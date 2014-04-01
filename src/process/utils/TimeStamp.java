@@ -9,12 +9,19 @@ public class TimeStamp {
 	/* *********************************************************************************************
 	 * Static Utility Methods
 	 * *********************************************************************************************/
-
+	/**
+	 * 
+	 * @return
+	 */
 	public static String makeEmpty()
 	{
 		return "[0000/00/00][00:00:00.000]";
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	public static String make()
 	{
@@ -24,6 +31,10 @@ public class TimeStamp {
 		return temp;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	public static String makeForFileName()
 	{
@@ -33,6 +44,11 @@ public class TimeStamp {
 		return temp;
 	}
 	
+	/**
+	 * 
+	 * @param l
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
 	public static String makeFromLong(long l)
 	{
@@ -42,6 +58,11 @@ public class TimeStamp {
 		return temp;
 	}
 	
+	/**
+	 * 
+	 * @param timeStamp
+	 * @return
+	 */
 	public static String makeFromDate(Date timeStamp)
 	{
 		return makeFromLong(timeStamp.getTime());

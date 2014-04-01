@@ -13,7 +13,11 @@ import system.Constants;
 
 public class FileUtils {
 	
-
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	public static File openDirectoryChooser() throws Exception
 	{
 		File[] dir = null;
@@ -33,6 +37,11 @@ public class FileUtils {
 		return dir[0];
 	}
 
+	/**
+	 * 
+	 * @param validFileExtension
+	 * @return
+	 */
 	public static File openFileChooser(String validFileExtension)
 	{		
 		JFileChooser chooser = new JFileChooser();
@@ -58,6 +67,13 @@ public class FileUtils {
 	 *******************************************************************************************************************/
 	
 	//Returns a list of files, found below the current directory, that have a given extension
+	/**
+	 * 
+	 * @param dir
+	 * @param extension
+	 * @return
+	 * @throws Exception
+	 */
 	public static ArrayList<File> findAllFilesInDirWithExtension(File dir, String extension) throws Exception
 	{
 		//If the File object is not a directory then we can not search it for files, so bail out
@@ -86,6 +102,11 @@ public class FileUtils {
 	}
 
 	//Returns all files below a given directory (recursive)
+	/**
+	 * 
+	 * @param dir
+	 * @return
+	 */
 	private static ArrayList<File> findFilesInDirectory(File dir)
 	{
 		File[] files = dir.listFiles();
@@ -113,6 +134,11 @@ public class FileUtils {
 	} 
 
 	//Gets a listing of all directories from a list of File objects
+	/**
+	 * 
+	 * @param files
+	 * @return
+	 */
 	private static File[] getDirectoryList(File[] files)
 	{
 		if(files == null)
