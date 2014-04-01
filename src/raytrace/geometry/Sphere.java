@@ -41,7 +41,44 @@ public class Sphere extends CompositeSurface implements Positionable {
 	public IntersectionData intersects(Ray ray, double t0, double t1)
 	{
 		//TODO: Intersect
-		return null;
+		Vector4 e = ray.getOrigin();
+		Vector4 d = ray.getDirection();
+		
+		//Precalc frequently used values/vectors
+		Vector4 EminusC = new Vector4(e.x - center.x, e.y - center.y, e.z - center.z, 0);
+		double DdotD = d.dot(d);
+		double DdotEminusC = d.dot(EminusC);
+		
+		double discrim = Math.pow(DdotEminusC, 2.0) - DdotD * (EminusC.dot(EminusC) - Math.pow(radius, 2.0));
+		
+		//If the discriminant is negative then the ray doesn't intersect in real space
+		if(discrim < 0.0) {
+			return null;
+		}
+		
+		//Now that we know its >= 0, root it
+		discrim = Math.pow(discrim, 0.5);
+		
+		//Get the negation of d
+		Vector4 negD = d.multiply3(-1);
+		double negDdotEminusC = negD.dot(EminusC);
+		
+		//Get the time of intersection
+		double t = (negDdotEminusC - discrim) / DdotD;
+		//double tOut = (negDdotEminusC + discrim) / DdotD;//Time of second intersection, not used
+		
+		//Test if t is in the given time range
+		if(t <= t0 || t > t1)
+			return null;
+			
+		//Return data about the intersection
+		IntersectionData data = new IntersectionData();
+		data.setTime(t);
+		data.setRay(ray);
+		data.setPoint(ray.evaluateAtTime(t));
+		data.setDistance(ray.getDirection().magnitude3() * t);
+		
+		return data;
 	}
 	
 	/**

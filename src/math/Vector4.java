@@ -76,4 +76,9 @@ public class Vector4 extends Vector4d {
 	{
 		return Math.pow(magnitude3Sqrd(), 0.5);
 	}
+	
+	public Vector4 multiply3(double d)
+	{
+		return new Vector4(x*d, y*d, z*d, w);
+	}
 }
