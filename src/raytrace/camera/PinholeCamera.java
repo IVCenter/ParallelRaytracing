@@ -19,14 +19,20 @@ public class PinholeCamera extends Camera {
 	
 	protected double imagePlaneRatio;
 	
-	
 
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
 	public PinholeCamera()
 	{
-		//
+		super();
+		update();
+	}
+	
+	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
+	{
+		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
+		update();
 	}
 
 

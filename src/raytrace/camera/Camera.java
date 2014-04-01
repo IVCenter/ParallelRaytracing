@@ -22,6 +22,26 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	
 
 	/* *********************************************************************************************
+	 * Constructors
+	 * *********************************************************************************************/
+	public Camera()
+	{
+		//
+	}
+	
+	public Camera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
+	{
+		this.position = position;
+		this.viewingDirection = viewingDirection;
+		this.up = up;
+		
+		this.fieldOfView = fieldOfView;
+		this.pixelWidth = pixelWidth;
+		this.pixelHeight = pixelHeight;
+	}
+	
+
+	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	protected abstract void update();
@@ -40,6 +60,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	@Override
 	public void setPosition(Vector4 position) {
 		this.position = position;
+		update();
 	}
 	
 	//LookAt
@@ -49,6 +70,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setViewingDirection(Vector4 viewingDirection) {
 		this.viewingDirection = viewingDirection;
+		update();
 	}
 	
 	//Up
@@ -58,6 +80,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setUp(Vector4 up) {
 		this.up = up;
+		update();
 	}
 
 	public double getFieldOfView() {
@@ -66,6 +89,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setFieldOfView(double fieldOfView) {
 		this.fieldOfView = fieldOfView;
+		update();
 	}
 
 	public double getPixelWidth() {
@@ -74,6 +98,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setPixelWidth(double pixelWidth) {
 		this.pixelWidth = pixelWidth;
+		update();
 	}
 
 	public double getPixelHeight() {
@@ -82,5 +107,6 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setPixelHeight(double pixelHeight) {
 		this.pixelHeight = pixelHeight;
+		update();
 	}
 }
