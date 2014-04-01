@@ -1,6 +1,7 @@
 package raytrace.surfaces;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import math.Ray;
@@ -55,8 +56,23 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		
 		//Having the same surface added twice uses unnecessary resources.
 		//This contains method is slow
-		if(!children.contains(cs))
+		if(cs != null && !children.contains(cs))
 			children.add(cs);
+	}
+	
+	public void addChildren(Collection<CompositeSurface> set)
+	{	
+		//Add each child, one by one
+		for(CompositeSurface cs : set)
+			addChild(cs);
+	}
+	
+	public void addChildrenUnsafe(Collection<CompositeSurface> set)
+	{	
+		//Add all children at once
+		//This does not check for null or duplicate surfaces
+		if(children != null)
+			children.addAll(set);
 	}
 	
 	public CompositeSurface removeChild(CompositeSurface cs)
