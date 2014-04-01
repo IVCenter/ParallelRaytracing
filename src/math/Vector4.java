@@ -38,7 +38,7 @@ public class Vector4 extends Vector4d {
 	/* *********************************************************************************************
 	 * Calculation Methods
 	 * *********************************************************************************************/
-	public Vector4 cross(Vector4 that)
+	public Vector4 cross3(Vector4 that)
 	{
 		Vector4 res = new Vector4();
 		res.x = this.y*that.z - this.z*that.y;
@@ -48,9 +48,14 @@ public class Vector4 extends Vector4d {
 		return res;
 	}
 	
-	public double angle(Vector4 that)
+	public double dot3(Vector4 that)
 	{
-		return 0.0;
+		return this.x*that.x + this.y*that.y + this.z*that.z;
+	}
+	
+	public double angle3(Vector4 that)
+	{
+		return  Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
 	}
 	
 	public Vector4 normalize3(Vector4 that)
