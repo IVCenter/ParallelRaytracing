@@ -5,6 +5,10 @@ public abstract class StringParser<POPULATES_THIS_TYPE> {
 	/*
 	 * A base class for parsing strings and returning an object
 	 */
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	protected String keyToken = null;
 	
 	/* *********************************************************************************************
 	 * Abstract Parsing Methods
@@ -19,4 +23,6 @@ public abstract class StringParser<POPULATES_THIS_TYPE> {
 	{
 		return str.trim().split(pattern);
 	}
+	
+	public String getKeyToken() { return keyToken; }
 }
