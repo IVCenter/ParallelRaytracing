@@ -58,7 +58,7 @@ public class Vector4 extends Vector4d {
 		return  Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
 	}
 	
-	public Vector4 normalize3(Vector4 that)
+	public Vector4 normalize3()
 	{
 		double m = magnitude3();
 		x = x/m;

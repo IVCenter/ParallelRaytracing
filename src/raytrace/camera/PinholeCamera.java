@@ -37,7 +37,7 @@ public class PinholeCamera extends Camera {
 	public Iterator<Ray> iterator()
 	{
 		//Create and return a ray iterator
-		return null;
+		return new RayIterator();
 	}
 
 	
@@ -47,9 +47,16 @@ public class PinholeCamera extends Camera {
 	@Override
 	protected void update()
 	{
-		//Update pre-calculated values
-		cameraX = viewingDirection.cross(up).normalize;
-		cameraY = viewingDirection.cross(cameraX).normalize;
+		//Update camera axes
+		cameraX = viewingDirection.cross3(up).normalize3();
+		cameraY = viewingDirection.cross3(cameraX).normalize3();
+		
+		//Update image plane ratio
+		imagePlaneRatio = pixelWidth / pixelHeight;
+		
+		//Update the image plane values
+		imagePlaneWidth = 2*Math.tan(fieldOfView/2.0);
+		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
 	}
 
 	
@@ -57,10 +64,22 @@ public class PinholeCamera extends Camera {
 	 * Getter/Setter Methods
 	 * *********************************************************************************************/
 	@Override
-	protected Vector4 getRay(double x, double y)
+	protected Ray getRay(double x, double y)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		//Create the origin vector
+		Vector4 orig = new Vector4(position);
+		
+		//Pre-calculate the axis weights
+		double pw = ((x/pixelWidth) - 0.5) * imagePlaneWidth;
+		double ph = ((y/pixelHeight) - 0.5) * imagePlaneHeight;
+		
+		//Create the direction vector
+		Vector4 dir = new Vector4(viewingDirection.x + pw*cameraX.x + ph*cameraY.x,
+								  viewingDirection.y + pw*cameraX.y + ph*cameraY.y,
+								  viewingDirection.z + pw*cameraX.z + ph*cameraY.z,
+								  0.0);
+		
+		return new Ray(orig, dir);
 	}
 	
 	
@@ -73,14 +92,16 @@ public class PinholeCamera extends Camera {
 		/* *********************************************************************************************
 		 * Instance Vars
 		 * *********************************************************************************************/
-		
+		private double currentPixelX;
+		private double currentPixelY;
 
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
 		public RayIterator()
 		{
-			
+			currentPixelX = 0;
+			currentPixelY = 0;
 		}
 
 		/* *********************************************************************************************
@@ -88,21 +109,31 @@ public class PinholeCamera extends Camera {
 		 * *********************************************************************************************/
 
 		@Override
-		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
+		public boolean hasNext()
+		{
+			return currentPixelX < pixelWidth && currentPixelY < pixelHeight;
 		}
 
 		@Override
-		public Ray next() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void remove() {
-			// TODO Auto-generated method stub
+		public Ray next()
+		{
+			//Get the next ray
+			Ray r = getRay(currentPixelX, currentPixelY);
 			
+			//Increment the counters
+			++currentPixelX;
+			if(currentPixelX >= pixelWidth) {
+				currentPixelX = 0;
+				++currentPixelY;
+			}
+			
+			return r;
+		}
+
+		@Override
+		public void remove()
+		{
+			//No
 		}
 		
 	}

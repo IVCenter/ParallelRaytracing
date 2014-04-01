@@ -25,7 +25,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	protected abstract void update();
-	protected abstract Vector4 getRay(double x, double y);
+	protected abstract Ray getRay(double x, double y);
 	
 
 	/* *********************************************************************************************
