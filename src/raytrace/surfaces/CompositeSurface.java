@@ -3,6 +3,10 @@ package raytrace.surfaces;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import math.Ray;
+
+import raytrace.data.IntersectionData;
+import raytrace.data.TraceData;
 import raytrace.framework.Composite;
 import raytrace.framework.Node;
 import raytrace.framework.Surface;
@@ -18,7 +22,19 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	 * *********************************************************************************************/
 	protected ArrayList<CompositeSurface> children;
 	
-	
+
+	/* *********************************************************************************************
+	 * Surface-related Methods
+	 * *********************************************************************************************/
+	public TraceData trace(Ray ray)
+	{
+		return trace(ray, 0, Double.POSITIVE_INFINITY);
+	}
+
+	public IntersectionData intersects(Ray ray)
+	{
+		return intersects(ray, 0, Double.POSITIVE_INFINITY);
+	}
 
 	/* *********************************************************************************************
 	 * Composite-related Methods
