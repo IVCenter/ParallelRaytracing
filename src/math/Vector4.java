@@ -81,4 +81,9 @@ public class Vector4 extends Vector4d {
 	{
 		return new Vector4(x*d, y*d, z*d, w);
 	}
+	
+	public Vector4 subtract3(Vector4 that)
+	{
+		return new Vector4(x-that.x, y-that.y, z-that.z, w);
+	}
 }

@@ -11,6 +11,7 @@ public class IntersectionData {
 	protected double time;
 	protected double distance;
 	protected Vector4 point;
+	protected Vector4 normal;
 	protected Ray ray;
 
 	
@@ -22,11 +23,11 @@ public class IntersectionData {
 		//
 	}
 
-	
 
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
+	//Time
 	public double getTime() {
 		return time;
 	}
@@ -35,6 +36,7 @@ public class IntersectionData {
 		this.time = time;
 	}
 
+	//Distance
 	public double getDistance() {
 		return distance;
 	}
@@ -43,6 +45,7 @@ public class IntersectionData {
 		this.distance = distance;
 	}
 
+	//Point
 	public Vector4 getPoint() {
 		return point;
 	}
@@ -51,6 +54,16 @@ public class IntersectionData {
 		this.point = point;
 	}
 
+	//Normal
+	public Vector4 getNormal() {
+		return normal;
+	}
+
+	public void setNormal(Vector4 normal) {
+		this.normal = normal;
+	}
+
+	//Ray
 	public Ray getRay() {
 		return ray;
 	}

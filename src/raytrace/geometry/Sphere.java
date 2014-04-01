@@ -46,10 +46,10 @@ public class Sphere extends CompositeSurface implements Positionable {
 		
 		//Precalc frequently used values/vectors
 		Vector4 EminusC = new Vector4(e.x - center.x, e.y - center.y, e.z - center.z, 0);
-		double DdotD = d.dot(d);
-		double DdotEminusC = d.dot(EminusC);
+		double DdotD = d.dot3(d);
+		double DdotEminusC = d.dot3(EminusC);
 		
-		double discrim = Math.pow(DdotEminusC, 2.0) - DdotD * (EminusC.dot(EminusC) - Math.pow(radius, 2.0));
+		double discrim = Math.pow(DdotEminusC, 2.0) - DdotD * (EminusC.dot3(EminusC) - Math.pow(radius, 2.0));
 		
 		//If the discriminant is negative then the ray doesn't intersect in real space
 		if(discrim < 0.0) {
@@ -61,7 +61,7 @@ public class Sphere extends CompositeSurface implements Positionable {
 		
 		//Get the negation of d
 		Vector4 negD = d.multiply3(-1);
-		double negDdotEminusC = negD.dot(EminusC);
+		double negDdotEminusC = negD.dot3(EminusC);
 		
 		//Get the time of intersection
 		double t = (negDdotEminusC - discrim) / DdotD;
@@ -77,6 +77,7 @@ public class Sphere extends CompositeSurface implements Positionable {
 		data.setRay(ray);
 		data.setPoint(ray.evaluateAtTime(t));
 		data.setDistance(ray.getDirection().magnitude3() * t);
+		data.setNormal(data.getPoint().subtract3(center).normalize3());
 		
 		return data;
 	}
