@@ -1,7 +1,7 @@
 package system;
 
+import process.Environment;
 import process.logging.Logger;
-import raster.RasterDelegate;
 
 public class Launcher {
 	
@@ -25,11 +25,14 @@ public class Launcher {
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
 		//TODO: Pass off control to the Delegate
+		Configuration.setScreenWidth(1024);
+		Configuration.setScreenHeight(640);
 		
 		Logger.progress(-1, "Launching a Parallel Rendering Node with ID:[" + Configuration.getId() + "]...");
 		
-		RasterDelegate raster = new RasterDelegate(1920, 1080);
-		
+		//Pass off control to the ApplicationDelegate
+		ApplicationDelegate app = new ApplicationDelegate();
+		app.execute(new Environment());
 	}
 
 }

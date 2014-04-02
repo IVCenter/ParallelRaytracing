@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-public class RasterDelegate {
+public class ScreenDrawer {
 	
 	/*
 	 * A simple delegate for handling the pushing of pixels to screen
@@ -49,7 +49,7 @@ public class RasterDelegate {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public RasterDelegate(final int width, final int height)
+	public ScreenDrawer(final int width, final int height)
 	{
 		//Initialize instance vars
 		this.width = width;
@@ -63,9 +63,10 @@ public class RasterDelegate {
             public void run()
             {
                 frame = new JFrame();
-                panel = new RasterPanel();
+                panel = new ScreenPanel();
                 frame.getContentPane().add(panel, BorderLayout.CENTER);
                 frame.setSize(width, height);
+                frame.setUndecorated(true);
                 frame.setVisible(true);
             }
         });
@@ -137,7 +138,7 @@ public class RasterDelegate {
 	 * 
 	 * 
 	 */
-	private class RasterPanel extends JPanel
+	private class ScreenPanel extends JPanel
 	{
 	    /**
 		 * 
@@ -149,15 +150,15 @@ public class RasterDelegate {
 		 * Instance Vars
 		 * *********************************************************************************************/
 		private Image src = null;
-	    private RasterWorker worker;
+	    private ScreenWorker worker;
 
 	    
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
-	    public RasterPanel()
+	    public ScreenPanel()
 	    {
-	        worker = new RasterWorker();
+	        worker = new ScreenWorker();
 	        worker.execute();
 	    }
 
@@ -179,7 +180,7 @@ public class RasterDelegate {
 	     * 
 	     *
 	     */
-	    private class RasterWorker extends SwingWorker<Void, Image>
+	    private class ScreenWorker extends SwingWorker<Void, Image>
 	    {
 
 	    	/* *********************************************************************************************
@@ -196,7 +197,6 @@ public class RasterDelegate {
 	         */
 	        protected void process(List<Image> chunks)
 	        {
-	        	//TODO: Why loop the chunks, keep only the last, and repaint for all.....??
 	            for (Image bufferedImage : chunks)
 	            {
 	                src = bufferedImage;

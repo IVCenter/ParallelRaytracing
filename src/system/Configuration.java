@@ -16,6 +16,8 @@ public class Configuration {
 	
 	//Defined parameters
 	protected static String id = "Unassigned";
+	protected static int screenWidth = 1024;
+	protected static int screenHeight = 640;
 
 	
 	/* *********************************************************************************************
@@ -47,6 +49,14 @@ public class Configuration {
 	//ID
 	public static String getId() { return id; }
 	public static void setId(String id) { Configuration.id = id; }
+
+	//Screen Width
+	public static int getScreenWidth() { return screenWidth; }
+	public static void setScreenWidth(int screenWidth) { Configuration.screenWidth = screenWidth; }
+
+	//Screen Height
+	public static int getScreenHeight() { return screenHeight; }
+	public static void setScreenHeight(int screenHeight) { Configuration.screenHeight = screenHeight; }
 	
 	//
 	
