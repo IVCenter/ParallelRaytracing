@@ -18,6 +18,7 @@ public class Configuration {
 	protected static String id = "Unassigned";
 	protected static int screenWidth = 1024;
 	protected static int screenHeight = 640;
+	protected static boolean drawToScreen = false;
 
 	
 	/* *********************************************************************************************
@@ -57,6 +58,10 @@ public class Configuration {
 	//Screen Height
 	public static int getScreenHeight() { return screenHeight; }
 	public static void setScreenHeight(int screenHeight) { Configuration.screenHeight = screenHeight; }
+
+	//Draw to screen
+	public static boolean isDrawingToScreen() { return drawToScreen; }
+	public static void setDrawToScreen(boolean drawToScreen) { Configuration.drawToScreen = drawToScreen; }
 	
 	//
 	

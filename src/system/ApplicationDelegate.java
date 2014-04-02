@@ -1,6 +1,7 @@
 package system;
 
 import process.Job;
+import raster.PixelBuffer;
 import raster.ScreenDrawer;
 
 public class ApplicationDelegate extends Job{
@@ -26,6 +27,7 @@ public class ApplicationDelegate extends Job{
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected ScreenDrawer screenDrawer;
+	protected PixelBuffer pixelBuffer;
 	
 	
 	/* *********************************************************************************************
@@ -43,7 +45,13 @@ public class ApplicationDelegate extends Job{
 	@Override
 	protected void initialize()
 	{
-		screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+		if(Configuration.isDrawingToScreen())
+		{
+			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			pixelBuffer = screenDrawer.getPixelBuffer();
+		}else{
+			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+		}
 	}
 
 	@Override

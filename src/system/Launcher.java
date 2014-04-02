@@ -27,6 +27,7 @@ public class Launcher {
 		//TODO: Pass off control to the Delegate
 		Configuration.setScreenWidth(1024);
 		Configuration.setScreenHeight(640);
+		Configuration.setDrawToScreen(true);
 		
 		Logger.progress(-1, "Launching a Parallel Rendering Node with ID:[" + Configuration.getId() + "]...");
 		
