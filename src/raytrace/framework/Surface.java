@@ -1,8 +1,10 @@
 package raytrace.framework;
 
+import raytrace.bounding.BoundingBox;
+import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
 import raytrace.data.TraceData;
-import math.Ray;
 
 public interface Surface {
 	
@@ -13,13 +15,26 @@ public interface Surface {
 	/**
 	 * 
 	 */
-	public IntersectionData intersects(Ray ray);
-	public IntersectionData intersects(Ray ray, double t0, double t1);
+	public IntersectionData intersects(RayData data);
 	
 	/**
 	 * 
 	 */
-	public TraceData trace(Ray ray);
-	public TraceData trace(Ray ray, double t0, double t1);
+	public TraceData trace(RayData data);
+	
+	/**
+	 * 
+	 */
+	public void bake(BakeData data);
+	
+	/**
+	 * 
+	 */
+	public void updateBoundingBox();
+	
+	/**
+	 * 
+	 */
+	public BoundingBox getBoundingBox();
 
 }
