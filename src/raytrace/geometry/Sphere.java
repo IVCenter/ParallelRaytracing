@@ -5,11 +5,14 @@ import math.Vector4;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.data.TraceData;
 import raytrace.framework.Positionable;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.surfaces.TerminalSurface;
 
-public class Sphere extends CompositeSurface implements Positionable {
+public class Sphere extends TerminalSurface implements Positionable {
+	
+	/*
+	 * A simple sphere class
+	 */
 	
 	/* *********************************************************************************************
 	 * Instance Vars
@@ -86,15 +89,6 @@ public class Sphere extends CompositeSurface implements Positionable {
 		idata.setSurface(this);
 		
 		return idata;
-	}
-	
-	/**
-	 * 
-	 */
-	public TraceData trace(RayData ray)
-	{
-		//TODO: Trace
-		return null;
 	}
 	
 	/**
