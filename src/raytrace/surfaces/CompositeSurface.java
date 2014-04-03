@@ -7,6 +7,7 @@ import java.util.Iterator;
 import math.Vector4;
 
 import raytrace.bounding.BoundingBox;
+import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.UpdateData;
@@ -43,6 +44,10 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	@Override
 	public IntersectionData intersects(RayData data)
 	{
+		//If no children, then return
+		if(children == null)
+			return null;
+		
 		//TOOD: check against bounding box first
 		
 		IntersectionData idata;
@@ -64,6 +69,10 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	@Override
 	public void update(UpdateData data)
 	{
+		//If no children, then return
+		if(children == null)
+			return;
+		
 		//Update all children
 		for(CompositeSurface cs : this)
 		{
@@ -72,8 +81,26 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	}
 	
 	@Override
+	public void bake(BakeData data)
+	{
+		//If no children, then return
+		if(children == null)
+			return;
+		
+		//Update all children
+		for(CompositeSurface cs : this)
+		{
+			cs.bake(data);
+		}
+	}
+	
+	@Override
 	public void updateBoundingBox()
 	{
+		//If no children, then return
+		if(children == null)
+			return;
+		
 		//Clear the current bounding box
 		boundingBox.clear();
 		
