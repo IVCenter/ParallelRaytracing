@@ -1,19 +1,15 @@
 package math;
 
-import javax.vecmath.Vector4d;
-
-public class Vector4 extends Vector4d {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6002825425579913543L;
-
+public class Vector4 {
 	
 	
 	/*
 	 * An extension of the Vector4d class to allow for additional features
 	 */
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	protected double[] m;
 	
 
 	/* *********************************************************************************************
@@ -21,17 +17,55 @@ public class Vector4 extends Vector4d {
 	 * *********************************************************************************************/
 	public Vector4()
 	{
-		super(0,0,0,0);
+		m = new double[4];
 	}
 	
 	public Vector4(double x, double y, double z, double w)
 	{
-		super(x,y,z,w);
+		this();
+		m[0] = x;
+		m[1] = y;
+		m[2] = z;
+		m[3] = w;
 	}
 	
 	public Vector4(Vector4 v)
 	{
-		super(v.x,v.y,v.z,v.w);
+		this();
+		double[] vm = v.getM();
+		set(vm);
+	}
+	
+	public Vector4(double[] v)
+	{
+		this();
+		set(v);
+	}
+	
+	public double[] getM()
+	{
+		return m;
+	}
+	
+	public double get(int element)
+	{
+		return m[element];
+	}
+	
+	public void set(int element, double value)
+	{
+		m[element] = value;
+	}
+	
+	public void set(double[] v)
+	{
+		for(int i = 0; i < 4; ++i)
+			m[i] = v[i];
+	}
+	
+	public void set(Vector4 v)
+	{
+		set(v.getM());
 	}
 	
 
@@ -40,36 +74,37 @@ public class Vector4 extends Vector4d {
 	 * *********************************************************************************************/
 	public Vector4 cross3(Vector4 that)
 	{
-		Vector4 res = new Vector4();
-		res.x = this.y*that.z - this.z*that.y;
-		res.y = this.z*that.x - this.x*that.z;
-		res.z = this.x*that.y - this.y*that.x;
-		res.w = 0;
+		double[] vm = that.getM();
+		Vector4 res = new Vector4(m[1]*vm[2] - m[2]*vm[1],
+								  m[2]*vm[0] - m[0]*vm[2],
+								  m[0]*vm[1] - m[1]*vm[0],
+								  0);
 		return res;
 	}
 	
 	public double dot3(Vector4 that)
 	{
-		return this.x*that.x + this.y*that.y + this.z*that.z;
+		double[] vm = that.getM();
+		return m[0]*vm[0] + m[1]*vm[1] + m[2]*vm[2];
 	}
 	
 	public double angle3(Vector4 that)
 	{
-		return  Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
+		return Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
 	}
 	
 	public Vector4 normalize3()
 	{
-		double m = magnitude3();
-		x = x/m;
-		y = y/m;
-		z = z/m;
+		double mag = magnitude3();
+		m[0] = m[0]/mag;
+		m[1] = m[1]/mag;
+		m[2] = m[2]/mag;
 		return this;
 	}
 	
 	public double magnitude3Sqrd()
 	{
-		return Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0);
+		return Math.pow(m[0], 2.0) + Math.pow(m[1], 2.0) + Math.pow(m[2], 2.0);
 	}
 	
 	public double magnitude3()
@@ -79,27 +114,36 @@ public class Vector4 extends Vector4d {
 	
 	public Vector4 multiply3(double d)
 	{
-		return new Vector4(x*d, y*d, z*d, w);
+		return new Vector4(m[0]*d, m[1]*d, m[2]*d, m[3]);
+	}
+	
+	public Vector4 add3(Vector4 that)
+	{
+		double[] vm = that.getM();
+		return new Vector4(m[0]+vm[0], m[1]+vm[1], m[2]+vm[2], m[3]);
 	}
 	
 	public Vector4 subtract3(Vector4 that)
 	{
-		return new Vector4(x-that.x, y-that.y, z-that.z, w);
+		double[] vm = that.getM();
+		return new Vector4(m[0]-vm[0], m[1]-vm[1], m[2]-vm[2], m[3]);
 	}
 	
 	public Vector4 minimize3(Vector4 that)
 	{
-		this.x = this.x < that.x ? this.x : that.x;
-		this.y = this.y < that.y ? this.y : that.y;
-		this.z = this.z < that.z ? this.z : that.z;
+		double[] vm = that.getM();
+		m[0] = m[0] < vm[0] ? m[0] : vm[0];
+		m[1] = m[1] < vm[1] ? m[1] : vm[1];
+		m[2] = m[2] < vm[2] ? m[2] : vm[2];
 		return this;
 	}
 	
 	public Vector4 maximize3(Vector4 that)
 	{
-		this.x = this.x > that.x ? this.x : that.x;
-		this.y = this.y > that.y ? this.y : that.y;
-		this.z = this.z > that.z ? this.z : that.z;
+		double[] vm = that.getM();
+		m[0] = m[0] > vm[0] ? m[0] : vm[0];
+		m[1] = m[1] > vm[1] ? m[1] : vm[1];
+		m[2] = m[2] > vm[2] ? m[2] : vm[2];
 		return this;
 	}
 }
