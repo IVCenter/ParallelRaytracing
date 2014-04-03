@@ -35,10 +35,7 @@ public class Ray {
 	 * *********************************************************************************************/
 	public Vector4 evaluateAtTime(double t)
 	{
-		return new Vector4(origin.x + t * direction.x,
-						   origin.y + t * direction.y,
-						   origin.z + t * direction.z,
-						   1.0);
+		return new Vector4(origin.addMultiRight3(direction, t));
 	}
 	
 	
