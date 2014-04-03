@@ -39,13 +39,8 @@ public class BoundingBox {
 	 * *********************************************************************************************/
 	public void clear()
 	{
-		min.x = Double.POSITIVE_INFINITY;
-		min.y = Double.POSITIVE_INFINITY;
-		min.z = Double.POSITIVE_INFINITY;
-
-		max.x = Double.NEGATIVE_INFINITY;
-		max.y = Double.NEGATIVE_INFINITY;
-		max.z = Double.NEGATIVE_INFINITY;
+		min.set(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 0);
+		max.set(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 0);
 	}
 	
 }
