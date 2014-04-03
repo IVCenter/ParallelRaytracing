@@ -99,6 +99,17 @@ public class Sphere extends TerminalSurface implements Positionable {
 		//TODO: Bake
 	}
 	
+	@Override
+	/**
+	 * 
+	 */
+	public void updateBoundingBox()
+	{
+		boundingBox.clear();
+		boundingBox.min.set(center.subtract3(radius));
+		boundingBox.max.set(center.add3(radius));
+	}
+	
 
 	/* *********************************************************************************************
 	 * Getter/Setter Methods
