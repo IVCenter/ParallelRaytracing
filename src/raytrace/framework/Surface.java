@@ -5,6 +5,7 @@ import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.TraceData;
+import raytrace.data.UpdateData;
 
 public interface Surface {
 	
@@ -26,6 +27,11 @@ public interface Surface {
 	 * 
 	 */
 	public void bake(BakeData data);
+	
+	/**
+	 * 
+	 */
+	public void update(UpdateData data);
 	
 	/**
 	 * 

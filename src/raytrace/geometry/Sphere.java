@@ -2,7 +2,9 @@ package raytrace.geometry;
 
 import math.Ray;
 import math.Vector4;
+import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
 import raytrace.data.TraceData;
 import raytrace.framework.Positionable;
 import raytrace.surfaces.CompositeSurface;
@@ -22,7 +24,7 @@ public class Sphere extends CompositeSurface implements Positionable {
 	public Sphere()
 	{
 		radius = 1.0;
-		center = new Vector4();
+		center = new Vector4(0,0,0,1);
 	}
 	
 	public Sphere(double radius, Vector4 center)
@@ -38,9 +40,12 @@ public class Sphere extends CompositeSurface implements Positionable {
 	/**
 	 * 
 	 */
-	public IntersectionData intersects(Ray ray, double t0, double t1)
+	public IntersectionData intersects(RayData data)
 	{
-		//TODO: Intersect
+		Ray ray = data.getRay();
+		double t0 = data.getTStart();
+		double t1 = data.getTEnd();
+		
 		Vector4 e = ray.getOrigin();
 		Vector4 d = ray.getDirection();
 		
@@ -72,23 +77,31 @@ public class Sphere extends CompositeSurface implements Positionable {
 			return null;
 			
 		//Return data about the intersection
-		IntersectionData data = new IntersectionData();
-		data.setTime(t);
-		data.setRay(ray);
-		data.setPoint(ray.evaluateAtTime(t));
-		data.setDistance(ray.getDirection().magnitude3() * t);
-		data.setNormal(data.getPoint().subtract3(center).normalize3());
+		IntersectionData idata = new IntersectionData();
+		idata.setTime(t);
+		idata.setRay(ray);
+		idata.setPoint(ray.evaluateAtTime(t));
+		idata.setDistance(ray.getDirection().magnitude3() * t);
+		idata.setNormal(idata.getPoint().subtract3(center).normalize3());
 		
-		return data;
+		return idata;
 	}
 	
 	/**
 	 * 
 	 */
-	public TraceData trace(Ray ray, double t0, double t1)
+	public TraceData trace(RayData ray)
 	{
 		//TODO: Trace
 		return null;
+	}
+	
+	/**
+	 * 
+	 */
+	public void bake(BakeData data)
+	{
+		//TODO: Bake
 	}
 	
 
