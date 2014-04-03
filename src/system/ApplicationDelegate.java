@@ -3,6 +3,9 @@ package system;
 import process.Job;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
+import raytrace.data.RenderData;
+import raytrace.data.UpdateData;
+import raytrace.framework.Renderer;
 
 public class ApplicationDelegate extends Job{
 	
@@ -21,6 +24,9 @@ public class ApplicationDelegate extends Job{
 	 * 
 	 * If leaf node:
 	 * 		perform rendering on given workload
+	 * 
+	 * Handles the main loop, including synchronizing between children nodes
+	 * 		-Update, Render, Keyboard callbacks, etc.
 	 */
 	
 	/* *********************************************************************************************
@@ -28,6 +34,8 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
+	
+	protected Renderer renderer;
 	
 	
 	/* *********************************************************************************************
@@ -52,17 +60,79 @@ public class ApplicationDelegate extends Job{
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 		}
+		
+		//TODO: Set renderer
+		//	If leaf its a ray tracer
+		//	If has children its a network distribution renderer
+		if(Configuration.isLeaf())
+		{
+			renderer = new ConfigurableRayTracer(Configuration.getMasterScene(), new ParallelRayTracer());
+		}
 	}
 
 	@Override
 	protected void begin()
 	{
-		//
+		//Initialize the renderer
+		//This may establish network connections, or block until one is established
+		renderer.initialize();
+		
+		//If this node is the clock, start the main loop, else, sleep this thread
+		//The sleep prevents this Job subclass from finalizing, and instead of using
+		//	a loop for timing, this relies on a parent node to send timing signals
+		if(Configuration.isClock())
+		{
+			startMainLoop();
+		}else{
+			try {
+				Thread.sleep(Long.MAX_VALUE);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
 	protected void finalize()
 	{
 		//
+	}
+
+	
+	/* *********************************************************************************************
+	 * Main Loop Methods
+	 * *********************************************************************************************/
+	protected void startMainLoop()
+	{
+		//Configure the initial update data
+		UpdateData udata = initUpdateData();
+		
+		//Configure the initial render data
+		RenderData rdata = initRenderData();
+		
+		//Main Loop
+		for(;;)//While spider face holds true
+		{
+			renderer.update(udata);
+			
+			renderer.render(rdata);
+		}
+	}
+	
+	private UpdateData initUpdateData()
+	{
+		//Configure the initial update data
+		UpdateData udata = new UpdateData();
+		
+		return udata;
+	}
+	
+	private RenderData initRenderData()
+	{
+		//Configure the initial render data
+		RenderData rdata = new RenderData();
+		rdata.setPixelBuffer(pixelBuffer);
+		
+		return rdata;
 	}
 }
