@@ -18,10 +18,12 @@ public interface Surface {
 	 */
 	public IntersectionData intersects(RayData data);
 	
+	//No longer supported
 	/**
 	 * 
-	 */
+	 *
 	public TraceData trace(RayData data);
+	*/
 	
 	/**
 	 * 
