@@ -86,4 +86,20 @@ public class Vector4 extends Vector4d {
 	{
 		return new Vector4(x-that.x, y-that.y, z-that.z, w);
 	}
+	
+	public Vector4 minimize3(Vector4 that)
+	{
+		this.x = this.x < that.x ? this.x : that.x;
+		this.y = this.y < that.y ? this.y : that.y;
+		this.z = this.z < that.z ? this.z : that.z;
+		return this;
+	}
+	
+	public Vector4 maximize3(Vector4 that)
+	{
+		this.x = this.x > that.x ? this.x : that.x;
+		this.y = this.y > that.y ? this.y : that.y;
+		this.z = this.z > that.z ? this.z : that.z;
+		return this;
+	}
 }
