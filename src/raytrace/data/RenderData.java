@@ -24,7 +24,7 @@ public class RenderData {
 	
 
 	/* *********************************************************************************************
-	 * Instance Vars
+	 * Getters/Setters
 	 * *********************************************************************************************/
 	public PixelBuffer getPixelBuffer() {
 		return pixelBuffer;

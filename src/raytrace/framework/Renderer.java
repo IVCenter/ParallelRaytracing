@@ -11,6 +11,10 @@ public interface Renderer {
 	 * This interface and be implemented to allow any existing renderer to 
 	 * be controlled by this framework
 	 */
+	
+	/**
+	 * 
+	 */
 	public void initialize();
 	
 	/**
