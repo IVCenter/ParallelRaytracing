@@ -4,7 +4,6 @@ import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.data.TraceData;
 import raytrace.data.UpdateData;
 
 public interface Surface {

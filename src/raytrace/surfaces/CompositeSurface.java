@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import math.Ray;
 import math.Vector4;
 
 import raytrace.bounding.BoundingBox;

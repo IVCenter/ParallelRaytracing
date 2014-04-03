@@ -6,7 +6,6 @@ import math.Vector4;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.data.TraceData;
 
 public class MatrixTransformSurface extends CompositeSurface {
 	
@@ -39,6 +38,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 	@Override
 	public IntersectionData intersects(RayData data)
 	{
+		//TODO: Make sure this actually works...
 		//TODO: Check against bounding box first
 		
 		Ray oldRay = data.getRay();
@@ -68,28 +68,12 @@ public class MatrixTransformSurface extends CompositeSurface {
 		if(closest != null)
 		{
 			closest.setRay(oldRay);
-			closest.setNormal(transform.multiply3(closest.getNormal()));
+			closest.setNormal(transform.multiply3(closest.getNormal()).normalize3());
 			closest.setPoint(transform.multiplyPt(closest.getPoint()));
 			closest.setDistance(closest.getPoint().subtract3(oldRay.getOrigin()).magnitude3());
 		}
 		
 		return closest;
-	}
-
-	@Override
-	public TraceData trace(RayData data)
-	{
-		/*
-		 * Material class as a programmable shader?
-		 * shade method
-		 * Pass in ShadingData (which includes IntersectionData)
-		 */
-		/*
-		 * Check if Ray intersects with this
-		 */
-		
-		// TODO: trace
-		return null;
 	}
 
 	@Override
@@ -104,8 +88,9 @@ public class MatrixTransformSurface extends CompositeSurface {
 	{
 		// TODO Auto-generated method stub
 		//Push child bounding boxes back into parent space
+		//And then calculate a bounding box much like composite surface does
 		
-		
+		//Or do the opposite (call super.updateBound, then transform the min/max)
 	}
 
 }
