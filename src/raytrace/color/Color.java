@@ -50,6 +50,24 @@ public class Color {
 		//TODO: normalize
 	}
 	
+	
+	/* *********************************************************************************************
+	 * Calculation Methods
+	 * *********************************************************************************************/
+	public double[] getChannels()
+	{
+		return channels;
+	}
+	
+	public double get(int channel)
+	{
+		return channels[channel];
+	}
+	
+	//TODO: Add
+	//TOOD: Multiply
+	//TODO: Other convenient color methods like contrast, saturation, hue shifts, etc.
+	
 
 	/* *********************************************************************************************
 	 * Static Helper Methods
