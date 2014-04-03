@@ -85,8 +85,9 @@ public abstract class Job implements Runnable {
 			initialize();
 		}catch(Exception e) {
 			error("Initialization of Job #" + jobID + " failed in an unrecoverable manner.");
-			error(stackTraceToString(e));
 			error(e.getMessage());
+			error(e.getLocalizedMessage());
+			error(stackTraceToString(e));
 		}
 
 		//Run the job
@@ -99,8 +100,9 @@ public abstract class Job implements Runnable {
 			finalize();
 		}catch(Exception e) {
 			error("Finalization of Job #" + jobID + " failed in an unrecoverable manner.  Following jobs may not execute correctly.");
-			error(stackTraceToString(e));
 			error(e.getMessage());
+			error(e.getLocalizedMessage());
+			error(stackTraceToString(e));
 		}
 		
 		this.percentComplete = 1.0;
@@ -125,8 +127,9 @@ public abstract class Job implements Runnable {
 			this.begin();
 		}catch(Exception e) {
 			error("An exception occurred while running Job #" + jobID + ".");
-			error(stackTraceToString(e));
 			error(e.getMessage());
+			error(e.getLocalizedMessage());
+			error(stackTraceToString(e));
 		}
 		
 		//If we've returned from job then we can now store the end time
