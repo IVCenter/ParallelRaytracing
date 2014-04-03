@@ -224,16 +224,6 @@ public class ScreenDrawer {
 	            		start = loopStart;
 	            		frames = 0;
 	            	}
-	            	
-	            	/*
-	            	for(int y = 0; y < height; y++)
-	            	{
-	            		for(int x = 0; x < width; x++)
-	            		{
-	            			mem[x + y * width] = (((mem[x + y * width] >> 0x2) + 0x06080a) << 0x2) + 0xff;
-	            		}
-	            	}
-	            	*/
 	                
 	            	//Load the pixel buffer into an image object
 	                Image img = createImage(new MemoryImageSource(width, height, mem, 0, width));
