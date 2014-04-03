@@ -17,7 +17,7 @@ public class Triangle extends TerminalSurface {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Vector4[] vertices;
-	protected Vector4 normal;
+	protected Vector4[] normals;
 	
 
 	/* *********************************************************************************************
@@ -26,17 +26,42 @@ public class Triangle extends TerminalSurface {
 	public Triangle()
 	{
 		vertices = new Vector4[3];
+		normals = new Vector4[3];
 		for(int i = 0; i < 3; ++i) {
 			vertices[i] = new Vector4();
 			vertices[i].set(i, 1);
 		}
+		
+		Vector4 normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
+		for(int i = 0; i < 3; ++i) {
+			normals[i] = new Vector4(normal);
+		}
+	}
+	
+	public Triangle(Vector4 v0, Vector4 v1, Vector4 v2, Vector4 n0, Vector4 n1, Vector4 n2)
+	{
+		vertices = new Vector4[3];
+		vertices[0] = v0;
+		vertices[1] = v1;
+		vertices[2] = v2;
+
+		normals = new Vector4[3];
+		normals[0] = n0.normalize3();
+		normals[1] = n1.normalize3();
+		normals[2] = n2.normalize3();
 	}
 	
 	public Triangle(Vector4 v0, Vector4 v1, Vector4 v2)
 	{
+		vertices = new Vector4[3];
 		vertices[0] = v0;
 		vertices[1] = v1;
 		vertices[2] = v2;
+
+		Vector4 normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
+		for(int i = 0; i < 3; ++i) {
+			normals[i] = new Vector4(normal);
+		}
 	}
 	
 
@@ -98,6 +123,8 @@ public class Triangle extends TerminalSurface {
 		if(beta < 0 || beta > 1 - gamma)
 			return null;
 		
+		//Interpolate the normals
+		Vector4 normal = normals[0].multiply3(1.0 - (gamma + beta)).add3(normals[1].multiply3(beta)).add3(normals[2].multiply3(gamma));
 		
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
@@ -117,7 +144,18 @@ public class Triangle extends TerminalSurface {
 	public void bake(BakeData data)
 	{
 		//TODO: Bake
-		normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
+		//normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
+	}
+	
+	@Override
+	/**
+	 * 
+	 */
+	public void updateBoundingBox()
+	{
+		boundingBox.clear();
+		boundingBox.min.minimize3(vertices[0]).minimize3(vertices[1]).minimize3(vertices[2]);
+		boundingBox.max.maximize3(vertices[0]).maximize3(vertices[1]).maximize3(vertices[2]);
 	}
 	
 
@@ -140,12 +178,12 @@ public class Triangle extends TerminalSurface {
 		vertices[element] = v;
 	}
 
-	public Vector4 getNormal() {
-		return normal;
+	public Vector4[] getNormasl() {
+		return normals;
 	}
 
-	public void setNormal(Vector4 normal) {
-		this.normal = normal;
+	public void setNormal(Vector4[] normals) {
+		this.normals = normals;
 	}
 	
 }
