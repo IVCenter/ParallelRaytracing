@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import math.Ray;
+import math.Vector4;
 
-import raytrace.data.IntersectionData;
-import raytrace.data.TraceData;
+import raytrace.bounding.BoundingBox;
+import raytrace.data.UpdateData;
 import raytrace.framework.Composite;
 import raytrace.framework.Node;
 import raytrace.framework.Surface;
+import raytrace.material.Material;
 
 public abstract class CompositeSurface implements Node, Composite<CompositeSurface>, Surface
 {
@@ -22,11 +23,15 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected ArrayList<CompositeSurface> children;
+	protected Material material;
+	protected BoundingBox boundingBox = new BoundingBox();
 	
 
 	/* *********************************************************************************************
 	 * Surface-related Methods
 	 * *********************************************************************************************/
+	//No longer supported
+	/*
 	public TraceData trace(Ray ray)
 	{
 		return trace(ray, 0, Double.POSITIVE_INFINITY);
@@ -35,6 +40,47 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	public IntersectionData intersects(Ray ray)
 	{
 		return intersects(ray, 0, Double.POSITIVE_INFINITY);
+	}
+	*/
+	
+	@Override
+	public void update(UpdateData data)
+	{
+		//Update all children
+		for(CompositeSurface cs : this)
+		{
+			cs.update(data);
+		}
+	}
+	
+	@Override
+	public void updateBoundingBox()
+	{
+		//Clear the current bounding box
+		boundingBox.clear();
+		
+		//Temp Storage
+		Vector4 min;
+		Vector4 max;
+		BoundingBox bb;
+		
+		//Loop through all children bounding boxes and set this to bound them
+		for(CompositeSurface cs : this)
+		{
+			cs.updateBoundingBox();
+			bb = cs.getBoundingBox();
+			
+			min = bb.min;
+			max = bb.max;
+
+			boundingBox.min.minimize3(min);
+			boundingBox.max.maximize3(max);
+		}
+	}
+	
+	public BoundingBox getBoundingBox()
+	{
+		return boundingBox;
 	}
 
 	/* *********************************************************************************************
@@ -98,4 +144,11 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
+	public Material getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
 }
