@@ -12,6 +12,7 @@ public class IntersectionData {
 	protected double distance;
 	protected Vector4 point;
 	protected Vector4 normal;
+	protected boolean twoSided;
 	protected Ray ray;
 
 	
@@ -20,7 +21,15 @@ public class IntersectionData {
 	 * *********************************************************************************************/
 	public IntersectionData()
 	{
-		//
+		time = Double.NEGATIVE_INFINITY;
+		distance = Double.POSITIVE_INFINITY;
+		
+		//point
+		//normal
+		
+		twoSided = false;
+		
+		//ray
 	}
 
 
@@ -70,5 +79,14 @@ public class IntersectionData {
 
 	public void setRay(Ray ray) {
 		this.ray = ray;
+	}
+
+	//Two Sided
+	public boolean isTwoSided() {
+		return twoSided;
+	}
+
+	public void setTwoSided(boolean twoSided) {
+		this.twoSided = twoSided;
 	}
 }
