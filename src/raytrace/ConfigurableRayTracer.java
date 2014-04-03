@@ -1,5 +1,6 @@
 package raytrace;
 
+import process.logging.Logger;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
@@ -46,6 +47,7 @@ public class ConfigurableRayTracer implements Renderer {
 	@Override
 	public void update(UpdateData data)
 	{
+		Logger.progress(-1, "Updating...");
 		if(scene != null)
 			scene.update(data);
 	}
@@ -53,7 +55,8 @@ public class ConfigurableRayTracer implements Renderer {
 	@Override
 	public void render(RenderData data)
 	{
-		if(tracer != null)
+		Logger.progress(-1, "Rendering...");
+		if(tracer != null && scene != null)
 			tracer.trace(data.getPixelBuffer(), scene.getActiveCamera(), scene);
 	}
 
