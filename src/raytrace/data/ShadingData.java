@@ -2,7 +2,7 @@ package raytrace.data;
 
 import raytrace.scene.Scene;
 
-public class ShadingData {
+public class ShadingData{
 	
 	/*
 	 * A storage class for shading data used by Material.shade()
@@ -16,7 +16,13 @@ public class ShadingData {
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
-	//
+	public ShadingData()
+	{
+		
+	}
+	
+	
+	
 	
 
 }
