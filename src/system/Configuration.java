@@ -1,6 +1,7 @@
 package system;
 
 import process.Environment;
+import raytrace.scene.Scene;
 
 public class Configuration {
 	
@@ -18,7 +19,12 @@ public class Configuration {
 	protected static String id = "Unassigned";
 	protected static int screenWidth = 1024;
 	protected static int screenHeight = 640;
+	
 	protected static boolean drawToScreen = false;
+	protected static boolean isClock = false;
+	protected static boolean isLeaf = false;
+	
+	protected static Scene masterScene = null;
 
 	
 	/* *********************************************************************************************
@@ -62,7 +68,17 @@ public class Configuration {
 	//Draw to screen
 	public static boolean isDrawingToScreen() { return drawToScreen; }
 	public static void setDrawToScreen(boolean drawToScreen) { Configuration.drawToScreen = drawToScreen; }
+
+	//Clock
+	public static boolean isClock() { return isClock; }
+	public static void setClock(boolean isClock) { Configuration.isClock = isClock; }
 	
-	//
+	//Leaf
+	public static boolean isLeaf() { return isLeaf; }
+	public static void setLeaf(boolean isLeaf) { Configuration.isLeaf = isLeaf; }
+
+	//Master Scene
+	public static Scene getMasterScene() { return masterScene; }
+	public static void setMasterScene(Scene masterScene) { Configuration.masterScene = masterScene; }
 	
 }
