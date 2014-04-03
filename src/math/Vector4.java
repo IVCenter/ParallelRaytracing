@@ -128,10 +128,26 @@ public class Vector4 {
 		return new Vector4(m[0]+vm[0], m[1]+vm[1], m[2]+vm[2], m[3]);
 	}
 	
+	public Vector4 add3(double d)
+	{
+		return new Vector4(m[0]+d, m[1]+d, m[2]+d, m[3]);
+	}
+	
+	public Vector4 addMultiRight3(Vector4 that, double c)
+	{
+		double[] vm = that.getM();
+		return new Vector4(m[0]+vm[0]*c, m[1]+vm[1]*c, m[2]+vm[2]*c, m[3]);
+	}
+	
 	public Vector4 subtract3(Vector4 that)
 	{
 		double[] vm = that.getM();
 		return new Vector4(m[0]-vm[0], m[1]-vm[1], m[2]-vm[2], m[3]);
+	}
+	
+	public Vector4 subtract3(double d)
+	{
+		return new Vector4(m[0]-d, m[1]-d, m[2]-d, m[3]);
 	}
 	
 	public Vector4 minimize3(Vector4 that)
