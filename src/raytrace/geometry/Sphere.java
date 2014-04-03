@@ -50,7 +50,7 @@ public class Sphere extends CompositeSurface implements Positionable {
 		Vector4 d = ray.getDirection();
 		
 		//Precalc frequently used values/vectors
-		Vector4 EminusC = new Vector4(e.x - center.x, e.y - center.y, e.z - center.z, 0);
+		Vector4 EminusC = e.subtract3(center);
 		double DdotD = d.dot3(d);
 		double DdotEminusC = d.dot3(EminusC);
 		
@@ -83,6 +83,7 @@ public class Sphere extends CompositeSurface implements Positionable {
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(idata.getPoint().subtract3(center).normalize3());
+		idata.setSurface(this);
 		
 		return idata;
 	}

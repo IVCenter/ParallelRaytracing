@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import math.Ray;
 import math.Vector4;
 
 import raytrace.bounding.BoundingBox;
+import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Composite;
 import raytrace.framework.Node;
@@ -32,16 +35,32 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	 * *********************************************************************************************/
 	//No longer supported
 	/*
-	public TraceData trace(Ray ray)
+	public TraceData trace(RayData data)
 	{
 		return trace(ray, 0, Double.POSITIVE_INFINITY);
 	}
-
-	public IntersectionData intersects(Ray ray)
-	{
-		return intersects(ray, 0, Double.POSITIVE_INFINITY);
-	}
 	*/
+
+	@Override
+	public IntersectionData intersects(RayData data)
+	{
+		//TOOD: check against bounding box first
+		
+		IntersectionData idata;
+		IntersectionData closest = null;
+		
+		for(CompositeSurface cs : this)
+		{
+			idata = cs.intersects(data);
+			//If idata isn't null, and either closest is null, or idata is closer than closest
+			if(idata != null && (closest == null || idata.getDistance() < closest.getDistance()))
+			{
+				closest = idata;
+			}
+		}
+		
+		return closest;
+	}
 	
 	@Override
 	public void update(UpdateData data)

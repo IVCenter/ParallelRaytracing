@@ -74,6 +74,7 @@ public class Plane extends CompositeSurface implements Positionable {
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(new Vector4(normal));
 		idata.setTwoSided(true);
+		idata.setSurface(this);
 		
 		return idata;
 	}
