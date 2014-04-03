@@ -23,10 +23,7 @@ public class Vector4 {
 	public Vector4(double x, double y, double z, double w)
 	{
 		this();
-		m[0] = x;
-		m[1] = y;
-		m[2] = z;
-		m[3] = w;
+		set(x,y,z,w);
 	}
 	
 	public Vector4(Vector4 v)
@@ -50,6 +47,14 @@ public class Vector4 {
 	public double get(int element)
 	{
 		return m[element];
+	}
+	
+	public void set(double x, double y, double z, double w)
+	{
+		m[0] = x;
+		m[1] = y;
+		m[2] = z;
+		m[3] = w;
 	}
 	
 	public void set(int element, double value)
