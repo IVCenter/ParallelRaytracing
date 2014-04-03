@@ -2,6 +2,7 @@ package system;
 
 import process.Environment;
 import process.logging.Logger;
+import raytrace.scene.SceneLoader;
 
 public class Launcher {
 	
@@ -28,6 +29,14 @@ public class Launcher {
 		Configuration.setScreenWidth(1024);
 		Configuration.setScreenHeight(640);
 		Configuration.setDrawToScreen(true);
+		Configuration.setClock(true);
+		Configuration.setLeaf(true);
+		
+		
+		//Load the scene (TODO: Parse args for scene choice)
+		String sceneKey = "Test1";
+		SceneLoader sceneLoader = new SceneLoader();
+		Configuration.setMasterScene(sceneLoader.load(sceneKey));
 		
 		Logger.progress(-1, "Launching a Parallel Rendering Node with ID:[" + Configuration.getId() + "]...");
 		
