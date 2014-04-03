@@ -34,7 +34,7 @@ public class Launcher {
 		
 		
 		//Load the scene (TODO: Parse args for scene choice)
-		String sceneKey = "Test1";
+		String sceneKey = Constants.SceneKeys.TEST1;
 		SceneLoader sceneLoader = new SceneLoader();
 		Configuration.setMasterScene(sceneLoader.load(sceneKey));
 		

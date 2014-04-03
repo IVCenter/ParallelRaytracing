@@ -28,6 +28,18 @@ public class Constants {
 		public static final String example = KEYS.addKey("EXAMPLE KEY");
 	}
 	
+
+	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 * Scene Keys
+	 * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+	public static class SceneKeys
+	{
+		//Keep track of keys used to prevent duplicate keys from being used
+		public static final KeySet KEYS = new KeySet();
+		
+		public static final String TEST1 = KEYS.addKey("Test1");
+	}
+	
 	
 	/*
 	 * ParameterKeySet

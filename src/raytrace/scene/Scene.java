@@ -4,7 +4,7 @@ import raytrace.camera.Camera;
 import raytrace.data.BakeData;
 import raytrace.surfaces.CompositeSurface;
 
-public class Scene extends CompositeSurface{
+public abstract class Scene extends CompositeSurface{
 	
 	/*
 	 * A scene to be rendered
@@ -20,8 +20,14 @@ public class Scene extends CompositeSurface{
 	 * *********************************************************************************************/
 	public Scene()
 	{
-		//Empty Scene
+		initialize();
 	}
+	
+
+	/* *********************************************************************************************
+	 * Abstract Methods
+	 * *********************************************************************************************/
+	protected abstract void initialize();
 	
 	
 	/* *********************************************************************************************
