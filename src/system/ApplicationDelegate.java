@@ -1,9 +1,11 @@
 package system;
 
 import process.Job;
+import process.logging.Logger;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
 import raytrace.ConfigurableRayTracer;
+import raytrace.ParallelRayTracer;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
@@ -54,6 +56,8 @@ public class ApplicationDelegate extends Job{
 	@Override
 	protected void initialize()
 	{
+		Logger.progress(-1, "Initializing Application Delegate...");
+		
 		if(Configuration.isDrawingToScreen())
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
@@ -105,6 +109,8 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected void startMainLoop()
 	{
+		Logger.progress(-1, "Starting Main Loop...");
+		
 		//Configure the initial update data
 		UpdateData udata = initUpdateData();
 		
