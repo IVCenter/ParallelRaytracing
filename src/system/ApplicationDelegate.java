@@ -3,6 +3,7 @@ package system;
 import process.Job;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
+import raytrace.ConfigurableRayTracer;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
@@ -66,7 +67,7 @@ public class ApplicationDelegate extends Job{
 		//	If has children its a network distribution renderer
 		if(Configuration.isLeaf())
 		{
-			renderer = new ConfigurableRayTracer(Configuration.getMasterScene(), new ParallelRayTracer());
+			renderer = new ConfigurableRayTracer(new ParallelRayTracer(), Configuration.getMasterScene());
 		}
 	}
 

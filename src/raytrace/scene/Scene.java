@@ -24,9 +24,6 @@ public class Scene extends CompositeSurface{
 	}
 	
 	
-	
-
-
 	/* *********************************************************************************************
 	 * Surface Overrides
 	 * *********************************************************************************************/
@@ -34,6 +31,18 @@ public class Scene extends CompositeSurface{
 	public void bake(BakeData data) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public Camera getActiveCamera() {
+		return activeCamera;
+	}
+
+	public void setActiveCamera(Camera activeCamera) {
+		this.activeCamera = activeCamera;
 	}
 
 }

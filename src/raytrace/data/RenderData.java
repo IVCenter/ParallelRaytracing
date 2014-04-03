@@ -1,5 +1,36 @@
 package raytrace.data;
 
-public class RenderData {
+import raster.PixelBuffer;
 
+public class RenderData {
+	
+	/*
+	 * A storage class for data used by render calls
+	 */
+
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	protected PixelBuffer pixelBuffer;
+	
+
+	/* *********************************************************************************************
+	 * Constructors
+	 * *********************************************************************************************/
+	public RenderData()
+	{
+		//
+	}
+	
+
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	public PixelBuffer getPixelBuffer() {
+		return pixelBuffer;
+	}
+
+	public void setPixelBuffer(PixelBuffer pixelBuffer) {
+		this.pixelBuffer = pixelBuffer;
+	}
 }
