@@ -1,8 +1,8 @@
 package raytrace.light;
 
-import raytrace.surfaces.CompositeSurface;
+import raytrace.surfaces.TerminalSurface;
 
-public class Light extends CompositeSurface {
+public class Light extends TerminalSurface {
 
 	
 
