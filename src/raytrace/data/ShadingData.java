@@ -1,6 +1,6 @@
 package raytrace.data;
 
-import raytrace.scene.Scene;
+import raytrace.surfaces.CompositeSurface;
 
 public class ShadingData{
 	
@@ -10,7 +10,8 @@ public class ShadingData{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Scene scene;
+	protected CompositeSurface rootSurface;
+	protected IntersectionData intersectionData;
 	
 
 	/* *********************************************************************************************
@@ -19,6 +20,25 @@ public class ShadingData{
 	public ShadingData()
 	{
 		
+	}
+
+
+	
+	
+	public CompositeSurface getRootSurface() {
+		return rootSurface;
+	}
+
+	public void setRootSurface(CompositeSurface rootSurface) {
+		this.rootSurface = rootSurface;
+	}
+
+	public IntersectionData getIntersectionData() {
+		return intersectionData;
+	}
+
+	public void setIntersectionData(IntersectionData intersectionData) {
+		this.intersectionData = intersectionData;
 	}
 	
 	
