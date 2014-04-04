@@ -106,7 +106,7 @@ public class PinholeCamera extends Camera {
 		//TODO: Might be slow
 		Vector4 dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph));
 		
-		return new Ray(orig, dir);
+		return new Ray(orig, dir, (int)x, (int)y);
 	}
 	
 	
