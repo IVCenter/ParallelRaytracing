@@ -52,7 +52,7 @@ public class TestScene1 extends Scene {
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed += 0.1;
+		elapsed += 0.2;
 		
 		Vector4 pos = sphere.getPosition();
 		pos.set(Math.cos(elapsed/8.0), 1.0 + Math.sin(elapsed/8.0), 0.0, 1);
