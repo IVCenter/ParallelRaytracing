@@ -10,7 +10,7 @@ import raster.PixelBuffer;
 import raytrace.camera.Camera;
 import raytrace.camera.RayBuffer;
 import raytrace.framework.Tracer;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.scene.Scene;
 
 public class ParallelRayTracer implements Tracer {
 	
@@ -48,9 +48,11 @@ public class ParallelRayTracer implements Tracer {
 	
 	
 	//TODO: Find a better way to get this data to the tracers
-	private PixelBuffer pixelBuffer;
-	private Camera camera;
-	private CompositeSurface surface;
+	//NOTE: These change every call to trace
+	private PixelBuffer activePixelBuffer;
+	@SuppressWarnings("unused")
+	private Camera activeCamera;
+	private Scene activeScene;
 	
 	
 
@@ -85,12 +87,12 @@ public class ParallelRayTracer implements Tracer {
 	 * Trace Overrides
 	 * *********************************************************************************************/
 	@Override
-	public synchronized void trace(PixelBuffer pixelBuffer, Camera camera, CompositeSurface surface)
+	public synchronized void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene)
 	{	
 		//Store parameters
-		this.pixelBuffer = pixelBuffer;
-		this.camera = camera;
-		this.surface = surface;
+		this.activePixelBuffer = pixelBuffer;
+		this.activeCamera = camera;
+		this.activeScene = scene;
 		
 		//Start tracing
 		Logger.progress(-1, "Starting Tracing...(" + threadCount + " threads).");
@@ -241,15 +243,8 @@ public class ParallelRayTracer implements Tracer {
 				//Logger.progress(-1, "Starting RayTracerWorker ID:[" + id + "]...");
 				
 				RayBuffer buffer = rayBuffers.get(id);
-				tracer.trace(pixelBuffer, buffer, surface);
+				tracer.trace(activePixelBuffer, buffer, activeScene);
 				
-				/*
-				double acc = 0.0;
-				for(Ray ray : buffer)
-				{
-					acc += ray.getDirection().get(0);
-					//acc += 1.1;
-				}*/
 				
 				//Logger.progress(-1, "Ending RayTracerWorker ID:[" + id + "]...");
 				

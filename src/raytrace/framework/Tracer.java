@@ -2,7 +2,7 @@ package raytrace.framework;
 
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.scene.Scene;
 
 public interface Tracer {
 
@@ -14,8 +14,9 @@ public interface Tracer {
 	 * 
 	 * @param pixelBuffer
 	 * @param camera
-	 * @param surface
+	 * @param scene
 	 */
-	public void trace(PixelBuffer pixelBuffer, Camera camera, CompositeSurface surface);
+	public void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene);
+	//public void trace(PixelBuffer pixelBuffer, Camera camera, CompositeSurface surface);
 	
 }
