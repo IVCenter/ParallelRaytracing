@@ -11,6 +11,8 @@ public class Ray {
 	 * *********************************************************************************************/
 	protected Vector4 origin;
 	protected Vector4 direction;
+	protected int pixelX;
+	protected int pixelY;
 	
 
 	/* *********************************************************************************************
@@ -20,13 +22,17 @@ public class Ray {
 	{
 		origin = new Vector4();
 		direction = new Vector4();
+		pixelX = 0;
+		pixelY = 0;
 	}
 	
 	//We assume that direction is normalized
-	public Ray(Vector4 origin, Vector4 direction)
+	public Ray(Vector4 origin, Vector4 direction, int pixelX, int pixelY)
 	{
 		this.origin = origin;
 		this.direction = direction;
+		this.pixelX = pixelX;
+		this.pixelY = pixelY;
 	}
 	
 
@@ -58,6 +64,23 @@ public class Ray {
 	public void setDirection(Vector4 direction) {
 		this.direction = direction;
 	}
+
+	public int getPixelX() {
+		return pixelX;
+	}
+
+	public void setPixelX(int pixelX) {
+		this.pixelX = pixelX;
+	}
+
+	public int getPixelY() {
+		return pixelY;
+	}
+
+	public void setPixelY(int pixelY) {
+		this.pixelY = pixelY;
+	}
+	
 	
 	
 }
