@@ -61,6 +61,7 @@ public class ApplicationDelegate extends Job{
 		if(Configuration.isDrawingToScreen())
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			screenDrawer.setVerticalSynchronize(false);
 			pixelBuffer = screenDrawer.getPixelBuffer();
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
