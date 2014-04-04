@@ -46,7 +46,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 		Vector4 transOrigin = inverseTransform.multiplyPt(oldRay.getOrigin());
 		Vector4 transDirection = inverseTransform.multiply3(oldRay.getDirection());
 		
-		Ray newRay = new Ray(transOrigin, transDirection);
+		Ray newRay = new Ray(transOrigin, transDirection, oldRay.getPixelX(), oldRay.getPixelY());
 		
 		data.setRay(newRay);
 		
