@@ -1,5 +1,6 @@
 package raytrace.camera;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import math.Ray;
@@ -19,6 +20,8 @@ public class PinholeCamera extends Camera {
 	
 	protected double imagePlaneRatio;
 	
+	protected ArrayList<Ray> precalculatedRays;
+	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -26,12 +29,14 @@ public class PinholeCamera extends Camera {
 	public PinholeCamera()
 	{
 		super();
+		precalculatedRays = new ArrayList<Ray>();
 		update();
 	}
 	
 	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
+		precalculatedRays = new ArrayList<Ray>();
 		update();
 	}
 
@@ -43,7 +48,10 @@ public class PinholeCamera extends Camera {
 	public Iterator<Ray> iterator()
 	{
 		//Create and return a ray iterator
-		return new RayIterator();
+		if(precalculatedRays.isEmpty())
+			return new RayIterator();
+		else
+			return precalculatedRays.iterator();
 	}
 
 	
@@ -63,6 +71,14 @@ public class PinholeCamera extends Camera {
 		//Update the image plane values
 		imagePlaneWidth = 2*Math.tan(fieldOfView/2.0);
 		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
+		
+		//Buffer rays
+		precalculatedRays.clear();
+		for(Ray ray : this)
+			precalculatedRays.add(ray);
+		
+		//Since the rays are new change the set ID
+		raySetID++;
 	}
 
 	
@@ -80,10 +96,15 @@ public class PinholeCamera extends Camera {
 		double ph = ((y/pixelHeight) - 0.5) * imagePlaneHeight;
 		
 		//Create the direction vector
+		/*
 		Vector4 dir = new Vector4(viewingDirection.x + pw*cameraX.x + ph*cameraY.x,
 								  viewingDirection.y + pw*cameraX.y + ph*cameraY.y,
 								  viewingDirection.z + pw*cameraX.z + ph*cameraY.z,
 								  0.0);
+								  */
+		
+		//TODO: Might be slow
+		Vector4 dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph));
 		
 		return new Ray(orig, dir);
 	}

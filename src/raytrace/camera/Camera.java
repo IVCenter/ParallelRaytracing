@@ -20,6 +20,8 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
 	
+	protected int raySetID = 0;
+	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -108,5 +110,9 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	public void setPixelHeight(double pixelHeight) {
 		this.pixelHeight = pixelHeight;
 		update();
+	}
+
+	public int getRaySetID() {
+		return raySetID;
 	}
 }

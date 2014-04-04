@@ -3,9 +3,12 @@ package raytrace;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import math.Ray;
+
 import process.logging.Logger;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
+import raytrace.camera.RayBuffer;
 import raytrace.framework.Tracer;
 import raytrace.surfaces.CompositeSurface;
 
@@ -17,8 +20,8 @@ public class ParallelRayTracer implements Tracer {
 	/* *********************************************************************************************
 	 * Local Constants
 	 * *********************************************************************************************/
-	protected static final String k = "";
-	private static AtomicInteger idPool = new AtomicInteger(0);
+	//protected static final String k = "";
+	//private static AtomicInteger idPool = new AtomicInteger(0);
 	
 	
 	/* *********************************************************************************************
@@ -35,6 +38,13 @@ public class ParallelRayTracer implements Tracer {
 
 	protected ArrayList<SynchronizingWorker> workers;
 	protected ArrayList<Thread> threadPool;
+	protected ArrayList<RayBuffer> rayBuffers;
+	
+	
+	//Used to cache rays
+	private Camera cameraUsedForDistro = null;
+	private int cameraRaySetID = -1;
+	
 	
 
 	/* *********************************************************************************************
@@ -46,14 +56,16 @@ public class ParallelRayTracer implements Tracer {
 		threadCount = cores;
 		workers = new ArrayList<SynchronizingWorker>(cores);
 		threadPool = new ArrayList<Thread>(cores);
+		rayBuffers = new ArrayList<RayBuffer>(cores);
 		
 		//Create as many workers as there are cores
 		SynchronizingWorker worker;
 		for(int i = 0; i < cores; ++i)
 		{
-			worker = new SynchronizingWorker();
+			worker = new SynchronizingWorker(i);
 			workers.add(worker);
 			threadPool.add(new Thread(worker));
+			rayBuffers.add(new RayBuffer());
 		}
 		
 		//Start the workers (they should imediately fall into a spin lock)
@@ -68,12 +80,17 @@ public class ParallelRayTracer implements Tracer {
 	@Override
 	public void trace(PixelBuffer pixelBuffer, Camera camera, CompositeSurface surface)
 	{
-		Logger.progress(-1, "Starting Tracing...");
+		Logger.progress(-1, "Starting Tracing...(" + threadCount + " threads).");
+		long startTime = System.currentTimeMillis();
 		
+		//TODO: Distribute camera rays
+		distributeRays(camera);
+		
+		//Update the call id, clear the complete count
 		callID++;
 		
+		//Clear thread control flags/counts
 		completedCount.set(0);
-		
 		isComplete = false;
 		wasNotified = true;
 		
@@ -97,19 +114,18 @@ public class ParallelRayTracer implements Tracer {
 		}
 		
 		//Re-enable the spin lock on the workers
-		//TODO: This may be insufficient.  If a worker finishes much quicker than another,
-		//	the finished worker has a small chance of spuriously waking up until all other
-		//	workers finish
 		wasNotified = false;
 		
 
-		Logger.progress(-1, "Ending Tracing...");
+		Logger.progress(-1, "Ending Tracing... (" + (System.currentTimeMillis()-startTime) + "ms).");
 		
+		/*
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	private void incrementCompletedCount()
@@ -125,6 +141,35 @@ public class ParallelRayTracer implements Tracer {
 			}
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void distributeRays(Camera camera)
+	{
+		if(camera == cameraUsedForDistro && camera.getRaySetID() == cameraRaySetID)
+			return;
+		
+		cameraUsedForDistro = camera;
+		cameraRaySetID = camera.getRaySetID();
+		
+		int bufCount = rayBuffers.size();
+		ArrayList<Ray>[] buffers = (ArrayList<Ray>[])new ArrayList[bufCount];
+		
+		//Get the buffers and clear them
+		int i = 0;
+		ArrayList<Ray> temp;
+		for(RayBuffer buffer : rayBuffers) {
+			temp = buffer.getRays();
+			temp.clear();
+			buffers[i++] = temp;
+		}
+		
+		//Distribute the rays to each buffer
+		i = 0;
+		for(Ray ray : camera)
+		{
+			buffers[(i++)%bufCount].add(new Ray(ray.getOrigin(), ray.getDirection()));
+		}
+	}
 
 
 	/* *********************************************************************************************
@@ -138,15 +183,15 @@ public class ParallelRayTracer implements Tracer {
 		/* *********************************************************************************************
 		 * Instance Vars
 		 * *********************************************************************************************/
-		public final int id = idPool.getAndIncrement();
+		public final int id;
 		private int currentCallID = 0;
 
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
-		public SynchronizingWorker()
+		public SynchronizingWorker(int id)
 		{
-			
+			this.id = id;
 		}
 		
 
@@ -178,8 +223,17 @@ public class ParallelRayTracer implements Tracer {
 
 				
 				//Do tracing here
-				Logger.progress(-1, "Running RayTracerWorker ID:[" + id + "]...");
+				//Logger.progress(-1, "Starting RayTracerWorker ID:[" + id + "]...");
 				
+				RayBuffer buffer = rayBuffers.get(id);
+				double acc = 0.0;
+				for(Ray ray : buffer)
+				{
+					acc += ray.getDirection().get(0);
+					//acc += 1.1;
+				}
+				
+				//Logger.progress(-1, "Ending RayTracerWorker ID:[" + id + "]...");
 				
 				//Increment the completed counter
 				incrementCompletedCount();
