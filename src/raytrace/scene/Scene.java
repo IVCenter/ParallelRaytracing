@@ -1,7 +1,12 @@
 package raytrace.scene;
 
+import java.util.Iterator;
+
 import raytrace.camera.Camera;
 import raytrace.data.BakeData;
+import raytrace.light.Light;
+import raytrace.light.LightManager;
+import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
 
 public abstract class Scene extends CompositeSurface{
@@ -13,6 +18,8 @@ public abstract class Scene extends CompositeSurface{
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Camera activeCamera;
+	protected LightManager lightManager;
+	protected Material skyMaterial;
 	
 
 	/* *********************************************************************************************
@@ -50,5 +57,27 @@ public abstract class Scene extends CompositeSurface{
 	public void setActiveCamera(Camera activeCamera) {
 		this.activeCamera = activeCamera;
 	}
+
+	public LightManager getLightManager() {
+		return lightManager;
+	}
+
+	public void setLightManager(LightManager lightManager) {
+		this.lightManager = lightManager;
+	}
+	
+	public Iterator<Light> lights()
+	{
+		return lightManager.iterator();
+	}
+
+	public Material getSkyMaterial() {
+		return skyMaterial;
+	}
+
+	public void setSkyMaterial(Material skyMaterial) {
+		this.skyMaterial = skyMaterial;
+	}
+	
 
 }

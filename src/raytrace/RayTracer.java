@@ -3,10 +3,13 @@ package raytrace;
 import math.Ray;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
+import raytrace.color.Color;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.ShadingData;
 import raytrace.framework.Tracer;
+import raytrace.material.ColorMaterial;
+import raytrace.material.Material;
 import raytrace.scene.Scene;
 
 public class RayTracer implements Tracer {
@@ -27,6 +30,10 @@ public class RayTracer implements Tracer {
 		ShadingData sdata = new ShadingData();
 		sdata.setRootScene(scene);
 		
+		Material skyMaterial = scene.getSkyMaterial();
+		if(skyMaterial == null)
+			skyMaterial = new ColorMaterial(Color.black());
+		
 		//For each ray, calculate the pixel color
 		for(Ray ray : camera)
 		{
@@ -42,7 +49,7 @@ public class RayTracer implements Tracer {
 			{
 				sdata.setIntersectionData(idata);
 				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
-						idata.getSurface().getMaterial().shade(sdata).rgb32();
+						idata.getMaterial().shade(sdata).rgb32();
 				
 			//If there wasn't an intersection, TODO do something more clever! (Sky material object? on scene?)
 			}else{
@@ -52,7 +59,7 @@ public class RayTracer implements Tracer {
 				
 				//TODO: Replace this with a scene stored sky material
 				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
-						0xffff0068;
+						skyMaterial.shade(sdata).rgb32();
 			}
 		}
 	}
