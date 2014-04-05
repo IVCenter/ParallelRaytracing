@@ -92,8 +92,8 @@ public class PinholeCamera extends Camera {
 		Vector4 orig = new Vector4(position);
 		
 		//Pre-calculate the axis weights
-		double pw = ((x/pixelWidth) - 0.5) * imagePlaneWidth;
-		double ph = ((y/pixelHeight) - 0.5) * imagePlaneHeight;
+		double pw = (((x+0.5)/pixelWidth) - 0.5) * imagePlaneWidth;
+		double ph = (((y+0.5)/pixelHeight) - 0.5) * imagePlaneHeight;
 		
 		//Create the direction vector
 		/*
