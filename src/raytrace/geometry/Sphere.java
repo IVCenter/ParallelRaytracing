@@ -86,7 +86,8 @@ public class Sphere extends TerminalSurface implements Positionable {
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(idata.getPoint().subtract3(center).normalize3());
-		idata.setSurface(this);
+		//idata.setSurface(this);
+		idata.setMaterial(material);
 		
 		return idata;
 	}

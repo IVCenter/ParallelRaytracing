@@ -73,7 +73,8 @@ public class Plane extends TerminalSurface implements Positionable {
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(new Vector4(normal));
 		idata.setTwoSided(true);
-		idata.setSurface(this);
+		//idata.setSurface(this);
+		idata.setMaterial(material);
 		
 		return idata;
 	}

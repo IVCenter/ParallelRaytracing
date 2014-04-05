@@ -74,10 +74,7 @@ public class Triangle extends TerminalSurface {
 	public IntersectionData intersects(RayData data)
 	{
 		Ray ray = data.getRay();
-		double t0 = data.getTStart();
-		double t1 = data.getTEnd();
 		
-		double[] e = ray.getOrigin().getM();
 		double[] d = ray.getDirection().getM();
 
 		double[] a = vertices[0].getM();
@@ -93,19 +90,32 @@ public class Triangle extends TerminalSurface {
 		double vg = d[0];
 		double vh = d[1];
 		double vi = d[2];
-		double vj = a[0] - e[0];
-		double vk = a[1] - e[1];
-		double vl = a[2] - e[2];
 		
 		double ei_hf = ve * vi - vh * vf;
 		double gf_di = vg * vf - vd * vi;
 		double dh_eg = vd * vh - ve * vg;
+		
+		double m = va * ei_hf + vb * gf_di + vc * dh_eg;
+		
+		//If the determinant m is 0, then the ray is parallel
+		if(m == 0.0)
+			return null;
+
+		
+		double[] e = ray.getOrigin().getM();
+		
+		double vj = a[0] - e[0];
+		double vk = a[1] - e[1];
+		double vl = a[2] - e[2];
+		
 		double ak_jb = va * vk - vj * vb;
 		double jc_al = vj * vc - va * vl;
 		double bl_kc = vb * vl - vk * vc;
 		
-		double m = va * ei_hf + vb * gf_di + vc * dh_eg;
+		
 		double t = (vf * ak_jb + ve * jc_al + vd * bl_kc) / m;
+		double t0 = data.getTStart();
+		double t1 = data.getTEnd();
 
 		//Test if t is in the given time range
 		if(t <= t0 || t > t1)
@@ -133,7 +143,8 @@ public class Triangle extends TerminalSurface {
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(ray.getDirection().dot3(normal) < 0 ? normal.multiply3(-1) : normal);
-		idata.setSurface(this);
+		//idata.setSurface(this);
+		idata.setMaterial(material);
 		
 		return idata;
 	}
