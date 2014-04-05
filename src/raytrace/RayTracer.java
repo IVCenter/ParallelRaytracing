@@ -51,13 +51,13 @@ public class RayTracer implements Tracer {
 				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
 						idata.getMaterial().shade(sdata).rgb32();
 				
-			//If there wasn't an intersection, TODO do something more clever! (Sky material object? on scene?)
+			//If there wasn't an intersection, use the sky material
 			}else{
 				
 				//Make sure the intersection data is null!
 				sdata.setIntersectionData(null);
 				
-				//TODO: Replace this with a scene stored sky material
+				//Shade the pixel using the sky material
 				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
 						skyMaterial.shade(sdata).rgb32();
 			}
