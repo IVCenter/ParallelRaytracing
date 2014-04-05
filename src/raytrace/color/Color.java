@@ -1,5 +1,7 @@
 package raytrace.color;
 
+import process.utils.StringUtils;
+
 public class Color {
 	
 	/*
@@ -26,6 +28,20 @@ public class Color {
 		this.channels[1] = channels[1];
 		this.channels[2] = channels[2];
 		this.channels[3] = channels[3];
+	}
+	
+	public Color(int color)
+	{
+		this();
+		
+		//construct a bit mask 0xff000000
+	    int mask = 0xff000000;
+	    int u8bit = 0x000000ff;
+	    
+	    //Unpack each 8bit segment into a float, and normalize such that 255 ~= 1.0
+	    for(int i = 0; mask != 0 && i < 4; ++i, mask = mask >>> 8) {
+	        channels[i] = ((double) ((color & mask) >>> ((3-i)*8) ) ) / u8bit;
+	    }
 	}
 	
 	public Color(double r, double g, double b, double a)
@@ -55,15 +71,44 @@ public class Color {
 		double max = Math.max(Math.max(channels[0], channels[1]), channels[2]);
 		if(max < 1.0)
 			max = 1.0;
-		return  (0xff << 24) +
-				((int)(channels[0]/max * 256) << 16) +
-				((int)(channels[1]/max * 256) << 8) +
-				((int)(channels[2]/max * 256));
+		return  (0x000000ff << 24) +
+				((int)((channels[0]/max) * 255) << 16) +
+				((int)((channels[1]/max) * 255) << 8) +
+				((int)((channels[2]/max) * 255));
+	}
+	
+	public Color multiply3(double d)
+	{
+		return new Color(channels[0] * d, channels[1] * d, channels[2] * d, channels[3]);
+	}
+	
+	public Color interpolate(Color color0, Color color1, double t)
+	{
+		t = Math.min(1.0, Math.max(0.0, t));
+		double[] c0 = color0.getChannels();
+		double[] c1 = color1.getChannels();
+		
+	    return new Color((1.0 - t) * c0[0] + t * c1[0],
+	                 	 (1.0 - t) * c0[1] + t * c1[1],
+	                 	 (1.0 - t) * c0[2] + t * c1[2],
+	                 	 (1.0 - t) * c0[3] + t * c1[3]);
+	}
+	
+
+	/* *********************************************************************************************
+	 * Print Methods
+	 * *********************************************************************************************/
+	public void print()
+	{
+		System.out.println("[" + StringUtils.column(""+channels[0], 8) + ", " + 
+								 StringUtils.column(""+channels[1], 8) + ", " +
+								 StringUtils.column(""+channels[2], 8) + ", " +
+								 StringUtils.column(""+channels[3], 8) + "]");
 	}
 	
 	
 	/* *********************************************************************************************
-	 * Calculation Methods
+	 * Getters/Setter Methods
 	 * *********************************************************************************************/
 	public double[] getChannels()
 	{
