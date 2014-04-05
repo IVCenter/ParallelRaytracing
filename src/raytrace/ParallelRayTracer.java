@@ -122,7 +122,6 @@ public class ParallelRayTracer implements Tracer {
 					mainLock.wait();
 						
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -134,13 +133,6 @@ public class ParallelRayTracer implements Tracer {
 		//Tracing done
 		Logger.progress(-1, "Ending Tracing... (" + (System.currentTimeMillis()-startTime) + "ms).");
 		
-		/*
-		try {
-			Thread.sleep(50);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		*/
 	}
 	
 	private void incrementCompletedCount()
