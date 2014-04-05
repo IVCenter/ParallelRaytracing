@@ -1,6 +1,6 @@
 package raytrace.data;
 
-import raytrace.surfaces.CompositeSurface;
+import raytrace.material.Material;
 import math.Ray;
 import math.Vector4;
 
@@ -15,9 +15,10 @@ public class IntersectionData {
 	protected Vector4 normal;
 	protected boolean twoSided;
 	protected Ray ray;
-	protected CompositeSurface surface;
+	//protected CompositeSurface surface;
+	protected Material material;
 
-	
+
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
@@ -95,11 +96,22 @@ public class IntersectionData {
 	}
 
 	//Surface
+	/*
 	public CompositeSurface getSurface() {
 		return surface;
 	}
 
 	public void setSurface(CompositeSurface surface) {
 		this.surface = surface;
+	}
+	*/
+	
+	//Material
+	public Material getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
 	}
 }
