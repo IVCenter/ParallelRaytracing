@@ -77,9 +77,27 @@ public class Color {
 				((int)((channels[2]/max) * 255));
 	}
 	
+	public Color add3(Color c)
+	{
+		return new Color(channels[0] + c.channels[0], channels[1] + c.channels[1], channels[2] + c.channels[2], channels[3]);
+	}
+	
+	public Color add3M(Color c)
+	{
+		channels[0] += c.channels[0];
+		channels[1] += c.channels[1];
+		channels[2] += c.channels[2];
+		return this;
+	}
+	
 	public Color multiply3(double d)
 	{
 		return new Color(channels[0] * d, channels[1] * d, channels[2] * d, channels[3]);
+	}
+	
+	public Color multiply3(Color c)
+	{
+		return new Color(channels[0] * c.channels[0], channels[1] * c.channels[1], channels[2] * c.channels[2], channels[3]);
 	}
 	
 	public Color interpolate(Color color0, Color color1, double t)
