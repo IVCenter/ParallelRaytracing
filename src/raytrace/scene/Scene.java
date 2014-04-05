@@ -27,6 +27,7 @@ public abstract class Scene extends CompositeSurface{
 	 * *********************************************************************************************/
 	public Scene()
 	{
+		lightManager = new LightManager();
 		initialize();
 	}
 	
