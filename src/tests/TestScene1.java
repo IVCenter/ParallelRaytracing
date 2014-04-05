@@ -26,6 +26,8 @@ public class TestScene1 extends Scene {
 	{
 		// TODO Auto-generated method stub
 		
+		skyMaterial = new ColorMaterial(new Color(0xff0068ff));
+		
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
 		activeCamera.setPosition(new Vector4(0,2,5,0));
