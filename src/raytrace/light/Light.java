@@ -2,6 +2,7 @@ package raytrace.light;
 
 import math.Vector4;
 import raytrace.color.Color;
+import raytrace.data.IlluminationData;
 import raytrace.framework.Positionable;
 import raytrace.surfaces.TerminalSurface;
 
@@ -17,7 +18,7 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	protected double linearAttenuation = 0.0;
 	protected double quadraticAttenuation = 1.0;
 	
-	protected Color color = Color.white();;
+	protected Color color = Color.white();
 	protected double intensity = 1.0;
 	
 	protected Vector4 position = new Vector4();
@@ -26,7 +27,7 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
-	public abstract Color illuminate();
+	public abstract IlluminationData illuminate(Vector4 point);
 
 
 	/* *********************************************************************************************
