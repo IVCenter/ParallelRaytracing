@@ -25,9 +25,8 @@ public class Launcher {
 		
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
-		//TODO: Pass off control to the Delegate
-		Configuration.setScreenWidth(960);
-		Configuration.setScreenHeight(640);
+		Configuration.setScreenWidth(512);
+		Configuration.setScreenHeight(512);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);
 		Configuration.setLeaf(true);
