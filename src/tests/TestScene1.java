@@ -6,7 +6,10 @@ import raytrace.color.Color;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
+import raytrace.light.DirectionalLight;
+import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DiffuseMaterial;
 import raytrace.scene.Scene;
 import system.Configuration;
 
@@ -41,13 +44,44 @@ public class TestScene1 extends Scene {
 		
 		//Make a plane
 		Plane plane = new Plane();
-		plane.setMaterial(new ColorMaterial(Color.grey(0.2)));
+		plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
 		this.addChild(plane);
 		
 		//Make a sphere
 		sphere = new Sphere();
-		sphere.setMaterial(new ColorMaterial(Color.grey(0.7)));
+		sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
 		this.addChild(sphere);
+		
+		
+		//Make a point light
+		{
+			PointLight pointLight = new PointLight();
+			pointLight.setColor(new Color(0x00ff68ff));
+			pointLight.setPosition(new Vector4(0,4,4,0));
+			pointLight.setIntensity(16.0);
+			lightManager.addLight(pointLight);
+		}
+		{
+			PointLight pointLight = new PointLight();
+			pointLight.setColor(new Color(0x6800ffff));
+			pointLight.setPosition(new Vector4(2,0.5,1.0,0));
+			pointLight.setIntensity(4.0);
+			lightManager.addLight(pointLight);
+		}
+		{
+			PointLight pointLight = new PointLight();
+			pointLight.setColor(new Color(0x68ff00ff));
+			pointLight.setPosition(new Vector4(-2,0.5,1.0,0));
+			pointLight.setIntensity(4.0);
+			lightManager.addLight(pointLight);
+		}
+		
+		//Directional Light
+		DirectionalLight directionalLight = new DirectionalLight();
+		directionalLight.setColor(Color.white());
+		directionalLight.setIntensity(0.95);
+		directionalLight.setDirection(new Vector4(1,-1,-0.2,0));
+		lightManager.addLight(directionalLight);
 		
 	}
 	
