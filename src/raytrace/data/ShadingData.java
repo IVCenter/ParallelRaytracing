@@ -15,13 +15,15 @@ public class ShadingData{
 	protected IntersectionData intersectionData;
 	protected Ray ray;
 	
+	protected int recursionDepth;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
 	public ShadingData()
 	{
-		
+		recursionDepth = 0;
 	}
 
 
@@ -50,6 +52,14 @@ public class ShadingData{
 
 	public void setRay(Ray ray) {
 		this.ray = ray;
+	}
+
+	public int getRecursionDepth() {
+		return recursionDepth;
+	}
+
+	public void setRecursionDepth(int recursionDepth) {
+		this.recursionDepth = recursionDepth;
 	}
 
 }
