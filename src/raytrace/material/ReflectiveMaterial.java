@@ -42,6 +42,7 @@ public class ReflectiveMaterial  extends Material{
 		
 		IntersectionData shadowData;
 		
+		//Diffuse lighting and shadows
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
@@ -56,9 +57,9 @@ public class ReflectiveMaterial  extends Material{
 			if(shadowData == null)
 				shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
-		
-		Color rflectColor = new Color();
+
 		//If reflective, go divin'
+		Color rflectColor = new Color();
 		if(reflectivePercent != 0.0)
 		{
 			RayData rdata = new RayData();
@@ -66,7 +67,7 @@ public class ReflectiveMaterial  extends Material{
 			Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
 			Ray ray = new Ray(point, reflect, 0, 0);
 			rdata.setRay(ray);
-			rdata.setTStart(0.001);
+			rdata.setTStart(RECURSIVE_EPSILON);
 			
 			IntersectionData idata = data.getRootScene().intersects(rdata);
 			
@@ -80,10 +81,7 @@ public class ReflectiveMaterial  extends Material{
 			
 			//If there wasn't an intersection, use the sky material
 			}else{
-				//Make sure the intersection data is null!
 				sdata.setIntersectionData(null);
-				
-				//Shade the pixel using the sky material
 				rflectColor = data.getRootScene().getSkyMaterial().shade(sdata);
 			}
 		}
