@@ -16,8 +16,7 @@ public class Triangle extends TerminalSurface {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4[] vertices;
-	protected Vector4[] normals;
+	protected Vertex[] vertices;
 	
 
 	/* *********************************************************************************************
@@ -25,10 +24,10 @@ public class Triangle extends TerminalSurface {
 	 * *********************************************************************************************/
 	public Triangle()
 	{
-		vertices = new Vector4[3];
-		normals = new Vector4[3];
+		vertices = new Vertex[3];
+		/*
 		for(int i = 0; i < 3; ++i) {
-			vertices[i] = new Vector4();
+			vertices[i] = new Vertex();
 			vertices[i].set(i, 1);
 		}
 		
@@ -36,32 +35,15 @@ public class Triangle extends TerminalSurface {
 		for(int i = 0; i < 3; ++i) {
 			normals[i] = new Vector4(normal);
 		}
+		*/
 	}
 	
-	public Triangle(Vector4 v0, Vector4 v1, Vector4 v2, Vector4 n0, Vector4 n1, Vector4 n2)
+	public Triangle(Vertex v0, Vertex v1, Vertex v2)
 	{
-		vertices = new Vector4[3];
+		vertices = new Vertex[3];
 		vertices[0] = v0;
 		vertices[1] = v1;
 		vertices[2] = v2;
-
-		normals = new Vector4[3];
-		normals[0] = n0.normalize3();
-		normals[1] = n1.normalize3();
-		normals[2] = n2.normalize3();
-	}
-	
-	public Triangle(Vector4 v0, Vector4 v1, Vector4 v2)
-	{
-		vertices = new Vector4[3];
-		vertices[0] = v0;
-		vertices[1] = v1;
-		vertices[2] = v2;
-
-		Vector4 normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
-		for(int i = 0; i < 3; ++i) {
-			normals[i] = new Vector4(normal);
-		}
 	}
 	
 
@@ -77,9 +59,9 @@ public class Triangle extends TerminalSurface {
 		
 		double[] d = ray.getDirection().getM();
 
-		double[] a = vertices[0].getM();
-		double[] b = vertices[1].getM();
-		double[] c = vertices[2].getM();
+		double[] a = vertices[0].getPosition().getM();
+		double[] b = vertices[1].getPosition().getM();
+		double[] c = vertices[2].getPosition().getM();
 
 		double va = a[0] - b[0];
 		double vb = a[1] - b[1];
@@ -134,7 +116,11 @@ public class Triangle extends TerminalSurface {
 			return null;
 		
 		//Interpolate the normals
-		Vector4 normal = normals[0].multiply3(1.0 - (gamma + beta)).add3(normals[1].multiply3(beta)).add3(normals[2].multiply3(gamma));
+		Vector4 normal = vertices[0].getNormal().multiply3(1.0 - (gamma + beta)).add3(
+							vertices[1].getNormal().multiply3(beta)
+						 ).add3(
+							vertices[2].getNormal().multiply3(gamma)
+						 );
 		
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
@@ -165,36 +151,28 @@ public class Triangle extends TerminalSurface {
 	public void updateBoundingBox()
 	{
 		boundingBox.clear();
-		boundingBox.min.minimize3(vertices[0]).minimize3(vertices[1]).minimize3(vertices[2]);
-		boundingBox.max.maximize3(vertices[0]).maximize3(vertices[1]).maximize3(vertices[2]);
+		boundingBox.min.minimize3(vertices[0].getPosition()).minimize3(vertices[1].getPosition()).minimize3(vertices[2].getPosition());
+		boundingBox.max.maximize3(vertices[0].getPosition()).maximize3(vertices[1].getPosition()).maximize3(vertices[2].getPosition());
 	}
 	
 
 	/* *********************************************************************************************
 	 * Getter/Setter Methods
 	 * *********************************************************************************************/
-	public Vector4[] getVertices() {
+	public Vertex[] getVertices() {
 		return vertices;
 	}
 
-	public void setVertices(Vector4[] vertices) {
+	public void setVertices(Vertex[] vertices) {
 		this.vertices = vertices;
 	}
 	
-	public Vector4 getVertex(int element) {
+	public Vertex getVertex(int element) {
 		return vertices[element];
 	}
 	
-	public void set(int element, Vector4 v) {
+	public void setVertex(int element, Vertex v) {
 		vertices[element] = v;
-	}
-
-	public Vector4[] getNormasl() {
-		return normals;
-	}
-
-	public void setNormal(Vector4[] normals) {
-		this.normals = normals;
 	}
 	
 }
