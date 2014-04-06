@@ -18,6 +18,7 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.001;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 2000;
 	
 
 	/* *********************************************************************************************
