@@ -25,10 +25,16 @@ public class MatrixTransformSurface extends CompositeSurface {
 	public MatrixTransformSurface()
 	{
 		transform = new Matrix4();
-		transform.inverse();
+		transform.identity();
 		
 		inverseTransform = new Matrix4();
 		inverseTransform.identity();
+	}
+	
+	public MatrixTransformSurface(Matrix4 transform)
+	{
+		this.transform = transform;
+		inverseTransform = transform.inverse();
 	}
 	
 
@@ -38,6 +44,9 @@ public class MatrixTransformSurface extends CompositeSurface {
 	@Override
 	public IntersectionData intersects(RayData data)
 	{
+		if(children == null)
+			return null;
+		
 		//TODO: Make sure this actually works...
 		//TODO: Check against bounding box first
 		
@@ -64,7 +73,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 		
 		data.setRay(oldRay);
 		
-		//Translate back into parent coords
+		//Transform back into parent coords
 		if(closest != null)
 		{
 			closest.setRay(oldRay);
@@ -81,6 +90,8 @@ public class MatrixTransformSurface extends CompositeSurface {
 	{
 		//TODO:Consider using a mutation flag in Matrix4 to reduce the number of inverse() calls
 		inverseTransform = transform.inverse();
+		
+		super.bake(data);
 	}
 
 	@Override
@@ -91,6 +102,20 @@ public class MatrixTransformSurface extends CompositeSurface {
 		//And then calculate a bounding box much like composite surface does
 		
 		//Or do the opposite (call super.updateBound, then transform the min/max)
+	}
+
+
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public Matrix4 getTransform() {
+		return transform;
+	}
+
+	public void setTransform(Matrix4 transform)
+	{
+		this.transform = transform;
+		this.inverseTransform = transform.inverse();
 	}
 
 }
