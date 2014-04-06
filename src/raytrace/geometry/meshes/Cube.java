@@ -3,6 +3,7 @@ package raytrace.geometry.meshes;
 import math.Vector4;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
+import raytrace.material.Material;
 
 public class Cube extends MeshSurface {
 	
@@ -21,11 +22,13 @@ public class Cube extends MeshSurface {
 	public Cube()
 	{
 		//Unit cube centered at the origin
+		super();
 		initialize(1,1,1);
 	}
 	
 	public Cube(double xLength, double yLength, double zLength)
 	{
+		super();
 		initialize(xLength, yLength, zLength);
 	}
 
@@ -35,9 +38,9 @@ public class Cube extends MeshSurface {
 	 * *********************************************************************************************/
 	public void initialize(double xLength, double yLength, double zLength)
 	{
-		double x = xLength * 0.5f;
-		double y = yLength * 0.5f;
-		double z = zLength * 0.5f;
+		double x = xLength * 0.5;
+		double y = yLength * 0.5;
+		double z = zLength * 0.5;
 
 		//Vertices
 		Vector4 p000 = new Vector4(-x,-y,-z,0);
@@ -122,5 +125,16 @@ public class Cube extends MeshSurface {
 			triangles.add(new Triangle(v0, v1, v2));
 			triangles.add(new Triangle(v0, v2, v3));
 		}
+	}
+	
+
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public void setMaterial(Material material)
+	{
+		this.material = material;
+		for(Triangle tri: triangles)
+			tri.setMaterial(material);
 	}
 }
