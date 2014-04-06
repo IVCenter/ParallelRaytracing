@@ -17,7 +17,7 @@ public abstract class Material {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	//
+	protected static final double RECURSIVE_EPSILON = 0.001;
 	
 
 	/* *********************************************************************************************
@@ -50,6 +50,7 @@ public abstract class Material {
 	{
 		RayData rdata = new RayData();
 		rdata.setRay(ray);
+		rdata.setTStart(RECURSIVE_EPSILON);
 		IntersectionData idata = scene.intersects(rdata);
 		
 		//If no intersection, not shadowed
