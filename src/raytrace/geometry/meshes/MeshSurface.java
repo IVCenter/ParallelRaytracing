@@ -1,4 +1,4 @@
-package raytrace.geometry;
+package raytrace.geometry.meshes;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,7 @@ import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
+import raytrace.geometry.Triangle;
 import raytrace.surfaces.TerminalSurface;
 
 public class MeshSurface extends TerminalSurface {
@@ -15,7 +16,6 @@ public class MeshSurface extends TerminalSurface {
 	/*
 	 * A simple sphere class
 	 */
-	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
