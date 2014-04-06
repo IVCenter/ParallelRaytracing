@@ -1,17 +1,22 @@
 package tests;
 
+import math.Matrix4;
 import math.Vector4;
 import raytrace.camera.PinholeCamera;
 import raytrace.color.Color;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
+import raytrace.geometry.Triangle;
+import raytrace.geometry.Vertex;
+import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.MatrixTransformSurface;
 import system.Configuration;
 
 public class TestScene1 extends Scene {
@@ -54,6 +59,61 @@ public class TestScene1 extends Scene {
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
 		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
 		this.addChild(sphere);
+		
+		
+		//Test transform
+		MatrixTransformSurface matTrans = new MatrixTransformSurface();
+		{
+			Matrix4 mat = new Matrix4();
+			mat.identity();
+			mat.translation(-1.5, -0.2, 0);
+			matTrans.setTransform(mat);
+			this.addChild(matTrans);
+		}
+
+		MatrixTransformSurface matTrans2 = new MatrixTransformSurface();
+		{
+			Matrix4 mat = new Matrix4();
+			mat.identity();
+			mat.rotateY(Math.PI / 4.0);
+			matTrans2.setTransform(mat);
+			matTrans.addChild(matTrans2);
+		}
+
+		MatrixTransformSurface matTrans3 = new MatrixTransformSurface();
+		{
+			Matrix4 mat = new Matrix4();
+			mat.identity();
+			mat.scale(2.5);
+			matTrans3.setTransform(mat);
+			matTrans2.addChild(matTrans3);
+		}
+
+		MatrixTransformSurface matTrans4 = new MatrixTransformSurface();
+		{
+			Matrix4 mat = new Matrix4();
+			mat.identity();
+			mat.translation(1, 0, 0);
+			mat.rotateZ(0.1);
+			matTrans4.setTransform(mat);
+			matTrans3.addChild(matTrans4);
+		}
+		
+		
+		//Test Cube
+		Cube cube = new Cube(2,1,3);
+		cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
+		//cube.setMaterial(new DiffuseMaterial(Color.white()));
+		matTrans4.addChild(cube);
+		
+		
+		Triangle tri = new Triangle();
+		tri.setMaterial(new DiffuseMaterial(Color.white()));
+		Vector4 ZAxis = new Vector4(0,0,1,0);
+		tri.setVertex(0, new Vertex(new Vector4(-1,1,0,0), ZAxis, null));
+		tri.setVertex(1, new Vertex(new Vector4(1,1,0,0), ZAxis, null));
+		tri.setVertex(2, new Vertex(new Vector4(0,2,0,0), ZAxis, null));
+		//this.addChild(tri);
 		
 		for(int i = 0; i < 256; i++)
 		{
