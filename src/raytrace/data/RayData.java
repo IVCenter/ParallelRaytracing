@@ -36,6 +36,7 @@ public class RayData {
 	
 	public RayData(Ray ray, CompositeSurface rootSurface, double t0, double t1)
 	{
+		this();
 		this.t0 = t0;
 		this.t1 = t1;
 		this.ray = ray;
