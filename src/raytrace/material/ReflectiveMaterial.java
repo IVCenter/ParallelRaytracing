@@ -60,7 +60,7 @@ public class ReflectiveMaterial  extends Material{
 
 		//If reflective, go divin'
 		Color rflectColor = new Color();
-		if(reflectivePercent != 0.0)
+		if(reflectivePercent != 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
 			RayData rdata = new RayData();
 			Vector4 dir = data.getIntersectionData().getRay().getDirection();
@@ -74,6 +74,7 @@ public class ReflectiveMaterial  extends Material{
 			ShadingData sdata = new ShadingData();
 			sdata.setRay(rdata.getRay());
 			sdata.setRootScene(data.getRootScene());
+			sdata.setRecursionDepth(data.getRecursionDepth() + 1);
 			
 			if(idata != null) {
 				sdata.setIntersectionData(idata);
