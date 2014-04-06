@@ -1,6 +1,7 @@
 package raytrace;
 
 import process.logging.Logger;
+import raytrace.data.BakeData;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
@@ -48,8 +49,10 @@ public class ConfigurableRayTracer implements Renderer {
 	public void update(UpdateData data)
 	{
 		Logger.progress(-1, "Updating...");
-		if(scene != null)
+		if(scene != null) {
 			scene.update(data);
+			scene.bake(new BakeData());//TODO: Do we need a bake method on the interface for Renderers?
+		}
 	}
 
 	@Override
