@@ -10,6 +10,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
 import system.Configuration;
 
@@ -44,13 +45,30 @@ public class TestScene1 extends Scene {
 		
 		//Make a plane
 		Plane plane = new Plane();
-		plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
+		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
+		plane.setMaterial(new ReflectiveMaterial(Color.grey(0.9), 0.6));
 		this.addChild(plane);
 		
 		//Make a sphere
 		sphere = new Sphere();
-		sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
+		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
+		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
 		this.addChild(sphere);
+		
+		for(int i = 0; i < 256; i++)
+		{
+			Sphere sphere = new Sphere();
+			
+			if(Math.random() < 0.8) {
+				sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.9), Math.random()));
+			}else{
+				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
+			}
+			
+			sphere.setPosition(new Vector4(6 * Math.random() - 3.0, 6 * Math.random(), 8 * Math.random() - 6.0, 0));
+			sphere.setRadius(Math.random() * 0.3);
+			this.addChild(sphere);
+		}
 		
 		
 		//Make a point light
@@ -64,15 +82,22 @@ public class TestScene1 extends Scene {
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x6800ffff));
-			pointLight.setPosition(new Vector4(2,0.5,1.0,0));
-			pointLight.setIntensity(4.0);
+			pointLight.setPosition(new Vector4(3,0.5,1.0,0));
+			pointLight.setIntensity(8.0);
 			lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x68ff00ff));
-			pointLight.setPosition(new Vector4(-2,0.5,1.0,0));
-			pointLight.setIntensity(4.0);
+			pointLight.setPosition(new Vector4(-3,0.5,1.0,0));
+			pointLight.setIntensity(8.0);
+			lightManager.addLight(pointLight);
+		}
+		{
+			PointLight pointLight = new PointLight();
+			pointLight.setColor(new Color(0xff6800ff));
+			pointLight.setPosition(new Vector4(0.0,2.0,0.5,0));
+			pointLight.setIntensity(3.0);
 			lightManager.addLight(pointLight);
 		}
 		
@@ -88,11 +113,12 @@ public class TestScene1 extends Scene {
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed += 0.2;
+		elapsed += Math.PI/4.0;
 		
 		Vector4 pos = sphere.getPosition();
-		pos.set(Math.cos(elapsed/8.0), 1.0 + Math.sin(elapsed/8.0), 0.0, 1);
+		pos.set(Math.cos(elapsed), 1.0 + Math.sin(elapsed), 0.0, 1);
 		sphere.setPosition(pos);
+
 		
 		
 		//Update the children
