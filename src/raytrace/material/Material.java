@@ -43,7 +43,7 @@ public abstract class Material {
 		double dot = normal.dot3(fromLight);
 		if(dot >= 0.0)
 			return Color.black();
-		return light.multiply3(dot * -1.0);
+		return light.multiply3( dot * -1.0 );
 	}
 	
 	protected IntersectionData shadowed(Scene scene, Ray ray, double distanceToLight)
