@@ -63,12 +63,18 @@ public class Triangle extends TerminalSurface {
 		double[] b = vertices[1].getPosition().getM();
 		double[] c = vertices[2].getPosition().getM();
 
-		double va = a[0] - b[0];
-		double vb = a[1] - b[1];
-		double vc = a[2] - b[2];
-		double vd = a[0] - c[0];
-		double ve = a[1] - c[1];
-		double vf = a[2] - c[2];
+		//double va = a[0] - b[0];
+		//double vb = a[1] - b[1];
+		//double vc = a[2] - b[2];
+		//double vd = a[0] - c[0];
+		//double ve = a[1] - c[1];
+		//double vf = a[2] - c[2];
+		double va = b[0] - a[0];
+		double vb = b[1] - a[1];
+		double vc = b[2] - a[2];
+		double vd = c[0] - a[0];
+		double ve = c[1] - a[1];
+		double vf = c[2] - a[2];
 		double vg = d[0];
 		double vh = d[1];
 		double vi = d[2];
@@ -86,9 +92,12 @@ public class Triangle extends TerminalSurface {
 		
 		double[] e = ray.getOrigin().getM();
 		
-		double vj = a[0] - e[0];
-		double vk = a[1] - e[1];
-		double vl = a[2] - e[2];
+		//double vj = a[0] - e[0];
+		//double vk = a[1] - e[1];
+		//double vl = a[2] - e[2];
+		double vj = e[0] - a[0];
+		double vk = e[1] - a[1];
+		double vl = e[2] - a[2];
 		
 		double ak_jb = va * vk - vj * vb;
 		double jc_al = vj * vc - va * vl;
@@ -117,10 +126,10 @@ public class Triangle extends TerminalSurface {
 		
 		//Interpolate the normals
 		Vector4 normal = vertices[0].getNormal().multiply3(1.0 - (gamma + beta)).add3(
-							vertices[1].getNormal().multiply3(beta)
+							vertices[1].getNormal().multiply3(gamma)
 						 ).add3(
-							vertices[2].getNormal().multiply3(gamma)
-						 );
+							vertices[2].getNormal().multiply3(beta)
+						 ).normalize3();
 		
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
@@ -128,7 +137,7 @@ public class Triangle extends TerminalSurface {
 		idata.setRay(ray);
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
-		idata.setNormal(ray.getDirection().dot3(normal) < 0 ? normal.multiply3(-1) : normal);
+		idata.setNormal(ray.getDirection().dot3(normal) <= 0 ? normal : normal.multiply3(-1));
 		//idata.setSurface(this);
 		idata.setMaterial(material);
 		
