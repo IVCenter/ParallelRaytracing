@@ -5,7 +5,6 @@ import math.Vector4;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
-import raytrace.data.RayData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
 
@@ -62,29 +61,7 @@ public class ReflectiveMaterial  extends Material{
 		Color rflectColor = new Color();
 		if(reflectivePercent != 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			RayData rdata = new RayData();
-			Vector4 dir = data.getIntersectionData().getRay().getDirection();
-			Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
-			Ray ray = new Ray(point, reflect, 0, 0);
-			rdata.setRay(ray);
-			rdata.setTStart(RECURSIVE_EPSILON);
-			
-			IntersectionData idata = data.getRootScene().intersects(rdata);
-			
-			ShadingData sdata = new ShadingData();
-			sdata.setRay(rdata.getRay());
-			sdata.setRootScene(data.getRootScene());
-			sdata.setRecursionDepth(data.getRecursionDepth() + 1);
-			
-			if(idata != null) {
-				sdata.setIntersectionData(idata);
-				rflectColor = idata.getMaterial().shade(sdata);
-			
-			//If there wasn't an intersection, use the sky material
-			}else{
-				sdata.setIntersectionData(null);
-				rflectColor = data.getRootScene().getSkyMaterial().shade(sdata);
-			}
+			rflectColor = reflect(data, point, normal);
 		}
 		
 		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);
