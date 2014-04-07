@@ -50,8 +50,8 @@ public class TestScene1 extends Scene {
 		
 		//Make a plane
 		Plane plane = new Plane();
-		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
 		plane.setMaterial(new ReflectiveMaterial(Color.grey(0.9), 0.6));
+		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
 		this.addChild(plane);
 		
 		//Make a sphere
@@ -94,17 +94,35 @@ public class TestScene1 extends Scene {
 			Matrix4 mat = new Matrix4();
 			mat.identity();
 			mat.translation(1, 0, 0);
-			mat.rotateZ(0.1);
+			mat.rotateZ(0.2);
 			matTrans4.setTransform(mat);
 			matTrans3.addChild(matTrans4);
 		}
 		
 		
 		//Test Cube
-		Cube cube = new Cube(2,1,3);
-		cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
-		//cube.setMaterial(new DiffuseMaterial(Color.white()));
-		matTrans4.addChild(cube);
+		{
+			Cube cube = new Cube(2,1,3);
+			cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
+			//cube.setMaterial(new DiffuseMaterial(Color.white()));
+			matTrans4.addChild(cube);
+		}
+		
+		//Test cube for dielectric material
+		{
+			Matrix4 mat = new Matrix4();
+			mat.identity();
+			mat.translation(0, 2, 0);
+			mat.rotateY(0.0);
+			
+			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
+			this.addChild(mts);
+			
+			Cube cube = new Cube(2,2,0.5);
+			cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
+			//cube.setMaterial(new DiffuseMaterial(Color.white()));
+			mts.addChild(cube);
+		}
 		
 		
 		Triangle tri = new Triangle();
@@ -134,7 +152,7 @@ public class TestScene1 extends Scene {
 		//Make a point light
 		{
 			PointLight pointLight = new PointLight();
-			pointLight.setColor(new Color(0x00ff68ff));
+			pointLight.setColor(new Color(0x33ff68ff));
 			pointLight.setPosition(new Vector4(0,4,4,0));
 			pointLight.setIntensity(16.0);
 			lightManager.addLight(pointLight);

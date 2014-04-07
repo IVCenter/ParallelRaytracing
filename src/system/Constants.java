@@ -36,8 +36,9 @@ public class Constants {
 	{
 		//Keep track of keys used to prevent duplicate keys from being used
 		public static final KeySet KEYS = new KeySet();
-		
+
 		public static final String TEST1 = KEYS.addKey("Test1");
+		public static final String CSE168_Project1 = KEYS.addKey("CSE168_Project1");
 	}
 	
 	
