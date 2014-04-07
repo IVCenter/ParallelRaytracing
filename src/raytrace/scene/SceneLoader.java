@@ -3,6 +3,7 @@ package raytrace.scene;
 import java.util.HashMap;
 
 import system.Constants;
+import tests.CSE168_Project1_Scene;
 import tests.TestScene1;
 
 public class SceneLoader {
@@ -34,6 +35,13 @@ public class SceneLoader {
 			@Override
 			public Scene load() {
 				return new TestScene1();
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.CSE168_Project1, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				return new CSE168_Project1_Scene();
 			}
 		});
 	}
