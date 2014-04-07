@@ -13,6 +13,7 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
@@ -34,8 +35,9 @@ public class TestScene1 extends Scene {
 	protected void initialize()
 	{
 		// TODO Auto-generated method stub
-		
-		skyMaterial = new ColorMaterial(new Color(0xff0068ff));
+
+		//skyMaterial = new ColorMaterial(new Color(0xff0068ff));
+		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
@@ -50,14 +52,15 @@ public class TestScene1 extends Scene {
 		
 		//Make a plane
 		Plane plane = new Plane();
-		plane.setMaterial(new ReflectiveMaterial(Color.grey(0.9), 0.6));
+		plane.setMaterial(new ReflectiveMaterial(new Color(0xffffffff), 0.35));
 		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
 		this.addChild(plane);
 		
 		//Make a sphere
 		sphere = new Sphere();
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
-		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
+		//sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
+		sphere.setMaterial(new DielectricMaterial(new Color(0xccddffff), 0.96));
 		this.addChild(sphere);
 		
 		
@@ -105,23 +108,23 @@ public class TestScene1 extends Scene {
 			Cube cube = new Cube(2,1,3);
 			cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
-			matTrans4.addChild(cube);
+			//matTrans4.addChild(cube);
 		}
 		
 		//Test cube for dielectric material
 		{
 			Matrix4 mat = new Matrix4();
 			mat.identity();
-			mat.translation(0, 2, 0);
+			mat.translation(0, 2, 2);
 			mat.rotateY(0.0);
 			
 			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
 			this.addChild(mts);
 			
-			Cube cube = new Cube(2,2,0.5);
-			cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
+			Cube cube = new Cube(2,2,0.1);
+			cube.setMaterial(new DielectricMaterial(new Color(0xeeeeeeff), 5.50));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
-			mts.addChild(cube);
+			//mts.addChild(cube);
 		}
 		
 		
@@ -133,18 +136,21 @@ public class TestScene1 extends Scene {
 		tri.setVertex(2, new Vertex(new Vector4(0,2,0,0), ZAxis, null));
 		//this.addChild(tri);
 		
-		for(int i = 0; i < 256; i++)
+		for(int i = 0; i < 384; i++)
 		{
 			Sphere sphere = new Sphere();
 			
-			if(Math.random() < 0.8) {
+			double rand = Math.random();
+			if(rand < 0.5) {
 				sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.9), Math.random()));
-			}else{
+			}else if(rand < 0.8){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
+			}else{
+				sphere.setMaterial(new DielectricMaterial(Color.random(0.85 + (Math.random()/16.0)), -0.24 + rand* 2.0));
 			}
 			
-			sphere.setPosition(new Vector4(6 * Math.random() - 3.0, 6 * Math.random(), 8 * Math.random() - 6.0, 0));
-			sphere.setRadius(Math.random() * 0.3);
+			sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 9.0, 0));
+			sphere.setRadius(Math.pow(Math.random() * 0.4, 1.15));
 			this.addChild(sphere);
 		}
 		
@@ -152,9 +158,9 @@ public class TestScene1 extends Scene {
 		//Make a point light
 		{
 			PointLight pointLight = new PointLight();
-			pointLight.setColor(new Color(0x33ff68ff));
+			pointLight.setColor(new Color(0x88ffb8ff));
 			pointLight.setPosition(new Vector4(0,4,4,0));
-			pointLight.setIntensity(16.0);
+			pointLight.setIntensity(12.0);
 			lightManager.addLight(pointLight);
 		}
 		{
@@ -174,8 +180,8 @@ public class TestScene1 extends Scene {
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0xff6800ff));
-			pointLight.setPosition(new Vector4(0.0,2.0,0.5,0));
-			pointLight.setIntensity(3.0);
+			pointLight.setPosition(new Vector4(0.0,6.0,1.0,0));
+			pointLight.setIntensity(8.0);
 			lightManager.addLight(pointLight);
 		}
 		
