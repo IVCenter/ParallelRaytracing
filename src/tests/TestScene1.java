@@ -149,7 +149,7 @@ public class TestScene1 extends Scene {
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.85 + (Math.random()/16.0)), -0.24 + rand* 2.0));
 			}
 			
-			sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 9.0, 0));
+			sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
 			sphere.setRadius(Math.pow(Math.random() * 0.4, 1.15));
 			this.addChild(sphere);
 		}

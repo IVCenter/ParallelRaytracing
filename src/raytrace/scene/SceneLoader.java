@@ -52,8 +52,9 @@ public class SceneLoader {
 	}
 	
 	
-	
-	
+	/* *********************************************************************************************
+	 * Private Classes
+	 * *********************************************************************************************/
 	private abstract class SceneConstructor
 	{
 		public abstract Scene load();
