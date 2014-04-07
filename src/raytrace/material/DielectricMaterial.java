@@ -42,6 +42,7 @@ public class DielectricMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();//.normalize3();
 		double DdotN = normal.dot3(data.getRay().getDirection());
 		if(DdotN > 0.0) {
+			refractiveIndex = 1.0;//TODO: Is this the right test, and right place to assume we are exiting the material?
 			normal = normal.multiply3(-1.0);
 			DdotN *= -1.0;
 		}
