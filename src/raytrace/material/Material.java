@@ -17,7 +17,7 @@ public abstract class Material {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected static final double RECURSIVE_EPSILON = 0.001;
+	protected static final double RECURSIVE_EPSILON = 0.0001;
 	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 2000;
 	
 
@@ -66,5 +66,31 @@ public abstract class Material {
 			return idata;
 		
 		return null;
+	}
+	
+	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal)
+	{	
+		RayData rdata = new RayData();
+		Vector4 dir = data.getIntersectionData().getRay().getDirection();
+		Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
+		Ray ray = new Ray(point, reflect, 0, 0);
+		rdata.setRay(ray);
+		rdata.setTStart(RECURSIVE_EPSILON);
+		
+		IntersectionData idata = data.getRootScene().intersects(rdata);
+		
+		ShadingData sdata = new ShadingData();
+		sdata.setRay(rdata.getRay());
+		sdata.setRootScene(data.getRootScene());
+		sdata.setRecursionDepth(data.getRecursionDepth() + 1);
+		
+		if(idata != null) {
+			sdata.setIntersectionData(idata);
+			return idata.getMaterial().shade(sdata);
+		}		
+
+		//If there wasn't an intersection, use the sky material
+		sdata.setIntersectionData(null);
+		return data.getRootScene().getSkyMaterial().shade(sdata);
 	}
 }
