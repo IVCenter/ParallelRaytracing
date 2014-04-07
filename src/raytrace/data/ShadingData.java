@@ -17,6 +17,8 @@ public class ShadingData{
 	
 	protected int recursionDepth;
 	
+	protected double refractiveIndex;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -24,6 +26,8 @@ public class ShadingData{
 	public ShadingData()
 	{
 		recursionDepth = 0;
+		
+		refractiveIndex = 1.0;
 	}
 
 
@@ -60,6 +64,14 @@ public class ShadingData{
 
 	public void setRecursionDepth(int recursionDepth) {
 		this.recursionDepth = recursionDepth;
+	}
+
+	public double getRefractiveIndex() {
+		return refractiveIndex;
+	}
+
+	public void setRefractiveIndex(double refractiveIndex) {
+		this.refractiveIndex = refractiveIndex;
 	}
 
 }
