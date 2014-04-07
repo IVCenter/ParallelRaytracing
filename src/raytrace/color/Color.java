@@ -175,4 +175,13 @@ public class Color {
 	{
 		return new Color(Math.random(), Math.random(), Math.random(), 1.0);
 	}
+	
+	public static Color random(double min)
+	{
+		min = Math.min(1.0, Math.max(min, 0.0));
+		return new Color(Math.random() * (1.0-min) + min, 
+						 Math.random() * (1.0-min) + min, 
+						 Math.random() * (1.0-min) + min, 
+						 1.0);
+	}
 }
