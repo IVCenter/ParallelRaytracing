@@ -109,6 +109,12 @@ public class PinholeCamera extends Camera {
 		return new Ray(orig, dir, (int)x, (int)y);
 	}
 	
+	public void setVerticalFieldOfView(double fov)
+	{
+		fieldOfView = 2.0 * Math.atan((imagePlaneWidth/imagePlaneHeight) * Math.tan(fov/2.0));
+		update();
+	}
+	
 	
 	/* *********************************************************************************************
 	 * Private Classes
