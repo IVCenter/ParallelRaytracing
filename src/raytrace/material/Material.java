@@ -70,10 +70,16 @@ public abstract class Material {
 	
 	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal)
 	{	
-		RayData rdata = new RayData();
 		Vector4 dir = data.getIntersectionData().getRay().getDirection();
 		Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
-		Ray ray = new Ray(point, reflect, 0, 0);
+		
+		return recurse(data, point, reflect, 1.0);
+	}
+
+	protected Color recurse(ShadingData data, Vector4 point, Vector4 direction, double refractiveIndex)
+	{	
+		RayData rdata = new RayData();
+		Ray ray = new Ray(point, direction, 0, 0);
 		rdata.setRay(ray);
 		rdata.setTStart(RECURSIVE_EPSILON);
 		
@@ -83,6 +89,7 @@ public abstract class Material {
 		sdata.setRay(rdata.getRay());
 		sdata.setRootScene(data.getRootScene());
 		sdata.setRecursionDepth(data.getRecursionDepth() + 1);
+		sdata.setRefractiveIndex(refractiveIndex);
 		
 		if(idata != null) {
 			sdata.setIntersectionData(idata);
