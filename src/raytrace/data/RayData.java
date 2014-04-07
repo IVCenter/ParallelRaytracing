@@ -17,8 +17,6 @@ public class RayData {
 	protected double t0;
 	protected double t1;
 	
-	protected double refractiveIndex;
-	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -27,8 +25,6 @@ public class RayData {
 	{
 		t0 = 0;
 		t1 = Double.POSITIVE_INFINITY;
-		
-		refractiveIndex = 1.0;
 	}
 	
 	public RayData(Ray ray, CompositeSurface rootSurface)
@@ -45,12 +41,6 @@ public class RayData {
 		this.t1 = t1;
 		this.ray = ray;
 		this.rootSurface = rootSurface;
-	}
-	
-	public RayData(Ray ray, CompositeSurface rootSurface, double t0, double t1, double refractiveIndex)
-	{
-		this(ray, rootSurface, t0, t1);
-		this.refractiveIndex = refractiveIndex;
 	}
 	
 
@@ -87,13 +77,5 @@ public class RayData {
 
 	public void setTEnd(double t1) {
 		this.t1 = t1;
-	}
-
-	public double getRefractiveIndex() {
-		return refractiveIndex;
-	}
-
-	public void setRefractiveIndex(double refractiveIndex) {
-		this.refractiveIndex = refractiveIndex;
 	}
 }
