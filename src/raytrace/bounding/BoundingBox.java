@@ -56,10 +56,13 @@ public class BoundingBox {
 		if(absmin > absmax)
 			return false;
 		
-		if(absmin >= data.getTStart() && absmin < data.getTEnd())
+		if(absmin >= data.getTEnd())
+			return false;
+		
+		if(absmin >= data.getTStart())
 			return true;
 		
-		if(absmin < data.getTStart() && absmax >= data.getTStart() && absmax < data.getTEnd())
+		if(absmax >= data.getTStart() && absmax < data.getTEnd())
 			return true;
 		
 		return false;
