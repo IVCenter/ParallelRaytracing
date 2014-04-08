@@ -3,6 +3,8 @@ package raytrace.surfaces.acceleration;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import process.logging.Logger;
+
 import math.Vector4;
 
 import raytrace.bounding.BoundingBox;
@@ -25,7 +27,7 @@ public class AABVHSurface extends CompositeSurface {
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
-	public AABVHSurface()
+	private AABVHSurface()
 	{
 		//
 	}
@@ -71,6 +73,13 @@ public class AABVHSurface extends CompositeSurface {
 	 * *********************************************************************************************/
 	public static AABVHSurface makeAABVH(Collection<CompositeSurface> surfaces)
 	{
+		int slices = 100;
+		int maxSurfacesPerLeaf = 4;
+		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
+	}
+	
+	public static AABVHSurface makeAABVH(Collection<CompositeSurface> surfaces, int slices, int maxSurfacesPerLeaf)
+	{
 		/*
 		 * Steps:
 		 * 
@@ -83,14 +92,13 @@ public class AABVHSurface extends CompositeSurface {
 		 * 		-Recurse for both sets
 		 */
 
-		System.out.println("Surfaces Size[" + surfaces.size() + "].");
+		Logger.progress(-1, "Surfaces Size[" + surfaces.size() + "].");
 		
 		//Get bounding box and mid point
 		BoundingBox topBB = makeBoundingBox(surfaces);
 		//Vector4 midPoint = topBB.min.add3(topBB.max).multiply3(0.5);
 		
-		//Get spatial slice data
-		int slices = 100;
+		//Get spatial axis data
 		double[] axisWidths = {topBB.max.get(0) - topBB.min.get(0), 
 							   topBB.max.get(1) - topBB.min.get(1), 
 							   topBB.max.get(2) - topBB.min.get(2)};
@@ -144,20 +152,20 @@ public class AABVHSurface extends CompositeSurface {
 		//System.out.println("Splitting on Axis[" + lowestAxis + "]");
 		//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
 		
-		//Build subtrees
-		AABVHSurface root = new AABVHSurface();
+		//Make a root surface
+		AABVHSurface rootSurface = new AABVHSurface();
 		
 		//If we encounter a set that can not be partitioned, add the surfaces and return;
-		if(/*negative.size() == surfaces.size() || positive.size() == surfaces.size() ||*/ surfaces.size() <= 4) {
+		if(/*negative.size() == surfaces.size() || positive.size() == surfaces.size() ||*/ surfaces.size() <= maxSurfacesPerLeaf) {
 			for(CompositeSurface cs : surfaces)
-				root.addChild(cs);
-			return root;
+				rootSurface.addChild(cs);
+			return rootSurface;
 		}
 		
-		root.addChild(AABVHSurface.makeAABVH(negative));
-		root.addChild(AABVHSurface.makeAABVH(positive));
+		rootSurface.addChild(AABVHSurface.makeAABVH(negative));
+		rootSurface.addChild(AABVHSurface.makeAABVH(positive));
 		
-		return  root;
+		return rootSurface;
 	}
 	
 	private static void split(Collection<CompositeSurface> surfaces, 
