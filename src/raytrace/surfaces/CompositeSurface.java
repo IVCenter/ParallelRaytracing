@@ -57,7 +57,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		{
 			idata = cs.intersects(data);
 			//If idata isn't null, and either closest is null, or idata is closer than closest
-			if(idata != null && (closest == null || idata.getDistance() < closest.getDistance()))
+			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
 			{
 				closest = idata;
 			}

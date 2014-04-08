@@ -65,7 +65,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 		{
 			idata = cs.intersects(data);
 			//If idata isn't null, and either closest is null, or idata is closer than closest
-			if(idata != null && (closest == null || idata.getDistance() < closest.getDistance()))
+			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
 			{
 				closest = idata;
 			}
@@ -102,6 +102,9 @@ public class MatrixTransformSurface extends CompositeSurface {
 		//And then calculate a bounding box much like composite surface does
 		
 		//Or do the opposite (call super.updateBound, then transform the min/max)
+		super.updateBoundingBox();
+		boundingBox.min = transform.multiplyPt(boundingBox.min);
+		boundingBox.max = transform.multiplyPt(boundingBox.max);
 	}
 
 
