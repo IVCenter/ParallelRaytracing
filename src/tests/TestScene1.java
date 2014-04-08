@@ -7,6 +7,7 @@ import math.Matrix4;
 import math.Vector4;
 import raytrace.camera.PinholeCamera;
 import raytrace.color.Color;
+import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
@@ -148,7 +149,7 @@ public class TestScene1 extends Scene {
 			}
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 2 * Math.random(), 60 * Math.random() - 58.0, 0));
+			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 4 * Math.random(), 60 * Math.random() - 58.0, 0));
 			sphere.setRadius(Math.pow(Math.random() * 0.8, 1.15));
 			spheres.add(sphere);
 			
@@ -238,9 +239,6 @@ public class TestScene1 extends Scene {
 	{
 		elapsed += Math.PI/4.0;
 		
-		//TODO: This may be costly
-		this.updateBoundingBox();
-		
 		
 		Vector4 pos = sphere.getPosition();
 		pos.set(Math.cos(elapsed), 1.0 + Math.sin(elapsed), 0.0, 1);
@@ -250,6 +248,13 @@ public class TestScene1 extends Scene {
 		
 		//Update the children
 		super.update(data);
+	}
+	
+	@Override
+	public void bake(BakeData data)
+	{
+		//TODO: This may be costly
+		this.updateBoundingBox();
 	}
 
 }
