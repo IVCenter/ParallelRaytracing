@@ -1,5 +1,8 @@
 package tests;
 
+import java.util.ArrayList;
+
+import process.logging.Logger;
 import math.Matrix4;
 import math.Vector4;
 import raytrace.camera.PinholeCamera;
@@ -7,8 +10,6 @@ import raytrace.color.Color;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
-import raytrace.geometry.Triangle;
-import raytrace.geometry.Vertex;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
@@ -17,7 +18,9 @@ import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.MatrixTransformSurface;
+import raytrace.surfaces.acceleration.AABVHSurface;
 import system.Configuration;
 
 public class TestScene1 extends Scene {
@@ -50,21 +53,16 @@ public class TestScene1 extends Scene {
 		//this.addChild(activeCamera);
 		
 		
-		//Make a plane
-		Plane plane = new Plane();
-		plane.setMaterial(new ReflectiveMaterial(new Color(0xffffffff), 0.35));
-		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
-		this.addChild(plane);
 		
 		//Make a sphere
 		sphere = new Sphere();
-		sphere.setRadius(1.5);
+		sphere.setRadius(1.3);
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
-		//sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
-		sphere.setMaterial(new DielectricMaterial(new Color(1.0, 1.0, 0.93), 1.45));
+		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
+		//sphere.setMaterial(new DielectricMaterial(new Color(1.01, 1.01, 0.99), 1.45));
 		this.addChild(sphere);
 		
-		
+		/*
 		//Test transform
 		MatrixTransformSurface matTrans = new MatrixTransformSurface();
 		{
@@ -102,6 +100,7 @@ public class TestScene1 extends Scene {
 			matTrans4.setTransform(mat);
 			matTrans3.addChild(matTrans4);
 		}
+		*/
 		
 		
 		//Test Cube
@@ -123,37 +122,40 @@ public class TestScene1 extends Scene {
 			this.addChild(mts);
 			
 			Cube cube = new Cube(0.9,0.9,0.9);
-			cube.setMaterial(new DielectricMaterial(new Color(0xfff0ffff), 1.1));
-			//cube.setMaterial(new DiffuseMaterial(Color.white()));
-			//mts.addChild(cube);
+			//cube.setMaterial(new DielectricMaterial(new Color(1.05, 1.0, 1.05), 1.1));
+			cube.setMaterial(new DiffuseMaterial(Color.white()));
+			mts.addChild(cube);
 		}
 		
 		
-		Triangle tri = new Triangle();
-		tri.setMaterial(new DiffuseMaterial(Color.white()));
-		Vector4 ZAxis = new Vector4(0,0,1,0);
-		tri.setVertex(0, new Vertex(new Vector4(-1,1,0,0), ZAxis, null));
-		tri.setVertex(1, new Vertex(new Vector4(1,1,0,0), ZAxis, null));
-		tri.setVertex(2, new Vertex(new Vector4(0,2,0,0), ZAxis, null));
-		//this.addChild(tri);
+		//For big loads, allocate the size we'l need ahead of time
+		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(1020513);
 		
-		for(int i = 0; i < 64; i++)
+		for(int i = 0; i < 200512; i++)
 		{
 			Sphere sphere = new Sphere();
 			
 			double rand = Math.random();
-			if(rand < 0.0) {
+			if(rand < 1.0) {
 				sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
-			}else if(rand < 0.3){
+			}else if(rand < 0.0){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
-			}else{
+			}else if(rand < 0.0){
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+			}else{
+				sphere.setMaterial(new ColorMaterial(Color.random(0.7 + (Math.random()/16.0))));
 			}
-			
-			sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
+
+			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
+			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 40 * Math.random(), 60 * Math.random() - 58.0, 0));
 			sphere.setRadius(Math.pow(Math.random() * 0.4, 1.15));
-			this.addChild(sphere);
+			spheres.add(sphere);
+			
+			//if(i % 10000 == 0)
+			//	Logger.progress(-1, "Loaded " + i + " spheres into this surface.");
 		}
+		//Add the spheres to this
+		this.addChildrenUnsafe(spheres);
 		
 		
 		//Make a point light
@@ -192,6 +194,36 @@ public class TestScene1 extends Scene {
 		directionalLight.setIntensity(0.95);
 		directionalLight.setDirection(new Vector4(1,-1,-0.2,0));
 		lightManager.addLight(directionalLight);
+		
+		
+		
+		//Update bounding boxes
+		this.updateBoundingBox();
+		
+		//BVH TESTS
+		Logger.progress(-1, "Starting creating a BVH for root surface...");
+		long startTime = System.currentTimeMillis();
+		
+		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren());
+		this.getChildren().clear();
+		this.addChild(aabvh);
+		
+		//Refresh
+		this.updateBoundingBox();
+		
+		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
+		
+		
+		
+
+		//Make a plane
+		//This is down here since infinitely large objects cause problems with BVHs...
+		Plane plane = new Plane();
+		plane.setMaterial(new ReflectiveMaterial(new Color(0xffffffff), 0.35));
+		//plane.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.35));
+		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
+		this.addChild(plane);
+		
 		
 	}
 	
