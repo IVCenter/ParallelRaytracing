@@ -137,7 +137,7 @@ public class Triangle extends TerminalSurface {
 		idata.setRay(ray);
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
-		idata.setNormal(ray.getDirection().dot3(normal) <= 0 ? normal : normal.multiply3(-1));
+		idata.setNormal(normal);
 		//idata.setSurface(this);
 		idata.setMaterial(material);
 		
