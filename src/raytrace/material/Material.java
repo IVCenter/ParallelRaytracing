@@ -18,7 +18,8 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 2000;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
+	public static final double AIR_REFRACTIVE_INDEX = 1.003;
 	
 
 	/* *********************************************************************************************
@@ -68,12 +69,12 @@ public abstract class Material {
 		return null;
 	}
 	
-	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal)
+	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal, double refractiveIndex)
 	{	
 		Vector4 dir = data.getIntersectionData().getRay().getDirection();
 		Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
 		
-		return recurse(data, point, reflect, 1.0);
+		return recurse(data, point, reflect, refractiveIndex);
 	}
 
 	protected Color recurse(ShadingData data, Vector4 point, Vector4 direction, double refractiveIndex)
