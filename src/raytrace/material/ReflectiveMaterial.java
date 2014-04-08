@@ -64,6 +64,8 @@ public class ReflectiveMaterial  extends Material{
 			rflectColor = reflect(data, point, normal, data.getRefractiveIndex());
 		}
 		
+		//TODO: Fresnel equations
+		
 		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);
 		Color reflectiveColor = rflectColor.multiply3(reflectivePercent);
 		return diffuseColor.add3(reflectiveColor);

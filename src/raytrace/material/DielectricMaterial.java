@@ -29,6 +29,7 @@ public class DielectricMaterial extends Material{
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Setup the point of intersection
 		Vector4 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
@@ -68,22 +69,7 @@ public class DielectricMaterial extends Material{
 			Vector4 phiSide = normal.multiply3(Math.sqrt(phiDiscrim));
 			Vector4 refracDir = thetaSide.subtract3(phiSide);
 			
-			//TODO exiting test
 			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
-		}
-		
-		
-		//If we are exiting the material, calculate beers 
-		if(exiting)
-		{
-			double d = data.getIntersectionData().getDistance();
-			double[] a = tint.getChannels();
-			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * d), 
-										Math.exp(-1.0 * Math.log(a[1]) * d), 
-										Math.exp(-1.0 * Math.log(a[2]) * d));
-			//beerColor.print();
-			refractColor = refractColor.multiply3(beerColor);
-			//refractColor = refractColor.multiply3(tint);
 		}
 		
 		
@@ -104,7 +90,6 @@ public class DielectricMaterial extends Material{
 			reflectiveCoeff = baseReflectiveCoeff + (1.0 - baseReflectiveCoeff) * Math.pow(1.0 - Math.abs(DdotN), 5.0);
 		}
 		
-		
 
 		//If reflective, go divin'
 		Color rflectColor = new Color();
@@ -114,13 +99,14 @@ public class DielectricMaterial extends Material{
 		}
 		
 		
-		//TODO: How does mix color
-		//TODO: Beers law on tint!
+		//Scale the colors
 		Color refractiveColor = refractColor.multiply3(1.0 - reflectiveCoeff);
 		Color reflectiveColor = rflectColor.multiply3(reflectiveCoeff);
 		
+		//Add reflective and refractive colors together to get the final color
 		Color totalColor = refractiveColor.add3(reflectiveColor);
 					
+		//If the ray is exiting the surface, then apply beers law to all light that was collected recursively
 		if(exiting)
 		{
 			double d = data.getIntersectionData().getTime();
@@ -128,9 +114,8 @@ public class DielectricMaterial extends Material{
 			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * d), 
 										Math.exp(-1.0 * Math.log(a[1]) * d), 
 										Math.exp(-1.0 * Math.log(a[2]) * d));
-			//beerColor.print();
+
 			totalColor = totalColor.multiply3(beerColor);
-			//refractColor = refractColor.multiply3(tint);
 		}
 		return totalColor;
 	}

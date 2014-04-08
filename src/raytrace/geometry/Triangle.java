@@ -25,17 +25,6 @@ public class Triangle extends TerminalSurface {
 	public Triangle()
 	{
 		vertices = new Vertex[3];
-		/*
-		for(int i = 0; i < 3; ++i) {
-			vertices[i] = new Vertex();
-			vertices[i].set(i, 1);
-		}
-		
-		Vector4 normal = vertices[0].subtract3(vertices[1]).cross3(vertices[2].subtract3(vertices[1])).normalize3();
-		for(int i = 0; i < 3; ++i) {
-			normals[i] = new Vector4(normal);
-		}
-		*/
 	}
 	
 	public Triangle(Vertex v0, Vertex v1, Vertex v2)
@@ -63,12 +52,6 @@ public class Triangle extends TerminalSurface {
 		double[] b = vertices[1].getPosition().getM();
 		double[] c = vertices[2].getPosition().getM();
 
-		//double va = a[0] - b[0];
-		//double vb = a[1] - b[1];
-		//double vc = a[2] - b[2];
-		//double vd = a[0] - c[0];
-		//double ve = a[1] - c[1];
-		//double vf = a[2] - c[2];
 		double va = b[0] - a[0];
 		double vb = b[1] - a[1];
 		double vc = b[2] - a[2];
@@ -92,9 +75,6 @@ public class Triangle extends TerminalSurface {
 		
 		double[] e = ray.getOrigin().getM();
 		
-		//double vj = a[0] - e[0];
-		//double vk = a[1] - e[1];
-		//double vl = a[2] - e[2];
 		double vj = e[0] - a[0];
 		double vk = e[1] - a[1];
 		double vl = e[2] - a[2];

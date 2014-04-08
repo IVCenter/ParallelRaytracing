@@ -27,7 +27,6 @@ public class ShadingData{
 	public ShadingData()
 	{
 		recursionDepth = 0;
-		
 		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
 	}
 

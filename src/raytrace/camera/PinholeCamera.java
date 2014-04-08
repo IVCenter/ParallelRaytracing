@@ -96,13 +96,6 @@ public class PinholeCamera extends Camera {
 		double ph = (((y+0.5)/pixelHeight) - 0.5) * imagePlaneHeight;
 		
 		//Create the direction vector
-		/*
-		Vector4 dir = new Vector4(viewingDirection.x + pw*cameraX.x + ph*cameraY.x,
-								  viewingDirection.y + pw*cameraX.y + ph*cameraY.y,
-								  viewingDirection.z + pw*cameraX.z + ph*cameraY.z,
-								  0.0);
-								  */
-		
 		//TODO: Might be slow
 		Vector4 dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph)).normalize3();
 		
