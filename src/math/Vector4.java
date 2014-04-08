@@ -1,5 +1,7 @@
 package math;
 
+import process.utils.StringUtils;
+
 public class Vector4 {
 	
 	
@@ -109,12 +111,12 @@ public class Vector4 {
 	
 	public double magnitude3Sqrd()
 	{
-		return Math.pow(m[0], 2.0) + Math.pow(m[1], 2.0) + Math.pow(m[2], 2.0);
+		return m[0] * m[0] + m[1] * m[1] + m[2] * m[2];
 	}
 	
 	public double magnitude3()
 	{
-		return Math.pow(magnitude3Sqrd(), 0.5);
+		return Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
 	}
 	
 	public Vector4 multiply3(double d)
@@ -166,5 +168,18 @@ public class Vector4 {
 		m[1] = m[1] > vm[1] ? m[1] : vm[1];
 		m[2] = m[2] > vm[2] ? m[2] : vm[2];
 		return this;
+	}
+
+	
+
+	/* *********************************************************************************************
+	 * Print Methods
+	 * *********************************************************************************************/
+	public void print()
+	{
+		System.out.println("[" + StringUtils.column(""+m[0], 8) + ", " + 
+								 StringUtils.column(""+m[1], 8) + ", " +
+								 StringUtils.column(""+m[2], 8) + ", " +
+								 StringUtils.column(""+m[3], 8) + "]");
 	}
 }
