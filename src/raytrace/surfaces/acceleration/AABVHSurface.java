@@ -86,8 +86,14 @@ public class AABVHSurface extends CompositeSurface {
 		System.out.println("Surfaces Size[" + surfaces.size() + "].");
 		
 		//Get bounding box and mid point
-		//BoundingBox topBB = makeBoundingBox(surfaces);
+		BoundingBox topBB = makeBoundingBox(surfaces);
 		//Vector4 midPoint = topBB.min.add3(topBB.max).multiply3(0.5);
+		
+		//Get spatial slice data
+		int slices = 100;
+		double[] axisWidths = {topBB.max.get(0) - topBB.min.get(0), 
+							   topBB.max.get(1) - topBB.min.get(1), 
+							   topBB.max.get(2) - topBB.min.get(2)};
 		
 		//Center point might be better...
 		Vector4 center = centerPoint(surfaces);
@@ -102,31 +108,39 @@ public class AABVHSurface extends CompositeSurface {
 		//Best axis data
 		double lowestSAH = Double.MAX_VALUE;
 		double currentSAH = 0.0;
+		double currentAxisValue = 0.0;
 		int lowestAxis = -1;
+		double lowestAxisValue = Integer.MAX_VALUE;
 		
 		//For each exis, split the sets
 		for(int i = 0; i < 3; ++i)
 		{
-			//Split across current axis
-			split(surfaces, negative, positive, i, axisValues);
-			//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
-			
-			//Compute the SAH for the current sets
-			currentSAH = calculateSAH(negative, positive);
-			//System.out.println("CurrentSAH: " + currentSAH);
-			if(currentSAH < lowestSAH)
+			for(int slice = -slices/2; slice <= slices/2; ++slice)
 			{
-				lowestSAH = currentSAH;
-				lowestAxis = i;
+				currentAxisValue = axisValues[i] + (slice * (axisWidths[i])/(double)slices);
+				
+				//Split across current axis
+				split(surfaces, negative, positive, i, currentAxisValue);
+				//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
+				
+				//Compute the SAH for the current sets
+				currentSAH = calculateSAH(negative, positive);
+				//System.out.println("CurrentSAH: " + currentSAH);
+				if(currentSAH < lowestSAH)
+				{
+					lowestSAH = currentSAH;
+					lowestAxis = i;
+					lowestAxisValue = currentAxisValue;
+				}
+				
+				//Clear
+				negative.clear();
+				positive.clear();
 			}
-			
-			//Clear
-			negative.clear();
-			positive.clear();
 		}
 
 		//Split on the lowest axis
-		split(surfaces, negative, positive, lowestAxis, axisValues);
+		split(surfaces, negative, positive, lowestAxis, lowestAxisValue);
 		//System.out.println("Splitting on Axis[" + lowestAxis + "]");
 		//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
 		
@@ -134,7 +148,7 @@ public class AABVHSurface extends CompositeSurface {
 		AABVHSurface root = new AABVHSurface();
 		
 		//If we encounter a set that can not be partitioned, add the surfaces and return;
-		if(negative.size() == surfaces.size() || positive.size() == surfaces.size() || surfaces.size() <= 8) {
+		if(/*negative.size() == surfaces.size() || positive.size() == surfaces.size() ||*/ surfaces.size() <= 4) {
 			for(CompositeSurface cs : surfaces)
 				root.addChild(cs);
 			return root;
@@ -148,7 +162,7 @@ public class AABVHSurface extends CompositeSurface {
 	
 	private static void split(Collection<CompositeSurface> surfaces, 
 			ArrayList<CompositeSurface> negative, ArrayList<CompositeSurface> positive,
-			int axis, double[] axisValues)
+			int axis, double axisValue)
 	{
 		BoundingBox surfacebb;
 		
@@ -157,19 +171,19 @@ public class AABVHSurface extends CompositeSurface {
 			surfacebb = cs.getBoundingBox();
 			
 			//If on the negative side, add to negative
-			if(surfacebb.min.get(axis) < axisValues[axis] && surfacebb.max.get(axis) < axisValues[axis])
+			if(surfacebb.min.get(axis) < axisValue && surfacebb.max.get(axis) < axisValue)
 			{
 				negative.add(cs);
 				
 			//If on the positive side, add to positive
-			}else if(surfacebb.min.get(axis) > axisValues[axis] && surfacebb.max.get(axis) > axisValues[axis])
+			}else if(surfacebb.min.get(axis) > axisValue && surfacebb.max.get(axis) > axisValue)
 			{
 				positive.add(cs);
 				
 			//If on both sides, add to both
 			}else{
 				negative.add(cs);
-				positive.add(cs);
+				//positive.add(cs);
 			}
 		}
 	}
@@ -232,10 +246,18 @@ public class AABVHSurface extends CompositeSurface {
 		BoundingBox positiveBB = makeBoundingBox(positive);
 		
 		double sah = 0.0;
+		
 		if(negative.size() > 0)
-			sah += negativeBB.getSurfaceArea() / (double)negative.size();
+			sah += negativeBB.getSurfaceArea() * (double)(negative.size()/* * negative.size()*/);
 		if(positive.size() > 0)
-			sah += positiveBB.getSurfaceArea() / (double)positive.size();
+			sah += positiveBB.getSurfaceArea() * (double)(positive.size()/* * positive.size()*/);
+			
+		/*
+		if(negative.size() > 0)
+			sah += negativeBB.getSurfaceArea() * (double)negative.size();
+		if(positive.size() > 0)
+			sah += positiveBB.getSurfaceArea() * (double)positive.size();
+			*/
 		
 		return sah;
 	}
