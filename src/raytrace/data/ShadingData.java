@@ -1,6 +1,7 @@
 package raytrace.data;
 
 import math.Ray;
+import raytrace.material.Material;
 import raytrace.scene.Scene;
 
 public class ShadingData{
@@ -27,7 +28,7 @@ public class ShadingData{
 	{
 		recursionDepth = 0;
 		
-		refractiveIndex = 1.0;
+		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
 	}
 
 
