@@ -76,8 +76,11 @@ public class Sphere extends TerminalSurface implements Positionable {
 		//double tOut = (negDdotEminusC + discrim) / DdotD;//Time of second intersection, not used
 		
 		//Test if t is in the given time range
+		if(t < t0)
+			t = (negDdotEminusC + discrim) / DdotD;
 		if(t <= t0 || t > t1)
 			return null;
+		
 			
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
