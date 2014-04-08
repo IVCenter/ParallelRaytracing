@@ -56,9 +56,9 @@ public class TestScene1 extends Scene {
 		
 		//Make a sphere
 		sphere = new Sphere();
-		sphere.setRadius(1.3);
+		sphere.setRadius(1.8);
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
-		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
+		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 0.98));
 		//sphere.setMaterial(new DielectricMaterial(new Color(1.01, 1.01, 0.99), 1.45));
 		this.addChild(sphere);
 		
@@ -123,7 +123,8 @@ public class TestScene1 extends Scene {
 			
 			Cube cube = new Cube(0.9,0.9,0.9);
 			//cube.setMaterial(new DielectricMaterial(new Color(1.05, 1.0, 1.05), 1.1));
-			cube.setMaterial(new DiffuseMaterial(Color.white()));
+			cube.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.6, 0.4), 0.6));
+			//cube.setMaterial(new DiffuseMaterial(Color.white()));
 			mts.addChild(cube);
 		}
 		
@@ -131,7 +132,7 @@ public class TestScene1 extends Scene {
 		//For big loads, allocate the size we'l need ahead of time
 		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(1020513);
 		
-		for(int i = 0; i < 200512; i++)
+		for(int i = 0; i < 10012; i++)
 		{
 			Sphere sphere = new Sphere();
 			
@@ -147,8 +148,8 @@ public class TestScene1 extends Scene {
 			}
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 40 * Math.random(), 60 * Math.random() - 58.0, 0));
-			sphere.setRadius(Math.pow(Math.random() * 0.4, 1.15));
+			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 2 * Math.random(), 60 * Math.random() - 58.0, 0));
+			sphere.setRadius(Math.pow(Math.random() * 0.8, 1.15));
 			spheres.add(sphere);
 			
 			//if(i % 10000 == 0)
@@ -171,14 +172,14 @@ public class TestScene1 extends Scene {
 			pointLight.setColor(new Color(0x6800ffff));
 			pointLight.setPosition(new Vector4(3,0.5,1.0,0));
 			pointLight.setIntensity(8.0);
-			lightManager.addLight(pointLight);
+			//lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x68ff00ff));
 			pointLight.setPosition(new Vector4(-3,0.5,1.0,0));
 			pointLight.setIntensity(8.0);
-			lightManager.addLight(pointLight);
+			//lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
@@ -236,6 +237,10 @@ public class TestScene1 extends Scene {
 	public void update(UpdateData data)
 	{
 		elapsed += Math.PI/4.0;
+		
+		//TODO: This may be costly
+		this.updateBoundingBox();
+		
 		
 		Vector4 pos = sphere.getPosition();
 		pos.set(Math.cos(elapsed), 1.0 + Math.sin(elapsed), 0.0, 1);
