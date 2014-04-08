@@ -46,8 +46,6 @@ public class Sphere extends TerminalSurface implements Positionable {
 	public IntersectionData intersects(RayData data)
 	{
 		Ray ray = data.getRay();
-		double t0 = data.getTStart();
-		double t1 = data.getTEnd();
 		
 		Vector4 e = ray.getOrigin();
 		Vector4 d = ray.getDirection();
@@ -57,7 +55,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		double DdotD = d.dot3(d);
 		double DdotEminusC = d.dot3(EminusC);
 		
-		double discrim = Math.pow(DdotEminusC, 2.0) - DdotD * (EminusC.dot3(EminusC) - Math.pow(radius, 2.0));
+		double discrim = (DdotEminusC * DdotEminusC) - DdotD * (EminusC.magnitude3Sqrd() - (radius * radius));
 		
 		//If the discriminant is negative then the ray doesn't intersect in real space
 		if(discrim < 0.0) {
@@ -65,7 +63,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		}
 		
 		//Now that we know its >= 0, root it
-		discrim = Math.pow(discrim, 0.5);
+		discrim = Math.sqrt(discrim);
 		
 		//Get the negation of d
 		Vector4 negD = d.multiply3(-1);
@@ -73,7 +71,9 @@ public class Sphere extends TerminalSurface implements Positionable {
 		
 		//Get the time of intersection
 		double t = (negDdotEminusC - discrim) / DdotD;
-		//double tOut = (negDdotEminusC + discrim) / DdotD;//Time of second intersection, not used
+		
+		double t0 = data.getTStart();
+		double t1 = data.getTEnd();
 		
 		//Test if t is in the given time range
 		if(t < t0)
@@ -81,7 +81,6 @@ public class Sphere extends TerminalSurface implements Positionable {
 		if(t <= t0 || t > t1)
 			return null;
 		
-			
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
 		idata.setTime(t);
@@ -89,7 +88,6 @@ public class Sphere extends TerminalSurface implements Positionable {
 		idata.setPoint(ray.evaluateAtTime(t));
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(idata.getPoint().subtract3(center).normalize3());
-		//idata.setSurface(this);
 		idata.setMaterial(material);
 		
 		return idata;
