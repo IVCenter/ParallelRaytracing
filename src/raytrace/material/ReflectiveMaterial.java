@@ -61,7 +61,7 @@ public class ReflectiveMaterial  extends Material{
 		Color rflectColor = new Color();
 		if(reflectivePercent != 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			rflectColor = reflect(data, point, normal);
+			rflectColor = reflect(data, point, normal, data.getRefractiveIndex());
 		}
 		
 		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);

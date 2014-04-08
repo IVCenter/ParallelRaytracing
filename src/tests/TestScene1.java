@@ -58,9 +58,10 @@ public class TestScene1 extends Scene {
 		
 		//Make a sphere
 		sphere = new Sphere();
+		sphere.setRadius(1.5);
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
 		//sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 1.0));
-		sphere.setMaterial(new DielectricMaterial(new Color(0xccddffff), 0.96));
+		sphere.setMaterial(new DielectricMaterial(new Color(1.0, 1.0, 0.93), 1.45));
 		this.addChild(sphere);
 		
 		
@@ -115,14 +116,14 @@ public class TestScene1 extends Scene {
 		{
 			Matrix4 mat = new Matrix4();
 			mat.identity();
-			mat.translation(0, 2, 2);
-			mat.rotateY(0.0);
+			mat.translation(0, 0.4501, 2);
+			mat.rotateY(Math.PI/7.0);
 			
 			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
 			this.addChild(mts);
 			
-			Cube cube = new Cube(2,2,0.1);
-			cube.setMaterial(new DielectricMaterial(new Color(0xeeeeeeff), 5.50));
+			Cube cube = new Cube(0.9,0.9,0.9);
+			cube.setMaterial(new DielectricMaterial(new Color(0xfff0ffff), 1.1));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
 			//mts.addChild(cube);
 		}
@@ -136,17 +137,17 @@ public class TestScene1 extends Scene {
 		tri.setVertex(2, new Vertex(new Vector4(0,2,0,0), ZAxis, null));
 		//this.addChild(tri);
 		
-		for(int i = 0; i < 384; i++)
+		for(int i = 0; i < 64; i++)
 		{
 			Sphere sphere = new Sphere();
 			
 			double rand = Math.random();
-			if(rand < 0.5) {
-				sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.9), Math.random()));
-			}else if(rand < 0.8){
+			if(rand < 0.0) {
+				sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
+			}else if(rand < 0.3){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
 			}else{
-				sphere.setMaterial(new DielectricMaterial(Color.random(0.85 + (Math.random()/16.0)), -0.24 + rand* 2.0));
+				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			}
 			
 			sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
@@ -192,6 +193,11 @@ public class TestScene1 extends Scene {
 		directionalLight.setDirection(new Vector4(1,-1,-0.2,0));
 		lightManager.addLight(directionalLight);
 		
+	}
+	
+	private double randInRange(double min, double max)
+	{
+		return min + Math.random() * (max-min);
 	}
 	
 	@Override
