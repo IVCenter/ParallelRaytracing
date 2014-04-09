@@ -40,7 +40,6 @@ public class BoundingBox {
 	 * *********************************************************************************************/
 	public boolean intersects(RayData data)
 	{
-		//TODO
 		Ray ray = data.getRay();
 		double[] minm = min.getM();
 		double[] maxm = max.getM();
@@ -50,19 +49,33 @@ public class BoundingBox {
 		double[] tmin = {(minm[0] - o[0]) / d[0], (minm[1] - o[1]) / d[1], (minm[2] - o[2]) / d[2]};
 		double[] tmax = {(maxm[0] - o[0]) / d[0], (maxm[1] - o[1]) / d[1], (maxm[2] - o[2]) / d[2]};
 
-		double absmin = Math.max(Math.min(tmin[0], tmax[0]), Math.max(Math.min(tmin[1], tmax[1]), Math.min(tmin[2], tmax[2])));
-		double absmax = Math.min(Math.max(tmin[0], tmax[0]), Math.min(Math.max(tmin[1], tmax[1]), Math.max(tmin[2], tmax[2])));
+		//TODO: is this too slow?
+		//double absmin = Math.max(Math.min(tmin[0], tmax[0]), Math.max(Math.min(tmin[1], tmax[1]), Math.min(tmin[2], tmax[2])));
+		//double absmax = Math.min(Math.max(tmin[0], tmax[0]), Math.min(Math.max(tmin[1], tmax[1]), Math.max(tmin[2], tmax[2])));
 		
-		if(absmin > absmax)
+		//TODO: Is this any faster?
+		double[] amin = {tmin[0] < tmax[0] ? tmin[0] : tmax[0], 
+						 tmin[1] < tmax[1] ? tmin[1] : tmax[1], 
+						 tmin[2] < tmax[2] ? tmin[2] : tmax[2]};
+		
+		double absmin = amin[0] > amin[1] ? amin[0] : amin[1];
+		absmin = absmin > amin[2] ? absmin : amin[2];
+		
+		double[] amax = {tmin[0] > tmax[0] ? tmin[0] : tmax[0], 
+				 		 tmin[1] > tmax[1] ? tmin[1] : tmax[1], 
+				 		 tmin[2] > tmax[2] ? tmin[2] : tmax[2]};
+
+		double absmax = amax[0] < amax[1] ? amax[0] : amax[1];
+		absmax = absmax < amax[2] ? absmax : amax[2];
+		
+		double tend = data.getTEnd();
+		
+		if(absmin > absmax || absmin >= tend)
 			return false;
 		
-		if(absmin >= data.getTEnd())
-			return false;
+		double tstart = data.getTStart();
 		
-		if(absmin >= data.getTStart())
-			return true;
-		
-		if(absmax >= data.getTStart() && absmax < data.getTEnd())
+		if(absmin >= tstart || (absmax >= tstart && absmax < tend) )
 			return true;
 		
 		return false;
@@ -91,8 +104,8 @@ public class BoundingBox {
 	public void clear()
 	{
 		min.set(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, 0);
-		//max.set(-1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), 0);
-		max.set((-9999999.0), (-9999999.0), (-9999999.0), 0);
+		max.set(-1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), 0);
+		//max.set((-9999999.0), (-9999999.0), (-9999999.0), 0);
 	}
 	
 }
