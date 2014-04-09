@@ -106,8 +106,8 @@ public class TestScene1 extends Scene {
 		
 		//Test Cube
 		{
-			Cube cube = new Cube(2,1,3);
-			cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
+			//Cube cube = new Cube(2,1,3);
+			//cube.setMaterial(new ReflectiveMaterial(Color.grey(1.0), 0.35));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
 			//matTrans4.addChild(cube);
 		}
@@ -116,13 +116,14 @@ public class TestScene1 extends Scene {
 		{
 			Matrix4 mat = new Matrix4();
 			mat.identity();
-			mat.translation(0, 0.4501, 2);
+			mat.translation(0, 0.22501, 2);
 			mat.rotateY(Math.PI/7.0);
+			mat.nuscale(2.0, 0.5, 2.0);
 			
 			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
 			this.addChild(mts);
 			
-			Cube cube = new Cube(0.9,0.9,0.9);
+			Cube cube = new Cube(0.5,1.9,0.5);
 			//cube.setMaterial(new DielectricMaterial(new Color(1.05, 1.0, 1.05), 1.1));
 			cube.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.6, 0.4), 0.6));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
@@ -131,7 +132,7 @@ public class TestScene1 extends Scene {
 		
 		
 		//For big loads, allocate the size we'l need ahead of time
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(1020513);
+		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(11600);
 		
 		for(int i = 0; i < 10012; i++)
 		{
@@ -149,8 +150,25 @@ public class TestScene1 extends Scene {
 			}
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 4 * Math.random(), 60 * Math.random() - 58.0, 0));
+			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 2.2 * Math.random(), 60 * Math.random() - 58.5, 0));
 			sphere.setRadius(Math.pow(Math.random() * 0.8, 1.15));
+			spheres.add(sphere);
+			
+			//if(i % 10000 == 0)
+			//	Logger.progress(-1, "Loaded " + i + " spheres into this surface.");
+		}
+		
+		for(int i = 0; i < 812; i++)
+		{
+			Sphere sphere = new Sphere();
+			
+			//double rand = Math.random();
+			//sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
+			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+
+			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
+			sphere.setPosition(new Vector4(8 * Math.random() - 4.0, 3 * Math.random(), 6 * Math.random() - 1.0, 0));
+			sphere.setRadius(Math.pow(Math.random() * 0.1, 1.15));
 			spheres.add(sphere);
 			
 			//if(i % 10000 == 0)
@@ -221,7 +239,7 @@ public class TestScene1 extends Scene {
 		//Make a plane
 		//This is down here since infinitely large objects cause problems with BVHs...
 		Plane plane = new Plane();
-		plane.setMaterial(new ReflectiveMaterial(new Color(0xffffffff), 0.35));
+		plane.setMaterial(new ReflectiveMaterial(new Color(0xffeeddff), 0.35));
 		//plane.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.35));
 		//plane.setMaterial(new DiffuseMaterial(Color.grey(0.2)));
 		this.addChild(plane);
@@ -237,7 +255,7 @@ public class TestScene1 extends Scene {
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed += Math.PI/4.0;
+		elapsed = Math.PI/4.0;
 		
 		
 		Vector4 pos = sphere.getPosition();
