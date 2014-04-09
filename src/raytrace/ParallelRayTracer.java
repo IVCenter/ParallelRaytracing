@@ -40,6 +40,7 @@ public class ParallelRayTracer implements Tracer {
 	protected ArrayList<Thread> threadPool;
 	protected ArrayList<RayBuffer> rayBuffers;
 	
+	protected boolean randomizeRays = true;//TODO: Need a getter/setter for this
 	
 	//Used to cache rays
 	private Camera cameraUsedForDistro = null;
@@ -68,6 +69,7 @@ public class ParallelRayTracer implements Tracer {
 		rayBuffers = new ArrayList<RayBuffer>(cores);
 		
 		//Create as many workers as there are cores
+		//TODO:If a worker crashes, create a new one
 		SynchronizingWorker worker;
 		for(int i = 0; i < cores; ++i)
 		{
@@ -77,7 +79,7 @@ public class ParallelRayTracer implements Tracer {
 			rayBuffers.add(new RayBuffer());
 		}
 		
-		//Start the workers (they should imediately fall into a spin lock)
+		//Start the workers (they should immediately fall into a spin lock)
 		for(Thread t: threadPool)
 			t.start();
 	}
@@ -99,7 +101,7 @@ public class ParallelRayTracer implements Tracer {
 		long startTime = System.currentTimeMillis();
 		
 		//Distribute camera rays (if necessary)
-		distributeRays(camera);
+		distributeRays(camera, randomizeRays);
 		
 		//Update the call id
 		callID++;
@@ -150,7 +152,7 @@ public class ParallelRayTracer implements Tracer {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void distributeRays(Camera camera)
+	private void distributeRays(Camera camera, boolean randomize)
 	{
 		if(camera == cameraUsedForDistro && camera.getRaySetID() == cameraRaySetID)
 			return;
@@ -175,6 +177,32 @@ public class ParallelRayTracer implements Tracer {
 		for(Ray ray : camera)
 		{
 			buffers[(i++)%bufCount].add(ray);
+		}
+		
+		//If randomize is set to true, shuffle the rays around
+		if(randomize)
+		{
+			//Randomize the rays
+			Ray tempRay;
+			int leftIndex, rightIndex;
+			int leftRayIndex, rightRayIndex;
+			for(i *= 4; i >= 0; --i)
+			{
+				//Calculate buffer indices
+				leftIndex = (int)Math.floor((Math.random() * bufCount));
+				rightIndex = leftIndex;
+				while(rightIndex == leftIndex) {
+					rightIndex = (int)Math.floor((Math.random() * bufCount));
+				}
+				
+				//Swap random rays from the two buffers
+				leftRayIndex = (int)Math.floor((Math.random() * buffers[leftIndex].size()));
+				rightRayIndex = (int)Math.floor((Math.random() * buffers[rightIndex].size()));
+				
+				tempRay = buffers[leftIndex].get(leftRayIndex);
+				buffers[leftIndex].set(leftRayIndex, buffers[rightIndex].get(rightRayIndex));
+				buffers[rightIndex].set(rightRayIndex, tempRay);
+			}
 		}
 	}
 
