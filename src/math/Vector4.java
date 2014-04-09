@@ -177,9 +177,9 @@ public class Vector4 {
 	 * *********************************************************************************************/
 	public void print()
 	{
-		System.out.println("[" + StringUtils.column(""+m[0], 8) + ", " + 
-								 StringUtils.column(""+m[1], 8) + ", " +
-								 StringUtils.column(""+m[2], 8) + ", " +
-								 StringUtils.column(""+m[3], 8) + "]");
+		System.out.println("[" + StringUtils.column(""+m[0], 24) + ", " + 
+								 StringUtils.column(""+m[1], 24) + ", " +
+								 StringUtils.column(""+m[2], 24) + ", " +
+								 StringUtils.column(""+m[3], 24) + "]");
 	}
 }
