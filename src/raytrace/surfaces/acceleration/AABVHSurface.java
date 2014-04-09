@@ -84,8 +84,7 @@ public class AABVHSurface extends CompositeSurface {
 		 * Steps:
 		 * 
 		 * 		-Build a AABB for the set of surfaces
-		 * 		-Calculate the midpoint
-		 * 		-For each component of the midpoint, create an AAP
+		 * 		-For each axis, and for each of a set of planes orthogonal to that axis
 		 * 			-Split the set of surface into -/+ sides of the AAP
 		 * 			-Calculate SAH*N
 		 * 		-Use the split with the minimum SAH*N
@@ -94,9 +93,8 @@ public class AABVHSurface extends CompositeSurface {
 
 		Logger.progress(-1, "Surfaces Size[" + surfaces.size() + "].");
 		
-		//Get bounding box and mid point
+		//Get bounding box
 		BoundingBox topBB = makeBoundingBox(surfaces);
-		//Vector4 midPoint = topBB.min.add3(topBB.max).multiply3(0.5);
 		
 		//Get spatial axis data
 		double[] axisWidths = {topBB.max.get(0) - topBB.min.get(0), 
@@ -125,15 +123,16 @@ public class AABVHSurface extends CompositeSurface {
 		{
 			for(int slice = -slices/2; slice <= slices/2; ++slice)
 			{
+				//Get the plane position for the current axis/slice
 				currentAxisValue = axisValues[i] + (slice * (axisWidths[i])/(double)slices);
 				
 				//Split across current axis
 				split(surfaces, negative, positive, i, currentAxisValue);
-				//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
 				
 				//Compute the SAH for the current sets
 				currentSAH = calculateSAH(negative, positive);
-				//System.out.println("CurrentSAH: " + currentSAH);
+
+				//If the current SAH is lower than the current lowest
 				if(currentSAH < lowestSAH)
 				{
 					lowestSAH = currentSAH;
@@ -149,19 +148,22 @@ public class AABVHSurface extends CompositeSurface {
 
 		//Split on the lowest axis
 		split(surfaces, negative, positive, lowestAxis, lowestAxisValue);
-		//System.out.println("Splitting on Axis[" + lowestAxis + "]");
-		//System.out.println("Negative Size[" + negative.size() + "]\tPositive Size[" + positive.size() + "]\t");
 		
 		//Make a root surface
 		AABVHSurface rootSurface = new AABVHSurface();
 		
-		//If we encounter a set that can not be partitioned, add the surfaces and return;
-		if(/*negative.size() == surfaces.size() || positive.size() == surfaces.size() ||*/ surfaces.size() <= maxSurfacesPerLeaf) {
+		//If we encounter a set of surfaces that the current SAH can not partition further
+		/*if(negative.size() == surfaces.size() || positive.size() == surfaces.size())*/
+		//TODO: Then what do we do?
+		
+		//If we encounter a set that is smaller than the per leaf max, add the surfaces and return;
+		if(surfaces.size() <= maxSurfacesPerLeaf) {
 			for(CompositeSurface cs : surfaces)
 				rootSurface.addChild(cs);
 			return rootSurface;
 		}
 		
+		//Recurse on the negative and positive sets, adding their result to this
 		rootSurface.addChild(AABVHSurface.makeAABVH(negative));
 		rootSurface.addChild(AABVHSurface.makeAABVH(positive));
 		
@@ -174,6 +176,7 @@ public class AABVHSurface extends CompositeSurface {
 	{
 		BoundingBox surfacebb;
 		
+		//For all of the surfaces, place them in either the negative or positive side
 		for(CompositeSurface cs : surfaces)
 		{
 			surfacebb = cs.getBoundingBox();
@@ -188,7 +191,7 @@ public class AABVHSurface extends CompositeSurface {
 			{
 				positive.add(cs);
 				
-			//If on both sides, add to both
+			//If on both sides, add to negative
 			}else{
 				negative.add(cs);
 				//positive.add(cs);
