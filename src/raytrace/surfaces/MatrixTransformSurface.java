@@ -103,8 +103,24 @@ public class MatrixTransformSurface extends CompositeSurface {
 		
 		//Or do the opposite (call super.updateBound, then transform the min/max)
 		super.updateBoundingBox();
-		boundingBox.min = transform.multiplyPt(boundingBox.min);
-		boundingBox.max = transform.multiplyPt(boundingBox.max);
+		
+		//Create a vector for each corner, and transform it
+		Vector4[] corners = new Vector4[8];
+		for(int mask = 0x0; mask < 0x8; ++mask)
+		{
+			corners[mask] = transform.multiplyPt(new Vector4(
+					(mask & 0x1) == 0 ? boundingBox.min.get(0) : boundingBox.max.get(0),
+					(mask & 0x2) == 0 ? boundingBox.min.get(1) : boundingBox.max.get(1),
+					(mask & 0x4) == 0 ? boundingBox.min.get(2) : boundingBox.max.get(2),
+					0));
+		}
+		
+		//Calculate the bounding box for the transformed corners
+		for(int i = 0; i < 8; ++i)
+		{
+			boundingBox.min.minimize3(corners[i]);
+			boundingBox.max.maximize3(corners[i]);
+		}
 	}
 
 
