@@ -69,7 +69,7 @@ public class Color {
 	public int rgb32()
 	{
 		double max = Math.max(Math.max(channels[0], channels[1]), channels[2]);
-		if(max < 1.0)
+		if(max >= 0.0 && max < 1.0)
 			max = 1.0;
 		return  (0x000000ff << 24) +
 				((int)((channels[0]/max) * 255) << 16) +
