@@ -19,7 +19,7 @@ public abstract class Material {
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
 	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
-	public static final double AIR_REFRACTIVE_INDEX = 1.003;
+	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 	
 
 	/* *********************************************************************************************
