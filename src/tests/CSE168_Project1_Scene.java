@@ -83,6 +83,8 @@ public class CSE168_Project1_Scene extends Scene{
 		redlgt.setColor(new Color(1.0, 0.2, 0.2));
 		redlgt.setIntensity(2.0);
 		redlgt.setConstantAttenuation(0.0);
+		redlgt.setLinearAttenuation(0.0);
+		redlgt.setQuadraticAttenuation(1.0);
 		redlgt.setPosition(new Vector4(2.0, 2.0, 0.0, 0));
 		lightManager.addLight(redlgt);
 		
