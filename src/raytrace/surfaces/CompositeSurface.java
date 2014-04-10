@@ -48,8 +48,6 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		if(children == null)
 			return null;
 		
-		//TOOD: check against bounding box first
-		
 		IntersectionData idata;
 		IntersectionData closest = null;
 		
@@ -162,8 +160,9 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	{	
 		//Add all children at once
 		//This does not check for null or duplicate surfaces
-		if(children != null)
-			children.addAll(set);
+		if(children == null)
+			children = new ArrayList<CompositeSurface>();
+		children.addAll(set);
 	}
 	
 	public CompositeSurface removeChild(CompositeSurface cs)
