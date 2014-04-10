@@ -62,6 +62,7 @@ public class ApplicationDelegate extends Job{
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			screenDrawer.setVerticalSynchronize(false);
+			screenDrawer.setMsPerFrame(1000/12);
 			pixelBuffer = screenDrawer.getPixelBuffer();
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
@@ -124,6 +125,7 @@ public class ApplicationDelegate extends Job{
 			renderer.update(udata);
 			
 			renderer.render(rdata);
+			
 		}
 	}
 	
