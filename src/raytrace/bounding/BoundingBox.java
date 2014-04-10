@@ -38,7 +38,7 @@ public class BoundingBox {
 	/* *********************************************************************************************
 	 * Test Methods
 	 * *********************************************************************************************/
-	public boolean intersects(RayData data)
+	public double intersects(RayData data)
 	{
 		Ray ray = data.getRay();
 		double[] minm = min.getM();
@@ -68,22 +68,27 @@ public class BoundingBox {
 		double absmax = amax[0] < amax[1] ? amax[0] : amax[1];
 		absmax = absmax < amax[2] ? absmax : amax[2];
 		
+		
 		double tend = data.getTEnd();
 		
 		if(absmin > absmax || absmin >= tend)
-			return false;
+			return Double.MAX_VALUE;
 		
 		double tstart = data.getTStart();
 		
-		if(absmin >= tstart || (absmax >= tstart && absmax < tend) )
-			return true;
+		if(absmin >= tstart)
+			return absmin;
 		
-		return false;
+		if(absmax >= tstart && absmax < tend) 
+			return absmax;
+		
+		return Double.MAX_VALUE;
 	}
 	
 	public Vector4 getMidpoint()
 	{
-		return min.add3(max).multiply3(0.5);
+		Vector4 mp = min.add3(max).multiply3(0.5);
+		return mp;
 	}
 	
 	public double getSurfaceArea()
