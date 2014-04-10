@@ -61,7 +61,7 @@ public class TestScene1 extends Scene {
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
 		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 0.98));
 		//sphere.setMaterial(new DielectricMaterial(new Color(1.01, 1.01, 0.99), 1.45));
-		this.addChild(sphere);
+		//this.addChild(sphere);
 		
 		/*
 		//Test transform
@@ -121,13 +121,13 @@ public class TestScene1 extends Scene {
 			mat.nuscale(2.0, 0.5, 2.0);
 			
 			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
-			this.addChild(mts);
+			//this.addChild(mts);
 			
 			Cube cube = new Cube(0.5,1.9,0.5);
 			//cube.setMaterial(new DielectricMaterial(new Color(1.05, 1.0, 1.05), 1.1));
 			cube.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.6, 0.4), 0.6));
 			//cube.setMaterial(new DiffuseMaterial(Color.white()));
-			mts.addChild(cube);
+			//mts.addChild(cube);
 		}
 		
 		
