@@ -63,6 +63,7 @@ public class ParallelRayTracer implements Tracer {
 	public ParallelRayTracer()
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
+		//cores = 1;
 		threadCount = cores;
 		workers = new ArrayList<SynchronizingWorker>(cores);
 		threadPool = new ArrayList<Thread>(cores);
@@ -191,9 +192,10 @@ public class ParallelRayTracer implements Tracer {
 				//Calculate buffer indices
 				leftIndex = (int)Math.floor((Math.random() * bufCount));
 				rightIndex = leftIndex;
-				while(rightIndex == leftIndex) {
-					rightIndex = (int)Math.floor((Math.random() * bufCount));
-				}
+				if(bufCount != 1)
+					while(rightIndex == leftIndex) {
+						rightIndex = (int)Math.floor((Math.random() * bufCount));
+					}
 				
 				//Swap random rays from the two buffers
 				leftRayIndex = (int)Math.floor((Math.random() * buffers[leftIndex].size()));
