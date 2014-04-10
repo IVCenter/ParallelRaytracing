@@ -43,11 +43,144 @@ public class AABVHSurface extends CompositeSurface {
 			return null;
 		
 		//TODO: Check against BB, if miss, return null
-		if(!boundingBox.intersects(data))
+		double bbIntersection = boundingBox.intersects(data);
+		if(bbIntersection == Double.MAX_VALUE)
 			return null;
 		
+		/*
+		int childCount = getChildren().size();
+		
+		if(childCount > 2)
+			return super.intersects(data);
+		else if(childCount == 1)
+			return this.getChildren().get(0).intersects(data);
+		
+		
+		//Get the bounding boxes and intersection times
+		CompositeSurface[] surfaces = new CompositeSurface[childCount];
+		double[] intersections = new double[surfaces.length];
+
+		surfaces[0] = this.getChildren().get(0);
+		surfaces[1] = this.getChildren().get(1);
+		intersections[0] = surfaces[0].getBoundingBox().intersects(data);
+		intersections[1] = surfaces[1].getBoundingBox().intersects(data);
+		
+		//Sort
+		//insertionSortSideBySide(intersections, surfaces);
+
+		double swapTemp;
+		CompositeSurface swapTempSurface;
+		if(intersections[1] < intersections[0])
+		{
+			swapTemp = intersections[0];
+			swapTempSurface = surfaces[0];
+			intersections[0] = intersections[1];
+			surfaces[0] = surfaces[1];
+			intersections[1] = swapTemp;
+			surfaces[1] = swapTempSurface;
+		}
+		
+		
+		
+		IntersectionData idata;
+		IntersectionData closest = null;
+		CompositeSurface cs;
+		double time;
+		for(int i = 0; i < 2; ++i)
+		{
+			cs = surfaces[i];
+			time = intersections[i];
+			if(time == Double.MAX_VALUE) {
+				continue;
+			}
+			
+			idata = cs.intersects(data);
+			//If idata isn't null, and either closest is null, or idata is closer than closest
+			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
+			{
+				closest = idata;
+				if(i < surfaces.length-1 && closest.getTime() <= intersections[i])
+				{
+					//System.out.println("Returning early.  Closest[" + closest.getTime() + "] NextBox[" + intersections[i] + "]");
+					return closest;
+				}
+			}
+		}
+		
+		return closest;
+		*/
+		
+		//TODO: check children BBs
+		//Sort by hit time
+		//Dive in order
+		//if hit returns, and time less than next BB time, return hit
 		return super.intersects(data);
 	}
+	
+	/*
+	private void insertionSortSideBySide(double[] data, CompositeSurface[] css)
+	{	
+		if(data.length < 2 || data.length != css.length)
+			return;
+
+		double swapTemp;
+		CompositeSurface swapTempSurface;
+		
+		//Special case for 2 items
+		if(data.length == 2)
+		{
+			if(data[1] < data[0])
+			{
+				swapTemp = data[0];
+				swapTempSurface = css[0];
+				data[0] = data[1];
+				css[0] = css[1];
+				data[1] = swapTemp;
+				css[1] = swapTempSurface;
+			}
+			return;
+		}
+		
+		//General case
+		double insertTemp;
+		CompositeSurface insertTempSurface;
+		
+		for(int i = 1; i < data.length; ++i)
+		{
+			insertTemp = data[i];
+			insertTempSurface = css[i];
+			for(int j = i-1; j >= 0; --j)
+			{
+				swapTemp = data[j];
+				swapTempSurface = css[j];
+				if(swapTemp > insertTemp)
+				{
+					data[j+1] = swapTemp;
+					css[j+1] = swapTempSurface;
+				}else {
+					data[j+1] = insertTemp;
+					css[j+1] = insertTempSurface;
+					break;
+				}
+				
+				if(j == 0) {
+					data[0] = insertTemp;
+					css[0] = insertTempSurface;
+				}
+			}
+		}
+		
+	}
+	
+	private void printArray(double[] data)
+	{
+		StringBuilder sb = new StringBuilder("[");
+		for(double d : data)
+			sb.append(d + ", ");
+		sb.append("]");
+		System.out.println(sb.toString());
+	}
+	*/
 
 	@Override
 	public void bake(BakeData data)
@@ -152,15 +285,22 @@ public class AABVHSurface extends CompositeSurface {
 		//Make a root surface
 		AABVHSurface rootSurface = new AABVHSurface();
 		
-		//If we encounter a set of surfaces that the current SAH can not partition further
-		/*if(negative.size() == surfaces.size() || positive.size() == surfaces.size())*/
-		//TODO: Then what do we do?
-		
 		//If we encounter a set that is smaller than the per leaf max, add the surfaces and return;
 		if(surfaces.size() <= maxSurfacesPerLeaf) {
 			for(CompositeSurface cs : surfaces)
 				rootSurface.addChild(cs);
 			return rootSurface;
+		}
+		
+		//If we encounter a set of surfaces that the current SAH can not partition further
+		if(negative.size() == surfaces.size() || positive.size() == surfaces.size()) {
+			System.out.println("Entering forced split");
+			negative.clear();
+			positive.clear();
+			split(surfaces, negative, positive, 2, axisValues[2]);
+			center.print();
+			System.out.println("Negative size: " + negative.size());
+			System.out.println("Positive size: " + positive.size());
 		}
 		
 		//Recurse on the negative and positive sets, adding their result to this
@@ -248,6 +388,7 @@ public class AABVHSurface extends CompositeSurface {
 		}
 		
 		center.set(m[0]/count, m[1]/count, m[2]/count, 0);
+		
 		return center;
 	}
 	
