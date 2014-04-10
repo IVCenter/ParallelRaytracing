@@ -45,6 +45,7 @@ public class ScreenDrawer {
 
 	protected boolean refreshScreen = true;
 	protected boolean verticalSynchronize = true;//Setting this to true fixes screen tearing...and murders the frame rate
+	
 
 	/* *********************************************************************************************
 	 * Constructor

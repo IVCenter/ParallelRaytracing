@@ -43,4 +43,5 @@ public class PixelBuffer {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+
 }
