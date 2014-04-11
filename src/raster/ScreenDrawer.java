@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-public class ScreenDrawer {
+public class ScreenDrawer extends JFrame {
 	
 	/*
 	 * A simple delegate for handling the pushing of pixels to screen
@@ -29,10 +29,15 @@ public class ScreenDrawer {
 	 * 		-
 	 */
 	
+	/**
+	 * Default Serial ID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected JFrame frame;
+	//protected JFrame frame;
 	protected JPanel panel;
 	
     protected int width;
@@ -52,6 +57,9 @@ public class ScreenDrawer {
 	 * *********************************************************************************************/
 	public ScreenDrawer(final int width, final int height)
 	{
+		//Init frame
+		super();
+		
 		//Initialize instance vars
 		this.width = width;
 		this.height = height;
@@ -63,12 +71,12 @@ public class ScreenDrawer {
             @Override
             public void run()
             {
-                frame = new JFrame();
+                //frame = new JFrame();
                 panel = new ScreenPanel();
-                frame.getContentPane().add(panel, BorderLayout.CENTER);
-                frame.setSize(width, height);
-                frame.setUndecorated(true);
-                frame.setVisible(true);
+                getContentPane().add(panel, BorderLayout.CENTER);
+                setSize(width, height);
+                setUndecorated(true);
+                setVisible(true);
             }
         });
 	}
@@ -103,7 +111,7 @@ public class ScreenDrawer {
 		this.msPerFrame = msPerFrame;
 	}
 
-	public long getFrames() {
+	public long getFrameCount() {
 		return frames;
 	}
 
