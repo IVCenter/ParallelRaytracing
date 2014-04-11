@@ -45,12 +45,15 @@ public class TestScene1 extends Scene {
 		
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
+		((PinholeCamera)activeCamera).setStratifiedSampling(true);
+		((PinholeCamera)activeCamera).setSuperSamplingLevel(3);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
+		((PinholeCamera)activeCamera).forceUpdate();
 		//this.addChild(activeCamera);
 		
 		
