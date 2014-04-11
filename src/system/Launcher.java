@@ -25,15 +25,17 @@ public class Launcher {
 		
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
-		Configuration.setScreenWidth(960);
-		Configuration.setScreenHeight(640);
+		Configuration.setScreenWidth(1368);
+		Configuration.setScreenHeight(752);
+		Configuration.setScreenWidth(800);
+		Configuration.setScreenHeight(600);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);
 		Configuration.setLeaf(true);
 		
 		
 		//Load the scene (TODO: Parse args for scene choice)
-		String sceneKey = Constants.SceneKeys.TEST1;
+		String sceneKey = Constants.SceneKeys.CSE168_Project1;
 		SceneLoader sceneLoader = new SceneLoader();
 		Configuration.setMasterScene(sceneLoader.load(sceneKey));
 		
