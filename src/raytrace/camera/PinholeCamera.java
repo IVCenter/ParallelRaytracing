@@ -3,6 +3,7 @@ package raytrace.camera;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import math.CompositeRay;
 import math.Ray;
 import math.Vector4;
 
@@ -22,6 +23,9 @@ public class PinholeCamera extends Camera {
 	
 	protected ArrayList<Ray> precalculatedRays;
 	
+	protected int superSamplingLevel = 1;
+	protected boolean stratifiedSampling = false;
+	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -39,7 +43,34 @@ public class PinholeCamera extends Camera {
 		precalculatedRays = new ArrayList<Ray>();
 		update();
 	}
+	
+	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
+	{
+		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
+		this.superSamplingLevel = superSamplingLevel;
+		precalculatedRays = new ArrayList<Ray>();
+		update();
+	}
+	
 
+	/* *********************************************************************************************
+	 * Getters/Setter
+	 * *********************************************************************************************/
+	public int getSuperSamplingLevel() {
+		return superSamplingLevel;
+	}
+
+	public void setSuperSamplingLevel(int superSamplingLevel) {
+		this.superSamplingLevel = superSamplingLevel;
+	}
+
+	public boolean isStratifiedSampling() {
+		return stratifiedSampling;
+	}
+
+	public void setStratifiedSampling(boolean stratifiedSampling) {
+		this.stratifiedSampling = stratifiedSampling;
+	}
 
 	/* *********************************************************************************************
 	 * Iteration
@@ -54,7 +85,7 @@ public class PinholeCamera extends Camera {
 			return precalculatedRays.iterator();
 	}
 
-	
+
 	/* *********************************************************************************************
 	 * Calculation Methods
 	 * *********************************************************************************************/
@@ -80,6 +111,18 @@ public class PinholeCamera extends Camera {
 		//Since the rays are new change the set ID
 		raySetID++;
 	}
+	
+	@Override
+	protected void wasModified()
+	{
+		
+	}
+	
+	//TODO: This is not exactly good design.....
+	public void forceUpdate()
+	{
+		update();
+	}
 
 	
 	/* *********************************************************************************************
@@ -91,15 +134,48 @@ public class PinholeCamera extends Camera {
 		//Create the origin vector
 		Vector4 orig = new Vector4(position);
 		
-		//Pre-calculate the axis weights
-		double pw = (((x+0.5)/pixelWidth) - 0.5) * imagePlaneWidth;
-		double ph = (((y+0.5)/pixelHeight) - 0.5) * imagePlaneHeight;
+		//Create a composite ray with enough space for the sampling rays
+		CompositeRay cray = null;
+		if(superSamplingLevel != 1) {
+			cray = new CompositeRay(superSamplingLevel * superSamplingLevel);
+			cray.setOrigin(orig);
+			cray.setPixelX((int)x);
+			cray.setPixelY((int)y);
+		}
 		
-		//Create the direction vector
-		//TODO: Might be slow
-		Vector4 dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph)).normalize3();
+		double samplingDelta = 1.0/(double)superSamplingLevel;
 		
-		return new Ray(orig, dir, (int)x, (int)y);
+		double pw;
+		double ph;
+		double woffset, hoffset;
+		Vector4 dir;
+		
+		for(int u = 0; u < superSamplingLevel; ++u)
+		{
+			for(int v = 0; v < superSamplingLevel; ++v)
+			{
+				//Calculate sampling offsets
+				woffset = u * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
+				hoffset = v * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
+				
+				
+				//Pre-calculate the axis weights
+				pw = (((x+woffset)/pixelWidth) - 0.5) * imagePlaneWidth;
+				ph = (((y+hoffset)/pixelHeight) - 0.5) * imagePlaneHeight;
+				
+				//Create the direction vector
+				//TODO: Might be slow
+				dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph)).normalize3();
+				
+				if(superSamplingLevel == 1)
+					return new Ray(orig, dir, (int)x, (int)y);
+				else
+					cray.addRay(new Ray(orig, dir, (int)x, (int)y));
+			}
+		}
+		
+		
+		return cray;
 	}
 	
 	public void setVerticalFieldOfView(double fov)
