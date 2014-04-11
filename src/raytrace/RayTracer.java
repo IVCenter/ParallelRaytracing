@@ -32,7 +32,7 @@ public class RayTracer implements Tracer {
 		
 		Material skyMaterial = scene.getSkyMaterial();
 		if(skyMaterial == null)
-			skyMaterial = new ColorMaterial(Color.black());
+			skyMaterial = new ColorMaterial(Color.white());
 		
 		//For each ray, calculate the pixel color
 		for(Ray ray : camera)
