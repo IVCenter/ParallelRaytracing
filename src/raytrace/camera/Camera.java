@@ -47,6 +47,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	protected abstract void update();
+	protected abstract void wasModified();
 	protected abstract Ray getRay(double x, double y);
 	
 
@@ -62,7 +63,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	@Override
 	public void setPosition(Vector4 position) {
 		this.position = position;
-		update();
+		wasModified();
 	}
 	
 	//LookAt
@@ -72,7 +73,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setViewingDirection(Vector4 viewingDirection) {
 		this.viewingDirection = viewingDirection;
-		update();
+		wasModified();
 	}
 	
 	//Up
@@ -82,7 +83,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setUp(Vector4 up) {
 		this.up = up;
-		update();
+		wasModified();
 	}
 
 	public double getFieldOfView() {
@@ -91,7 +92,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setFieldOfView(double fieldOfView) {
 		this.fieldOfView = fieldOfView;
-		update();
+		wasModified();
 	}
 
 	public double getPixelWidth() {
@@ -100,7 +101,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setPixelWidth(double pixelWidth) {
 		this.pixelWidth = pixelWidth;
-		update();
+		wasModified();
 	}
 
 	public double getPixelHeight() {
@@ -109,7 +110,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setPixelHeight(double pixelHeight) {
 		this.pixelHeight = pixelHeight;
-		update();
+		wasModified();
 	}
 
 	public int getRaySetID() {

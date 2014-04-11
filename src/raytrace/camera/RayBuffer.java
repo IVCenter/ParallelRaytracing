@@ -44,6 +44,12 @@ public class RayBuffer extends Camera {
 	{
 		//TODO: Oh?
 	}
+	
+	@Override
+	protected void wasModified()
+	{
+		//TODO: Oh?
+	}
 
 	@Override
 	protected Ray getRay(double x, double y)
