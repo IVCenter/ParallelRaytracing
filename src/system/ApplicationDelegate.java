@@ -1,5 +1,7 @@
 package system;
 
+import input.DefaultKeyboard;
+import input.Keyboard;
 import process.Job;
 import process.logging.Logger;
 import raster.PixelBuffer;
@@ -37,6 +39,7 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
+	protected Keyboard keyboard;
 	
 	protected Renderer renderer;
 	
@@ -63,7 +66,15 @@ public class ApplicationDelegate extends Job{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			screenDrawer.setVerticalSynchronize(false);
 			screenDrawer.setMsPerFrame(1000/12);
+			
 			pixelBuffer = screenDrawer.getPixelBuffer();
+			
+			keyboard = Configuration.getKeyboard();
+			if(keyboard == null) {
+				keyboard = new DefaultKeyboard(pixelBuffer);
+			}
+			screenDrawer.addKeyListener(keyboard);
+			
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 		}
