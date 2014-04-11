@@ -57,6 +57,19 @@ public class Color {
 	{
 		this(r, g, b, 1);;
 	}
+	
+	public void set(double r, double g, double b)
+	{
+		this.set(r, g, b, 1.0);
+	}
+	
+	public void set(double r, double g, double b, double a)
+	{
+		channels[0] = r;
+		channels[1] = g;
+		channels[2] = b;
+		channels[3] = a;
+	}
 
 	/* *********************************************************************************************
 	 * Calculation Methods
@@ -99,6 +112,22 @@ public class Color {
 	public Color multiply3(Color c)
 	{
 		return new Color(channels[0] * c.channels[0], channels[1] * c.channels[1], channels[2] * c.channels[2], channels[3]);
+	}
+	
+	public Color multiply3M(Color c)
+	{
+		channels[0] *= c.channels[0];
+		channels[1] *= c.channels[1];
+		channels[2] *= c.channels[2];
+		return this;
+	}
+
+	public Color multiply3M(double d)
+	{
+		channels[0] *= d;
+		channels[1] *= d;
+		channels[2] *= d;
+		return this;
 	}
 	
 	public Color interpolate(Color color0, Color color1, double t)
