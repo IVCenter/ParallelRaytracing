@@ -33,9 +33,12 @@ public class Launcher {
 		Configuration.setClock(true);
 		Configuration.setLeaf(true);
 		
+		//TODO: Need a reliable and relative folder to write to
+		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
+		
 		
 		//Load the scene (TODO: Parse args for scene choice)
-		String sceneKey = Constants.SceneKeys.CSE168_Project1;
+		String sceneKey = Constants.SceneKeys.TEST2;
 		SceneLoader sceneLoader = new SceneLoader();
 		Configuration.setMasterScene(sceneLoader.load(sceneKey));
 		
