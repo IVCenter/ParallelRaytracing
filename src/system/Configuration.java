@@ -1,5 +1,6 @@
 package system;
 
+import input.Keyboard;
 import process.Environment;
 import raytrace.scene.Scene;
 
@@ -25,6 +26,9 @@ public class Configuration {
 	protected static boolean isLeaf = false;
 	
 	protected static Scene masterScene = null;
+	
+	protected static Keyboard keyboard = null;
+	protected static String workingDirectory = "/";
 
 	
 	/* *********************************************************************************************
@@ -80,5 +84,13 @@ public class Configuration {
 	//Master Scene
 	public static Scene getMasterScene() { return masterScene; }
 	public static void setMasterScene(Scene masterScene) { Configuration.masterScene = masterScene; }
+
+	//Keyboard
+	public static Keyboard getKeyboard() { return keyboard; }
+	public static void setKeyboard(Keyboard keyboard) { Configuration.keyboard = keyboard; }
+
+	//Working Directory
+	public static String getWorkingDirectory() { return workingDirectory; }
+	public static void setWorkingDirectory(String workingDirectory) { Configuration.workingDirectory = workingDirectory; }
 	
 }
