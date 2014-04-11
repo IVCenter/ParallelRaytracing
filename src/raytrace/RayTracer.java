@@ -34,33 +34,50 @@ public class RayTracer implements Tracer {
 		if(skyMaterial == null)
 			skyMaterial = new ColorMaterial(Color.white());
 		
+		//ray count and color storage for super sampling support
+		double rayCount = 0;
+		Color color = new Color();
+		
 		//For each ray, calculate the pixel color
-		for(Ray ray : camera)
+		for(Ray rays : camera)
 		{
-			//Set the current ray
-			rdata.setRay(ray);
-			sdata.setRay(ray);
+			//reset ray count and color
+			rayCount = 0.0;
+			color.set(0.0, 0.0, 0.0);
 			
-			//Get the ray-scene intersection data
-			idata = scene.intersects(rdata);
-			
-			//If there was an intersection, do shading
-			if(idata != null)
+			//For all rays in the ray
+			for(Ray ray : rays)
 			{
-				sdata.setIntersectionData(idata);
-				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
-						idata.getMaterial().shade(sdata).rgb32();
+				//Increment ray count
+				rayCount += 1.0;
 				
-			//If there wasn't an intersection, use the sky material
-			}else{
+				//Set the current ray
+				rdata.setRay(ray);
+				sdata.setRay(ray);
 				
-				//Make sure the intersection data is null!
-				sdata.setIntersectionData(null);
+				//Get the ray-scene intersection data
+				idata = scene.intersects(rdata);
 				
-				//Shade the pixel using the sky material
-				pixels[ray.getPixelX() + ray.getPixelY() * pixelBuffer.getWidth()] = 
-						skyMaterial.shade(sdata).rgb32();
+				//If there was an intersection, do shading
+				if(idata != null)
+				{
+					sdata.setIntersectionData(idata);
+					color.add3M(idata.getMaterial().shade(sdata));
+					
+				//If there wasn't an intersection, use the sky material
+				}else{
+					
+					//Make sure the intersection data is null!
+					sdata.setIntersectionData(null);
+					
+					//Shade the pixel using the sky material
+					color.add3M(skyMaterial.shade(sdata));
+				}
 			}
+			
+			//Set the final color
+			color.multiply3M(1.0 / rayCount);
+			pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.rgb32();
 		}
 	}
 
