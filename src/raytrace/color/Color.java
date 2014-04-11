@@ -68,12 +68,10 @@ public class Color {
 	
 	public int rgb32()
 	{
-		//double max = Math.max(Math.max(channels[0], channels[1]), channels[2]);
-		channels[0] = Math.max(0, Math.min(1.0, channels[0]));
-		channels[1] = Math.max(0, Math.min(1.0, channels[1]));
-		channels[2] = Math.max(0, Math.min(1.0, channels[2]));
-		//if(max >= 0.0 && max < 1.0)
-		//	max = 1.0;
+		channels[0] = Math.max(0.0, Math.min(1.0, channels[0]));
+		channels[1] = Math.max(0.0, Math.min(1.0, channels[1]));
+		channels[2] = Math.max(0.0, Math.min(1.0, channels[2]));
+
 		return  (0x000000ff << 24) +
 				((int)((channels[0]) * 255) << 16) +
 				((int)((channels[1]) * 255) << 8) +
