@@ -14,13 +14,13 @@ import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
+import raytrace.material.CSE168Proj1_DiffuseMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
-import raytrace.surfaces.MatrixTransformSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import system.Configuration;
 
@@ -120,7 +120,7 @@ public class TestScene1 extends Scene {
 			mat.rotateY(Math.PI/7.0);
 			mat.nuscale(2.0, 0.5, 2.0);
 			
-			MatrixTransformSurface mts = new MatrixTransformSurface(mat);
+			//MatrixTransformSurface mts = new MatrixTransformSurface(mat);
 			//this.addChild(mts);
 			
 			Cube cube = new Cube(0.5,1.9,0.5);
@@ -143,6 +143,8 @@ public class TestScene1 extends Scene {
 				sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
+			}else if(rand < 0.0){
+				sphere.setMaterial(new CSE168Proj1_DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			}else{
@@ -174,6 +176,20 @@ public class TestScene1 extends Scene {
 			//if(i % 10000 == 0)
 			//	Logger.progress(-1, "Loaded " + i + " spheres into this surface.");
 		}
+		
+		//Place a sphere infront of the camera
+		{
+			Sphere sphere = new Sphere();
+			sphere.setMaterial(new DielectricMaterial(Color.white(), 0.85));
+
+			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
+			sphere.setPosition(new Vector4(0.0, 2.0, 4.40, 0));
+			sphere.setRadius(0.5);
+			//spheres.add(sphere);
+		}
+		
+		
+		
 		//Add the spheres to this
 		this.addChildrenUnsafe(spheres);
 		
