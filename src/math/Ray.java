@@ -1,6 +1,8 @@
 package math;
 
-public class Ray {
+import java.util.Iterator;
+
+public class Ray implements Iterable<Ray>{
 	
 	/*
 	 * A class that represents a Ray in 3D space
@@ -79,6 +81,53 @@ public class Ray {
 
 	public void setPixelY(int pixelY) {
 		this.pixelY = pixelY;
+	}
+
+	
+	/* *********************************************************************************************
+	 * Iteration Overrides
+	 * *********************************************************************************************/
+	@Override
+	public Iterator<Ray> iterator()
+	{
+		return new RayIterator(this);
+	}
+
+	/* *********************************************************************************************
+	 * Private Classes
+	 * *********************************************************************************************/
+	private class RayIterator implements Iterator<Ray>
+	{
+		boolean notDone = true;
+		Ray ray;
+		
+		public RayIterator(Ray ray)
+		{
+			this.ray = ray;
+		}
+		
+		@Override
+		public boolean hasNext()
+		{
+			return notDone;
+		}
+
+		@Override
+		public Ray next()
+		{
+			if(notDone) {
+				notDone = false;
+				return ray;
+			}
+			return null;
+		}
+
+		@Override
+		public void remove()
+		{
+			//No
+		}
+		
 	}
 	
 	
