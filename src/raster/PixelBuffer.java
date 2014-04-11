@@ -10,9 +10,11 @@ import process.logging.Logger;
 
 public class PixelBuffer {
 	
-
+	/*
+	 * A memory buffer for pixel data
+	 */
 	/* *********************************************************************************************
-	 * Constructor
+	 * Instance Vars
 	 * *********************************************************************************************/
 	protected int[] buffer;
 	protected int width;
