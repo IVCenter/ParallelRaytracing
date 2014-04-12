@@ -16,7 +16,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	protected Vector4 position = new Vector4();
 	protected Vector4 viewingDirection = new Vector4(0,0,-1,0);
 	protected Vector4 up = new Vector4(0,1,0,0);
-	protected double fieldOfView = 90.0;
+	protected double fieldOfView = Math.PI/2.0;
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
 	
