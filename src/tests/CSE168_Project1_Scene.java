@@ -1,9 +1,11 @@
 package tests;
 
+import process.logging.Logger;
 import math.Matrix4;
 import math.Vector4;
 import raytrace.camera.PinholeCamera;
 import raytrace.color.Color;
+import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
@@ -13,6 +15,7 @@ import raytrace.material.CSE168Proj1_DiffuseMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.MatrixTransformSurface;
+import raytrace.surfaces.acceleration.AABVHSurface;
 import system.Configuration;
 
 public class CSE168_Project1_Scene extends Scene{
@@ -32,12 +35,16 @@ public class CSE168_Project1_Scene extends Scene{
 
 		// Create camera
 		activeCamera = new PinholeCamera();
+		((PinholeCamera)activeCamera).setStratifiedSampling(false);
+		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(2.0, 2.0, 5.0, 0));
 		activeCamera.setViewingDirection(activeCamera.getPosition().multiply3(-1.0).normalize3());
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
+		((PinholeCamera)activeCamera).forceUpdate();
 		((PinholeCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
+		((PinholeCamera)activeCamera).forceUpdate();
 		
 		// Create boxes
 		//Box 1
@@ -88,6 +95,27 @@ public class CSE168_Project1_Scene extends Scene{
 		redlgt.setPosition(new Vector4(2.0, 2.0, 0.0, 0));
 		lightManager.addLight(redlgt);
 		
+		
+		
+		
+
+		//Update bounding boxes
+		this.updateBoundingBox();
+		
+		//BVH TESTS
+		Logger.progress(-1, "Starting creating a BVH for root surface...");
+		long startTime = System.currentTimeMillis();
+		
+		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren());
+		this.getChildren().clear();
+		this.addChild(aabvh);
+		
+		//Refresh
+		this.updateBoundingBox();
+		
+		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
+		
+		
 	}
 	
 	@Override
@@ -95,6 +123,13 @@ public class CSE168_Project1_Scene extends Scene{
 	{
 		//Update the children
 		super.update(data);
+	}
+	
+	@Override
+	public void bake(BakeData data)
+	{
+		//TODO: This may be costly
+		this.updateBoundingBox();
 	}
 
 }
