@@ -3,6 +3,8 @@ package raytrace.camera;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import process.logging.Logger;
+
 import math.CompositeRay;
 import math.Ray;
 import math.Vector4;
@@ -34,14 +36,14 @@ public class PinholeCamera extends Camera {
 	{
 		super();
 		precalculatedRays = new ArrayList<Ray>();
-		update();
+		//update();
 	}
 	
 	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		precalculatedRays = new ArrayList<Ray>();
-		update();
+		//update();
 	}
 	
 	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
@@ -49,7 +51,7 @@ public class PinholeCamera extends Camera {
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		this.superSamplingLevel = superSamplingLevel;
 		precalculatedRays = new ArrayList<Ray>();
-		update();
+		//update();
 	}
 	
 
@@ -121,6 +123,7 @@ public class PinholeCamera extends Camera {
 	//TODO: This is not exactly good design.....
 	public void forceUpdate()
 	{
+		Logger.progress(-8, "Forcing Update");
 		update();
 	}
 
@@ -180,8 +183,10 @@ public class PinholeCamera extends Camera {
 	
 	public void setVerticalFieldOfView(double fov)
 	{
+		Logger.progress(-8, "PreFOV[" + fieldOfView + "]");
 		fieldOfView = 2.0 * Math.atan((imagePlaneWidth/imagePlaneHeight) * Math.tan(fov/2.0));
-		update();
+		Logger.progress(-8, "PreFOV[" + fieldOfView + "]");
+		wasModified();
 	}
 	
 	
