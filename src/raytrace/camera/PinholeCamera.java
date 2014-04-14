@@ -106,7 +106,12 @@ public class PinholeCamera extends Camera {
 		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
 		
 		//Buffer rays
-		precalculatedRays.clear();
+		if(precalculatedRays.size() < pixelWidth * pixelHeight) {
+			precalculatedRays = new ArrayList<Ray>((int)(pixelHeight * pixelHeight + 1));
+		}else{
+			precalculatedRays.clear();
+		}
+		
 		for(Ray ray : this)
 			precalculatedRays.add(ray);
 		
@@ -183,9 +188,8 @@ public class PinholeCamera extends Camera {
 	
 	public void setVerticalFieldOfView(double fov)
 	{
-		Logger.progress(-8, "PreFOV[" + fieldOfView + "]");
-		fieldOfView = 2.0 * Math.atan((imagePlaneWidth/imagePlaneHeight) * Math.tan(fov/2.0));
-		Logger.progress(-8, "PreFOV[" + fieldOfView + "]");
+		//fieldOfView = 2.0 * Math.atan((imagePlaneWidth/imagePlaneHeight) * Math.tan(fov/2.0));
+		fieldOfView = 2.0 * Math.atan((pixelWidth/pixelHeight) * Math.tan(fov/2.0));
 		wasModified();
 	}
 	
