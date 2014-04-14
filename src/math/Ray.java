@@ -16,6 +16,8 @@ public class Ray implements Iterable<Ray>{
 	protected int pixelX;
 	protected int pixelY;
 	
+	protected RayIterator rayIterator;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -26,6 +28,8 @@ public class Ray implements Iterable<Ray>{
 		direction = new Vector4();
 		pixelX = 0;
 		pixelY = 0;
+		
+		rayIterator = new RayIterator(this);
 	}
 	
 	//We assume that direction is normalized
@@ -35,6 +39,8 @@ public class Ray implements Iterable<Ray>{
 		this.direction = direction;
 		this.pixelX = pixelX;
 		this.pixelY = pixelY;
+		
+		rayIterator = new RayIterator(this);
 	}
 	
 
@@ -90,7 +96,8 @@ public class Ray implements Iterable<Ray>{
 	@Override
 	public Iterator<Ray> iterator()
 	{
-		return new RayIterator(this);
+		rayIterator.reset();
+		return rayIterator;
 	}
 
 	/* *********************************************************************************************
@@ -126,6 +133,11 @@ public class Ray implements Iterable<Ray>{
 		public void remove()
 		{
 			//No
+		}
+		
+		public void reset()
+		{
+			notDone = true;
 		}
 		
 	}
