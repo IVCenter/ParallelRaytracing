@@ -15,6 +15,9 @@ public class RenderResponseHandler implements MessageHandler {
 	 * 		If match,
 	 * 
 	 * 			Pass all of this to network renderer
+	 * 
+	 * 			Scratch that, do it here
+	 * 
 	 * 			Get pixel data from message (width, height, int array, etc.)
 	 * 			Compare to known quest params in node
 	 * 			if match,

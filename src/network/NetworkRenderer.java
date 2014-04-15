@@ -13,7 +13,7 @@ public class NetworkRenderer implements Renderer {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	//
+	protected NodeManager 
 	
 	
 	/* *********************************************************************************************
@@ -39,7 +39,11 @@ public class NetworkRenderer implements Renderer {
 	public void update(UpdateData data)
 	{
 		Logger.progress(-1, "Updating...");
-		//
+		/*
+		 * Create update message
+		 * Loop nodes
+		 * 		send update message
+		 */
 	}
 
 	@Override
