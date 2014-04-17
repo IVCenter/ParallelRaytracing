@@ -10,7 +10,7 @@ public class FaceParser extends StringParser<ObjModelData> {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public FaceParser() { keyToken = "v"; }
+	public FaceParser() { keyToken = "f"; }
 	
 
 	/* *********************************************************************************************
@@ -46,11 +46,11 @@ public class FaceParser extends StringParser<ObjModelData> {
 						faceComponents[j] = "0";
 				}
 				
-				pop.addVertexToFace(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+				pop.addVertexToFace(Integer.parseInt(faceComponents[0]), Integer.parseInt(faceComponents[1]), Integer.parseInt(faceComponents[2]));
 			}
 			
 		}catch(Exception e) {
-			Logger.error(-1, "Failed to parse a face line.");
+			Logger.error(-1, "Failed to parse a face line. [" + str + "]");
 			Logger.error(-1, StringUtils.stackTraceToString(e));
 			e.printStackTrace();
 		}

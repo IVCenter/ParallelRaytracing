@@ -29,10 +29,10 @@ public class VertexParser extends StringParser<ObjModelData> {
 			if(!tokens[0].equals(keyToken))
 				throw new Exception("VertexParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			pop.addVertex(Double.parseDouble(tokens[0]), Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
+			pop.addVertex(Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]), Double.parseDouble(tokens[3]));
 			
 		}catch(Exception e) {
-			Logger.error(-1, "Failed to parse a vertex line.");
+			Logger.error(-1, "Failed to parse a vertex line. [" + str + "]");
 			Logger.error(-1, StringUtils.stackTraceToString(e));
 			e.printStackTrace();
 		}
