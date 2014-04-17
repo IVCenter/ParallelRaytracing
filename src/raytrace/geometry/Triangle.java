@@ -107,10 +107,11 @@ public class Triangle extends TerminalSurface {
 			return null;
 		
 		//Interpolate the normals
-		Vector4 normal = vertices[0].getNormal().multiply3(1.0 - (gamma + beta)).add3(
-							vertices[1].getNormal().multiply3(gamma)
+		//TODO: This is expensive
+		Vector4 normal = vertices[0].getNormal().multiply3(beta).add3(
+							vertices[1].getNormal().multiply3(1.0 - (gamma + beta))
 						 ).add3(
-							vertices[2].getNormal().multiply3(beta)
+							vertices[2].getNormal().multiply3(gamma)
 						 ).normalize3();
 		
 		//Return data about the intersection
