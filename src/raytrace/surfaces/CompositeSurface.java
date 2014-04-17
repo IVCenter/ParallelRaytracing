@@ -28,6 +28,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	protected ArrayList<CompositeSurface> children;
 	protected Material material;
 	protected BoundingBox boundingBox = new BoundingBox();
+	protected boolean dynamic = true;
 	
 
 	/* *********************************************************************************************
@@ -95,8 +96,8 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	@Override
 	public void updateBoundingBox()
 	{
-		//If no children, then return
-		if(children == null)
+		//If no children or this is a static surface, then return
+		if(children == null || !dynamic)
 			return;
 		
 		//Clear the current bounding box
@@ -194,5 +195,13 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 
 	public void setMaterial(Material material) {
 		this.material = material;
+	}
+
+	public boolean isDynamic() {
+		return dynamic;
+	}
+
+	public void setDynamic(boolean dynamic) {
+		this.dynamic = dynamic;
 	}
 }
