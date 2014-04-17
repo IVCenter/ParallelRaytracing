@@ -38,7 +38,7 @@ public class CSE168Proj1_DiffuseMaterial extends Material{
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
-			ildata = light.illuminate(point);
+			ildata = light.illuminate(data, point);
 			
 			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
