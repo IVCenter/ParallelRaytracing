@@ -18,6 +18,7 @@ import raytrace.material.CSE168Proj1_DiffuseMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
@@ -46,7 +47,8 @@ public class TestScene1 extends Scene {
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
 		((PinholeCamera)activeCamera).setStratifiedSampling(true);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(2);
+		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
+		((PinholeCamera)activeCamera).setUseRayCaching(false);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -142,7 +144,7 @@ public class TestScene1 extends Scene {
 			Sphere sphere = new Sphere();
 			
 			double rand = Math.random();
-			if(rand < 1.0) {
+			if(rand < 0.0) {
 				sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
@@ -150,6 +152,8 @@ public class TestScene1 extends Scene {
 				sphere.setMaterial(new CSE168Proj1_DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+			}else if(rand < 1.0){
+				sphere.setMaterial(new FresnelMetalMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(0.51, 2.0), randInRange(2.01, 5.0)));
 			}else{
 				sphere.setMaterial(new ColorMaterial(Color.random(0.7 + (Math.random()/16.0))));
 			}

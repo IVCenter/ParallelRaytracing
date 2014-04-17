@@ -12,6 +12,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -75,7 +76,8 @@ public class TestScene2 extends Scene
 		//Reflective Sphere
 		{
 			Sphere sphere = new Sphere();
-			sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.9, 0.7), 0.8));
+			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
+			sphere.setMaterial(new FresnelMetalMaterial(new Color(0.98, 0.8, 0.6), 0.317, 2.63));
 			sphere.setPosition(new Vector4(3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
