@@ -29,7 +29,7 @@ public class ObjectParser extends StringParser<ObjModelData> {
 			if(!tokens[0].equals(keyToken))
 				throw new Exception("ObjectParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			//TODO
+			pop.addObject(tokens[1]);
 			
 		}catch(Exception e) {
 			Logger.error(-1, "Failed to parse an object line.");

@@ -29,7 +29,25 @@ public class FaceParser extends StringParser<ObjModelData> {
 			if(!tokens[0].equals(keyToken))
 				throw new Exception("FaceParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			//TODO
+			pop.addFace();
+			
+			//For all of the face tokens
+			String[] faceComponents;
+			for(int i = 1; i < tokens.length; ++i)
+			{
+				faceComponents = tokens(tokens[i], "/");
+				
+				if(faceComponents.length != 3)
+					throw new Exception("FaceParser: The line [" + str + "] has an improperly formatted part [" + tokens[i] + "].");
+				
+				for(int j = 0; j < faceComponents.length; ++j)
+				{
+					if(faceComponents[j].length() == 0)
+						faceComponents[j] = "0";
+				}
+				
+				pop.addVertexToFace(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+			}
 			
 		}catch(Exception e) {
 			Logger.error(-1, "Failed to parse a face line.");

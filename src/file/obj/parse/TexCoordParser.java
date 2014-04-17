@@ -29,7 +29,7 @@ public class TexCoordParser extends StringParser<ObjModelData> {
 			if(!tokens[0].equals(keyToken))
 				throw new Exception("TexCoordParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			//TODO
+			pop.addTexCoord(Double.parseDouble(tokens[0]), Double.parseDouble(tokens[1]), Double.parseDouble(tokens[2]));
 			
 		}catch(Exception e) {
 			Logger.error(-1, "Failed to parse a texcoord line.");
