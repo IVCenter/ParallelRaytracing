@@ -204,14 +204,14 @@ public class AABVHSurface extends CompositeSurface {
 	/* *********************************************************************************************
 	 * Static Creation Methods
 	 * *********************************************************************************************/
-	public static AABVHSurface makeAABVH(Collection<CompositeSurface> surfaces)
+	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces)
 	{
 		int slices = 100;
 		int maxSurfacesPerLeaf = 4;
 		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
 	}
 	
-	public static AABVHSurface makeAABVH(Collection<CompositeSurface> surfaces, int slices, int maxSurfacesPerLeaf)
+	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces, int slices, int maxSurfacesPerLeaf)
 	{
 		/*
 		 * Steps:
@@ -241,8 +241,8 @@ public class AABVHSurface extends CompositeSurface {
 		double[] axisValues = center.getM();
 		
 		//Make surface sets
-		ArrayList<CompositeSurface> negative = new ArrayList<CompositeSurface>();
-		ArrayList<CompositeSurface> positive = new ArrayList<CompositeSurface>();
+		ArrayList<SURFACE> negative = new ArrayList<SURFACE>();
+		ArrayList<SURFACE> positive = new ArrayList<SURFACE>();
 		
 		//Best axis data
 		double lowestSAH = Double.MAX_VALUE;
@@ -316,14 +316,14 @@ public class AABVHSurface extends CompositeSurface {
 		return rootSurface;
 	}
 	
-	private static void split(Collection<CompositeSurface> surfaces, 
-			ArrayList<CompositeSurface> negative, ArrayList<CompositeSurface> positive,
+	private static <SURFACE extends CompositeSurface> void split(Collection<SURFACE> surfaces, 
+			ArrayList<SURFACE> negative, ArrayList<SURFACE> positive,
 			int axis, double axisValue)
 	{
 		BoundingBox surfacebb;
 		
 		//For all of the surfaces, place them in either the negative or positive side
-		for(CompositeSurface cs : surfaces)
+		for(SURFACE cs : surfaces)
 		{
 			surfacebb = cs.getBoundingBox();
 			
@@ -345,7 +345,7 @@ public class AABVHSurface extends CompositeSurface {
 		}
 	}
 	
-	private static BoundingBox makeBoundingBox(Collection<CompositeSurface> surfaces)
+	private static <SURFACE extends CompositeSurface> BoundingBox makeBoundingBox(Collection<SURFACE> surfaces)
 	{
 		//Clear the current bounding box
 		BoundingBox boundingBox = new BoundingBox();
@@ -372,7 +372,7 @@ public class AABVHSurface extends CompositeSurface {
 		return boundingBox;
 	}
 	
-	private static Vector4 centerPoint(Collection<CompositeSurface> surfaces)
+	private static <SURFACE extends CompositeSurface> Vector4 centerPoint(Collection<SURFACE> surfaces)
 	{
 		Vector4 center = new Vector4();
 		double[] m = center.getM();
@@ -382,7 +382,7 @@ public class AABVHSurface extends CompositeSurface {
 		BoundingBox bb;
 		Vector4 mp;
 		double[] mpm;
-		for(CompositeSurface cs : surfaces)
+		for(SURFACE cs : surfaces)
 		{
 			bb = cs.getBoundingBox();
 			mp = bb.getMidpoint();
@@ -398,7 +398,8 @@ public class AABVHSurface extends CompositeSurface {
 		return center;
 	}
 	
-	private static double calculateSAH(ArrayList<CompositeSurface> negative, ArrayList<CompositeSurface> positive)
+	private static <SURFACE extends CompositeSurface> double calculateSAH(
+			ArrayList<SURFACE> negative, ArrayList<SURFACE> positive)
 	{
 		BoundingBox negativeBB = makeBoundingBox(negative);
 		BoundingBox positiveBB = makeBoundingBox(positive);
