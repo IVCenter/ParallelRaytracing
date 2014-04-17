@@ -293,19 +293,25 @@ public class AABVHSurface extends CompositeSurface {
 		}
 		
 		//If we encounter a set of surfaces that the current SAH can not partition further
-		if(negative.size() == surfaces.size() || positive.size() == surfaces.size()) {
-			System.out.println("Entering forced split");
+		int loopCount = 0;
+		while(negative.size() == surfaces.size() || positive.size() == surfaces.size())
+		{
 			negative.clear();
 			positive.clear();
-			split(surfaces, negative, positive, 2, axisValues[2]);
-			center.print();
-			System.out.println("Negative size: " + negative.size());
-			System.out.println("Positive size: " + positive.size());
+			int index = (int)(Math.random() * 3);
+			split(surfaces, negative, positive, index, axisValues[index]);
+			
+			//If we've tried all of the axes, just add them to the rootSurface
+			//There is a good chance that all objects are nearly ontop of each other
+			if(++loopCount >= 3)
+				for(CompositeSurface cs : surfaces)
+					rootSurface.addChild(cs);
+				return rootSurface;
 		}
 		
 		//Recurse on the negative and positive sets, adding their result to this
-		rootSurface.addChild(AABVHSurface.makeAABVH(negative));
-		rootSurface.addChild(AABVHSurface.makeAABVH(positive));
+		rootSurface.addChild(AABVHSurface.makeAABVH(negative, slices, maxSurfacesPerLeaf));
+		rootSurface.addChild(AABVHSurface.makeAABVH(positive, slices, maxSurfacesPerLeaf));
 		
 		return rootSurface;
 	}
