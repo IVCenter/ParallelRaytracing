@@ -29,6 +29,8 @@ public class Configuration {
 	
 	protected static Keyboard keyboard = null;
 	protected static String workingDirectory = "/";
+	protected static String modelsSubDirectory = "Models/";
+	protected static String screenshotSubDirectory = "Screenshots/";
 
 	
 	/* *********************************************************************************************
@@ -92,5 +94,13 @@ public class Configuration {
 	//Working Directory
 	public static String getWorkingDirectory() { return workingDirectory; }
 	public static void setWorkingDirectory(String workingDirectory) { Configuration.workingDirectory = workingDirectory; }
+
+	//Models Sub-directory
+	public static String getModelsSubDirectory() { return modelsSubDirectory; }
+	public static void setModelsSubDirectory(String modelsSubDirectory) { Configuration.modelsSubDirectory = modelsSubDirectory; }
+
+	//Screenshot Sub-directory
+	public static String getScreenshotSubDirectory() { return screenshotSubDirectory; }
+	public static void setScreenshotSubDirectory(String screenshotSubDirectory) { Configuration.screenshotSubDirectory = screenshotSubDirectory; }
 	
 }
