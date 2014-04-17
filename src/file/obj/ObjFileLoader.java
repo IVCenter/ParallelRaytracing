@@ -7,6 +7,7 @@ import process.logging.Logger;
 
 import file.LineParser;
 import file.StringParser;
+import file.obj.parse.CommentParser;
 import file.obj.parse.FaceParser;
 import file.obj.parse.NormalParser;
 import file.obj.parse.ObjectParser;
@@ -43,6 +44,7 @@ public class ObjFileLoader {
 		(new NormalParser()).addTo(parsers);
 		(new TexCoordParser()).addTo(parsers);
 		(new FaceParser()).addTo(parsers);
+		(new CommentParser()).addTo(parsers);
 		//TODO: The rest
 	}
 	
@@ -84,7 +86,7 @@ public class ObjFileLoader {
 			//If we dont have a parser for this line, continue;
 			if(parser == null) {
 				Logger.warning(-8, "ObjFileLoader.load(): Encountered a line key [" + lineKey + "] that does not have" +
-						" and associated parser.");
+						" an associated parser.");
 				continue;
 			}
 			
