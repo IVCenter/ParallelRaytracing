@@ -30,6 +30,11 @@ public class MeshSurface extends TerminalSurface {
 		triangles = new ArrayList<Triangle>();
 	}
 	
+	public MeshSurface(int triangleCount)
+	{
+		triangles = new ArrayList<Triangle>(triangleCount);
+	}
+	
 
 	/* *********************************************************************************************
 	 * Surface Methods
