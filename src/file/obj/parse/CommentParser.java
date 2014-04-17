@@ -32,7 +32,7 @@ public class CommentParser extends StringParser<ObjModelData> {
 			Logger.progress(-11, "ObjectFileLoader: Comment: " + str);
 			
 		}catch(Exception e) {
-			Logger.error(-1, "Failed to parse a texcoord line.");
+			Logger.error(-1, "Failed to parse a comment line. [" + str + "]");
 			Logger.error(-1, StringUtils.stackTraceToString(e));
 			e.printStackTrace();
 		}
