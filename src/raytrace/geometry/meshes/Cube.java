@@ -125,6 +125,10 @@ public class Cube extends MeshSurface {
 			triangles.add(new Triangle(v0, v1, v2));
 			triangles.add(new Triangle(v0, v2, v3));
 		}
+		
+
+		updateBoundingBox();
+		dynamic = false;
 	}
 	
 
