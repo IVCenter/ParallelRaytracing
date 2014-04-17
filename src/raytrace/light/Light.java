@@ -1,9 +1,14 @@
 package raytrace.light;
 
+import math.Ray;
 import math.Vector4;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
+import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
+import raytrace.data.ShadingData;
 import raytrace.framework.Positionable;
+import raytrace.scene.Scene;
 import raytrace.surfaces.TerminalSurface;
 
 public abstract class Light extends TerminalSurface implements Positionable {
@@ -14,6 +19,8 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
+	protected static final double RECURSIVE_EPSILON = 0.0001;
+	
 	protected double constantAttenuation = 1.0;
 	protected double linearAttenuation = 0.0;
 	protected double quadraticAttenuation = 1.0;
@@ -27,7 +34,32 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
-	public abstract IlluminationData illuminate(Vector4 point);
+	public abstract IlluminationData illuminate(ShadingData data, Vector4 point);
+
+	
+	/* *********************************************************************************************
+	 * Helper Methods
+	 * *********************************************************************************************/
+	protected IntersectionData shadowed(Scene scene, Ray ray, double distanceToLight)
+	{
+		RayData rdata = new RayData();
+		rdata.setRay(ray);
+		rdata.setTStart(RECURSIVE_EPSILON);
+		IntersectionData idata = scene.intersects(rdata);
+		
+		//If no intersection, not shadowed
+		if(idata == null)
+			return null;
+		
+		//If the light is infinitely far, and we hit something, in shadow
+		if(distanceToLight == Double.MAX_VALUE)
+			return idata;
+		
+		if(idata.getDistance() < distanceToLight)
+			return idata;
+		
+		return null;
+	}
 
 
 	/* *********************************************************************************************
