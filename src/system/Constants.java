@@ -39,6 +39,7 @@ public class Constants {
 
 		public static final String TEST1 = KEYS.addKey("Test1");
 		public static final String TEST2 = KEYS.addKey("Test2");
+		public static final String TEST3 = KEYS.addKey("Test3");
 		public static final String CSE168_Project1 = KEYS.addKey("CSE168_Project1");
 	}
 	

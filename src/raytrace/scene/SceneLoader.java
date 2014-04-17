@@ -6,6 +6,7 @@ import system.Constants;
 import tests.CSE168_Project1_Scene;
 import tests.TestScene1;
 import tests.TestScene2;
+import tests.TestScene3;
 
 public class SceneLoader {
 	
@@ -50,6 +51,13 @@ public class SceneLoader {
 			@Override
 			public Scene load() {
 				return new TestScene2();
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST3, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				return new TestScene3();
 			}
 		});
 	}
