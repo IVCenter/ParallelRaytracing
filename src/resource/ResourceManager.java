@@ -1,4 +1,4 @@
-package raytrace.resource;
+package resource;
 
 import java.util.HashMap;
 
@@ -6,7 +6,7 @@ import file.obj.ObjFileLoader;
 import file.obj.ObjModelData;
 
 import raytrace.geometry.meshes.Cube;
-import raytrace.geometry.meshes.ObjectMeshSurface;
+import raytrace.geometry.meshes.ObjectSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 
@@ -92,7 +92,7 @@ public class ResourceManager {
 			if(data == null)
 				return;
 			
-			CompositeSurface model = new ObjectMeshSurface(data);
+			CompositeSurface model = new ObjectSurface(data);
 			
 			surfaces.put(keyOrFilePath, model);
 			
