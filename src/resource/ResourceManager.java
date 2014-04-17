@@ -5,10 +5,11 @@ import java.util.HashMap;
 import file.obj.ObjFileLoader;
 import file.obj.ObjModelData;
 
+import raytrace.geometry.meshes.CompositeObjectSurface;
 import raytrace.geometry.meshes.Cube;
-import raytrace.geometry.meshes.ObjectSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
+import system.Configuration;
 
 public class ResourceManager {
 	
@@ -87,12 +88,13 @@ public class ResourceManager {
 		if(keyOrFilePath.endsWith(".obj"))
 		{
 			//TODO: Load object file and create a Mesh
-			ObjModelData data = ObjFileLoader.load(keyOrFilePath);
+			ObjModelData data = ObjFileLoader.load(
+					Configuration.getWorkingDirectory() + Configuration.getModelsSubDirectory() + keyOrFilePath);
 			
 			if(data == null)
 				return;
 			
-			CompositeSurface model = new ObjectSurface(data);
+			CompositeSurface model = new CompositeObjectSurface(data);
 			
 			surfaces.put(keyOrFilePath, model);
 			
