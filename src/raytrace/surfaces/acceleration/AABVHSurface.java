@@ -206,7 +206,7 @@ public class AABVHSurface extends CompositeSurface {
 	 * *********************************************************************************************/
 	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces)
 	{
-		int slices = 100;
+		int slices = 1;
 		int maxSurfacesPerLeaf = 4;
 		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
 	}
@@ -224,7 +224,7 @@ public class AABVHSurface extends CompositeSurface {
 		 * 		-Recurse for both sets
 		 */
 
-		Logger.progress(-1, "Surfaces Size[" + surfaces.size() + "].");
+		//Logger.progress(-1, "Surfaces Size[" + surfaces.size() + "].");
 		
 		//Get bounding box
 		BoundingBox topBB = makeBoundingBox(surfaces);
