@@ -48,7 +48,7 @@ public class Logger {
 		logServerBaseURL = "http://127.0.0.1/";
 		
 		logQueue = new ArrayDeque<Message>();
-		queueSizeBeforePause = 100;
+		queueSizeBeforePause = 10000;
 		queueSizeBeforeResume = 10;
 		queueSleepInterval = 10;
 		
