@@ -2,6 +2,8 @@ package file.obj;
 
 import java.util.ArrayList;
 
+import process.logging.Logger;
+
 import math.Vector4;
 
 public class ObjModelData {
@@ -95,14 +97,20 @@ public class ObjModelData {
 	 * *********************************************************************************************/
 	private void prepareCurrentObject()
 	{
-		if(currentObject == null)
+		if(currentObject == null) {
 			currentObject = new Object("AnonymousObject");
+			objects.add(currentObject);
+		}
 	}
 
 	private void prepareCurrentFace()
 	{
-		if(currentFace == null)
+		prepareCurrentObject();
+		
+		if(currentFace == null) {
 			currentFace = new Face();
+			currentObject.addFace(currentFace);
+		}
 	}
 
 
@@ -133,8 +141,14 @@ public class ObjModelData {
 			this.id = id;
 			
 			vertices = new ArrayList<ObjModelData.Vertex>();
+			vertices.add(new Vertex(0,0,0));
+			
 			normals = new ArrayList<ObjModelData.Normal>();
+			normals.add(new Normal(0,0,0));
+			
 			texCoords = new ArrayList<ObjModelData.TexCoord>();
+			texCoords.add(new TexCoord(0,0,0));
+			
 			faces = new ArrayList<ObjModelData.Face>();
 		}
 		
@@ -149,13 +163,29 @@ public class ObjModelData {
 		public ArrayList<Vertex> getVertices() {
 			return vertices;
 		}
+		
+		public Vector4 getVertex(int index) {
+			if(index == 0)
+				Logger.warning(-14, "ObjModelData: Attempting to access default vertex at index 0.");
+			return vertices.get(index);
+		}
 
 		public ArrayList<Normal> getNormals() {
 			return normals;
 		}
+		
+		public Vector4 getNormal(int index) {
+			if(index == 0)
+				Logger.warning(-14, "ObjModelData: Attempting to access default normal at index 0.");
+			return normals.get(index);
+		}
 
 		public ArrayList<TexCoord> getTexCoords() {
 			return texCoords;
+		}
+		
+		public Vector4 getTexCoord(int index) {
+			return texCoords.get(index);
 		}
 
 		public ArrayList<Face> getFaces() {
@@ -229,14 +259,21 @@ public class ObjModelData {
 		
 		public void addVertex(int v, int vt, int vn)
 		{
-			if(currentVert >= verts.length)
+			if(currentVert >= verts.length) {
+				Logger.warning(-14, "ObjModelData.Face.addVertex(): Over-packing of a face detected!");
 				return;
+			}
 			
 			verts[currentVert][0] = v;
 			verts[currentVert][1] = vt;
 			verts[currentVert][2] = vn;
 			
 			currentVert++;
+		}
+		
+		public int[][] getVertices()
+		{
+			return verts;
 		}
 	}
 }
