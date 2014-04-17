@@ -34,6 +34,8 @@ public class Sphere extends TerminalSurface implements Positionable {
 	{
 		this.radius = radius;
 		this.center = center;
+		updateBoundingBox();
+		dynamic = false;
 	}
 	
 
