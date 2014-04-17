@@ -97,6 +97,9 @@ public class MatrixTransformSurface extends CompositeSurface {
 	@Override
 	public void updateBoundingBox()
 	{
+		if(!dynamic)
+			return;
+		
 		// TODO Auto-generated method stub
 		//Push child bounding boxes back into parent space
 		//And then calculate a bounding box much like composite surface does
@@ -112,10 +115,12 @@ public class MatrixTransformSurface extends CompositeSurface {
 					(mask & 0x1) == 0 ? boundingBox.min.get(0) : boundingBox.max.get(0),
 					(mask & 0x2) == 0 ? boundingBox.min.get(1) : boundingBox.max.get(1),
 					(mask & 0x4) == 0 ? boundingBox.min.get(2) : boundingBox.max.get(2),
-					0));
+					1));
 		}
+
 		
 		//Calculate the bounding box for the transformed corners
+		boundingBox.clear();
 		for(int i = 0; i < 8; ++i)
 		{
 			boundingBox.min.minimize3(corners[i]);
