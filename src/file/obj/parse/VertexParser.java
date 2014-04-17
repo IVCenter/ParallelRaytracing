@@ -20,10 +20,14 @@ public class VertexParser extends StringParser<ObjModelData> {
 	public void parse(String str, ObjModelData pop)
 	{
 		//Get the tokens
-		String[] tokens = tokens(str, " ");
+		String[] tokens = tokens(str.trim(), " ");
 		
 		//Parse the tokens into the obj model
 		try{
+			
+			//First make sure the first token matches the key token
+			if(!tokens[0].equals(keyToken))
+				throw new Exception("VertexParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
 			//TODO
 			
