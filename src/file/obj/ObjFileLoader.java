@@ -60,6 +60,9 @@ public class ObjFileLoader {
 			Logger.warning(-9, "ObjFileLoader: The specified file does not exist.");
 			return null;
 		}
+
+		long startTime = System.currentTimeMillis();
+		Logger.progress(-9, "Starting loading of the model [" + file.getName() + "]...");
 		
 		//Create a new Object Model Data object
 		ObjModelData data = new ObjModelData();
@@ -68,8 +71,10 @@ public class ObjFileLoader {
 		String lineKey;
 		StringParser<ObjModelData> parser;
 		int firstSpaceIndex = -1;
+		
 		for(String line : new LineParser(file))
 		{
+			
 			firstSpaceIndex = line.indexOf(" ");
 			
 			if(line.length() == 0 || firstSpaceIndex < 0) {
@@ -93,6 +98,9 @@ public class ObjFileLoader {
 			//Parse the line into the model data
 			parser.parse(line, data);
 		}
+		
+		Logger.progress(-9, "Ending loading of the model [" + file.getName() + "]... (" + 
+				(System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;
 	}
