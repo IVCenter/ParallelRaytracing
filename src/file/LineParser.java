@@ -60,6 +60,7 @@ public class LineParser implements Iterable<String>{
 			{
 				InputStream is =  new FileInputStream(file);
 				inReader = new BufferedReader(new InputStreamReader(is));
+				currentLine = inReader.readLine();
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
