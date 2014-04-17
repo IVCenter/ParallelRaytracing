@@ -1,5 +1,7 @@
 package file;
 
+import java.util.HashMap;
+
 public abstract class StringParser<POPULATES_THIS_TYPE> {
 	
 	/*
@@ -17,7 +19,7 @@ public abstract class StringParser<POPULATES_THIS_TYPE> {
 	
 
 	/* *********************************************************************************************
-	 * Consrete Utility Methods
+	 * Concrete Utility Methods
 	 * *********************************************************************************************/
 	protected String[] tokens(String str, String pattern)
 	{
@@ -25,4 +27,9 @@ public abstract class StringParser<POPULATES_THIS_TYPE> {
 	}
 	
 	public String getKeyToken() { return keyToken; }
+	
+	public void addTo(HashMap<String, StringParser<POPULATES_THIS_TYPE>> map)
+	{
+		map.put(keyToken, this);
+	}
 }
