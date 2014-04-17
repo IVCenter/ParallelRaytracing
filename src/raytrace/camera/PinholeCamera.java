@@ -28,6 +28,8 @@ public class PinholeCamera extends Camera {
 	protected int superSamplingLevel = 1;
 	protected boolean stratifiedSampling = false;
 	
+	protected boolean useRayCaching = true;
+	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -81,7 +83,7 @@ public class PinholeCamera extends Camera {
 	public Iterator<Ray> iterator()
 	{
 		//Create and return a ray iterator
-		if(precalculatedRays.isEmpty())
+		if(!useRayCaching || precalculatedRays.isEmpty())
 			return new RayIterator();
 		else
 			return precalculatedRays.iterator();
@@ -106,14 +108,17 @@ public class PinholeCamera extends Camera {
 		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
 		
 		//Buffer rays
-		if(precalculatedRays.size() < pixelWidth * pixelHeight) {
-			precalculatedRays = new ArrayList<Ray>((int)(pixelHeight * pixelHeight + 1));
-		}else{
-			precalculatedRays.clear();
+		if(useRayCaching)
+		{
+			if(precalculatedRays.size() < pixelWidth * pixelHeight) {
+				precalculatedRays = new ArrayList<Ray>((int)(pixelHeight * pixelHeight + 1));
+			}else{
+				precalculatedRays.clear();
+			}
+			
+			for(Ray ray : this)
+				precalculatedRays.add(ray);
 		}
-		
-		for(Ray ray : this)
-			precalculatedRays.add(ray);
 		
 		//Since the rays are new change the set ID
 		raySetID++;
@@ -193,7 +198,15 @@ public class PinholeCamera extends Camera {
 		wasModified();
 	}
 	
-	
+	public boolean useRayCaching() {
+		return useRayCaching;
+	}
+
+	public void setUseRayCaching(boolean useRayCaching) {
+		this.useRayCaching = useRayCaching;
+	}
+
+
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
