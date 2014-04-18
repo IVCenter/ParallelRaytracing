@@ -25,7 +25,7 @@ public class Instance extends MatrixTransformSurface {
 	public IntersectionData intersects(RayData data)
 	{
 		IntersectionData idata = super.intersects(data);
-		if(idata != null) {
+		if(idata != null && material != null) {
 			idata.setMaterial(this.material);
 		}
 		return idata;

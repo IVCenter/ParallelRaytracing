@@ -5,6 +5,13 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class LightManager implements Iterable<Light>{
+	
+	/*
+	 * A light manager for abstracting lighting details of a scene
+	 */
+	/*
+	 * TODO: Replace lighting loops in materials to query this instead?
+	 */
 
 
 	/* *********************************************************************************************
