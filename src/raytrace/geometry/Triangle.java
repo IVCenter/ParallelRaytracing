@@ -108,8 +108,8 @@ public class Triangle extends TerminalSurface {
 		
 		//Interpolate the normals
 		//TODO: This is expensive
-		Vector4 normal = vertices[0].getNormal().multiply3(beta).add3(
-							vertices[1].getNormal().multiply3(1.0 - (gamma + beta))
+		Vector4 normal = vertices[0].getNormal().multiply3(1.0 - (gamma + beta)).add3(
+							vertices[1].getNormal().multiply3(beta)
 						 ).add3(
 							vertices[2].getNormal().multiply3(gamma)
 						 ).normalize3();
@@ -146,6 +146,24 @@ public class Triangle extends TerminalSurface {
 		boundingBox.min.minimize3(vertices[0].getPosition()).minimize3(vertices[1].getPosition()).minimize3(vertices[2].getPosition());
 		boundingBox.max.maximize3(vertices[0].getPosition()).maximize3(vertices[1].getPosition()).maximize3(vertices[2].getPosition());
 	}
+
+	
+	/* *********************************************************************************************
+	 * Print Methods
+	 * *********************************************************************************************/
+	public void print()
+	{
+		System.out.println("Triangle[" + this.toString() + "]");
+		for(Vertex v : vertices)
+		{
+			System.out.print("\tPosition: ");
+			v.getPosition().print();
+			System.out.print("\tNormal: ");
+			v.getNormal().print();
+			System.out.print("\tTexCoord: ");
+			v.getTexCoord().print();
+		}
+	}
 	
 
 	/* *********************************************************************************************
@@ -165,6 +183,14 @@ public class Triangle extends TerminalSurface {
 	
 	public void setVertex(int element, Vertex v) {
 		vertices[element] = v;
+	}
+	
+	public double getArea()
+	{
+		Vector4 a = vertices[0].getPosition().subtract3(vertices[1].getPosition());
+		Vector4 b = vertices[2].getPosition().subtract3(vertices[1].getPosition());
+		
+		return a.cross3(b).magnitude3()/2.0;
 	}
 	
 }
