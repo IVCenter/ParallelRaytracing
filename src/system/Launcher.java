@@ -25,10 +25,10 @@ public class Launcher {
 		
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
-		//Configuration.setScreenWidth(1368);
-		//Configuration.setScreenHeight(752);
-		Configuration.setScreenWidth(800);
-		Configuration.setScreenHeight(600);
+		Configuration.setScreenWidth(1368);
+		Configuration.setScreenHeight(752);
+		//Configuration.setScreenWidth(800);
+		//Configuration.setScreenHeight(600);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);
 		Configuration.setLeaf(true);
