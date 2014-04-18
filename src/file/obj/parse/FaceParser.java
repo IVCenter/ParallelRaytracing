@@ -31,6 +31,18 @@ public class FaceParser extends StringParser<ObjModelData> {
 			
 			pop.addFace();
 			
+			//If its a vertices only face
+			if(tokens.length == 4 && str.indexOf("/") == -1)
+			{
+				for(int i = 1; i < tokens.length; ++i)
+				{
+					pop.addVertexToFace(Integer.parseInt(tokens[i]), 0, 0);
+				}
+				
+				return;
+			}
+			
+			
 			//For all of the face tokens
 			String[] faceComponents;
 			for(int i = 1; i < tokens.length; ++i)
