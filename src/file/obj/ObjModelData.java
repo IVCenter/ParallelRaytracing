@@ -144,7 +144,7 @@ public class ObjModelData {
 			vertices.add(new Vertex(0,0,0));
 			
 			normals = new ArrayList<ObjModelData.Normal>();
-			normals.add(new Normal(0,0,0));
+			normals.add(new Normal(0,1,0));
 			
 			texCoords = new ArrayList<ObjModelData.TexCoord>();
 			texCoords.add(new TexCoord(0,0,0));
@@ -164,9 +164,14 @@ public class ObjModelData {
 			return vertices;
 		}
 		
-		public Vector4 getVertex(int index) {
+		public Vector4 getVertex(int index)
+		{
+			if(index >= vertices.size())
+				index = index % vertices.size();
+			
 			if(index == 0)
 				Logger.warning(-14, "ObjModelData: Attempting to access default vertex at index 0.");
+			
 			return vertices.get(index);
 		}
 
@@ -174,9 +179,14 @@ public class ObjModelData {
 			return normals;
 		}
 		
-		public Vector4 getNormal(int index) {
+		public Vector4 getNormal(int index)
+		{
+			if(index >= normals.size())
+				index = index % normals.size();
+			
 			if(index == 0)
 				Logger.warning(-14, "ObjModelData: Attempting to access default normal at index 0.");
+			
 			return normals.get(index);
 		}
 
@@ -184,7 +194,11 @@ public class ObjModelData {
 			return texCoords;
 		}
 		
-		public Vector4 getTexCoord(int index) {
+		public Vector4 getTexCoord(int index)
+		{
+			if(index >= texCoords.size())
+				index = index % texCoords.size();
+			
 			return texCoords.get(index);
 		}
 
@@ -234,7 +248,7 @@ public class ObjModelData {
 	}
 	
 	public static class Normal extends Vector4 {
-		public Normal(double x, double y, double z) { super(x, y, z, 0); }
+		public Normal(double x, double y, double z) { super(x, y, z, 0); super.normalize3(); }
 	}
 	
 	public static class TexCoord extends Vector4 {
