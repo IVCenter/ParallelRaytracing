@@ -72,13 +72,15 @@ public class ObjFileLoader {
 		StringParser<ObjModelData> parser;
 		int firstSpaceIndex = -1;
 		
-		for(String line : new LineParser(file))
+		LineParser lines = new LineParser(file);
+		
+		for(String line : lines)
 		{
-			
+			line = line.replace("\t", " ");
 			firstSpaceIndex = line.indexOf(" ");
 			
 			if(line.length() == 0 || firstSpaceIndex < 0) {
-				//TODO: Do something 
+				Logger.warning(-6, "ObjFileLoader: Skipping line [" + line + "].");
 				continue;
 			}
 			
