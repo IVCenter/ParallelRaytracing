@@ -28,6 +28,7 @@ public class CompositeObjectSurface extends CompositeSurface {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
+	protected ArrayList<ObjectSurface> objectSurfaces;
 	
 
 	/* *********************************************************************************************
@@ -37,23 +38,25 @@ public class CompositeObjectSurface extends CompositeSurface {
 	{
 		Logger.progress(-1, "Starting creating a Composite OBject Surface...");
 		
-		ArrayList<ObjectSurface> objects = new ArrayList<ObjectSurface>();
+		objectSurfaces = new ArrayList<ObjectSurface>();
 		
 		//For each object in the model, create an object surface
 		for(ObjModelData.Object obj : data.getObjects())
 		{
-			objects.add(new ObjectSurface(obj));
+			objectSurfaces.add(new ObjectSurface(obj));
 		}
 		
 		//If there are enough surfaces, make an aabvh to wrap them
-		if(objects.size() >= minSurfacesRequiredForAABVH)
+		if(objectSurfaces.size() >= minSurfacesRequiredForAABVH)
 		{
-			AABVHSurface aabvh = AABVHSurface.makeAABVH(objects);
+			AABVHSurface aabvh = AABVHSurface.makeAABVH(objectSurfaces);
 			this.addChild(aabvh);
 		}else{
-			for(CompositeSurface cs : objects)
+			for(CompositeSurface cs : objectSurfaces)
 				this.addChild(cs);
 		}
+		
+		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending creating a Composite OBject Surface.");
 	}
@@ -65,7 +68,7 @@ public class CompositeObjectSurface extends CompositeSurface {
 	@Override
 	public void setMaterial(Material material)
 	{
-		for(CompositeSurface cs : this)
+		for(CompositeSurface cs : objectSurfaces)
 			cs.setMaterial(material);
 	}
 
