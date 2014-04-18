@@ -248,7 +248,7 @@ public class AABVHSurface extends CompositeSurface {
 		double lowestSAH = Double.MAX_VALUE;
 		double currentSAH = 0.0;
 		double currentAxisValue = 0.0;
-		int lowestAxis = -1;
+		int lowestAxis = 0;
 		double lowestAxisValue = Integer.MAX_VALUE;
 		
 		//For each exis, split the sets
@@ -303,10 +303,11 @@ public class AABVHSurface extends CompositeSurface {
 			
 			//If we've tried all of the axes, just add them to the rootSurface
 			//There is a good chance that all objects are nearly ontop of each other
-			if(++loopCount >= 3)
+			if(++loopCount >= 3) {
 				for(CompositeSurface cs : surfaces)
 					rootSurface.addChild(cs);
 				return rootSurface;
+			}
 		}
 		
 		//Recurse on the negative and positive sets, adding their result to this
