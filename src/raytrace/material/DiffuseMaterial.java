@@ -35,6 +35,13 @@ public class DiffuseMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();
 		IlluminationData ildata;
 		
+		double DdotN = normal.dot3(data.getRay().getDirection());
+		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
+		if(DdotN > 0.0) {
+			normal = normal.multiply3(-1.0);
+		}
+		
+		
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
