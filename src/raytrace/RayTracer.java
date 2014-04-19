@@ -22,6 +22,7 @@ public class RayTracer implements Tracer {
 		
 		//Trace each ray in the camera
 		IntersectionData idata;
+		//IntersectionData idata = new IntersectionData();//Allocate once
 		
 		//Build a ray data object
 		RayData rdata = new RayData();

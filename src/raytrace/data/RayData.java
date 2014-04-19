@@ -13,6 +13,7 @@ public class RayData {
 	 * *********************************************************************************************/
 	protected Ray ray;
 	protected CompositeSurface rootSurface;
+	//protected IntersectionData idata;
 
 	protected double t0;
 	protected double t1;
@@ -27,20 +28,22 @@ public class RayData {
 		t1 = Double.POSITIVE_INFINITY;
 	}
 	
-	public RayData(Ray ray, CompositeSurface rootSurface)
+	public RayData(Ray ray, CompositeSurface rootSurface/*, IntersectionData idata*/)
 	{
 		this();
 		this.ray = ray;
 		this.rootSurface = rootSurface;
+		//this.idata = idata;
 	}
 	
-	public RayData(Ray ray, CompositeSurface rootSurface, double t0, double t1)
+	public RayData(Ray ray, CompositeSurface rootSurface/*, IntersectionData idata*/, double t0, double t1)
 	{
 		this();
 		this.t0 = t0;
 		this.t1 = t1;
 		this.ray = ray;
 		this.rootSurface = rootSurface;
+		//this.idata = idata;
 	}
 	
 
@@ -62,7 +65,15 @@ public class RayData {
 	public void setRootSurface(CompositeSurface rootSurface) {
 		this.rootSurface = rootSurface;
 	}
+	/*
+	public IntersectionData getIdata() {
+		return idata;
+	}
 
+	public void setIdata(IntersectionData idata) {
+		this.idata = idata;
+	}
+	 */
 	public double getTStart() {
 		return t0;
 	}

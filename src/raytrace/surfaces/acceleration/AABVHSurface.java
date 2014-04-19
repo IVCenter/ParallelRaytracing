@@ -3,8 +3,6 @@ package raytrace.surfaces.acceleration;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import process.logging.Logger;
-
 import math.Vector4;
 
 import raytrace.bounding.BoundingBox;
