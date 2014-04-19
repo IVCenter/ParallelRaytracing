@@ -6,7 +6,6 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
-import raytrace.material.Material;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import file.obj.ObjModelData;
 
@@ -64,14 +63,12 @@ public class ObjectSurface extends MeshSurface {
 									new Vertex(obj.getVertex(verts[1][0]), obj.getNormal(verts[1][2]), obj.getTexCoord(verts[1][1])),
 									new Vertex(obj.getVertex(verts[2][0]), obj.getNormal(verts[2][2]), obj.getTexCoord(verts[2][1])));
 
-			//if(triangle.getArea() <= 0.0 || triangle.getArea() > 1.0)
-			//	Logger.warning(-14, "ObjectSurface: Encountered Triangle with an area of [" + triangle.getArea() + "].");
+			if(triangle.getArea() <= 0.0) {
+				Logger.warning(-14, "ObjectSurface: Encountered Triangle with an area of [" + triangle.getArea() + "].");
+				continue;
+			}
 			
 			triangles.add(triangle);
-			
-			//tempCount++;
-			//if(tempCount > obj.getFaces().size() - 10)
-			//	triangle.print();
 		}
 		
 		//Create and profile aabvh
@@ -88,12 +85,12 @@ public class ObjectSurface extends MeshSurface {
 	@Override
 	public IntersectionData intersects(RayData data)
 	{
-		//IntersectionData idata = aabvh.intersects(data);
-		//if(idata != null) {
-		//	idata.setMaterial(this.material);
-		//}
-		//return idata;
-		return aabvh.intersects(data);
+		IntersectionData idata = aabvh.intersects(data);
+		if(idata != null) {
+			idata.setMaterial(this.material);
+		}
+		return idata;
+		//return aabvh.intersects(data);
 	}
 	
 	@Override
