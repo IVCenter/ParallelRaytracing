@@ -114,6 +114,14 @@ public class Color {
 		return new Color(channels[0] * c.channels[0], channels[1] * c.channels[1], channels[2] * c.channels[2], channels[3]);
 	}
 	
+	public Color multiply3(Color c, double d)
+	{
+		return new Color(channels[0] * c.channels[0] * d, 
+						 channels[1] * c.channels[1] * d, 
+						 channels[2] * c.channels[2] * d, 
+						 channels[3]);
+	}
+	
 	public Color multiply3M(Color c)
 	{
 		channels[0] *= c.channels[0];
@@ -140,6 +148,14 @@ public class Color {
 	                 	 (1.0 - t) * c0[1] + t * c1[1],
 	                 	 (1.0 - t) * c0[2] + t * c1[2],
 	                 	 (1.0 - t) * c0[3] + t * c1[3]);
+	}
+	
+	public Color mixWithWhite(double d, double e)
+	{
+		return new Color(channels[0] * d + e, 
+						 channels[1] * d + e, 
+						 channels[2] * d + e, 
+						 channels[3]);
 	}
 	
 
