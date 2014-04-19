@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import process.logging.Logger;
+
 public class ScreenDrawer extends JFrame {
 	
 	/*
@@ -229,7 +231,7 @@ public class ScreenDrawer extends JFrame {
 	            	
 	            	//If its been about a second or so, print the current fps
 	            	if(loopStart - start >= 1000) {
-	            		System.err.println("FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
+	            		Logger.progress(-2, "ScreenDrawer: FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
 	            		start = loopStart;
 	            		frames = 0;
 	            	}
