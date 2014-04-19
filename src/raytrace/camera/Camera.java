@@ -73,6 +73,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 
 	public void setViewingDirection(Vector4 viewingDirection) {
 		this.viewingDirection = viewingDirection;
+		this.viewingDirection.normalize3();
 		wasModified();
 	}
 	
