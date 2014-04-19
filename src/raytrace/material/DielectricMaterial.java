@@ -109,7 +109,7 @@ public class DielectricMaterial extends Material{
 		//If the ray is exiting the surface, then apply beers law to all light that was collected recursively
 		if(exiting)
 		{
-			double d = data.getIntersectionData().getTime();
+			double d = data.getIntersectionData().getDistance();
 			double[] a = tint.getChannels();
 			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * d), 
 										Math.exp(-1.0 * Math.log(a[1]) * d), 
