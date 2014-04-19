@@ -4,10 +4,12 @@ import java.util.HashMap;
 
 import system.Constants;
 import tests.CSE168_Project1_Scene;
+import tests.CSE168_Project2_Scene;
 import tests.TestScene1;
 import tests.TestScene2;
 import tests.TestScene3;
 import tests.TestScene4;
+import tests.TestScene5;
 
 public class SceneLoader {
 	
@@ -66,6 +68,20 @@ public class SceneLoader {
 			@Override
 			public Scene load() {
 				return new TestScene4();
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.CSE168_Project2, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				return new CSE168_Project2_Scene();
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST5, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				return new TestScene5();
 			}
 		});
 	}
