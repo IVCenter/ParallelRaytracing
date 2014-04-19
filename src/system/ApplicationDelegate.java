@@ -103,7 +103,10 @@ public class ApplicationDelegate extends Job{
 			startMainLoop();
 		}else{
 			try {
-				Thread.sleep(Long.MAX_VALUE);
+				//In case of spurious wake ups
+				for(;;)
+					Thread.sleep(Long.MAX_VALUE);
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -136,7 +139,6 @@ public class ApplicationDelegate extends Job{
 			renderer.update(udata);
 			
 			renderer.render(rdata);
-			
 		}
 	}
 	
