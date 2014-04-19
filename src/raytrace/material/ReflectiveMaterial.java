@@ -43,14 +43,7 @@ public class ReflectiveMaterial  extends Material{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			//Get the shadow data for the current light
-			//shadowData = shadowed(data.getRootScene(), 
-			//		new Ray(point, ildata.getDirection().multiply3(-1.0), 0, 0), 
-			//		ildata.getDistance());
-			
-			//If we are not in shadow, add to the shade
-			//if(shadowData == null)
-				shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
+			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
 
 		//If reflective, go divin'
@@ -60,7 +53,6 @@ public class ReflectiveMaterial  extends Material{
 			rflectColor = reflect(data, point, normal, data.getRefractiveIndex());
 		}
 		
-		//TODO: Fresnel equations
 		
 		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);
 		Color reflectiveColor = rflectColor.multiply3(reflectivePercent);
