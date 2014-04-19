@@ -20,7 +20,7 @@ public class FaceParser extends StringParser<ObjModelData> {
 	public void parse(String str, ObjModelData pop)
 	{
 		//Get the tokens
-		String[] tokens = tokens(str.trim(), " ");
+		String[] tokens = tokens(str.trim().replace("  ", " "), " ");
 		
 		//Parse the tokens into the obj model
 		try{
