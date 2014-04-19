@@ -13,7 +13,6 @@ import raytrace.geometry.Sphere;
 import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
-import raytrace.material.DiffuseMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
@@ -56,13 +55,13 @@ public class TestScene4 extends Scene
 	
 		
 
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(1000);
-		for(int i = 0; i < 812; i++)
+		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(64);
+		for(int i = 0; i < 64; i++)
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
-			sphere.setPosition(new Vector4(64 * Math.random() - 32.0, 1.2 * Math.random() - 0.4, 48 * Math.random() - 43.0, 0));
-			sphere.setRadius(Math.pow(Math.random() * 0.3, 1.15));
+			sphere.setPosition(new Vector4(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0, 0));
+			sphere.setRadius(Math.pow(Math.random() * 0.1, 1.15));
 			spheres.add(sphere);
 		}
 		
@@ -71,22 +70,15 @@ public class TestScene4 extends Scene
 		
 		
 		
-		//TODO: Load model here
-		//Instance model = ResourceManager.create("white_lotus.obj");
 		Instance model = ResourceManager.create("ia.obj");
-		//Instance model = ResourceManager.create("sphere.obj");
-		//Instance model = ResourceManager.create("miku_v2.obj");
-		//Instance model = ResourceManager.create("bunny_n.obj");
 		
 		if(model != null) {
 			model.getTransform().scale(0.18);//ia
-			//model.getTransform().scale(1.8);//miku
-			//model.getTransform().translation(0, 2, 0);//Bunny
-			model.getTransform().translation(-1, 0, 1.2);//IA
+			model.getTransform().translation(-1.2, 0, 1.2);//IA
 			model.getTransform().rotateY(0.15);
 			model.bake(null);
-			model.setMaterial(new ReflectiveMaterial(new Color(0xff0068ff), .70));
-			//model.setMaterial(new FresnelMetalMaterial(new Color(0xff60b8ff), 1.55, 3.20));
+			//model.setMaterial(new ReflectiveMaterial(new Color(0xff0068ff), .70));
+			model.setMaterial(new DielectricMaterial(new Color(1.0, 0.8, 1.0), 1.15));
 			this.addChild(model);
 		}else{
 			Logger.error(-13, "TestScene4: Model was null!");
@@ -97,31 +89,14 @@ public class TestScene4 extends Scene
 		Instance model2 = ResourceManager.create("ia.obj");
 		
 		if(model2 != null) {
-			model2.getTransform().scale(0.22);//ia
-			model2.getTransform().translation(1, 0, -1);//IA
+			model2.getTransform().scale(0.20);//ia
+			model2.getTransform().translation(1, 0, 0);//IA
 			model2.bake(null);
 			model2.setMaterial(new FresnelMetalMaterial(new Color(1.0, 0.8, 0.6, 1.0), 0.55, 5.20));
 			this.addChild(model2);
 		}else{
 			Logger.error(-13, "TestScene4: Model2 was null!");
 		}
-		
-/*
-		Instance model3 = ResourceManager.create("miku_pose_wom.obj");
-		
-		if(model3 != null) {
-			model3.getTransform().scale(1.52);//ia
-			model3.getTransform().translation(0, 0, 1.5);//IA
-			model3.getTransform().rotateY(0.65);
-			model3.bake(null);
-			model3.setMaterial(new DiffuseMaterial(new Color(1.2, 1.5, 1.2, 1.0)));
-			//model3.setMaterial(new FresnelMetalMaterial(new Color(0.5, 1.0, 0.6, 1.0), 2.55, 5.20));
-			//model3.setMaterial(new DielectricMaterial(new Color(1.0, 1.7, 1.0, 1.0), 2.55));
-			this.addChild(model3);
-		}else{
-			Logger.error(-13, "TestScene4: Model3 was null!");
-		}
-*/		
 		
 		
 		
@@ -139,8 +114,7 @@ public class TestScene4 extends Scene
 		
 		//Add a plane to the scene
 		Plane plane = new Plane();
-		//plane.setMaterial(new ReflectiveMaterial(new Color(0xffeeddff), 0.35));
-		plane.setMaterial(new ReflectiveMaterial(new Color(0x101010ff), 0.35));
+		plane.setMaterial(new ReflectiveMaterial(new Color(0x202020ff), 0.35));
 		this.addChild(plane);
 	}
 	
