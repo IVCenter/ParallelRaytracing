@@ -18,6 +18,7 @@ public abstract class Material {
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
 	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
+	protected static final int SYSTEM_RESURSION_LIMIT = 2000;
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 	
 
@@ -50,25 +51,43 @@ public abstract class Material {
 	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal, double refractiveIndex)
 	{	
 		Vector4 dir = data.getIntersectionData().getRay().getDirection();
-		Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
+		//Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
+		
+		double c = -2.0 * dir.dot3(normal);
+		
+		double[] dirm = dir.getM();
+		double[] nm = normal.getM();
+
+		double rx = dirm[0] + nm[0] * c;
+		double ry = dirm[1] + nm[1] * c;
+		double rz = dirm[2] + nm[2] * c;
+		
+		Vector4 reflect = (new Vector4(rx, ry, rz, 0)).normalize3();
 		
 		return recurse(data, point, reflect, refractiveIndex);
 	}
 
 	protected Color recurse(ShadingData data, Vector4 point, Vector4 direction, double refractiveIndex)
-	{	
+	{		
+		//If we're past the ABSOLUTE recursive limit, use black
+		if(data.getRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
+			return Color.black();
+		}
+		
 		RayData rdata = new RayData();
 		Ray ray = new Ray(point, direction, 0, 0);
 		rdata.setRay(ray);
 		rdata.setTStart(RECURSIVE_EPSILON);
-		
-		IntersectionData idata = data.getRootScene().intersects(rdata);
 		
 		ShadingData sdata = new ShadingData();
 		sdata.setRay(rdata.getRay());
 		sdata.setRootScene(data.getRootScene());
 		sdata.setRecursionDepth(data.getRecursionDepth() + 1);
 		sdata.setRefractiveIndex(refractiveIndex);
+		
+		
+		IntersectionData idata = data.getRootScene().intersects(rdata);
+		
 		
 		if(idata != null) {
 			sdata.setIntersectionData(idata);
@@ -78,5 +97,6 @@ public abstract class Material {
 		//If there wasn't an intersection, use the sky material
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
+		//return Color.black();
 	}
 }
