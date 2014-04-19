@@ -70,12 +70,22 @@ public class FresnelMetalMaterial extends Material {
 			rflectColor = reflect(data, point, normal, data.getRefractiveIndex());
 		}
 		
-		//TODO: Fresnel equations
-		
+		//TODO: Which is faster, immutable or mutable?
+		/*
 		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);
-		//Color reflectiveColor = rflectColor.multiply3(reflectivePercent);
-		Color reflectiveColor = rflectColor.multiply3(Color.white().multiply3(reflectivePercent).add3(color.multiply3(1.0 - reflectivePercent))).multiply3(reflectivePercent);
+		Color reflectiveColor = rflectColor.multiply3(
+					Color.white().multiply3(reflectivePercent).add3(color.multiply3(1.0 - reflectivePercent))
+				).multiply3(reflectivePercent);
 		return diffuseColor.add3(reflectiveColor);
+		*/
+		
+
+		Color diffuseColor = color.multiply3(shade, 1.0 - reflectivePercent);
+		Color reflectiveColor = rflectColor.multiply3(
+				color.mixWithWhite(1.0 - reflectivePercent, reflectivePercent)
+						,reflectivePercent);
+		return diffuseColor.add3M(reflectiveColor);
+		
 	}
 
 }
