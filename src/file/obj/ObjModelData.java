@@ -166,6 +166,9 @@ public class ObjModelData {
 		
 		public Vector4 getVertex(int index)
 		{
+			if(index < 0)
+				index = -1 * index;
+			
 			if(index >= vertices.size())
 				index = index % vertices.size();
 			
@@ -181,6 +184,9 @@ public class ObjModelData {
 		
 		public Vector4 getNormal(int index)
 		{
+			if(index < 0)
+				index = -1 * index;
+		
 			if(index >= normals.size())
 				index = index % normals.size();
 			
