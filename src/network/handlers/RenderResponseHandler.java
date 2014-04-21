@@ -3,7 +3,7 @@ package network.handlers;
 import network.Message;
 import network.MessageHandler;
 
-public class RenderResponseHandler implements MessageHandler {
+public class RenderResponseHandler extends MessageHandler {
 	
 	/*
 	 * A handler for messages that are the response of a render request
