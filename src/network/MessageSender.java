@@ -16,6 +16,8 @@ public class MessageSender {
 	 * 		Send intermediate message about small pixel blocks that were modified
 	 * 			-Needs PixelModifiedHandler (or similar message handle support)
 	 * 			-Send the message up the chain
+	 * 
+	 * 		Load balancing, what do
 	 */
 
 }

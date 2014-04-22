@@ -1,5 +1,6 @@
 package system;
 
+import performance.SimpleFLOPSMeasurement;
 import process.Environment;
 import process.logging.Logger;
 import raytrace.scene.SceneLoader;
@@ -25,6 +26,7 @@ public class Launcher {
 		
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
+		//TODO: Move these to each scene, or use a config file
 		Configuration.setScreenWidth(1368);
 		Configuration.setScreenHeight(752);
 		//Configuration.setScreenWidth(800);
@@ -35,6 +37,7 @@ public class Launcher {
 		
 		//TODO: Need a reliable and relative folder to write to
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
+		
 		
 		
 		//Load the scene (TODO: Parse args for scene choice)

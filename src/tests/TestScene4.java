@@ -78,7 +78,7 @@ public class TestScene4 extends Scene
 			model.getTransform().rotateY(0.15);
 			model.bake(null);
 			//model.setMaterial(new ReflectiveMaterial(new Color(0xff0068ff), .70));
-			model.setMaterial(new DielectricMaterial(new Color(1.0, 0.8, 1.0), 1.15));
+			model.setMaterial(new DielectricMaterial(new Color(1.9, 1.9, 1.2), 1.45));
 			this.addChild(model);
 		}else{
 			Logger.error(-13, "TestScene4: Model was null!");
