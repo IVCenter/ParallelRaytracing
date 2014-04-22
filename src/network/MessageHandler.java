@@ -1,13 +1,26 @@
 package network;
 
-public interface MessageHandler {
+public abstract class MessageHandler {
 	
 	/*
 	 * An interface for message handlers
 	 */
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	protected String messageType = Message.Type.None;
+	
 
 	/* *********************************************************************************************
 	 * Interface Methods
 	 * *********************************************************************************************/
-	public void handle(Message message);
+	public abstract void handle(Message message);
+	
+
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public String getMessageType() {
+		return messageType;
+	}
 }
