@@ -1,5 +1,9 @@
 package system;
 
+import java.io.IOException;
+
+import network.MessageListener;
+import network.NetworkMessageListener;
 import input.DefaultKeyboard;
 import input.Keyboard;
 import process.Job;
@@ -42,6 +46,8 @@ public class ApplicationDelegate extends Job{
 	protected Keyboard keyboard;
 	
 	protected Renderer renderer;
+	
+	protected MessageListener messageListener;
 	
 	
 	/* *********************************************************************************************
@@ -86,6 +92,16 @@ public class ApplicationDelegate extends Job{
 		{
 			renderer = new ConfigurableRayTracer(new ParallelRayTracer(), Configuration.getMasterScene());
 		}
+		
+		//Setup a network message listener
+		try {
+			messageListener = new NetworkMessageListener(Configuration.Networking.getMessageReceivePort(), 
+														 Configuration.Networking.getMessageThreadCount());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//
 	}
 
 	@Override
