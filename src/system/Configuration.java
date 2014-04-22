@@ -31,6 +31,33 @@ public class Configuration {
 	protected static String workingDirectory = "/";
 	protected static String modelsSubDirectory = "Models/";
 	protected static String screenshotSubDirectory = "Screenshots/";
+	
+
+	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 * Network related
+	 * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+	public static class Networking
+	{
+		protected static int webInterfacePost = 9741;
+		protected static int messageReceivePort = 9742;
+		protected static int messageSendPort = 9743;
+		protected static int messageThreadCount = 4;
+		
+		
+		public static int getWebInterfacePost() { return webInterfacePost; }
+		public static void setWebInterfacePost(int webInterfacePost) { Networking.webInterfacePost = webInterfacePost; }
+		
+		public static int getMessageReceivePort() { return messageReceivePort; }
+		public static void setMessageReceivePort(int messageReceivePort) { Networking.messageReceivePort = messageReceivePort; }
+		
+		public static int getMessageSendPort() { return messageSendPort; }
+		public static void setMessageSendPort(int messageSendPort) { Networking.messageSendPort = messageSendPort; }
+		
+		public static int getMessageThreadCount() { return messageThreadCount; }
+		public static void setMessageThreadCount(int messageThreadCount) { Networking.messageThreadCount = messageThreadCount; }
+			
+	}
+		
 
 	
 	/* *********************************************************************************************
