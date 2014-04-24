@@ -2,7 +2,6 @@ package network.handlers;
 
 import process.logging.Logger;
 import network.Message;
-import network.MessageHandler;
 
 public class DefaultHandler extends MessageHandler {
 

@@ -2,6 +2,8 @@ package network;
 
 import java.util.Iterator;
 
+import network.handlers.MessageHandler;
+
 public abstract class CompositeMessageHandler extends MessageHandler implements Iterable<MessageHandler> {
 	
 	/*

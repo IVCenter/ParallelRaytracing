@@ -1,7 +1,6 @@
 package network.handlers;
 
 import network.Message;
-import network.MessageHandler;
 
 public class RenderResponseHandler extends MessageHandler {
 	
