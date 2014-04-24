@@ -1,17 +1,24 @@
 package network;
 
+import java.io.Serializable;
+
 import process.Environment;
 
-public class Message {
+public class Message implements Serializable {
 	
 	/*
 	 * A message object for transmitting data
 	 */
 
 	/* *********************************************************************************************
+	 * Static Vars
+	 * *********************************************************************************************/
+	private static final long serialVersionUID = 1L;
+	
+
+	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	
 	//Stores the data payload for a message
 	protected final MessageData data = new MessageData();
 	protected String type = Message.Type.None;
@@ -67,6 +74,7 @@ public class Message {
 	 */
 	public static class Type {
 		public static final String None = "NONE";			//A message with no type data (silently dropped)
+		public static final String Debug = "DEBUG";			//A message with no type data (silently dropped)
 	};
 		
 	/**
@@ -76,6 +84,6 @@ public class Message {
 	 * sending data between nodes.
 	 */
 	@SuppressWarnings("serial")
-	public static final class MessageData extends Environment{};
+	public static final class MessageData extends Environment implements Serializable {};
 
 }
