@@ -60,7 +60,7 @@ public class FresnelMetalMaterial extends Material {
 		
 		double reflParallel = (rpLeft + rpRight + 1.0) / (rpLeft - rpRight + 1.0);
 		double reflPerp = (ri2Sum + NdotD2 + rpRight) / (ri2Sum + NdotD2 - rpRight);
-		
+
 		double reflectivePercent = 0.5 * (reflParallel * reflParallel + reflPerp * reflPerp);
 
 		//If reflective, go divin'
