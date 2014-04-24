@@ -12,6 +12,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
@@ -32,10 +33,8 @@ public class TestScene2 extends Scene
 	@Override
 	protected void initialize()
 	{
-
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
-		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
 		((PinholeCamera)activeCamera).setStratifiedSampling(true);
 		((PinholeCamera)activeCamera).setSuperSamplingLevel(2);
@@ -47,18 +46,13 @@ public class TestScene2 extends Scene
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((PinholeCamera)activeCamera).forceUpdate();
 		
-
-		
-		//this.addChild(activeCamera);
-		
-		
-		
 		
 		
 		//Diffuse Sphere
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DiffuseMaterial(new Color(0.9, 0.3, 0.3)));
+			//sphere.setMaterial(new DiffusePTMaterial(new Color(0.9, 0.3, 0.3), 1));
 			sphere.setPosition(new Vector4(-3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);

@@ -5,12 +5,16 @@ import raytrace.camera.PinholeCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
+import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.DiffusePTMaterial;
+import raytrace.material.FresnelMetalMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import resource.ResourceManager;
@@ -37,9 +41,8 @@ public class CSE168_Project2_Scene extends Scene
 		//Camera
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(false);
+		((PinholeCamera)activeCamera).setStratifiedSampling(true);
 		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
-		((PinholeCamera)activeCamera).setUseRayCaching(false);
 		activeCamera.setPosition(new Vector4(-0.1, 0.1, 0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.05, 0.02, -0.2, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));

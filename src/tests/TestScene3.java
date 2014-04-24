@@ -39,7 +39,6 @@ public class TestScene3 extends Scene
 		activeCamera = new PinholeCamera();
 		((PinholeCamera)activeCamera).setStratifiedSampling(true);
 		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
-		((PinholeCamera)activeCamera).setUseRayCaching(false);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
