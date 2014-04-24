@@ -1,6 +1,7 @@
 package raytrace.camera;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import math.Ray;
@@ -56,6 +57,13 @@ public class RayBuffer extends Camera {
 	{
 		//Since this is a pre-defined buffer we have no idea how to generate a given ray
 		//that would make any sense
+		return null;
+	}
+
+	@Override
+	public Collection<Camera> decompose(int count)
+	{
+		// TODO Mmmmm
 		return null;
 	}
 
