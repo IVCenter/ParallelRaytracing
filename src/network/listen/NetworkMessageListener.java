@@ -1,4 +1,4 @@
-package network;
+package network.listen;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import network.Message;
 
 import process.logging.Logger;
 
@@ -18,6 +20,7 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
+	protected final int port;
 	protected final ServerSocket serverSocket;
 	protected final ExecutorService pool;
 	protected final Thread thisThread;
@@ -29,6 +32,7 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 	public NetworkMessageListener(int port, int poolSize) throws IOException
 	{
 		super();
+		this.port = port;
 		serverSocket = new ServerSocket(port);
 		pool = Executors.newFixedThreadPool(poolSize);
 		thisThread = new Thread(this);
@@ -108,9 +112,13 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 			try {
 				
 				Logger.progress(-21, "NetworkMessageListener: Serving socket...");
+				
 				ObjectInputStream stream = new ObjectInputStream(socket.getInputStream());
-				Message message = (Message)stream.readObject();
-				stream.close();
+				
+				Message message = null;
+				message = (Message)stream.readObject();
+				
+				socket.close();
 				listen(message);
 				
 			} catch (IOException | ClassNotFoundException e) {
