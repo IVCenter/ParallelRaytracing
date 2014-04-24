@@ -1,8 +1,10 @@
-package network;
+package network.listen;
 
 import java.util.HashMap;
 
+import network.Message;
 import network.handlers.DefaultHandler;
+import network.handlers.MessageHandler;
 
 import process.logging.Logger;
 
@@ -33,6 +35,11 @@ public abstract class MessageListener {
 	 * *********************************************************************************************/
 	public void listen(Message message)
 	{
+		Logger.progress(-21, "MessageListener: Listening...");
+		
+		if(message == null)
+			return;
+		
 		String type = message.getType();
 		
 		if(type == null || type.equals(Message.Type.None))
