@@ -2,12 +2,15 @@ package system;
 
 import java.io.IOException;
 
-import network.MessageListener;
-import network.NetworkMessageListener;
+import network.Node;
+import network.NodeManager;
+import network.listen.MessageListener;
+import network.listen.NetworkMessageListener;
+import network.send.MessageSender;
+import network.send.NetworkMessageSender;
 import input.DefaultKeyboard;
 import input.Keyboard;
 import process.Job;
-import process.logging.Logger;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
 import raytrace.ConfigurableRayTracer;
@@ -41,13 +44,19 @@ public class ApplicationDelegate extends Job{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
+	public static ApplicationDelegate inst;
+	
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
 	protected Keyboard keyboard;
 	
 	protected Renderer renderer;
+	protected boolean isStarted;
 	
 	protected MessageListener messageListener;
+	protected MessageSender messageSender;
+	protected NodeManager nodeManager;
+	protected Node thisNode;
 	
 	
 	/* *********************************************************************************************
@@ -55,7 +64,11 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	public ApplicationDelegate()
 	{
+		//Set the statically accessible instance to this
+		//There should not be more than once instance of application delegate at a time
+		inst = this;
 		
+		isStarted = false;
 	}
 	
 
@@ -65,8 +78,37 @@ public class ApplicationDelegate extends Job{
 	@Override
 	protected void initialize()
 	{
-		Logger.progress(-1, "Initializing Application Delegate...");
+		progress("Initializing Application Delegate...");
 		
+		
+		//Create a node manager
+		nodeManager = new NodeManager();
+		
+		
+		//Create a node object for this node
+		//TODO: Configure?
+		thisNode = new Node();
+		
+		
+		//Setup a network message listener
+		try {
+			messageListener = new NetworkMessageListener(Configuration.Networking.getMessageReceivePort(), 
+														 Configuration.Networking.getMessageThreadCount());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		//Setup a network message sender
+		try {
+			messageSender = new NetworkMessageSender(Configuration.Networking.getMessageReceivePort(), 
+					 								 Configuration.Networking.getMessageThreadCount());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+
+		//If drawing to screen
 		if(Configuration.isDrawingToScreen())
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
@@ -91,17 +133,9 @@ public class ApplicationDelegate extends Job{
 		if(Configuration.isLeaf())
 		{
 			renderer = new ConfigurableRayTracer(new ParallelRayTracer(), Configuration.getMasterScene());
+		}else{
+			//Create a network renderer here!
 		}
-		
-		//Setup a network message listener
-		try {
-			messageListener = new NetworkMessageListener(Configuration.Networking.getMessageReceivePort(), 
-														 Configuration.Networking.getMessageThreadCount());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		//
 	}
 
 	@Override
@@ -114,7 +148,7 @@ public class ApplicationDelegate extends Job{
 		//If this node is the clock, start the main loop, else, sleep this thread
 		//The sleep prevents this Job subclass from finalizing, and instead of using
 		//	a loop for timing, this relies on a parent node to send timing signals
-		if(Configuration.isClock())
+		if(Configuration.isClock() && Configuration.isLeaf())
 		{
 			startMainLoop();
 		}else{
@@ -141,7 +175,15 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected void startMainLoop()
 	{
-		Logger.progress(-1, "Starting Main Loop...");
+		//If not already started
+		if(isStarted) {
+			warning("ApplicationDelegate: Main loop is already started.  The loop must be stopped before it can" +
+					"be started again.");
+			return;
+		}
+		
+		progress("Starting Main Loop...");
+		isStarted = true;
 		
 		//Configure the initial update data
 		UpdateData udata = initUpdateData();
@@ -173,5 +215,73 @@ public class ApplicationDelegate extends Job{
 		rdata.setPixelBuffer(pixelBuffer);
 		
 		return rdata;
+	}
+	
+
+	/* *********************************************************************************************
+	 * Getters/Setters?
+	 * *********************************************************************************************/
+	public ScreenDrawer getScreenDrawer() {
+		return screenDrawer;
+	}
+
+	public void setScreenDrawer(ScreenDrawer screenDrawer) {
+		this.screenDrawer = screenDrawer;
+	}
+
+	public PixelBuffer getPixelBuffer() {
+		return pixelBuffer;
+	}
+
+	public void setPixelBuffer(PixelBuffer pixelBuffer) {
+		this.pixelBuffer = pixelBuffer;
+	}
+
+	public Keyboard getKeyboard() {
+		return keyboard;
+	}
+
+	public void setKeyboard(Keyboard keyboard) {
+		this.keyboard = keyboard;
+	}
+
+	public Renderer getRenderer() {
+		return renderer;
+	}
+
+	public void setRenderer(Renderer renderer) {
+		this.renderer = renderer;
+	}
+
+	public MessageListener getMessageListener() {
+		return messageListener;
+	}
+
+	public void setMessageListener(MessageListener messageListener) {
+		this.messageListener = messageListener;
+	}
+
+	public MessageSender getMessageSender() {
+		return messageSender;
+	}
+
+	public void setMessageSender(MessageSender messageSender) {
+		this.messageSender = messageSender;
+	}
+
+	public NodeManager getNodeManager() {
+		return nodeManager;
+	}
+
+	public void setNodeManager(NodeManager nodeManager) {
+		this.nodeManager = nodeManager;
+	}
+
+	public Node getThisNode() {
+		return thisNode;
+	}
+
+	public void setThisNode(Node thisNode) {
+		this.thisNode = thisNode;
 	}
 }
