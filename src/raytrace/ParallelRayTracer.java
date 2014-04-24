@@ -1,14 +1,12 @@
 package raytrace;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import math.Ray;
 
 import process.logging.Logger;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
-import raytrace.camera.RayBuffer;
 import raytrace.framework.Tracer;
 import raytrace.scene.Scene;
 
@@ -38,13 +36,12 @@ public class ParallelRayTracer implements Tracer {
 
 	protected ArrayList<SynchronizingWorker> workers;
 	protected ArrayList<Thread> threadPool;
-	protected ArrayList<RayBuffer> rayBuffers;
+	protected ArrayList<Camera> rayBuffers;
 	
-	protected boolean randomizeRays = true;//TODO: Need a getter/setter for this
+	//protected boolean randomizeRays = true;//TODO: Need a getter/setter for this
 	
 	//Used to cache rays
-	private Camera cameraUsedForDistro = null;
-	private int cameraRaySetID = -1;
+	//private Camera cameraUsedForDistro = null;
 	
 	
 	
@@ -67,7 +64,7 @@ public class ParallelRayTracer implements Tracer {
 		threadCount = cores;
 		workers = new ArrayList<SynchronizingWorker>(cores);
 		threadPool = new ArrayList<Thread>(cores);
-		rayBuffers = new ArrayList<RayBuffer>(cores);
+		rayBuffers = new ArrayList<Camera>(cores);
 		
 		//Create as many workers as there are cores
 		//TODO:If a worker crashes, create a new one
@@ -77,7 +74,7 @@ public class ParallelRayTracer implements Tracer {
 			worker = new SynchronizingWorker(i);
 			workers.add(worker);
 			threadPool.add(new Thread(worker));
-			rayBuffers.add(new RayBuffer());
+			//rayBuffers.add(new RayBuffer());
 		}
 		
 		//Start the workers (they should immediately fall into a spin lock)
@@ -102,7 +99,7 @@ public class ParallelRayTracer implements Tracer {
 		long startTime = System.currentTimeMillis();
 		
 		//Distribute camera rays (if necessary)
-		distributeRays(camera, randomizeRays);
+		distributeRays(camera);
 		
 		//Update the call id
 		callID++;
@@ -152,9 +149,24 @@ public class ParallelRayTracer implements Tracer {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void distributeRays(Camera camera, boolean randomize)
+	
+	//@SuppressWarnings("unchecked")
+	private void distributeRays(Camera camera)
 	{
+		//if(camera == cameraUsedForDistro)
+		//	return;
+
+		//cameraUsedForDistro = camera;
+		
+		rayBuffers.clear();
+		
+		Collection<Camera> cams = camera.decompose(threadCount);
+		
+		for(Camera cam : cams)
+			rayBuffers.add(cam);
+		
+		
+		/*
 		if(camera == cameraUsedForDistro && camera.getRaySetID() == cameraRaySetID)
 			return;
 		
@@ -206,7 +218,9 @@ public class ParallelRayTracer implements Tracer {
 				buffers[rightIndex].set(rightRayIndex, tempRay);
 			}
 		}
+		*/
 	}
+	
 
 
 	/* *********************************************************************************************
@@ -264,7 +278,7 @@ public class ParallelRayTracer implements Tracer {
 				//Do tracing here
 				//Logger.progress(-1, "Starting RayTracerWorker ID:[" + id + "]...");
 				
-				RayBuffer buffer = rayBuffers.get(id);
+				Camera buffer = rayBuffers.get(id);
 				tracer.trace(activePixelBuffer, buffer, activeScene);
 				
 				
