@@ -1,11 +1,12 @@
 package raytrace.camera;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import process.logging.Logger;
 
-import math.CompositeRay;
+//import math.CompositeRay;
 import math.Ray;
 import math.Vector4;
 
@@ -23,12 +24,32 @@ public class PinholeCamera extends Camera {
 	
 	protected double imagePlaneRatio;
 	
-	protected ArrayList<Ray> precalculatedRays;
-	
 	protected int superSamplingLevel = 1;
+	protected double samplingDelta = 1.0;
 	protected boolean stratifiedSampling = false;
+	//protected Function2D<Double, Double> superSampDistroFuncX = new PassThrough2D<Double>();
+	//protected Function2D superSampDistroFuncY;
+
+	protected double startPixelX = 0;
+	protected double startPixelY = 0;
+	protected double pixelStepSize = 1;
 	
-	protected boolean useRayCaching = true;
+	protected RayIterator iter = new RayIterator();
+	
+
+	/* *********************************************************************************************
+	 * Private Instance Vars
+	 * *********************************************************************************************/
+	//Used for fast ray math
+	private double[] vdir;
+	private double[] camX;
+	private double[] camY;
+	
+	//Used for sub ray calculations
+	protected Vector4 dir = new Vector4(0,0,-1,0);	
+	protected double pw;
+	protected double ph;
+	protected double woffset, hoffset;
 	
 
 	/* *********************************************************************************************
@@ -37,23 +58,19 @@ public class PinholeCamera extends Camera {
 	public PinholeCamera()
 	{
 		super();
-		precalculatedRays = new ArrayList<Ray>();
-		//update();
 	}
 	
 	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
-		precalculatedRays = new ArrayList<Ray>();
-		//update();
+		update();
 	}
 	
 	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		this.superSamplingLevel = superSamplingLevel;
-		precalculatedRays = new ArrayList<Ray>();
-		//update();
+		update();
 	}
 	
 
@@ -76,17 +93,39 @@ public class PinholeCamera extends Camera {
 		this.stratifiedSampling = stratifiedSampling;
 	}
 
+	public double getStartPixelX() {
+		return startPixelX;
+	}
+
+	public void setStartPixelX(double startPixelX) {
+		this.startPixelX = startPixelX;
+	}
+
+	public double getStartPixelY() {
+		return startPixelY;
+	}
+
+	public void setStartPixelY(double startPixelY) {
+		this.startPixelY = startPixelY;
+	}
+
+	public double getPixelStepSize() {
+		return pixelStepSize;
+	}
+
+	public void setPixelStepSize(double pixelStepSize) {
+		this.pixelStepSize = pixelStepSize;
+	}
+
 	/* *********************************************************************************************
 	 * Iteration
 	 * *********************************************************************************************/
 	@Override
 	public Iterator<Ray> iterator()
 	{
-		//Create and return a ray iterator
-		if(!useRayCaching || precalculatedRays.isEmpty())
-			return new RayIterator();
-		else
-			return precalculatedRays.iterator();
+		//Reset the pre-allocated iterator and return it
+		iter.reset();
+		return iter;
 	}
 
 
@@ -107,33 +146,25 @@ public class PinholeCamera extends Camera {
 		imagePlaneWidth = 2*Math.tan(fieldOfView/2.0);
 		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
 		
-		//Buffer rays
-		if(useRayCaching)
-		{
-			if(precalculatedRays.size() < pixelWidth * pixelHeight) {
-				precalculatedRays = new ArrayList<Ray>((int)(pixelHeight * pixelHeight + 1));
-			}else{
-				precalculatedRays.clear();
-			}
-			
-			for(Ray ray : this)
-				precalculatedRays.add(ray);
-		}
+		//
+		vdir = viewingDirection.getM();
+		camX = cameraX.getM();
+		camY = cameraY.getM();
 		
-		//Since the rays are new change the set ID
-		raySetID++;
+		//
+		samplingDelta = 1.0/(double)superSamplingLevel;
 	}
 	
 	@Override
 	protected void wasModified()
 	{
-		
+		update();
 	}
 	
 	//TODO: This is not exactly good design.....
 	public void forceUpdate()
 	{
-		Logger.progress(-8, "Forcing Update");
+		Logger.progress(-8, "PinholeCamera: Forcing Update...");
 		update();
 	}
 
@@ -144,6 +175,7 @@ public class PinholeCamera extends Camera {
 	@Override
 	protected Ray getRay(double x, double y)
 	{
+		/*
 		//Create the origin vector
 		Vector4 orig = new Vector4(position);
 		
@@ -189,6 +221,8 @@ public class PinholeCamera extends Camera {
 		
 		
 		return cray;
+		*/
+		return null;
 	}
 	
 	public void setVerticalFieldOfView(double fov)
@@ -198,12 +232,53 @@ public class PinholeCamera extends Camera {
 		wasModified();
 	}
 	
-	public boolean useRayCaching() {
-		return useRayCaching;
+	@Override
+	public Collection<Camera> decompose(int count)
+	{
+		//If the count of decompositions is one or less, just use this camera
+		if(count <= 1) {
+			ArrayList<Camera> oneCam = new ArrayList<Camera>(1);
+			oneCam.add(this);
+			return oneCam;
+		}
+		
+		//Create a collection for the decompositions
+		ArrayList<Camera> cams = new ArrayList<Camera>(count);
+		PinholeCamera newCam;
+		
+		//Decompose the current camera
+		for(int i = 0; i < count; i++)
+		{
+			newCam = this.duplicate();
+			newCam.setStartPixelX(i % newCam.pixelWidth);
+			newCam.setStartPixelY(i / (int)newCam.pixelWidth);
+			newCam.setPixelStepSize(count);
+			cams.add(newCam);
+		}
+		
+		return cams;
 	}
-
-	public void setUseRayCaching(boolean useRayCaching) {
-		this.useRayCaching = useRayCaching;
+	
+	private PinholeCamera duplicate()
+	{
+		PinholeCamera cam = new PinholeCamera();
+		cam.setPosition(position);
+		cam.setViewingDirection(viewingDirection);
+		cam.setUp(up);
+		cam.setFieldOfView(fieldOfView);
+		cam.setPixelWidth(pixelWidth);
+		cam.setPixelHeight(pixelHeight);
+		
+		cam.setSuperSamplingLevel(superSamplingLevel);
+		cam.setStratifiedSampling(stratifiedSampling);
+		
+		cam.setStartPixelX(startPixelX);
+		cam.setStartPixelY(startPixelY);
+		cam.setPixelStepSize(pixelStepSize);
+		
+		cam.update();
+		
+		return cam;
 	}
 
 
@@ -218,14 +293,21 @@ public class PinholeCamera extends Camera {
 		 * *********************************************************************************************/
 		private double currentPixelX;
 		private double currentPixelY;
+		
+		private PinholeRay ray;
+		private Ray subRay;
+
+		private Vector4 orig;
+		
 
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
 		public RayIterator()
 		{
-			currentPixelX = 0;
-			currentPixelY = 0;
+			subRay = new Ray();
+			ray = new PinholeRay(subRay);
+			reset();
 		}
 
 		/* *********************************************************************************************
@@ -242,16 +324,17 @@ public class PinholeCamera extends Camera {
 		public Ray next()
 		{
 			//Get the next ray
-			Ray r = getRay(currentPixelX, currentPixelY);
+			ray.setPixelX((int)currentPixelX);
+			ray.setPixelY((int)currentPixelY);
 			
 			//Increment the counters
-			++currentPixelX;
+			currentPixelX+=pixelStepSize;
 			if(currentPixelX >= pixelWidth) {
-				currentPixelX = 0;
+				currentPixelX = currentPixelX % pixelWidth;
 				++currentPixelY;
 			}
 			
-			return r;
+			return ray;
 		}
 
 		@Override
@@ -260,5 +343,135 @@ public class PinholeCamera extends Camera {
 			//No
 		}
 		
+		public void reset()
+		{	
+			currentPixelX = startPixelX;
+			currentPixelY = startPixelY;
+			
+			orig = new Vector4(position);
+			subRay.setOrigin(orig);
+			ray.setOrigin(orig);
+		}
+		
+	}
+	
+	private class PinholeRay extends Ray
+	{
+		/*
+		 * A class that represents a set of implicit Rays in 3D space
+		 */
+	
+		/* *********************************************************************************************
+		 * Instance Vars
+		 * *********************************************************************************************/
+		protected Ray subRay;
+		protected RayIterator iter;
+		
+		
+		/* *********************************************************************************************
+		 * Constructor
+		 * *********************************************************************************************/
+		public PinholeRay(Ray subRay)
+		{
+			if(subRay == null)
+				subRay = new Ray();
+			this.subRay = subRay;
+			iter = new RayIterator(subRay);
+		}
+		
+	
+		/* *********************************************************************************************
+		 * Getters/Setters
+		 * *********************************************************************************************/
+		
+		
+		/* *********************************************************************************************
+		 * Iteration Overrides
+		 * *********************************************************************************************/
+		@Override
+		public Iterator<Ray> iterator()
+		{
+			iter.reset();
+			return iter;
+		}
+
+
+
+		/* *********************************************************************************************
+		 * Private Classes
+		 * *********************************************************************************************/
+		private class RayIterator implements Iterator<Ray>
+		{	
+			/* *********************************************************************************************
+			 * Instance Vars
+			 * *********************************************************************************************/
+			private double subPixelU;
+			private double subPixelV;
+			private Ray ray;
+			
+	
+			/* *********************************************************************************************
+			 * Constructor
+			 * *********************************************************************************************/
+			public RayIterator(Ray ray)
+			{
+				subPixelU = 0;
+				subPixelV = 0;
+				this.ray = ray;
+			}
+	
+			/* *********************************************************************************************
+			 * Iterator Methods
+			 * *********************************************************************************************/
+	
+			@Override
+			public boolean hasNext()
+			{
+				return subPixelU < superSamplingLevel && subPixelV < superSamplingLevel;
+			}
+	
+			@Override
+			public Ray next()
+			{
+				//Get the next ray
+				//Calculate sampling offsets
+				woffset = subPixelU * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
+				hoffset = subPixelV * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
+				
+				//Pre-calculate the axis weights
+				pw = (((pixelX+woffset)/pixelWidth) - 0.5) * imagePlaneWidth;
+				ph = (((pixelY+hoffset)/pixelHeight) - 0.5) * imagePlaneHeight;
+				
+				//Create the direction vector
+				dir.set(vdir[0] + camX[0] * pw + camY[0] * ph, 
+						vdir[1] + camX[1] * pw + camY[1] * ph, 
+						vdir[2] + camX[2] * pw + camY[2] * ph, 
+						0);
+				subRay.setDirection(dir.normalize3());
+				
+				//Increment the counters
+				++subPixelU;
+				if(subPixelU >= superSamplingLevel) {
+					subPixelU = 0;
+					++subPixelV;
+				}
+				
+				
+				return ray;
+			}
+	
+			@Override
+			public void remove()
+			{
+				//No
+			}
+			
+			public void reset()
+			{
+				subPixelU = 0;
+				subPixelV = 0;
+			}
+			
+		}
 	}
 }
