@@ -1,5 +1,7 @@
 package raytrace.camera;
 
+import java.util.Collection;
+
 import raytrace.framework.Positionable;
 import math.Ray;
 import math.Vector4;
@@ -19,8 +21,6 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	protected double fieldOfView = Math.PI/2.0;
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
-	
-	protected int raySetID = 0;
 	
 
 	/* *********************************************************************************************
@@ -49,6 +49,12 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	protected abstract void update();
 	protected abstract void wasModified();
 	protected abstract Ray getRay(double x, double y);
+	public abstract Collection<Camera> decompose(int count);
+	//protected abstract Ray getRay(double x, double y, Ray ray);
+	//protected Ray getRay(double x, double y)
+	//{
+	//	return getRay(x, y, new Ray());
+	//}
 	
 
 	/* *********************************************************************************************
@@ -112,9 +118,5 @@ public abstract class Camera implements Iterable<Ray>, Positionable{
 	public void setPixelHeight(double pixelHeight) {
 		this.pixelHeight = pixelHeight;
 		wasModified();
-	}
-
-	public int getRaySetID() {
-		return raySetID;
 	}
 }
