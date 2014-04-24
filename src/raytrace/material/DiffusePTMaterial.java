@@ -53,7 +53,7 @@ public class DiffusePTMaterial extends Material{
 		}
 		
 		
-		if(data.getRecursionDepth() < 1)
+		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
 			//Sample random points
 			Color rflectColor = new Color();
@@ -68,11 +68,11 @@ public class DiffusePTMaterial extends Material{
 				
 				sampleDir.normalize3();
 				rflectColor.add3M(
-						diffuse(recurse(data, point, sampleDir, 1.0).multiply3(1.0/sampleCount), normal, sampleDir.multiply3(-1.0)));//TODO: Should we use data.refractiveInde here?
+						diffuse(recurse(data, point, sampleDir, 1.0), normal, sampleDir.multiply3(-1.0)));//TODO: Should we use data.refractiveInde here?
 			}
 			
 			//Add the direct shading and samples shading together
-			shade.add3M(rflectColor);
+			shade.add3M(rflectColor.multiply3(1.0/sampleCount));
 		}
 		
 		return shade.multiply3M(color);
