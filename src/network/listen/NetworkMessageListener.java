@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import network.Message;
 
 import process.logging.Logger;
+import system.Constants;
 
 public class NetworkMessageListener extends MessageListener implements Runnable {
 	
@@ -117,6 +118,12 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 				
 				Message message = null;
 				message = (Message)stream.readObject();
+				
+				String ip = socket.getInetAddress().getHostAddress();
+				
+				if(message != null) {
+					message.getData().put(Constants.Message.NODE_IP, ip);
+				}
 				
 				socket.close();
 				listen(message);
