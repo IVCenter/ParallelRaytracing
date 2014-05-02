@@ -1,16 +1,10 @@
 package system;
 
-import performance.SimpleFLOPSMeasurement;
 import process.Environment;
 import process.logging.Logger;
 import raytrace.scene.SceneLoader;
 
 public class Launcher {
-	
-	
-	
-	
-	
 
 	/* *********************************************************************************************
 	 * Main
@@ -27,13 +21,15 @@ public class Launcher {
 		//TODO: Parse the arguments
 		//TODO: Set configuration values
 		//TODO: Move these to each scene, or use a config file
-		Configuration.setScreenWidth(1368);
-		Configuration.setScreenHeight(752);
-		//Configuration.setScreenWidth(800);
-		//Configuration.setScreenHeight(600);
+		Configuration.setId(Constants.Default.NODE_ID);
+		//Configuration.setScreenWidth(1368);
+		//Configuration.setScreenHeight(752);
+		Configuration.setScreenWidth(800);
+		Configuration.setScreenHeight(600);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);
 		Configuration.setLeaf(true);
+		Configuration.setController(true);
 		
 		//TODO: Need a reliable and relative folder to write to
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
@@ -41,9 +37,8 @@ public class Launcher {
 		
 		
 		//Load the scene (TODO: Parse args for scene choice)
-		String sceneKey = Constants.SceneKeys.TEST2;
-		SceneLoader sceneLoader = new SceneLoader();
-		Configuration.setMasterScene(sceneLoader.load(sceneKey));
+		String sceneKey = Constants.SceneKeys.CSE168_Project2;
+		Configuration.setMasterScene(SceneLoader.load(sceneKey));
 		
 		Logger.progress(-1, "Launching a Parallel Rendering Node with ID:[" + Configuration.getId() + "]...");
 		

@@ -20,6 +20,7 @@ public abstract class Scene extends CompositeSurface{
 	protected Camera activeCamera;
 	protected LightManager lightManager;
 	protected Material skyMaterial;
+	protected String sceneKey;
 	
 
 	/* *********************************************************************************************
@@ -78,6 +79,14 @@ public abstract class Scene extends CompositeSurface{
 
 	public void setSkyMaterial(Material skyMaterial) {
 		this.skyMaterial = skyMaterial;
+	}
+
+	public String getSceneKey() {
+		return sceneKey;
+	}
+
+	public void setSceneKey(String sceneKey) {
+		this.sceneKey = sceneKey;
 	}
 	
 

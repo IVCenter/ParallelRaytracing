@@ -19,74 +19,90 @@ public class SceneLoader {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected HashMap<String, SceneConstructor> sceneConstructors;
+	protected static HashMap<String, SceneConstructor> sceneConstructors;
 	
 
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
-	public SceneLoader()
+	static
 	{
 		sceneConstructors = new HashMap<String, SceneConstructor>();
 		
 		sceneConstructors.put("", new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new EmptyScene();
+				Scene scene = new EmptyScene();
+				scene.setSceneKey("");
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.TEST1, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new TestScene1();
+				Scene scene = new TestScene1();
+				scene.setSceneKey(Constants.SceneKeys.TEST1);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.CSE168_Project1, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new CSE168_Project1_Scene();
+				Scene scene = new CSE168_Project1_Scene();
+				scene.setSceneKey(Constants.SceneKeys.CSE168_Project1);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.TEST2, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new TestScene2();
+				Scene scene = new TestScene2();
+				scene.setSceneKey(Constants.SceneKeys.TEST2);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.TEST3, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new TestScene3();
+				Scene scene = new TestScene3();
+				scene.setSceneKey(Constants.SceneKeys.TEST3);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.TEST4, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new TestScene4();
+				Scene scene = new TestScene4();
+				scene.setSceneKey(Constants.SceneKeys.TEST4);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.CSE168_Project2, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new CSE168_Project2_Scene();
+				Scene scene = new CSE168_Project2_Scene();
+				scene.setSceneKey(Constants.SceneKeys.CSE168_Project2);
+				return scene;
 			}
 		});
 		
 		sceneConstructors.put(Constants.SceneKeys.TEST5, new SceneConstructor(){
 			@Override
 			public Scene load() {
-				return new TestScene5();
+				Scene scene = new TestScene5();
+				scene.setSceneKey(Constants.SceneKeys.TEST5);
+				return scene;
 			}
 		});
 	}
 	
-	public Scene load(String key)
+	public static Scene load(String key)
 	{
 		return sceneConstructors.get(key).load();
 	}
@@ -95,7 +111,7 @@ public class SceneLoader {
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
-	private abstract class SceneConstructor
+	private static abstract class SceneConstructor
 	{
 		public abstract Scene load();
 	}
