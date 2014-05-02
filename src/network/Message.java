@@ -73,8 +73,15 @@ public class Message implements Serializable {
 	 * A message with the default type of None will be dropped silently
 	 */
 	public static class Type {
-		public static final String None = "NONE";			//A message with no type data (silently dropped)
-		public static final String Debug = "DEBUG";			//A message with no type data (silently dropped)
+		public static final String None = "NONE";	//A message with no type data (silently dropped)
+		public static final String Debug = "DEBUG";						
+		public static final String RenderRequest = "RenderRequest";
+		public static final String RenderResponse = "RenderResponse";
+		public static final String IntermediateRenderResponse = "IntermediateRenderResponse";
+		public static final String UpdateRequest = "UpdateRequest";
+		public static final String Registration = "Registration";
+		public static final String Configure = "Configuration";
+		public static final String Shutdown = "Shutdown";
 	};
 		
 	/**
@@ -85,5 +92,4 @@ public class Message implements Serializable {
 	 */
 	@SuppressWarnings("serial")
 	public static final class MessageData extends Environment implements Serializable {};
-
 }
