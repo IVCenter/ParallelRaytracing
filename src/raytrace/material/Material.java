@@ -17,7 +17,7 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 4;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
 	protected static final int SYSTEM_RESURSION_LIMIT = 2000;
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 	

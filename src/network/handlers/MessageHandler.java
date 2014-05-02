@@ -1,7 +1,6 @@
 package network.handlers;
 
 import network.Message;
-import network.Message.Type;
 
 public abstract class MessageHandler {
 	

@@ -5,7 +5,6 @@ import raytrace.camera.PinholeCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
-import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
@@ -13,8 +12,6 @@ import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
-import raytrace.material.DiffusePTMaterial;
-import raytrace.material.FresnelMetalMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import resource.ResourceManager;
@@ -68,6 +65,7 @@ public class CSE168_Project2_Scene extends Scene
 			model.getTransform().translation(0, 0.05, 0);
 			model.bake(null);
 			model.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
+			model.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.45));
 			this.addChild(model);
 		}
 		
