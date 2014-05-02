@@ -2,10 +2,18 @@ package input;
 
 import java.awt.event.KeyEvent;
 
+import network.CommonMessageConstructor;
+import network.Message;
+import network.Node;
+import network.NodeManager;
+import network.send.MessageSender;
+
 import process.logging.Logger;
 import process.utils.TimeStamp;
 import raster.PixelBuffer;
+import system.ApplicationDelegate;
 import system.Configuration;
+import system.Constants;
 
 public class DefaultKeyboard extends Keyboard {
 	
@@ -52,6 +60,55 @@ public class DefaultKeyboard extends Keyboard {
 			System.out.println("Shuting down...");
 			System.exit(1);
 		}
+		
+		//If N is released, print the current nodes under the node manager
+		if(e.getKeyCode() == KeyEvent.VK_N)
+		{
+			Logger.progress(-23, "Node Information:");
+			
+			NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
+			
+			for(Node node : nodes)
+			{
+				Logger.progress(-32, node.toString());
+			}
+		}
+		
+		//If S is released, start/stop the renderer
+		if(e.getKeyCode() == KeyEvent.VK_S)
+		{
+			if(ApplicationDelegate.inst.isStarted())
+			{
+				Logger.progress(-24, "Stopping Rendering...");
+				ApplicationDelegate.inst.stop();
+			}else{
+				Logger.progress(-24, "Starting Rendering...");
+				ApplicationDelegate.inst.start();	
+			}
+		}
+		
+		//If C, configure all known nodes to slave mode
+		if(e.getKeyCode() == KeyEvent.VK_C)
+		{
+			Message message;
+			
+			MessageSender sender = ApplicationDelegate.inst.getMessageSender();
+
+			NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
+			for(Node node : nodes)
+			{
+				message = CommonMessageConstructor.createConfigurationMessage(
+						node.getId(), 
+						Configuration.getScreenWidth(),
+						Configuration.getScreenHeight(), 
+						true,								//Leaf is true
+						false, 								//Drawing to screen is false
+						false, 								//Clock is false
+						Configuration.getMasterScene().getSceneKey());
+				sender.send(message, node.getIp());
+			}
+		}
+		
 	}
 
 }
