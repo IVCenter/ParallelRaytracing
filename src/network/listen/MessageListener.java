@@ -50,7 +50,13 @@ public abstract class MessageListener {
 			handler = defaultMessageHandler;
 		}
 		
-		handler.handle(message);
+		try {
+			
+			handler.handle(message);
+		
+		} catch(Exception e) {
+			Logger.error(-21, "MessageListener: A handler accepted when parsing the message:\n" + message.toString());
+		}
 	}
 	
 
