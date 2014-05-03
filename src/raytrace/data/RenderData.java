@@ -1,6 +1,7 @@
 package raytrace.data;
 
 import raster.PixelBuffer;
+import raytrace.scene.Scene;
 
 public class RenderData {
 	
@@ -12,6 +13,7 @@ public class RenderData {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected PixelBuffer pixelBuffer;
+	protected Scene scene;
 	
 
 	/* *********************************************************************************************
@@ -32,5 +34,13 @@ public class RenderData {
 
 	public void setPixelBuffer(PixelBuffer pixelBuffer) {
 		this.pixelBuffer = pixelBuffer;
+	}
+
+	public Scene getScene() {
+		return scene;
+	}
+
+	public void setScene(Scene scene) {
+		this.scene = scene;
 	}
 }
