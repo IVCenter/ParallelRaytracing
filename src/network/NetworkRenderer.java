@@ -19,9 +19,9 @@ public class NetworkRenderer implements Renderer {
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
-	public NetworkRenderer()
+	public NetworkRenderer(NodeManager nodeManager)
 	{
-		
+		this.nodeManager = nodeManager;
 	}
 	
 
