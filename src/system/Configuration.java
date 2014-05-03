@@ -18,12 +18,15 @@ public class Configuration {
 	
 	//Defined parameters
 	protected static String id = "Unassigned";
+	protected static String nodeIdPrefix = "NightSky_Node_";
+	
 	protected static int screenWidth = 1024;
 	protected static int screenHeight = 640;
 	
 	protected static boolean drawToScreen = false;
 	protected static boolean isClock = false;
 	protected static boolean isLeaf = false;
+	protected static boolean isController = true;
 	
 	protected static Scene masterScene = null;
 	
@@ -43,6 +46,8 @@ public class Configuration {
 		protected static int messageSendPort = 9743;
 		protected static int messageThreadCount = 4;
 		
+		protected static String controllerHostName = "localhost";
+		
 		
 		public static int getWebInterfacePost() { return webInterfacePost; }
 		public static void setWebInterfacePost(int webInterfacePost) { Networking.webInterfacePost = webInterfacePost; }
@@ -55,6 +60,12 @@ public class Configuration {
 		
 		public static int getMessageThreadCount() { return messageThreadCount; }
 		public static void setMessageThreadCount(int messageThreadCount) { Networking.messageThreadCount = messageThreadCount; }
+		
+		
+		public static String getControllerHostName() { return controllerHostName; }
+		public static void setControllerHostName(String controllerHostName) { Networking.controllerHostName = controllerHostName; }
+		
+		
 			
 	}
 		
@@ -90,6 +101,10 @@ public class Configuration {
 	public static String getId() { return id; }
 	public static void setId(String id) { Configuration.id = id; }
 
+	//Node Id Prefix
+	public static String getNodeIdPrefix() { return nodeIdPrefix; }
+	public static void setNodeIdPrefix(String nodeIdPrefix) { Configuration.nodeIdPrefix = nodeIdPrefix; }
+
 	//Screen Width
 	public static int getScreenWidth() { return screenWidth; }
 	public static void setScreenWidth(int screenWidth) { Configuration.screenWidth = screenWidth; }
@@ -109,6 +124,10 @@ public class Configuration {
 	//Leaf
 	public static boolean isLeaf() { return isLeaf; }
 	public static void setLeaf(boolean isLeaf) { Configuration.isLeaf = isLeaf; }
+
+	//Controller
+	public static boolean isController() { return isController; }
+	public static void setController(boolean isController) { Configuration.isController = isController; }
 
 	//Master Scene
 	public static Scene getMasterScene() { return masterScene; }
