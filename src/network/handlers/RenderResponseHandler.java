@@ -27,11 +27,29 @@ public class RenderResponseHandler extends MessageHandler {
 	 * 					send a render response with the appropriate data
 	 * 			
 	 */
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	//
+	
 
+	/* *********************************************************************************************
+	 * Constructor
+	 * *********************************************************************************************/
+	public RenderResponseHandler()
+	{
+		super();
+		messageType = Message.Type.RenderResponse;
+	}
+	
+
+	/* *********************************************************************************************
+	 * MessageHandler Override
+	 * *********************************************************************************************/
 	@Override
-	public void handle(Message message) {
+	public void handle(Message message)
+	{
 		// TODO Auto-generated method stub
-
 	}
 
 }
