@@ -2,8 +2,16 @@ package system;
 
 import java.io.IOException;
 
+import network.CommonMessageConstructor;
+import network.Message;
 import network.Node;
 import network.NodeManager;
+import network.handlers.ConfigurationHandler;
+import network.handlers.IntermediateRenderResponseHandler;
+import network.handlers.RegistrationHandler;
+import network.handlers.RenderRequestHandler;
+import network.handlers.RenderResponseHandler;
+import network.handlers.UpdateRequestHandler;
 import network.listen.MessageListener;
 import network.listen.NetworkMessageListener;
 import network.send.MessageSender;
@@ -94,6 +102,14 @@ public class ApplicationDelegate extends Job{
 		try {
 			messageListener = new NetworkMessageListener(Configuration.Networking.getMessageReceivePort(), 
 														 Configuration.Networking.getMessageThreadCount());
+
+			messageListener.addMessageHandler(new RegistrationHandler());
+			messageListener.addMessageHandler(new ConfigurationHandler());
+			messageListener.addMessageHandler(new UpdateRequestHandler());
+			messageListener.addMessageHandler(new RenderRequestHandler());
+			messageListener.addMessageHandler(new IntermediateRenderResponseHandler());
+			messageListener.addMessageHandler(new RenderResponseHandler());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -106,6 +122,14 @@ public class ApplicationDelegate extends Job{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
+		
+		Message regMsg = CommonMessageConstructor.createRegistrationMessage();
+		messageSender.send(regMsg, "localhost");
+		
+		
 		
 
 		//If drawing to screen
@@ -132,9 +156,15 @@ public class ApplicationDelegate extends Job{
 		//	If has children its a network distribution renderer
 		if(Configuration.isLeaf())
 		{
-			renderer = new ConfigurableRayTracer(new ParallelRayTracer(), Configuration.getMasterScene());
+			renderer = new ConfigurableRayTracer(new ParallelRayTracer());
 		}else{
 			//Create a network renderer here!
+		}
+		
+		//If not a controller, attempt to register with controller
+		if(!Configuration.isController)
+		{
+			//TOOD: register loop? how to kill once registered?
 		}
 	}
 
@@ -148,7 +178,7 @@ public class ApplicationDelegate extends Job{
 		//If this node is the clock, start the main loop, else, sleep this thread
 		//The sleep prevents this Job subclass from finalizing, and instead of using
 		//	a loop for timing, this relies on a parent node to send timing signals
-		if(Configuration.isClock() && Configuration.isLeaf())
+		if(Configuration.isClock() /*&& Configuration.isLeaf()*/)
 		{
 			startMainLoop();
 		}else{
@@ -176,14 +206,19 @@ public class ApplicationDelegate extends Job{
 	protected void startMainLoop()
 	{
 		//If not already started
-		if(isStarted) {
-			warning("ApplicationDelegate: Main loop is already started.  The loop must be stopped before it can" +
-					"be started again.");
-			return;
-		}
+		//if(isStarted) {
+		//	warning("ApplicationDelegate: Main loop is already started.  The loop must be stopped before it can" +
+		//			"be started again.");
+		//	return;
+		//}
+		
 		
 		progress("Starting Main Loop...");
-		isStarted = true;
+		
+		//If this is a clock (implicit by this method being called), and its a lead, then this is a stand-alone node
+		//So set the started flag to true
+		if(Configuration.isLeaf)
+			isStarted = true;
 		
 		//Configure the initial update data
 		UpdateData udata = initUpdateData();
@@ -194,8 +229,27 @@ public class ApplicationDelegate extends Job{
 		//Main Loop
 		for(;;)//While spider face holds true
 		{
-			renderer.update(udata);
+			//While the render loop is paused
+			while(!isStarted) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
+			//Update the update data
+			udata.setScene(Configuration.getMasterScene());
+			udata.setDt(0.016667);
 			
+			//update
+			renderer.update(udata);
+
+			//update the render data
+			rdata.setPixelBuffer(pixelBuffer);
+			rdata.setScene(Configuration.getMasterScene());
+			
+			//render
 			renderer.render(rdata);
 		}
 	}
@@ -212,7 +266,6 @@ public class ApplicationDelegate extends Job{
 	{
 		//Configure the initial render data
 		RenderData rdata = new RenderData();
-		rdata.setPixelBuffer(pixelBuffer);
 		
 		return rdata;
 	}
@@ -283,5 +336,21 @@ public class ApplicationDelegate extends Job{
 
 	public void setThisNode(Node thisNode) {
 		this.thisNode = thisNode;
+	}
+
+	public boolean isStarted() {
+		return isStarted;
+	}
+
+	public void setStarted(boolean isStarted) {
+		this.isStarted = isStarted;
+	}
+	
+	public void start() {
+		this.isStarted = true;
+	}
+	
+	public void stop() {
+		this.isStarted = false;
 	}
 }
