@@ -1,6 +1,7 @@
 package system;
 
 import java.util.HashSet;
+
 import process.logging.Logger;
 
 public class Constants {
@@ -46,6 +47,47 @@ public class Constants {
 		public static final String CSE168_Project2 = KEYS.addKey("CSE168_Project2");
 	}
 	
+	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 * Message Keys
+	 * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+	public static class Message
+	{
+		public static class Registrion
+		{
+			//Keep track of keys used to prevent duplicate keys from being used
+			public static final KeySet KEYS = new KeySet();
+
+			//public static final String PERFORMANCE_SCORE = KEYS.addKey("Test1");
+			//public static final String CORES = KEYS.addKey("Test1");
+			//public static final String PERFORMANCE_SCORE = KEYS.addKey("Test1");
+		}
+		
+		
+		//Keep track of keys used to prevent duplicate keys from being used
+		public static final KeySet KEYS = new KeySet();
+
+		public static final String NODE_ID = KEYS.addKey("NODE_ID");
+		public static final String NODE_IP = KEYS.addKey("NODE_IP");
+
+		public static final String SCREEN_WIDTH = KEYS.addKey("SCREEN_WIDTH");
+		public static final String SCREEN_HEIGHT = KEYS.addKey("SCREEN_HEIGHT");
+
+		public static final String STATE_IS_LEAF = KEYS.addKey("STATE_IS_LEAF");
+		public static final String STATE_IS_DRAWINGTOSCREEN = KEYS.addKey("STATE_IS_DRAWINGTOSCREEN");
+		public static final String STATE_IS_CLOCK = KEYS.addKey("STATE_IS_CLOCK");
+		
+		public static final String SCENE_KEY = KEYS.addKey("SCENE_KEY");
+	}
+
+	
+	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	 * Default Values
+	 * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+	public static class Default
+	{
+		public static final String NODE_ID = "Unassigned";
+	}
+	
 	
 	/*
 	 * ParameterKeySet
@@ -57,11 +99,22 @@ public class Constants {
 	{
 		public String addKey(String item)
 		{
-			if(this.contains(item)) {
+			if(this.contains(item))
+			{
 				Logger.error(-1, "CONSTANTS ERROR: You have added the key [" + item + "] multiple times!");
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				System.exit(-1);
-			}else
+				
+			}else{
 				this.add(item);
+			}
 			
 			return item;
 		}
