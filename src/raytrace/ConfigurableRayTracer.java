@@ -18,7 +18,6 @@ public class ConfigurableRayTracer implements Renderer {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Tracer tracer;
-	protected Scene scene;
 	
 	
 	/* *********************************************************************************************
@@ -29,10 +28,9 @@ public class ConfigurableRayTracer implements Renderer {
 		
 	}
 	
-	public ConfigurableRayTracer(Tracer tracer, Scene scene)
+	public ConfigurableRayTracer(Tracer tracer)
 	{
 		this.tracer = tracer;
-		this.scene = scene;
 	}
 
 	@Override
@@ -49,9 +47,9 @@ public class ConfigurableRayTracer implements Renderer {
 	public void update(UpdateData data)
 	{
 		Logger.progress(-1, "Updating...");
-		if(scene != null) {
-			scene.update(data);
-			scene.bake(new BakeData());//TODO: Do we need a bake method on the interface for Renderers?
+		if(data.getScene() != null) {
+			data.getScene().update(data);
+			data.getScene().bake(new BakeData());//TODO: Do we need a bake method on the interface for Renderers?
 		}
 	}
 
@@ -59,8 +57,8 @@ public class ConfigurableRayTracer implements Renderer {
 	public void render(RenderData data)
 	{
 		Logger.progress(-1, "Rendering...");
-		if(tracer != null && scene != null)
-			tracer.trace(data.getPixelBuffer(), scene.getActiveCamera(), scene);
+		if(tracer != null && data.getScene() != null)
+			tracer.trace(data.getPixelBuffer(), data.getScene().getActiveCamera(), data.getScene());
 	}
 
 	
@@ -73,14 +71,6 @@ public class ConfigurableRayTracer implements Renderer {
 
 	public void setTracer(Tracer tracer) {
 		this.tracer = tracer;
-	}
-
-	public Scene getScene() {
-		return scene;
-	}
-
-	public void setScene(Scene scene) {
-		this.scene = scene;
 	}
 
 }
