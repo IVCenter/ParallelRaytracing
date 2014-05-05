@@ -90,7 +90,7 @@ public class RenderResponseHandler extends MessageHandler {
 		try {
 			
 			for(Ray ray : camera)
-				buffer[(int)(ray.getPixelY() * camera.getPixelWidth() + ray.getPixelX())] = pixels[index];
+				buffer[(int)(ray.getPixelY() * camera.getPixelWidth() + ray.getPixelX())] = pixels[index++];
 			
 		} catch(Exception e)
 		{

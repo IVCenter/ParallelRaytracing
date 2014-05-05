@@ -117,7 +117,13 @@ public class TestScene2 extends Scene
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed = Math.PI/4.0;
+		elapsed += data.getDt();
+		
+		Vector4 position = activeCamera.getPosition();
+		position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8) * 5, 0);
+		activeCamera.setPosition(position);
+		
+		activeCamera.setViewingDirection(position.multiply3(-1.0));
 		
 		//Update the children
 		super.update(data);

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import network.send.MessageSender;
 import process.logging.Logger;
 import raytrace.camera.Camera;
+import raytrace.data.BakeData;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
@@ -52,6 +53,13 @@ public class NetworkRenderer implements Renderer {
 		 * Loop nodes
 		 * 		send update message
 		 */
+		
+		//TODO: Do we need to do this here, or can this be done elsewhere? (on nodes only?)
+		if(data.getScene() != null) {
+			data.getScene().update(data);
+			data.getScene().bake(new BakeData());
+		}
+		
 		
 		//For all nodes, send an update request
 		for(Node node : nodeManager)
