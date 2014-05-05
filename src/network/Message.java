@@ -79,6 +79,7 @@ public class Message implements Serializable {
 		public static final String RenderResponse = "RenderResponse";
 		public static final String IntermediateRenderResponse = "IntermediateRenderResponse";
 		public static final String UpdateRequest = "UpdateRequest";
+		public static final String UpdateResponse = "UpdateResponse";
 		public static final String Registration = "Registration";
 		public static final String Configure = "Configuration";
 		public static final String Shutdown = "Shutdown";
