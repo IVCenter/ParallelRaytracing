@@ -6,7 +6,6 @@ import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
 import raytrace.framework.Tracer;
-import raytrace.scene.Scene;
 
 public class ConfigurableRayTracer implements Renderer {
 
@@ -49,7 +48,7 @@ public class ConfigurableRayTracer implements Renderer {
 		Logger.progress(-1, "Updating...");
 		if(data.getScene() != null) {
 			data.getScene().update(data);
-			data.getScene().bake(new BakeData());//TODO: Do we need a bake method on the interface for Renderers?
+			data.getScene().bake(new BakeData());
 		}
 	}
 
