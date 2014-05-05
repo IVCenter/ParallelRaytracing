@@ -49,24 +49,34 @@ public class ConfigurationHandler extends MessageHandler {
 		 */
 		Logger.progress(-27, "ConfigurationHander: Configuring this node...");
 		
+		//
+		boolean didChangeScreenSize = false;
+		
+		
+		
 		String id = message.getData().get(Constants.Message.NODE_ID);
-		if(id != null) {
+		if(id != null)
+		{
 			Logger.progress(-27, "ConfigurationHander: Setting ID to [" + id + "].");
 			Configuration.setId(id);
 		}
 
 		
 		Integer screenWidth = message.getData().get(Constants.Message.SCREEN_WIDTH);
-		if(screenWidth != null) {
+		if(screenWidth != null && Configuration.getScreenWidth() != screenWidth) 
+		{
 			Logger.progress(-27, "ConfigurationHander: Setting screen width to [" + screenWidth + "].");
 			Configuration.setScreenWidth(screenWidth);
+			didChangeScreenSize = true;
 		}
 		
 		
 		Integer screenHeight = message.getData().get(Constants.Message.SCREEN_HEIGHT);
-		if(screenHeight != null) {
+		if(screenHeight != null && Configuration.getScreenHeight() != screenHeight)
+		{
 			Logger.progress(-27, "ConfigurationHander: Setting screen height to [" + screenHeight + "].");
 			Configuration.setScreenHeight(screenHeight);
+			didChangeScreenSize = true;
 		}
 		
 
@@ -89,11 +99,15 @@ public class ConfigurationHandler extends MessageHandler {
 			Configuration.setDrawToScreen(isDrawingToScreen);
 
 			ApplicationDelegate.inst.configureAsDrawingToScreen(isDrawingToScreen);
+		}else if(didChangeScreenSize)
+		{
+			Logger.progress(-27, "ConfigurationHander: Updating pixel buffer size.");
+			ApplicationDelegate.inst.configureAsDrawingToScreen(Configuration.isDrawingToScreen());
 		}
 		
 		
 		Boolean isClock = message.getData().get(Constants.Message.STATE_IS_CLOCK);
-		if(isClock != null)
+		if(isClock != null && Configuration.isClock() != isClock)
 		{
 			Logger.progress(-27, "ConfigurationHander: Setting clock state to [" + isClock + "].");
 			
@@ -104,11 +118,11 @@ public class ConfigurationHandler extends MessageHandler {
 		
 		
 		Boolean isController = message.getData().get(Constants.Message.STATE_IS_CONTROLLER);
-		if(isClock != null)
+		if(isController != null && Configuration.isController() != isController)
 		{
 			Logger.progress(-27, "ConfigurationHander: Setting controller state to [" + isController + "].");
 			
-			Configuration.setController(isController);;
+			Configuration.setController(isController);
 			
 			ApplicationDelegate.inst.configureAsController(isController);
 		}
@@ -116,7 +130,8 @@ public class ConfigurationHandler extends MessageHandler {
 		
 		
 		String sceneKey = message.getData().get(Constants.Message.SCENE_KEY);
-		if(sceneKey != null && !Configuration.getMasterScene().getSceneKey().equals(sceneKey))
+		if(sceneKey != null && 
+				(Configuration.getMasterScene() == null || !Configuration.getMasterScene().getSceneKey().equals(sceneKey)))
 		{
 			Logger.progress(-27, "ConfigurationHander: Setting scene to [" + sceneKey + "].");
 			Configuration.setMasterScene(SceneLoader.load(sceneKey));
