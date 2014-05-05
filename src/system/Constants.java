@@ -12,6 +12,7 @@ public class Constants {
 	
 	//Working Directory
 	public static final String workingDirectory = "/";
+	public static final String configurationFileExtension = ".nsconfig";
 	
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,8 +76,20 @@ public class Constants {
 		public static final String STATE_IS_LEAF = KEYS.addKey("STATE_IS_LEAF");
 		public static final String STATE_IS_DRAWINGTOSCREEN = KEYS.addKey("STATE_IS_DRAWINGTOSCREEN");
 		public static final String STATE_IS_CLOCK = KEYS.addKey("STATE_IS_CLOCK");
+		public static final String STATE_IS_CONTROLLER = KEYS.addKey("STATE_IS_CONTROLLER");
 		
 		public static final String SCENE_KEY = KEYS.addKey("SCENE_KEY");
+
+		//This is unsafe, add specific items only
+		//public static final String RENDER_DATA = KEYS.addKey("RENDER_DATA");
+		//public static final String UPDATE_DATA = KEYS.addKey("UPDATE_DATA");
+
+		public static final String NODE_CAMERA = KEYS.addKey("NODE_CAMERA");
+		public static final String NODE_PIXELS = KEYS.addKey("NODE_PIXELS");
+		public static final String DELTA_TIME = KEYS.addKey("DELTA_TIME");
+		//public static final String SCENE_KEY = KEYS.addKey("SCENE_KEY");
+		
+		
 	}
 
 	
