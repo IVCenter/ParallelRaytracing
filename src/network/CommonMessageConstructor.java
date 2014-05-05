@@ -1,17 +1,23 @@
 package network;
 
+import raytrace.camera.Camera;
+import raytrace.data.UpdateData;
 import system.Configuration;
 import system.Constants;
 
 public class CommonMessageConstructor {
 	
 	/*
-	 * A utility class for contructing mesages thare are commonly used.
+	 * A utility class for constructing messages that are commonly used.
 	 */
 
 	/* *********************************************************************************************
 	 * Static Helper Methods
 	 * *********************************************************************************************/
+	/**
+	 * 
+	 * @return
+	 */
 	public static Message createEmptyMessage()
 	{
 		Message message = new Message();
@@ -19,6 +25,10 @@ public class CommonMessageConstructor {
 		return message;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public static Message createRegistrationMessage()
 	{
 		Message message = new Message();
@@ -29,8 +39,20 @@ public class CommonMessageConstructor {
 		return message;
 	}
 
+	/**
+	 * 
+	 * @param id
+	 * @param screenWidth
+	 * @param screenHeight
+	 * @param isLeaf
+	 * @param isDrawingToScreen
+	 * @param isClock
+	 * @param isController
+	 * @param sceneKey
+	 * @return
+	 */
 	public static Message createConfigurationMessage(String id, Integer screenWidth, Integer screenHeight,
-			Boolean isLeaf, Boolean isDrawingToScreen, Boolean isClock, String sceneKey)
+			Boolean isLeaf, Boolean isDrawingToScreen, Boolean isClock, Boolean isController, String sceneKey)
 	{
 		Message message = new Message();
 		message.setType(Message.Type.Configure);
@@ -41,7 +63,66 @@ public class CommonMessageConstructor {
 		message.getData().set(Constants.Message.STATE_IS_LEAF, isLeaf);
 		message.getData().set(Constants.Message.STATE_IS_DRAWINGTOSCREEN, isDrawingToScreen);
 		message.getData().set(Constants.Message.STATE_IS_CLOCK, isClock);
+		message.getData().set(Constants.Message.STATE_IS_CONTROLLER, isController);
 		message.getData().set(Constants.Message.SCENE_KEY, sceneKey);
+		
+		return message;
+	}
+
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static Message createUpdateRequestMessage(UpdateData data)
+	{
+		Message message = new Message();
+		message.setType(Message.Type.UpdateRequest);
+		
+		message.getData().set(Constants.Message.DELTA_TIME, data.getDt());
+		
+		return message;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Message createUpdateResponseMessage()
+	{
+		Message message = new Message();
+		message.setType(Message.Type.UpdateResponse);
+		
+		//message.getData().set(Constants.Message.NODE_ID, Configuration.getId());
+		
+		return message;
+	}
+
+	/**
+	 * 
+	 * @param camera
+	 * @return
+	 */
+	public static Message createRenderRequestMessage(Camera camera)
+	{
+		Message message = new Message();
+		message.setType(Message.Type.RenderRequest);
+		
+		message.getData().set(Constants.Message.NODE_CAMERA, camera);
+		
+		return message;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Message createRenderResponseMessage()
+	{
+		Message message = new Message();
+		message.setType(Message.Type.RenderResponse);
+		
+		//message.getData().set(Constants.Message.NODE_ID, Configuration.getId());
 		
 		return message;
 	}
