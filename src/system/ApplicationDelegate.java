@@ -13,6 +13,7 @@ import network.handlers.RegistrationHandler;
 import network.handlers.RenderRequestHandler;
 import network.handlers.RenderResponseHandler;
 import network.handlers.UpdateRequestHandler;
+import network.handlers.UpdateResponseHandler;
 import network.listen.MessageListener;
 import network.listen.NetworkMessageListener;
 import network.send.MessageSender;
@@ -107,6 +108,7 @@ public class ApplicationDelegate extends Job{
 			messageListener.addMessageHandler(new RegistrationHandler());
 			messageListener.addMessageHandler(new ConfigurationHandler());
 			messageListener.addMessageHandler(new UpdateRequestHandler());
+			messageListener.addMessageHandler(new UpdateResponseHandler());
 			messageListener.addMessageHandler(new RenderRequestHandler());
 			messageListener.addMessageHandler(new IntermediateRenderResponseHandler());
 			messageListener.addMessageHandler(new RenderResponseHandler());
@@ -127,8 +129,8 @@ public class ApplicationDelegate extends Job{
 		
 		
 		//Test message
-		Message regMsg = CommonMessageConstructor.createRegistrationMessage();
-		messageSender.send(regMsg, "localhost");
+		//Message regMsg = CommonMessageConstructor.createRegistrationMessage();
+		//messageSender.send(regMsg, "localhost");
 		
 
 		//Drawing to Screen?
@@ -138,10 +140,10 @@ public class ApplicationDelegate extends Job{
 		configureAsLeaf(Configuration.isLeaf());
 		
 		//Is a controller node?
-		configureAsController(Configuration.isController);
+		configureAsController(Configuration.isController());
 		
 		//Is a clock?
-		configureAsController(Configuration.isClock);
+		configureAsController(Configuration.isClock());
 	}
 	
 
