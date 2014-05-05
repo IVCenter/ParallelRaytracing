@@ -197,7 +197,7 @@ public class Logger {
 		@Override
 		public void run()
 		{	
-			System.out.println("Now running worker thread [" + this + "]");
+			Logger.progress(-0, "Now running worker thread [" + this + "]");
 			
 			//Keep watching the log queue of the logger until terminated
 			while(running || logQueue.size() > 0)
