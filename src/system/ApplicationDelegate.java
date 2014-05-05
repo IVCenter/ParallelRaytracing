@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import network.CommonMessageConstructor;
 import network.Message;
+import network.NetworkRenderer;
 import network.Node;
 import network.NodeManager;
 import network.handlers.ConfigurationHandler;
@@ -125,15 +126,37 @@ public class ApplicationDelegate extends Job{
 		
 		
 		
-		
+		//Test message
 		Message regMsg = CommonMessageConstructor.createRegistrationMessage();
 		messageSender.send(regMsg, "localhost");
 		
-		
-		
 
+		//Drawing to Screen?
+		configureAsDrawingToScreen(Configuration.isDrawingToScreen());
+		
+		//Is a leaf node?
+		configureAsLeaf(Configuration.isLeaf());
+		
+		//Is a controller node?
+		configureAsController(Configuration.isController);
+		
+		//Is a clock?
+		configureAsController(Configuration.isClock);
+	}
+	
+
+	/* *********************************************************************************************
+	 * Configuration
+	 * *********************************************************************************************/
+	public void configureAs(boolean shouldConfigure)
+	{
+		
+	}
+	
+	public void configureAsDrawingToScreen(boolean shouldConfigure)
+	{
 		//If drawing to screen
-		if(Configuration.isDrawingToScreen())
+		if(shouldConfigure)
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			screenDrawer.setVerticalSynchronize(false);
@@ -150,24 +173,50 @@ public class ApplicationDelegate extends Job{
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 		}
-		
-		//TODO: Set renderer
+	}
+	
+	public void configureAsLeaf(boolean shouldConfigure)
+	{
 		//	If leaf its a ray tracer
 		//	If has children its a network distribution renderer
-		if(Configuration.isLeaf())
+		if(shouldConfigure)
 		{
 			renderer = new ConfigurableRayTracer(new ParallelRayTracer());
 		}else{
-			//Create a network renderer here!
+			renderer = new NetworkRenderer(nodeManager, messageSender);
 		}
-		
-		//If not a controller, attempt to register with controller
-		if(!Configuration.isController)
+	}
+	
+	public void configureAsController(boolean shouldConfigure)
+	{
+		if(shouldConfigure)
 		{
+			//
+			
+		}else{
+			//If not a controller, attempt to register with controller
 			//TOOD: register loop? how to kill once registered?
+			
+		}
+	}
+	
+	public void configureAsClock(boolean shouldConfigure)
+	{
+		if(shouldConfigure)
+		{
+			//TODO: What do?
+			
+		}else{
+			
+			//TODO: What do?
+			
 		}
 	}
 
+	
+	/* *********************************************************************************************
+	 * Job Overrides
+	 * *********************************************************************************************/
 	@Override
 	protected void begin()
 	{
