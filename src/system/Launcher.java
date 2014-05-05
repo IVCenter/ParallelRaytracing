@@ -38,11 +38,11 @@ public class Launcher {
 			Configuration.setScreenHeight(600);
 			Configuration.setDrawToScreen(true);
 			Configuration.setClock(true);
-			Configuration.setLeaf(true);
+			Configuration.setLeaf(false);//true
 			Configuration.setController(true);
 			//TODO: Need a reliable and relative folder to write to
 			Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.CSE168_Project2));
+			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST2));
 		}
 		
 		
@@ -73,10 +73,10 @@ public class Launcher {
 	/*
 	 * Local TOOD:
 	 * 
-	 * 		-Network Renderer
-	 * 		-Render/Update Request and Responses
-	 * 		-Intermediates
-	 * 		-
+	 * 		-Test distribution stability
+	 * 		-Configuration loader
+	 * 		-Intermediate results support
+	 * 		-BUG: call configure drawing is screen size changes (to update pixel buffer size)
 	 */
 
 }
