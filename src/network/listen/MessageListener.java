@@ -7,6 +7,7 @@ import network.handlers.DefaultHandler;
 import network.handlers.MessageHandler;
 
 import process.logging.Logger;
+import process.utils.StringUtils;
 
 public abstract class MessageListener {
 	
@@ -56,6 +57,7 @@ public abstract class MessageListener {
 		
 		} catch(Exception e) {
 			Logger.error(-21, "MessageListener: A handler accepted when parsing the message:\n" + message.toString());
+			Logger.error(-21, StringUtils.stackTraceToString(e));
 		}
 	}
 	
