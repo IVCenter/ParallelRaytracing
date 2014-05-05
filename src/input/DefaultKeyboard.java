@@ -13,7 +13,6 @@ import process.utils.TimeStamp;
 import raster.PixelBuffer;
 import system.ApplicationDelegate;
 import system.Configuration;
-import system.Constants;
 
 public class DefaultKeyboard extends Keyboard {
 	
@@ -104,6 +103,7 @@ public class DefaultKeyboard extends Keyboard {
 						true,								//Leaf is true
 						false, 								//Drawing to screen is false
 						false, 								//Clock is false
+						false, 								//Controller is false
 						Configuration.getMasterScene().getSceneKey());
 				sender.send(message, node.getIp());
 			}
