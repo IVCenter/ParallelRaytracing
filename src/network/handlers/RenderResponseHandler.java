@@ -1,6 +1,15 @@
 package network.handlers;
 
+import process.logging.Logger;
+import process.utils.StringUtils;
+
+import raytrace.camera.Camera;
+import raytrace.framework.Renderer;
+import system.ApplicationDelegate;
+import system.Constants;
+import math.Ray;
 import network.Message;
+import network.NetworkRenderer;
 
 public class RenderResponseHandler extends MessageHandler {
 	
@@ -49,7 +58,45 @@ public class RenderResponseHandler extends MessageHandler {
 	@Override
 	public void handle(Message message)
 	{
-		// TODO Auto-generated method stub
+		//Get camera
+		Camera camera = message.getData().get(Constants.Message.NODE_CAMERA);
+		
+		//Get pixels
+		int[] pixels = message.getData().get(Constants.Message.NODE_PIXELS);
+		
+		//Unpack the pixels into the buffer
+		unpackPixels(ApplicationDelegate.inst.getPixelBuffer().getPixels(), pixels, camera);
+		
+		
+		
+		//If the renderer is a network renderer, let it know we completed a request
+		Renderer renderer = ApplicationDelegate.inst.getRenderer();
+		if(renderer instanceof NetworkRenderer)
+		{
+			((NetworkRenderer)renderer).completedARequest();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param buffer
+	 * @param camera
+	 * @return
+	 */
+	private void unpackPixels(int[] buffer, int[] pixels, Camera camera)
+	{
+		int index = 0;
+		
+		try {
+			
+			for(Ray ray : camera)
+				buffer[(int)(ray.getPixelY() * camera.getPixelWidth() + ray.getPixelX())] = pixels[index];
+			
+		} catch(Exception e)
+		{
+			Logger.error(-29, "RenderResponseHandler: Encountered an error while unpacking pixels.");
+			Logger.error(-29, StringUtils.stackTraceToString(e));
+		}
 	}
 
 }
