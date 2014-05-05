@@ -2,6 +2,7 @@ package network.handlers;
 
 import process.logging.Logger;
 import raytrace.scene.SceneLoader;
+import system.ApplicationDelegate;
 import system.Configuration;
 import system.Constants;
 import network.Message;
@@ -42,6 +43,7 @@ public class ConfigurationHandler extends MessageHandler {
 		 * 			drawing to screen
 		 * 			isLeaf
 		 * 			isClock
+		 * 			isController
 		 * 		SceneKey (load scene if key changes)
 		 * 		
 		 */
@@ -60,6 +62,7 @@ public class ConfigurationHandler extends MessageHandler {
 			Configuration.setScreenWidth(screenWidth);
 		}
 		
+		
 		Integer screenHeight = message.getData().get(Constants.Message.SCREEN_HEIGHT);
 		if(screenHeight != null) {
 			Logger.progress(-27, "ConfigurationHander: Setting screen height to [" + screenHeight + "].");
@@ -74,9 +77,9 @@ public class ConfigurationHandler extends MessageHandler {
 			
 			Configuration.setLeaf(isLeaf);
 			
-			//TODO: if true, set renderer to configurable+parallel
-			//TOOD: if false, set to network
+			ApplicationDelegate.inst.configureAsLeaf(isLeaf);
 		}
+		
 		
 		Boolean isDrawingToScreen = message.getData().get(Constants.Message.STATE_IS_DRAWINGTOSCREEN);
 		if(isDrawingToScreen != null && Configuration.isDrawingToScreen() != isDrawingToScreen)
@@ -85,17 +88,31 @@ public class ConfigurationHandler extends MessageHandler {
 			
 			Configuration.setDrawToScreen(isDrawingToScreen);
 
-			//TODO: If true, make screen drawer, set pixle buffer
-			//TODO: If false, dispose screen drawer, make new pixel buffer
+			ApplicationDelegate.inst.configureAsDrawingToScreen(isDrawingToScreen);
 		}
 		
-		/*
+		
 		Boolean isClock = message.getData().get(Constants.Message.STATE_IS_CLOCK);
-		if(isClock != null) {
+		if(isClock != null)
+		{
 			Logger.progress(-27, "ConfigurationHander: Setting clock state to [" + isClock + "].");
+			
 			Configuration.setClock(isClock);
+			
+			ApplicationDelegate.inst.configureAsClock(isClock);
 		}
-		*/
+		
+		
+		Boolean isController = message.getData().get(Constants.Message.STATE_IS_CONTROLLER);
+		if(isClock != null)
+		{
+			Logger.progress(-27, "ConfigurationHander: Setting controller state to [" + isController + "].");
+			
+			Configuration.setController(isController);;
+			
+			ApplicationDelegate.inst.configureAsController(isController);
+		}
+		
 		
 		
 		String sceneKey = message.getData().get(Constants.Message.SCENE_KEY);
