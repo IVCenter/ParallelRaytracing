@@ -1,13 +1,21 @@
 package math;
 
+import java.io.Serializable;
+
 import process.utils.StringUtils;
 
-public class Vector4 {
-	
+public class Vector4 implements Serializable{
 	
 	/*
 	 * An extension of the Vector4d class to allow for additional features
 	 */
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/

@@ -11,6 +11,13 @@ public class RayBuffer extends Camera {
 	/*
 	 * A simple set of rays (used by parallel ray tracer to distribute a camera to workers)
 	 */
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/

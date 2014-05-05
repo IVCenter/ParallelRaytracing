@@ -56,7 +56,7 @@ public class DefaultKeyboard extends Keyboard {
 			//Logger is threaded so there is a good chance it will never get around to processing this message
 			//Logger.progress(-7, "Shuting down...");
 
-			System.out.println("Shuting down...");
+			System.out.println("Shutting down...");
 			System.exit(1);
 		}
 		

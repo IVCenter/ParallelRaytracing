@@ -9,6 +9,12 @@ public class CompositeRay extends Ray {
 	 * A class that represents a set of Rays in 3D space
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/

@@ -1,17 +1,24 @@
 package raytrace.camera;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import raytrace.framework.Positionable;
 import math.Ray;
 import math.Vector4;
 
-public abstract class Camera implements Iterable<Ray>, Positionable{
+public abstract class Camera implements Iterable<Ray>, Positionable, Serializable {
 	
 	/*
 	 * A base class for cameras
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/

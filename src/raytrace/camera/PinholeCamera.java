@@ -1,5 +1,6 @@
 package raytrace.camera;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,6 +14,12 @@ import math.Vector4;
 public class PinholeCamera extends Camera {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
@@ -285,9 +292,15 @@ public class PinholeCamera extends Camera {
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
-	private class RayIterator implements Iterator<Ray>
+	private class RayIterator implements Iterator<Ray>, Serializable
 	{
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		
 		/* *********************************************************************************************
 		 * Instance Vars
 		 * *********************************************************************************************/
@@ -355,12 +368,18 @@ public class PinholeCamera extends Camera {
 		
 	}
 	
-	private class PinholeRay extends Ray
+	private class PinholeRay extends Ray implements Serializable
 	{
 		/*
 		 * A class that represents a set of implicit Rays in 3D space
 		 */
 	
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		
 		/* *********************************************************************************************
 		 * Instance Vars
 		 * *********************************************************************************************/
@@ -400,8 +419,14 @@ public class PinholeCamera extends Camera {
 		/* *********************************************************************************************
 		 * Private Classes
 		 * *********************************************************************************************/
-		private class RayIterator implements Iterator<Ray>
+		private class RayIterator implements Iterator<Ray>, Serializable
 		{	
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			
+			
 			/* *********************************************************************************************
 			 * Instance Vars
 			 * *********************************************************************************************/

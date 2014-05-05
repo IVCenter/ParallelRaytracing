@@ -250,14 +250,32 @@ public class ObjModelData {
 	}
 	
 	public static class Vertex extends Vector4{
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public Vertex(double x, double y, double z) { super(x, y, z, 0); }
 	}
 	
 	public static class Normal extends Vector4 {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public Normal(double x, double y, double z) { super(x, y, z, 0); super.normalize3(); }
 	}
 	
 	public static class TexCoord extends Vector4 {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public TexCoord(double x, double y, double z) { super(x, y, z, 0); }
 	}
 	

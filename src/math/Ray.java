@@ -1,13 +1,20 @@
 package math;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class Ray implements Iterable<Ray>{
+public class Ray implements Iterable<Ray>, Serializable{
 	
 	/*
 	 * A class that represents a Ray in 3D space
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
@@ -103,8 +110,13 @@ public class Ray implements Iterable<Ray>{
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
-	private class RayIterator implements Iterator<Ray>
+	private class RayIterator implements Iterator<Ray>, Serializable
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		boolean notDone = true;
 		Ray ray;
 		
@@ -141,7 +153,5 @@ public class Ray implements Iterable<Ray>{
 		}
 		
 	}
-	
-	
 	
 }
