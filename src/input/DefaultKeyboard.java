@@ -101,7 +101,7 @@ public class DefaultKeyboard extends Keyboard {
 						Configuration.getScreenWidth(),
 						Configuration.getScreenHeight(), 
 						true,								//Leaf is true
-						true, 								//Drawing to screen is false
+						false, 								//Drawing to screen is false
 						false, 								//Clock is false
 						false, 								//Controller is false
 						Configuration.getMasterScene().getSceneKey());

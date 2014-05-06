@@ -34,8 +34,8 @@ public class Launcher {
 			Configuration.setId("Debug Node");
 			//Configuration.setScreenWidth(1368);
 			//Configuration.setScreenHeight(752);
-			Configuration.setScreenWidth(800);
-			Configuration.setScreenHeight(600);
+			//Configuration.setScreenWidth(800);
+			//Configuration.setScreenHeight(600);
 			Configuration.setDrawToScreen(true);
 			Configuration.setClock(true);
 			Configuration.setLeaf(false);//true
@@ -76,7 +76,7 @@ public class Launcher {
 	 * 		-Test distribution stability
 	 * 		-Configuration loader
 	 * 		-Intermediate results support
-	 * 		-BUG: call configure drawing is screen size changes (to update pixel buffer size)
+	 * 		-Registration Loop (controller compares on both ID and IP?)
 	 */
 
 }
