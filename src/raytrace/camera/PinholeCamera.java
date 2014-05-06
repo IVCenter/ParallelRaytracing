@@ -257,9 +257,11 @@ public class PinholeCamera extends Camera {
 		for(int i = 0; i < count; i++)
 		{
 			newCam = this.duplicate();
-			newCam.setStartPixelX((i * pixelStepSize) % newCam.pixelWidth);
-			newCam.setStartPixelY((i * pixelStepSize) / (int)newCam.pixelWidth);
+			newCam.setStartPixelX((startPixelX + i * pixelStepSize) % newCam.pixelWidth);
+			newCam.setStartPixelY(startPixelY + (int)(startPixelX + i * pixelStepSize) / (int)newCam.pixelWidth);
 			newCam.setPixelStepSize(count * pixelStepSize);
+			newCam.iter.reset();
+			
 			cams.add(newCam);
 		}
 		
