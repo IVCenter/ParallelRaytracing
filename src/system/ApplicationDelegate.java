@@ -130,7 +130,7 @@ public class ApplicationDelegate extends Job{
 		
 		//Test message
 		//Message regMsg = CommonMessageConstructor.createRegistrationMessage();
-		//messageSender.send(regMsg, "localhost");
+		//messageSender.send(regMsg, "137.110.52.67");
 		
 
 		//Drawing to Screen?

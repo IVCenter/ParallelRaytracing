@@ -26,6 +26,7 @@ public class Launcher {
 		Configuration.setClock(false);
 		Configuration.setLeaf(false);
 		Configuration.setController(false);
+		//Configuration.setWorkingDirectory("/home/linux/ieng6/oce/2d/rwest/NightSky/");
 		
 		
 		//Setup debug configuration
@@ -34,15 +35,15 @@ public class Launcher {
 			Configuration.setId("Debug Node");
 			//Configuration.setScreenWidth(1368);
 			//Configuration.setScreenHeight(752);
-			//Configuration.setScreenWidth(800);
-			//Configuration.setScreenHeight(600);
+			Configuration.setScreenWidth(800);
+			Configuration.setScreenHeight(600);
 			Configuration.setDrawToScreen(true);
 			Configuration.setClock(true);
-			Configuration.setLeaf(false);//true
+			Configuration.setLeaf(true);//true for local, false for networked
 			Configuration.setController(true);
 			//TODO: Need a reliable and relative folder to write to
 			Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST2));
+			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.CSE168_Project3));
 		}
 		
 		
@@ -77,6 +78,8 @@ public class Launcher {
 	 * 		-Configuration loader
 	 * 		-Intermediate results support
 	 * 		-Registration Loop (controller compares on both ID and IP?)
+	 * 		-Wrap network sender send calls in try catch
+	 * 		-Compress pixels before sending?
 	 */
 
 }
