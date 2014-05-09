@@ -6,12 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import process.logging.Logger;
+import raytrace.camera.aperture.Aperture;
+import raytrace.camera.aperture.CircleAperture;
 
 //import math.CompositeRay;
 import math.Ray;
 import math.Vector4;
 
-public class PinholeCamera extends Camera {
+public class ProgrammableCamera extends Camera {
 
 
 	/**
@@ -36,6 +38,9 @@ public class PinholeCamera extends Camera {
 	protected boolean stratifiedSampling = false;
 	//protected Function2D<Double, Double> superSampDistroFuncX = new PassThrough2D<Double>();
 	//protected Function2D superSampDistroFuncY;
+	
+	protected double focalPlaneDistance = 1.0;
+	protected Aperture aperture = new CircleAperture();
 
 	protected double startPixelX = 0;
 	protected double startPixelY = 0;
@@ -62,18 +67,18 @@ public class PinholeCamera extends Camera {
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
-	public PinholeCamera()
+	public ProgrammableCamera()
 	{
 		super();
 	}
 	
-	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
+	public ProgrammableCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		update();
 	}
 	
-	public PinholeCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
+	public ProgrammableCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		this.superSamplingLevel = superSamplingLevel;
@@ -122,6 +127,23 @@ public class PinholeCamera extends Camera {
 
 	public void setPixelStepSize(double pixelStepSize) {
 		this.pixelStepSize = pixelStepSize;
+	}
+
+	public double getFocalPlaneDistance() {
+		return focalPlaneDistance;
+	}
+
+	public void setFocalPlaneDistance(double focalPlaneDistance) {
+		this.focalPlaneDistance = focalPlaneDistance;
+	}
+
+	public Aperture getAperture() {
+		return aperture;
+	}
+
+	public void setAperture(Aperture aperture) {
+		if(aperture != null)
+			this.aperture = aperture;
 	}
 
 	/* *********************************************************************************************
@@ -182,53 +204,6 @@ public class PinholeCamera extends Camera {
 	@Override
 	protected Ray getRay(double x, double y)
 	{
-		/*
-		//Create the origin vector
-		Vector4 orig = new Vector4(position);
-		
-		//Create a composite ray with enough space for the sampling rays
-		CompositeRay cray = null;
-		if(superSamplingLevel != 1) {
-			cray = new CompositeRay(superSamplingLevel * superSamplingLevel);
-			cray.setOrigin(orig);
-			cray.setPixelX((int)x);
-			cray.setPixelY((int)y);
-		}
-		
-		double samplingDelta = 1.0/(double)superSamplingLevel;
-		
-		double pw;
-		double ph;
-		double woffset, hoffset;
-		Vector4 dir;
-		
-		for(int u = 0; u < superSamplingLevel; ++u)
-		{
-			for(int v = 0; v < superSamplingLevel; ++v)
-			{
-				//Calculate sampling offsets
-				woffset = u * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
-				hoffset = v * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
-				
-				
-				//Pre-calculate the axis weights
-				pw = (((x+woffset)/pixelWidth) - 0.5) * imagePlaneWidth;
-				ph = (((y+hoffset)/pixelHeight) - 0.5) * imagePlaneHeight;
-				
-				//Create the direction vector
-				//TODO: Might be slow
-				dir = viewingDirection.add3(cameraX.multiply3(pw)).add3(cameraY.multiply3(ph)).normalize3();
-				
-				if(superSamplingLevel == 1)
-					return new Ray(orig, dir, (int)x, (int)y);
-				else
-					cray.addRay(new Ray(orig, dir, (int)x, (int)y));
-			}
-		}
-		
-		
-		return cray;
-		*/
 		return null;
 	}
 	
@@ -251,7 +226,7 @@ public class PinholeCamera extends Camera {
 		
 		//Create a collection for the decompositions
 		ArrayList<Camera> cams = new ArrayList<Camera>(count);
-		PinholeCamera newCam;
+		ProgrammableCamera newCam;
 		
 		//Decompose the current camera
 		for(int i = 0; i < count; i++)
@@ -268,9 +243,9 @@ public class PinholeCamera extends Camera {
 		return cams;
 	}
 	
-	private PinholeCamera duplicate()
+	private ProgrammableCamera duplicate()
 	{
-		PinholeCamera cam = new PinholeCamera();
+		ProgrammableCamera cam = new ProgrammableCamera();
 		cam.setPosition(position);
 		cam.setViewingDirection(viewingDirection);
 		cam.setUp(up);
@@ -280,6 +255,9 @@ public class PinholeCamera extends Camera {
 		
 		cam.setSuperSamplingLevel(superSamplingLevel);
 		cam.setStratifiedSampling(stratifiedSampling);
+		
+		cam.setAperture(aperture);
+		cam.setFocalPlaneDistance(focalPlaneDistance);
 		
 		cam.setStartPixelX(startPixelX);
 		cam.setStartPixelY(startPixelY);
@@ -436,6 +414,12 @@ public class PinholeCamera extends Camera {
 			private double subPixelV;
 			private Ray ray;
 			
+			private Vector4 apertureSample;
+			private Vector4 apertureOrigin;
+			private double[] sampleM;
+			private double[] origM;
+			private double[] dirM;
+			
 	
 			/* *********************************************************************************************
 			 * Constructor
@@ -445,7 +429,10 @@ public class PinholeCamera extends Camera {
 				subPixelU = 0;
 				subPixelV = 0;
 				this.ray = ray;
+				apertureSample = new Vector4();
+				apertureOrigin = new Vector4();
 			}
+			
 	
 			/* *********************************************************************************************
 			 * Iterator Methods
@@ -470,11 +457,39 @@ public class PinholeCamera extends Camera {
 				ph = (((pixelY+hoffset)/pixelHeight) - 0.5) * imagePlaneHeight;
 				
 				//Create the direction vector
-				dir.set(vdir[0] + camX[0] * pw + camY[0] * ph, 
-						vdir[1] + camX[1] * pw + camY[1] * ph, 
-						vdir[2] + camX[2] * pw + camY[2] * ph, 
+				dir.set(focalPlaneDistance * (vdir[0] + camX[0] * pw + camY[0] * ph), 
+						focalPlaneDistance * (vdir[1] + camX[1] * pw + camY[1] * ph), 
+						focalPlaneDistance * (vdir[2] + camX[2] * pw + camY[2] * ph), 
 						0);
+				dirM = dir.getM();
+				
+				apertureSample = aperture.sample(apertureSample);
+				sampleM = apertureSample.getM();
+				
+				apertureOrigin.set(camX[0] * sampleM[0] + camY[0] * sampleM[1],
+								   camX[1] * sampleM[0] + camY[1] * sampleM[1],
+								   camX[2] * sampleM[0] + camY[2] * sampleM[1],
+								   0);
+				
+				
+				//Finalize Direction
+				origM = apertureOrigin.getM();
+				dir.set(dirM[0] - origM[0],
+						dirM[1] - origM[1],
+						dirM[2] - origM[2],
+						0);
+				
+
+				//Finalize Origin
+				origM = position.getM();
+				apertureOrigin.set(origM[0] + camX[0] * sampleM[0] + camY[0] * sampleM[1],
+								   origM[1] + camX[1] * sampleM[0] + camY[1] * sampleM[1],
+							   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1],
+								   0);
+				
+				
 				subRay.setDirection(dir.normalize3());
+				subRay.setOrigin(apertureOrigin);
 				
 				//Increment the counters
 				++subPixelU;
