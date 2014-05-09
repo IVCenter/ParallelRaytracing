@@ -47,17 +47,17 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(3);
-		//activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
-		//activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
-		activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
-		activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(5);
+		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
+		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
+		//activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.01));
-		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.245);
+		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.00005));
+		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
@@ -75,8 +75,9 @@ public class CSE168_Project3_Scene extends Scene
 			model.getTransform().scale(0.1);
 			model.getTransform().translation(0.0, 0.055, 0.0);
 			model.bake(null);
-			model.setMaterial(new AshikhminPTMaterial(Color.grey(0.7), Color.black(), 0.0,
+			model.setMaterial(new AshikhminPTMaterial(Color.grey(0.6), Color.black(), 0.0,
 					1.0, 0, 0, 1));
+			//model.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			//model.setMaterial(new FresnelDiffusePTMaterial(Color.grey(0.7), 0.1, 1.5, 1));
 			this.addChild(model);
 		}
@@ -92,6 +93,7 @@ public class CSE168_Project3_Scene extends Scene
 			model2.bake(null);
 			model2.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100, 1));
+			model2.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model2);
 		}
 		
@@ -106,6 +108,7 @@ public class CSE168_Project3_Scene extends Scene
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000, 1));
+			model3.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model3);
 		}
 		
@@ -120,6 +123,7 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000, 1));
+			model4.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model4);
 		}
 		
