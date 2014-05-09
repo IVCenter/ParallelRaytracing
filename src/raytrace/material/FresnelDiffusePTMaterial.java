@@ -67,7 +67,7 @@ public class FresnelDiffusePTMaterial extends Material{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
+			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()).multiply3(tint));
 		}
 		
 		
@@ -81,14 +81,14 @@ public class FresnelDiffusePTMaterial extends Material{
 			for(int i = 0; i < sampleCount; ++i)
 			{	
 				sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
-				reflectiveCoeff = Math.pow(1.0 - (DdotN - reflectiveRadius) / (1.0 - reflectiveRadius), schlickExponent);
+				reflectiveCoeff = Math.pow((reflectiveRadius - DdotN) / (reflectiveRadius), schlickExponent);
 				
 				//if reflecting
-				if(DdotN > reflectiveRadius && Math.random() < reflectiveCoeff)
+				if(DdotN < reflectiveRadius && Math.random() < reflectiveCoeff)
 				{
 					rflectColor.add3M(reflect(data, point, normal, AIR_REFRACTIVE_INDEX));
 				}else{
-					rflectColor.add3M(recurse(data, point, sampleDir, 1.0));
+					rflectColor.add3M(recurse(data, point, sampleDir, 1.0).multiply3(tint));
 				}
 			}
 			
@@ -96,7 +96,7 @@ public class FresnelDiffusePTMaterial extends Material{
 			shade.add3M(rflectColor.multiply3(1.0/sampleCount));
 		}
 		
-		return shade.multiply3M(tint);
+		return shade;
 	}
 
 }
