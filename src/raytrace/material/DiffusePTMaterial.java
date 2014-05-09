@@ -34,16 +34,28 @@ public class DiffusePTMaterial extends Material{
 		Color shade = new Color(0x000000ff);
 		
 		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal();
-		IlluminationData ildata;
+		Vector4 normal = data.getIntersectionData().getNormal().normalize3();
 		
 		double DdotN = normal.dot3(data.getRay().getDirection());
-		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
+		//If the normal is facing in the wrong direction, flip it
 		if(DdotN > 0.0) {
 			normal = normal.multiply3(-1.0);
 		}
+
+		
+		//Basis
+		Vector4 uTangent;
+		Vector4 vTangent;
+		
+		if(normal.dot3(positiveYAxis) == 1.0)
+			uTangent = normal.cross3(cosineWeightedSample()).normalize3();
+		else
+			uTangent = normal.cross3(positiveYAxis).normalize3();
+		vTangent = uTangent.cross3(normal).normalize3();
 		
 		
+		//Direct Illumination
+		IlluminationData ildata;
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
@@ -53,22 +65,17 @@ public class DiffusePTMaterial extends Material{
 		}
 		
 		
+		//Sampling
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
 			//Sample random points
 			Color rflectColor = new Color();
-			Vector4 sampleDir = new Vector4(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5, 0);
+			Vector4 sampleDir;
 			for(int i = 0; i < sampleCount; ++i)
 			{
-				while(sampleDir.dot3(normal) <= 0) {
-					sampleDir.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5, 0);
-				}
-				//sampleDir.set(0.4 * (Math.random() - 0.5), 0.4 * (Math.random() - 0.5), 0.4 * (Math.random() - 0.5), 0);
-				//sampleDir = normal.add3(sampleDir).normalize3();
+				sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
 				
-				sampleDir.normalize3();
-				rflectColor.add3M(
-						diffuse(recurse(data, point, sampleDir, 1.0), normal, sampleDir.multiply3(-1.0)));//TODO: Should we use data.refractiveInde here?
+				rflectColor.add3M(recurse(data, point, sampleDir, 1.0));
 			}
 			
 			//Add the direct shading and samples shading together
