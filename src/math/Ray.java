@@ -25,6 +25,8 @@ public class Ray implements Iterable<Ray>, Serializable{
 	
 	protected RayIterator rayIterator;
 	
+	protected double randomValue;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -95,8 +97,15 @@ public class Ray implements Iterable<Ray>, Serializable{
 	public void setPixelY(int pixelY) {
 		this.pixelY = pixelY;
 	}
-
 	
+	public double getRandomValue() {
+		return randomValue;
+	}
+
+	public void setRandomValue(double randomValue) {
+		this.randomValue = randomValue;
+	}
+
 	/* *********************************************************************************************
 	 * Iteration Overrides
 	 * *********************************************************************************************/

@@ -53,6 +53,7 @@ public class RayTracer implements Tracer {
 				rayCount += 1.0;
 				
 				//Set the current ray
+				ray.setRandomValue(Math.random());
 				rdata.setRay(ray);
 				sdata.setRay(ray);
 				
