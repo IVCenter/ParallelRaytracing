@@ -61,7 +61,7 @@ public class DiffusePTMaterial extends Material{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
+			shade.add3M(diffuse(ildata.getColor().multiply3(1.0/Math.PI), normal, ildata.getDirection()));
 		}
 		
 		
