@@ -2,7 +2,8 @@ package tests;
 
 import math.Vector4;
 import process.logging.Logger;
-import raytrace.camera.PinholeCamera;
+import raytrace.camera.ProgrammableCamera;
+import raytrace.camera.aperture.CircleAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -12,6 +13,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
@@ -24,7 +26,7 @@ public class TestScene2 extends Scene
 	/*
 	 * A simple test scene for debugging
 	 */
-	double elapsed = 0.0;
+	double elapsed = Math.PI / 16.0;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -34,24 +36,26 @@ public class TestScene2 extends Scene
 	{
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
-		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(true);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(2);
+		activeCamera = new ProgrammableCamera();
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(32);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((PinholeCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.2));
+		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
+		((ProgrammableCamera)activeCamera).forceUpdate();
 		
 		
 		
 		//Diffuse Sphere
 		{
 			Sphere sphere = new Sphere();
-			sphere.setMaterial(new DiffuseMaterial(new Color(0.9, 0.3, 0.3)));
-			//sphere.setMaterial(new DiffusePTMaterial(new Color(0.9, 0.3, 0.3), 1));
+			//sphere.setMaterial(new DiffuseMaterial(new Color(0.9, 0.3, 0.3)));
+			sphere.setMaterial(new FresnelDiffusePTMaterial(new Color(0.5, 0.2, 0.2), 0.9, 1.5, 1));
 			sphere.setPosition(new Vector4(-3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
@@ -74,6 +78,17 @@ public class TestScene2 extends Scene
 			sphere.setPosition(new Vector4(3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
+		}
+		
+
+		//Reflective Sphere
+		{
+			Sphere sphere = new Sphere();
+			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
+			sphere.setMaterial(new ColorMaterial(new Color(1.0, 1.0, 1.0)));
+			sphere.setPosition(new Vector4(0, 4, -10, 0));
+			sphere.setRadius(1.0);
+			//this.addChild(sphere);
 		}
 		
 		
@@ -120,10 +135,10 @@ public class TestScene2 extends Scene
 		elapsed += data.getDt();
 		
 		Vector4 position = activeCamera.getPosition();
-		position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8) * 5, 0);
-		activeCamera.setPosition(position);
+		//position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8) * 5, 0);
+		//activeCamera.setPosition(position);
 		
-		activeCamera.setViewingDirection(position.multiply3(-1.0));
+		//activeCamera.setViewingDirection(position.multiply3(-1.0));
 		
 		//Update the children
 		super.update(data);

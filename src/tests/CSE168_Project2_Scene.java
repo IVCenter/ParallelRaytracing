@@ -1,7 +1,7 @@
 package tests;
 
 import math.Vector4;
-import raytrace.camera.PinholeCamera;
+import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -37,17 +37,17 @@ public class CSE168_Project2_Scene extends Scene
 		
 		//Camera
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
-		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(true);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
+		activeCamera = new ProgrammableCamera();
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(-0.1, 0.1, 0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.05, 0.02, -0.2, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((PinholeCamera)activeCamera).forceUpdate();
-		((PinholeCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((PinholeCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
+		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
 		//Ground

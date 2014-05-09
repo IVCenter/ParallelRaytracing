@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import math.Vector4;
 import process.logging.Logger;
-import raytrace.camera.PinholeCamera;
+import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -36,16 +36,16 @@ public class TestScene3 extends Scene
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
-		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(true);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
+		activeCamera = new ProgrammableCamera();
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((PinholeCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
 		

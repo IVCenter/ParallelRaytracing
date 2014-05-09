@@ -3,7 +3,7 @@ package tests;
 import process.logging.Logger;
 import math.Matrix4;
 import math.Vector4;
-import raytrace.camera.PinholeCamera;
+import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -34,16 +34,16 @@ public class CSE168_Project1_Scene extends Scene{
 		
 
 		// Create camera
-		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(false);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(1);
+		activeCamera = new ProgrammableCamera();
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(false);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(2.0, 2.0, 5.0, 0));
 		activeCamera.setViewingDirection(activeCamera.getPosition().multiply3(-1.0).normalize3());
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((PinholeCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((PinholeCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
+		((ProgrammableCamera)activeCamera).forceUpdate();
 		
 		// Create boxes
 		//Box 1

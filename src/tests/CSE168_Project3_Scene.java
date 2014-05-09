@@ -2,7 +2,8 @@ package tests;
 
 import process.logging.Logger;
 import math.Vector4;
-import raytrace.camera.PinholeCamera;
+import raytrace.camera.ProgrammableCamera;
+import raytrace.camera.aperture.CircleAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -44,17 +45,20 @@ public class CSE168_Project3_Scene extends Scene
 		Configuration.setScreenHeight(600);
 		
 		//Camera
-		activeCamera = new PinholeCamera();
-		((PinholeCamera)activeCamera).setStratifiedSampling(true);
-		((PinholeCamera)activeCamera).setSuperSamplingLevel(4);
-		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
-		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		activeCamera = new ProgrammableCamera();
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(3);
+		//activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
+		//activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
+		activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((PinholeCamera)activeCamera).forceUpdate();
-		((PinholeCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((PinholeCamera)activeCamera).forceUpdate();
+		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
+		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.01));
+		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.245);
+		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
 		//Ground
