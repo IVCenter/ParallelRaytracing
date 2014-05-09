@@ -75,6 +75,7 @@ public class RenderRequestHandler extends MessageHandler {
 		Configuration.getMasterScene().setActiveCamera(sceneCamera);
 		
 		
+		//TODO: Compress pixels?
 		//Send a response message with the camera and pixels
 		Message response = CommonMessageConstructor.createRenderResponseMessage();
 		response.getData().set(Constants.Message.NODE_CAMERA, camera);

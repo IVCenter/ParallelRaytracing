@@ -13,7 +13,7 @@ import raytrace.framework.Renderer;
 public class NetworkRenderer implements Renderer {
 
 	/*
-	 * A configurable ray tracer that allows 
+	 * A network renderer that distributes rendering to compute nodes
 	 */
 	/* *********************************************************************************************
 	 * Instance Vars
