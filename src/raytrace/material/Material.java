@@ -17,10 +17,11 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 4;
 	protected static final int SYSTEM_RESURSION_LIMIT = 2000;
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
-	
+
+	protected static final Vector4 positiveYAxis = new Vector4(0,1,0,0);
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -98,5 +99,51 @@ public abstract class Material {
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
 		//return Color.black();
+	}
+	
+	protected Vector4 halfVector(Vector4 a, Vector4 b)
+	{
+		double[] ma = a.getM();
+		double[] mb = b.getM();
+		double maga = 1.0/a.magnitude3();
+		double magb = 1.0/b.magnitude3();
+		
+		return (new Vector4(ma[0]*maga + mb[0]*magb,
+							ma[1]*maga + mb[1]*magb,
+							ma[2]*maga + mb[2]*magb,
+							0)).normalize3();
+	}
+	
+	protected Vector4 cosineWeightedSample()
+	{
+		double s = Math.random();
+		double t = Math.random();
+		
+		double u = 2.0 * Math.PI * s;
+		double v = Math.sqrt(1.0 - t);
+		
+		double x = v * Math.cos(u);
+		double y = Math.sqrt(t);
+		double z = v * Math.sin(u);
+		
+		return (new Vector4(x, y, z, 0)).normalize3();
+	}
+	
+	protected Vector4 cosineWeightedSample(Vector4 xa, Vector4 ya, Vector4 za)
+	{
+		Vector4 s = cosineWeightedSample();
+		
+		double[] sm = s.getM();
+
+		double[] xam = xa.getM();
+		double[] yam = ya.getM();
+		double[] zam = za.getM();
+		
+		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
+						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
+						   0);
+		
+		return s.normalize3();
 	}
 }
