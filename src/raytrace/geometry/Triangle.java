@@ -161,6 +161,14 @@ public class Triangle extends TerminalSurface {
 		boundingBox.min.minimize3(vertices[0].getPosition()).minimize3(vertices[1].getPosition()).minimize3(vertices[2].getPosition());
 		boundingBox.max.maximize3(vertices[0].getPosition()).maximize3(vertices[1].getPosition()).maximize3(vertices[2].getPosition());
 	}
+	
+	public void generateFaceNormal()
+	{
+		Vector4 normal = vertices[0].position.subtract3(vertices[1].position).cross3(
+				vertices[2].position.subtract3(vertices[1].position)).normalize3();
+		for(Vertex v : vertices)
+			v.setNormal(normal);
+	}
 
 	
 	/* *********************************************************************************************
