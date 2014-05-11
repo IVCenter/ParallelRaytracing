@@ -13,6 +13,7 @@ public class CircleAperture implements Aperture {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected double radius;
+	protected double distributionExponent;
 	
 
 	/* *********************************************************************************************
@@ -21,12 +22,14 @@ public class CircleAperture implements Aperture {
 	public CircleAperture()
 	{
 		radius = 0.0;
+		distributionExponent = 0.5;
 	}
 	
-	public CircleAperture(double radius)
+	public CircleAperture(double radius, double distributionExponent)
 	{
 		super();
 		this.radius = radius;
+		this.distributionExponent = distributionExponent;
 	}
 
 	/* *********************************************************************************************
@@ -42,7 +45,7 @@ public class CircleAperture implements Aperture {
 	public Vector4 sample(Vector4 sample)
 	{
 		double theta = Math.random() * Math.PI * 2.0;
-		double distance = Math.random() * radius;
+		double distance = Math.pow(Math.random(), distributionExponent) * radius;
 		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0, 0);
 		return sample;
 	}
