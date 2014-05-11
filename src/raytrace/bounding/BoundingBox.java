@@ -70,19 +70,20 @@ public class BoundingBox {
 		
 		
 		double tend = data.getTEnd();
-		
-		if(absmin > absmax || absmin >= tend)
-			return Double.MAX_VALUE;
-		
 		double tstart = data.getTStart();
 		
-		if(absmin >= tstart)
+		if(absmin > absmax || absmin >= tend || absmax < tstart || absmax >= tend)
+			return Double.MAX_VALUE;
+		
+		//double tstart = data.getTStart();
+		
+		//if(absmin >= tstart)
 			return absmin;
 		
-		if(absmax >= tstart && absmax < tend) 
-			return absmax;
+		//if(absmax >= tstart && absmax < tend) 
+		//	return absmax;
 		
-		return Double.MAX_VALUE;
+		//return Double.MAX_VALUE;
 	}
 	
 	public Vector4 getMidpoint()
