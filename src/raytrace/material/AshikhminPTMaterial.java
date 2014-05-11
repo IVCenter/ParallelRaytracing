@@ -16,7 +16,6 @@ public class AshikhminPTMaterial extends Material{
 	 * *********************************************************************************************/
 	protected Color diffuseTint = new Color();
 	protected Color specularTint = new Color();
-	protected int sampleCount = 1;
 
 	protected double specularReflectance = 0.5;
 	protected double diffuseReflectance = 0.5;
@@ -28,7 +27,7 @@ public class AshikhminPTMaterial extends Material{
 	 * Constructor
 	 * *********************************************************************************************/
 	public AshikhminPTMaterial(Color diffuseTint, Color specularTint, double specularReflectance,
-			double diffuseReflectance, double uExponent, double vExponent, int sampleCount)
+			double diffuseReflectance, double uExponent, double vExponent)
 	{
 		this.diffuseTint = diffuseTint;
 		this.specularTint = specularTint;
@@ -36,7 +35,6 @@ public class AshikhminPTMaterial extends Material{
 		this.diffuseReflectance = diffuseReflectance;
 		this.uExponent = uExponent;
 		this.vExponent = vExponent;
-		this.sampleCount = sampleCount;
 	}
 	
 
@@ -88,36 +86,28 @@ public class AshikhminPTMaterial extends Material{
 		//Sampling
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			//Sample random points
-			Color rflectColor = new Color();
 			Vector4 halfSample;
 			Vector4 sample;
-			for(int i = 0; i < sampleCount; ++i)
+			//Roll a random to trace either specular reflections or diffuse reflections
+			if(Math.random() < specularReflectance)
 			{
-				//Roll a random to trace either specular reflections or diffuse reflections
-				if(Math.random() < specularReflectance)
-				{
 
-					//Specular Sample
-					halfSample = createHalfSample(normal, uTangent, vTangent);
-					sample = createSample(halfSample, rayDir);
-					
-					if(sample.dot3(normal) > 0.0)
-					{
-						rflectColor.add3M(recurse(data, point, sample, 1.0).multiply3(specularTint));	
-					}
+				//Specular Sample
+				halfSample = createHalfSample(normal, uTangent, vTangent);
+				sample = createSample(halfSample, rayDir);
 				
-				}else{
-					
-					//Diffuse Sample
-					sample = cosineWeightedSample(uTangent, normal, vTangent);
-	
-					rflectColor.add3M(recurse(data, point, sample, 1.0).multiply3(diffuseTint));	
+				if(sample.dot3(normal) > 0.0)
+				{
+					shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), specularTint);	
 				}
-			}
 			
-			//Add the direct shading and samples shading together
-			shade.add3M(rflectColor.multiply3M(1.0/sampleCount));
+			}else{
+				
+				//Diffuse Sample
+				sample = cosineWeightedSample(uTangent, normal, vTangent);
+
+				shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), diffuseTint);	
+			}
 		}
 		
 		return shade;
@@ -154,7 +144,6 @@ public class AshikhminPTMaterial extends Material{
 		//If middle spec is over 1.0 then the specular reflection is generating energy! So clamp it
 		if(middleSpec > 1.0)
 			middleSpec = 1.0;
-
 		
 		double specularCoeff = leadingCoeffSpec * middleSpec * fspec;
 		
@@ -173,15 +162,15 @@ public class AshikhminPTMaterial extends Material{
 		
 		double phi = Math.atan(Math.sqrt( (uExponent + 1.0) / (vExponent + 1.0) ) * Math.tan(0.5 * Math.PI * epsilon1));
 		
-		double cosPhiSqrd = Math.cos(phi);
-		cosPhiSqrd *= cosPhiSqrd;
-		double sinPhiSqrd = Math.sin(phi);
-		sinPhiSqrd *= sinPhiSqrd;
+		double cosPhi = Math.cos(phi);
+		double sinPhi = Math.sin(phi);
 		
-		double theta = Math.acos(Math.pow( (1.0 - epsilon2), ( 1.0 / (uExponent * cosPhiSqrd + vExponent * sinPhiSqrd + 1.0) ) ));
+		double theta = Math.acos(Math.pow( (1.0 - epsilon2), ( 1.0 / (uExponent * cosPhi * cosPhi + vExponent * sinPhi * sinPhi + 1.0) ) ));
 
-		double xCoeff = Math.sin(theta) * Math.cos(phi);
-		double yCoeff = Math.sin(theta) * Math.sin(phi);
+		double sinTheta = Math.sin(theta);
+		
+		double xCoeff = sinTheta * cosPhi;
+		double yCoeff = sinTheta * sinPhi;
 		double zCoeff = Math.cos(theta);
 		
 		Vector4 half = new Vector4();
@@ -190,14 +179,14 @@ public class AshikhminPTMaterial extends Material{
 		double quad2 = quad < 0.5 ? -1.0 : 1.0;
 		double quad1 = quad < 0.25 || quad >= 0.75 ? 1.0 : -1.0;
 		
-		half = half.addMultiRight3(normal, zCoeff).addMultiRight3(vTangent, yCoeff * quad2).addMultiRight3(uTangent, xCoeff * quad1);
+		half = half.addMultiRight3M(normal, zCoeff).addMultiRight3M(vTangent, yCoeff * quad2).addMultiRight3M(uTangent, xCoeff * quad1);
 		
 		return half.normalize3();
 	}
 	
 	private Vector4 createSample(Vector4 half, Vector4 k1/*rayDir*/)
 	{
-		return k1.multiply3(-1.0).add3(half.multiply3(half.dot3(k1) * 2.0)).normalize3();
+		return k1.multiply3(-1.0).add3M(half.multiply3(half.dot3(k1) * 2.0)).normalize3();
 	}
 
 }
