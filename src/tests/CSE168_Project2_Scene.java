@@ -65,7 +65,7 @@ public class CSE168_Project2_Scene extends Scene
 			model.getTransform().translation(0, 0.05, 0);
 			model.bake(null);
 			model.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
-			model.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.45));
+			//model.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.45));
 			this.addChild(model);
 		}
 		

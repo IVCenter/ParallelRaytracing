@@ -45,7 +45,7 @@ public class TestScene2 extends Scene
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.2));
+		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.2, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 		
