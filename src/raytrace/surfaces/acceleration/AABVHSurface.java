@@ -40,14 +40,11 @@ public class AABVHSurface extends CompositeSurface {
 		if(children == null)
 			return null;
 		
-		//TODO: Check against BB, if miss, return null
-		double bbIntersection = boundingBox.intersects(data);
-		if(bbIntersection == Double.MAX_VALUE)
-			return null;
 		
-		/*
 		int childCount = getChildren().size();
 		
+		//If we have too many, or too few, children to heuristically perform an intersection test, 
+		//use the default test.
 		if(childCount > 2)
 			return super.intersects(data);
 		else if(childCount == 1)
@@ -63,122 +60,56 @@ public class AABVHSurface extends CompositeSurface {
 		intersections[0] = surfaces[0].getBoundingBox().intersects(data);
 		intersections[1] = surfaces[1].getBoundingBox().intersects(data);
 		
-		//Sort
-		//insertionSortSideBySide(intersections, surfaces);
-
-		double swapTemp;
-		CompositeSurface swapTempSurface;
-		if(intersections[1] < intersections[0])
+		
+		//If there are no intersections then bail out.
+		if(intersections[1] == Double.MAX_VALUE && intersections[0] == Double.MAX_VALUE)
 		{
-			swapTemp = intersections[0];
-			swapTempSurface = surfaces[0];
-			intersections[0] = intersections[1];
-			surfaces[0] = surfaces[1];
-			intersections[1] = swapTemp;
-			surfaces[1] = swapTempSurface;
+			return null;
 		}
 		
-		
-		
-		IntersectionData idata;
-		IntersectionData closest = null;
-		CompositeSurface cs;
-		double time;
-		for(int i = 0; i < 2; ++i)
+		//If the intersections are sorted in reverse, flip them
+		int first = 0;
+		int second = 1;
+		if(intersections[1] < intersections[0])
 		{
-			cs = surfaces[i];
-			time = intersections[i];
-			if(time == Double.MAX_VALUE) {
-				continue;
-			}
-			
-			idata = cs.intersects(data);
-			//If idata isn't null, and either closest is null, or idata is closer than closest
-			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
+			first = 1;
+			second = 0;
+		}
+		
+
+		IntersectionData idata = null;
+		IntersectionData closest = null;
+		
+		//Test the closest bounding box first
+		if(intersections[first] != Double.MAX_VALUE)
+		{
+			idata = surfaces[first].intersects(data);
+			if(idata != null)
 			{
 				closest = idata;
-				if(i < surfaces.length-1 && closest.getTime() <= intersections[i])
+				//If idata isn't null, idata is closer than second bounding box
+				if(closest.getTime() < intersections[second])
 				{
-					//System.out.println("Returning early.  Closest[" + closest.getTime() + "] NextBox[" + intersections[i] + "]");
 					return closest;
 				}
 			}
 		}
 		
+		//If necessary, test the second bounding box
+		if(intersections[second] != Double.MAX_VALUE)
+		{
+			idata = surfaces[second].intersects(data);
+			//If idata isn't null, and either closest is null, or idata is closer than closest
+			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
+			{
+				closest = idata;
+			}
+		}
+		
 		return closest;
-		*/
-		
-		//TODO: check children BBs
-		//Sort by hit time
-		//Dive in order
-		//if hit returns, and time less than next BB time, return hit
-		return super.intersects(data);
 	}
 	
-	/*
-	private void insertionSortSideBySide(double[] data, CompositeSurface[] css)
-	{	
-		if(data.length < 2 || data.length != css.length)
-			return;
 
-		double swapTemp;
-		CompositeSurface swapTempSurface;
-		
-		//Special case for 2 items
-		if(data.length == 2)
-		{
-			if(data[1] < data[0])
-			{
-				swapTemp = data[0];
-				swapTempSurface = css[0];
-				data[0] = data[1];
-				css[0] = css[1];
-				data[1] = swapTemp;
-				css[1] = swapTempSurface;
-			}
-			return;
-		}
-		
-		//General case
-		double insertTemp;
-		CompositeSurface insertTempSurface;
-		
-		for(int i = 1; i < data.length; ++i)
-		{
-			insertTemp = data[i];
-			insertTempSurface = css[i];
-			for(int j = i-1; j >= 0; --j)
-			{
-				swapTemp = data[j];
-				swapTempSurface = css[j];
-				if(swapTemp > insertTemp)
-				{
-					data[j+1] = swapTemp;
-					css[j+1] = swapTempSurface;
-				}else {
-					data[j+1] = insertTemp;
-					css[j+1] = insertTempSurface;
-					break;
-				}
-				
-				if(j == 0) {
-					data[0] = insertTemp;
-					css[0] = insertTempSurface;
-				}
-			}
-		}
-		
-	}
-	
-	private void printArray(double[] data)
-	{
-		StringBuilder sb = new StringBuilder("[");
-		for(double d : data)
-			sb.append(d + ", ");
-		sb.append("]");
-		System.out.println(sb.toString());
-	}
-	*/
 
 	@Override
 	public void bake(BakeData data)
@@ -205,7 +136,7 @@ public class AABVHSurface extends CompositeSurface {
 	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces)
 	{
 		int slices = 1;
-		int maxSurfacesPerLeaf = 4;
+		int maxSurfacesPerLeaf = 8;
 		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
 	}
 	
