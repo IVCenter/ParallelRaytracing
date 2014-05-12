@@ -6,6 +6,7 @@ import system.Constants;
 import tests.CSE168_Project1_Scene;
 import tests.CSE168_Project2_Scene;
 import tests.CSE168_Project3_Scene;
+import tests.PerformanceTest1;
 import tests.TestScene1;
 import tests.TestScene2;
 import tests.TestScene3;
@@ -107,6 +108,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new CSE168_Project3_Scene();
 				scene.setSceneKey(Constants.SceneKeys.CSE168_Project3);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.Performance_TEST1, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new PerformanceTest1();
+				scene.setSceneKey(Constants.SceneKeys.Performance_TEST1);
 				return scene;
 			}
 		});
