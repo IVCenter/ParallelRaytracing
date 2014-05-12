@@ -50,14 +50,19 @@ public class MatrixTransformSurface extends CompositeSurface {
 		//TODO: Make sure this actually works...
 		//TODO: Check against bounding box first
 		
-		Ray oldRay = data.getRay();
+		Ray ray = data.getRay();
 		
-		Vector4 transOrigin = inverseTransform.multiplyPt(oldRay.getOrigin());
-		Vector4 transDirection = inverseTransform.multiply3(oldRay.getDirection());//.normalize3();
+		Vector4 oldOrigin = ray.getOrigin();
+		Vector4 oldDirection = ray.getDirection();
 		
-		Ray newRay = new Ray(transOrigin, transDirection, oldRay.getPixelX(), oldRay.getPixelY());
+		ray.setOrigin(inverseTransform.multiplyPt(oldOrigin));
+		ray.setDirection(inverseTransform.multiply3(oldDirection));
+		//Vector4 transOrigin = inverseTransform.multiplyPt(oldOrigin);
+		//Vector4 transDirection = inverseTransform.multiply3(oldDirection);//.normalize3();
 		
-		data.setRay(newRay);
+		//Ray newRay = new Ray(transOrigin, transDirection, oldRay.getPixelX(), oldRay.getPixelY());
+		
+		//data.setRay(newRay);
 		
 		IntersectionData idata;
 		IntersectionData closest = null;
@@ -71,15 +76,18 @@ public class MatrixTransformSurface extends CompositeSurface {
 			}
 		}
 		
-		data.setRay(oldRay);
+		//data.setRay(oldRay);
+
+		ray.setOrigin(oldOrigin);
+		ray.setDirection(oldDirection);
 		
 		//Transform back into parent coords
 		if(closest != null)
 		{
-			closest.setRay(oldRay);
+			closest.setRay(ray);
 			closest.setNormal(transform.multiply3(closest.getNormal()).normalize3());
 			closest.setPoint(transform.multiplyPt(closest.getPoint()));
-			closest.setDistance(closest.getPoint().subtract3(oldRay.getOrigin()).magnitude3());
+			closest.setDistance(closest.getPoint().subtract3(ray.getOrigin()).magnitude3());
 		}
 		
 		return closest;
