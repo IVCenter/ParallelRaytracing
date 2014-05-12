@@ -112,6 +112,14 @@ public class Color {
 		return this;
 	}
 	
+	public Color add3AfterMultiply3M(Color c, double d)
+	{
+		channels[0] += c.channels[0] * d;
+		channels[1] += c.channels[1] * d;
+		channels[2] += c.channels[2] * d;
+		return this;
+	}
+	
 	public Color multiply3(double d)
 	{
 		return new Color(channels[0] * d, channels[1] * d, channels[2] * d, channels[3]);
