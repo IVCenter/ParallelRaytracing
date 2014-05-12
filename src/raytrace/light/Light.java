@@ -42,7 +42,9 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	 * *********************************************************************************************/
 	protected IntersectionData shadowed(Scene scene, Ray ray, double distanceToLight)
 	{
+		//TODO: Remove this, and instead use a pre-allocated object
 		RayData rdata = new RayData();
+		
 		rdata.setRay(ray);
 		rdata.setTStart(RECURSIVE_EPSILON);
 		IntersectionData idata = scene.intersects(rdata);

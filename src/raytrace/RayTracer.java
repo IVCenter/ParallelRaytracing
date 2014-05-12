@@ -75,9 +75,6 @@ public class RayTracer implements Tracer {
 					//Shade the pixel using the sky material
 					color.add3M(skyMaterial.shade(sdata));
 				}
-				
-				//if((int)rayCount % 10 == 0)
-				//	pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.multiply3(1.0/rayCount).rgb32();
 			}
 			
 			//Set the final color
