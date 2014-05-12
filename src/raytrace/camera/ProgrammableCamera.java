@@ -461,35 +461,41 @@ public class ProgrammableCamera extends Camera {
 						focalPlaneDistance * (vdir[1] + camX[1] * pw + camY[1] * ph), 
 						focalPlaneDistance * (vdir[2] + camX[2] * pw + camY[2] * ph), 
 						0);
-				dirM = dir.getM();
 				
-				apertureSample = aperture.sample(apertureSample);
-				sampleM = apertureSample.getM();
-				
-				apertureOrigin.set(camX[0] * sampleM[0] + camY[0] * sampleM[1],
-								   camX[1] * sampleM[0] + camY[1] * sampleM[1],
-								   camX[2] * sampleM[0] + camY[2] * sampleM[1],
-								   0);
-				
-				
-				//Finalize Direction
-				origM = apertureOrigin.getM();
-				dir.set(dirM[0] - origM[0],
-						dirM[1] - origM[1],
-						dirM[2] - origM[2],
-						0);
-				
-
-				//Finalize Origin
-				origM = position.getM();
-				apertureOrigin.set(origM[0] + camX[0] * sampleM[0] + camY[0] * sampleM[1],
-								   origM[1] + camX[1] * sampleM[0] + camY[1] * sampleM[1],
-							   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1],
-								   0);
-				
-				
-				subRay.setDirection(dir.normalize3());
-				subRay.setOrigin(apertureOrigin);
+				if(superSamplingLevel > 1)
+				{
+					dirM = dir.getM();
+					
+					apertureSample = aperture.sample(apertureSample);
+					sampleM = apertureSample.getM();
+					
+					apertureOrigin.set(camX[0] * sampleM[0] + camY[0] * sampleM[1],
+									   camX[1] * sampleM[0] + camY[1] * sampleM[1],
+									   camX[2] * sampleM[0] + camY[2] * sampleM[1],
+									   0);
+					
+					
+					//Finalize Direction
+					origM = apertureOrigin.getM();
+					dir.set(dirM[0] - origM[0],
+							dirM[1] - origM[1],
+							dirM[2] - origM[2],
+							0);
+					
+	
+					//Finalize Origin
+					origM = position.getM();
+					apertureOrigin.set(origM[0] + camX[0] * sampleM[0] + camY[0] * sampleM[1],
+									   origM[1] + camX[1] * sampleM[0] + camY[1] * sampleM[1],
+								   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1],
+									   0);
+					
+					
+					subRay.setDirection(dir.normalize3());
+					subRay.setOrigin(apertureOrigin);
+				}else{
+					subRay.setDirection(dir.normalize3());
+				}
 				
 				//Increment the counters
 				++subPixelU;
