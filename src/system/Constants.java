@@ -47,6 +47,7 @@ public class Constants {
 		public static final String CSE168_Project1 = KEYS.addKey("CSE168_Project1");
 		public static final String CSE168_Project2 = KEYS.addKey("CSE168_Project2");
 		public static final String CSE168_Project3 = KEYS.addKey("CSE168_Project3");
+		public static final String Performance_TEST1 = KEYS.addKey("Performance_TEST1");
 	}
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

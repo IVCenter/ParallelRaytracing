@@ -7,17 +7,12 @@ import raytrace.camera.aperture.CircleAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
-import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
-import raytrace.light.PointLight;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DielectricMaterial;
-import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
-import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -47,7 +42,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
@@ -77,8 +72,6 @@ public class CSE168_Project3_Scene extends Scene
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.grey(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
-			//model.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
-			//model.setMaterial(new FresnelDiffusePTMaterial(Color.grey(0.7), 0.1, 1.5, 1));
 			this.addChild(model);
 		}
 		
@@ -93,7 +86,6 @@ public class CSE168_Project3_Scene extends Scene
 			model2.bake(null);
 			model2.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100));
-			//model2.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model2);
 		}
 		
@@ -108,7 +100,6 @@ public class CSE168_Project3_Scene extends Scene
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
-			//model3.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model3);
 		}
 		
@@ -123,7 +114,6 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
-			//model4.setMaterial(new DiffusePTMaterial(Color.grey(0.6), 1));
 			this.addChild(model4);
 		}
 		

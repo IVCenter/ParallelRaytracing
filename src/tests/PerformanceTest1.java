@@ -1,28 +1,31 @@
 package tests;
 
-import process.logging.Logger;
 import math.Vector4;
+import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
+import raytrace.camera.aperture.CircleAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
+import raytrace.geometry.Plane;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
-import raytrace.light.PointLight;
+import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.DiffusePTMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import resource.ResourceManager;
 import system.Configuration;
 
-public class CSE168_Project2_Scene extends Scene
+public class PerformanceTest1 extends Scene
 {	
 
 	/*
-	 * A scene for project 2 of CSE 168
+	 * A scene for performance testing
 	 */
 	double elapsed = 0.0;
 	
@@ -33,52 +36,57 @@ public class CSE168_Project2_Scene extends Scene
 	protected void initialize()
 	{
 		//Sky Material
-		skyMaterial = new ColorMaterial(new Color(0.8, 0.8, 1.0));
-		
+		skyMaterial = new ColorMaterial(new Color(0.8, 0.9, 1.0));
+
+		Configuration.setScreenWidth(800);
+		Configuration.setScreenHeight(600);
 		
 		//Camera
 		activeCamera = new ProgrammableCamera();
-		((ProgrammableCamera)activeCamera).setStratifiedSampling(false);
+		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(-0.1, 0.1, 0.2, 0));
-		activeCamera.setViewingDirection(new Vector4(0.05, 0.02, -0.2, 0));
+		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
+		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
+		//activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
+		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.00005, 0.5));
+		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
-		//Ground
-		MeshSurface ground = new Cube(5.0, 0.1, 5.0);
-		ground.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
-		this.addChild(ground);
 		
-		
-		//Dragon 1
+
+		//Dragon
 		Instance model = ResourceManager.create("dragon_smooth.obj");
 		
 		if(model != null)
 		{
-			model.getTransform().scale(0.1);
-			model.getTransform().translation(0, 0.05, 0);
+			model.getTransform().scale(0.15);
+			model.getTransform().translation(0.1, 0.005, -0.0);
 			model.bake(null);
-			model.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
+			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
+			//		0.80, 1000, 1000));
+			model.setMaterial(new DiffuseMaterial(Color.grey(0.8)));
 			this.addChild(model);
 		}
 		
-		
-		//Dragon 2
+
+		//Dragon
 		Instance model2 = ResourceManager.create("dragon_smooth.obj");
 		
 		if(model2 != null)
 		{
-			model2.getTransform().scale(0.1);
-			model2.getTransform().translation(-0.05, 0.05, -0.1);
-			model2.getTransform().rotateY(Math.PI);
+			model2.getTransform().scale(0.15);
+			model2.getTransform().translation(0.1, 0.005, -0.4);
 			model2.bake(null);
-			model2.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
-			this.addChild(model2);
+			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
+			//		0.80, 1000, 1000));
+			model2.setMaterial(new DiffuseMaterial(Color.grey(0.8)));
+			//this.addChild(model2);
 		}
 		
 		
@@ -89,37 +97,16 @@ public class CSE168_Project2_Scene extends Scene
 		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
 		lightManager.addLight(directionalLight);
 		
-
-		//Red Light
-		PointLight redlgt = new PointLight();
-		redlgt.setColor(new Color(1.0, 0.2, 0.2));
-		redlgt.setIntensity(0.02);
-		redlgt.setConstantAttenuation(0.0);
-		redlgt.setLinearAttenuation(0.0);
-		redlgt.setQuadraticAttenuation(1.0);
-		redlgt.setPosition(new Vector4(-0.2, 0.2, 0.2, 0));
-		lightManager.addLight(redlgt);
-		
-
-		//Blue Light
-		PointLight bluelgt = new PointLight();
-		bluelgt.setColor(new Color(0.2, 0.2, 1.0));
-		bluelgt.setIntensity(0.02);
-		bluelgt.setConstantAttenuation(0.0);
-		bluelgt.setLinearAttenuation(0.0);
-		bluelgt.setQuadraticAttenuation(1.0);
-		bluelgt.setPosition(new Vector4(0.1, 0.1, 0.3, 0));
-		lightManager.addLight(bluelgt);
 		
 		
 		//Update bounding boxes
 		this.updateBoundingBox();
-		
+		/*
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
 		long startTime = System.currentTimeMillis();
 		
-		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren(), 1, 2);
+		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren(), 1, 1);
 		this.getChildren().clear();
 		this.addChild(aabvh);
 		
@@ -127,13 +114,19 @@ public class CSE168_Project2_Scene extends Scene
 		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
+		*/
+
+		//Ground
+		Plane ground = new Plane();
+		ground.setMaterial(new DiffuseMaterial(new Color(0.3, 0.3, 0.35)));
+		this.addChild(ground);
 		
 	}
 	
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed = Math.PI/4.0;
+		elapsed += data.getDt();
 		
 		//Update the children
 		super.update(data);
