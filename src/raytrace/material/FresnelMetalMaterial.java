@@ -83,8 +83,8 @@ public class FresnelMetalMaterial extends Material {
 		Color diffuseColor = color.multiply3(shade, 1.0 - reflectivePercent);
 		Color reflectiveColor = rflectColor.multiply3(
 				color.mixWithWhite(1.0 - reflectivePercent, reflectivePercent)
-						,reflectivePercent);
-		return diffuseColor.add3M(reflectiveColor);
+						,1.0);//,reflectivePercent);
+		return reflectiveColor;//diffuseColor.add3M(reflectiveColor);
 		
 	}
 
