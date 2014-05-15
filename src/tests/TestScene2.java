@@ -38,7 +38,7 @@ public class TestScene2 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(32);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
 		activeCamera.setPosition(new Vector4(0,2,5,0));
 		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -72,9 +72,10 @@ public class TestScene2 extends Scene
 		
 		//Reflective Sphere
 		{
+			Color copper = new Color(0.98, 0.8, 0.6);
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
-			sphere.setMaterial(new FresnelMetalMaterial(new Color(0.98, 0.8, 0.6), 0.317, 2.63));
+			sphere.setMaterial(new FresnelMetalMaterial(copper.multiply3M(copper), 0.317, 2.63));
 			sphere.setPosition(new Vector4(3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
