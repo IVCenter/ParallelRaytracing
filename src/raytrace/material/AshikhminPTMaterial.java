@@ -6,7 +6,7 @@ import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
 
-public class AshikhminPTMaterial extends Material{
+public class AshikhminPTMaterial extends Material {
 	
 	/*
 	 * An implementation of the Ashikhmin BRDF
