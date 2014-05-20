@@ -25,7 +25,7 @@ public class RayData {
 	public RayData()
 	{
 		t0 = 0;
-		t1 = Double.POSITIVE_INFINITY;
+		t1 = Double.MAX_VALUE;
 	}
 	
 	public RayData(Ray ray, CompositeSurface rootSurface/*, IntersectionData idata*/)

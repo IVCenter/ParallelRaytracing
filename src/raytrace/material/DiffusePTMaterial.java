@@ -47,7 +47,7 @@ public class DiffusePTMaterial extends Material{
 		Vector4 uTangent;
 		Vector4 vTangent;
 		
-		if(normal.dot3(positiveYAxis) == 1.0)
+		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
 			uTangent = normal.cross3(cosineWeightedSample()).normalize3();
 		else
 			uTangent = normal.cross3(positiveYAxis).normalize3();
@@ -61,7 +61,7 @@ public class DiffusePTMaterial extends Material{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			shade.add3M(diffuse(ildata.getColor().multiply3(1.0/Math.PI), normal, ildata.getDirection()));
+			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
 		
 		
@@ -79,7 +79,8 @@ public class DiffusePTMaterial extends Material{
 			}
 			
 			//Add the direct shading and samples shading together
-			shade.add3M(rflectColor.multiply3(1.0/sampleCount));
+			if(sampleCount > 0)
+				shade.add3M(rflectColor.multiply3(1.0/sampleCount));
 		}
 		
 		return shade.multiply3M(color);

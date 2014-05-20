@@ -59,7 +59,7 @@ public class AshikhminPTMaterial extends Material {
 		Vector4 uTangent;
 		Vector4 vTangent;
 		
-		if(normal.dot3(positiveYAxis) == 1.0)
+		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
 			uTangent = normal.cross3(cosineWeightedSample()).normalize3();
 		else
 			uTangent = normal.cross3(positiveYAxis).normalize3();

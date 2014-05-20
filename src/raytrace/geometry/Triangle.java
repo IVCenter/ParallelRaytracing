@@ -71,7 +71,7 @@ public class Triangle extends TerminalSurface {
 		double m = va * ei_hf + vb * gf_di + vc * dh_eg;
 		
 		//If the determinant m is 0, then the ray is parallel
-		if(m == 0.0)
+		if(m == 0.0 || m != m)
 			return null;
 
 		
@@ -117,7 +117,8 @@ public class Triangle extends TerminalSurface {
 		double ny = n0[1] * alpha + n1[1] * beta + n2[1] * gamma;
 		double nz = n0[2] * alpha + n1[2] * beta + n2[2] * gamma;
 		
-		Vector4 normal = (new Vector4(nx, ny, nz, 0)).normalize3();
+		Vector4 normal = new Vector4(nx, ny, nz, 0);
+		normal.normalize3();
 		
 		
 		//Return data about the intersection
