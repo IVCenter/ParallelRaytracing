@@ -17,10 +17,12 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.0001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 8;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 5;
 	protected static final int SYSTEM_RESURSION_LIMIT = 2000;
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 
+	protected static final double oneOverPi = 1.0 / Math.PI;
+	
 	protected static final Vector4 positiveYAxis = new Vector4(0,1,0,0);
 
 	/* *********************************************************************************************
@@ -46,7 +48,7 @@ public abstract class Material {
 		double dot = normal.dot3(fromLight);
 		if(dot >= 0.0)
 			return Color.black();
-		return light.multiply3( dot * -1.0 );
+		return light.multiply3( dot * -1.0 * oneOverPi );
 	}
 	
 	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal, double refractiveIndex)
@@ -78,7 +80,9 @@ public abstract class Material {
 		RayData rdata = new RayData();
 		Ray ray = new Ray(point, direction, 0, 0);
 		rdata.setRay(ray);
+		rdata.setRootSurface(data.getRootScene());
 		rdata.setTStart(RECURSIVE_EPSILON);
+		rdata.setTEnd(Double.MAX_VALUE);
 		
 		ShadingData sdata = new ShadingData();
 		sdata.setRay(rdata.getRay());

@@ -33,17 +33,17 @@ public class Launcher {
 		if(args.length > 0 && args[0].equals("DEBUG"))
 		{
 			Configuration.setId("Debug Node");
-			//Configuration.setScreenWidth(1368);
-			//Configuration.setScreenHeight(752);
-			Configuration.setScreenWidth(800);
-			Configuration.setScreenHeight(600);
+			Configuration.setScreenWidth(1368);
+			Configuration.setScreenHeight(752);
+			//Configuration.setScreenWidth(800);
+			//Configuration.setScreenHeight(600);
 			Configuration.setDrawToScreen(true);
 			Configuration.setClock(true);
 			Configuration.setLeaf(true);//true for local, false for networked
 			Configuration.setController(true);
 			//TODO: Need a reliable and relative folder to write to
 			Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.CSE168_Project3));
+			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST5));
 		}
 		
 		
