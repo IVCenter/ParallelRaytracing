@@ -6,7 +6,7 @@ import process.logging.Logger;
 
 import math.Vector4;
 import raytrace.camera.ProgrammableCamera;
-import raytrace.camera.aperture.CircleAperture;
+import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -32,6 +32,7 @@ public class TestScene5 extends Scene
 	 * A simple test scene for debugging
 	 */
 	double elapsed = 0.0;
+	Instance model;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -39,6 +40,8 @@ public class TestScene5 extends Scene
 	@Override
 	protected void initialize()
 	{
+		Configuration.setScreenWidth(800);
+		Configuration.setScreenHeight(600);
 
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
@@ -52,23 +55,27 @@ public class TestScene5 extends Scene
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.06, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.06, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 
 		//Instance model = ResourceManager.create("white_lotus_reduced.obj");
-		Instance model = ResourceManager.create("white_lotus_reduced.obj");
 		model = ResourceManager.create("white_lotus_reduced.obj");
+		//model = ResourceManager.create("white_lotus_reduced.obj");
 		
 		if(model != null) {
 			model.getTransform().scale(6.1);//ia
 			//model.getTransform().scale(0.2);//ia
-			model.getTransform().translation(0, 0.5, 2);//IA
+			model.getTransform().translate(0, 0.5, 2);//IA
 			model.bake(null);
+			model.updateBoundingBox();
 			//model.setMaterial(new DiffusePTMaterial(new Color(0xddddddff), 1));
 			model.setMaterial(new DiffusePTMaterial(new Color(0xcc1111ff), 1));
 			this.addChild(model);
+			
+			
+			
 		}else{
 			Logger.error(-13, "TestScene5: Model was null!");
 		}
@@ -97,19 +104,19 @@ public class TestScene5 extends Scene
 		Cube cube = new Cube(1.0, 1.0, 1.0);
 		
 		
-		int blockCount = 2180;
+		int blockCount = 2480;
 		ArrayList<CompositeSurface> blocks = new ArrayList<CompositeSurface>(blockCount + 1);
 		
 		for(int x = 0; x < blockCount; ++x)
 		{
 			Instance inst = new Instance();
 			inst.addChild(cube);
-			if(x < 280)
+			if(x < 580)
 			{
-				double radius = 5.0 + randInRange(1.0, 8.0);
-				double phi = -1.0 * Math.PI * Math.random();
+				double radius = 5.0 + randInRange(1.0, 12.0);
+				double phi = -2.0 * Math.PI * Math.random();
 				double theta = 0.5 * Math.PI * Math.random();
-				inst.getTransform().translation(Math.sin(theta) * Math.cos(phi) * radius, Math.cos(theta) * radius, Math.sin(theta) * Math.sin(phi) * radius );//IA
+				inst.getTransform().translate(Math.sin(theta) * Math.cos(phi) * radius, Math.cos(theta) * radius, Math.sin(theta) * Math.sin(phi) * radius );//IA
 				//inst.getTransform().translation(randInRange(-4, 4), randInRange(0, 4), randInRange(-6, 2));
 				inst.getTransform().scale(randInRange(0.1, 0.4));
 				inst.getTransform().rotateX(Math.random());
@@ -118,14 +125,14 @@ public class TestScene5 extends Scene
 			}else{
 				double radius = 1.0 + randInRange(0.0, 12.0);
 				double phi = 2.0 * Math.PI * Math.random();
-				inst.getTransform().translation(Math.cos(phi) * radius + 0.5, 0, Math.sin(phi) * radius - 2.0);//IA
+				inst.getTransform().translate(Math.cos(phi) * radius + 0.5, 0, Math.sin(phi) * radius - 2.0);//IA
 				//inst.getTransform().translation(randInRange(-4, 4), randInRange(0, 4), randInRange(-6, 2));
 				double scale = randInRange(0.1, 0.6);
 				scale = Math.pow(scale, 1.2);
 				inst.getTransform().scale(scale);
 				inst.getTransform().rotateX(Math.random() * 0.5);
 				inst.getTransform().rotateY(Math.random() * Math.PI);
-				double greyBase = 0.70;
+				double greyBase = 0.30;
 				inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
 			}
 			//inst.setMaterial(new DiffuseMaterial(Color.random(0.8)));
@@ -146,7 +153,7 @@ public class TestScene5 extends Scene
 		Sphere sphere = new Sphere();
 		
 		
-		int sphereCount = 128;
+		int sphereCount = 256;
 		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(sphereCount + 1);
 		
 		for(int x = 0; x < sphereCount; ++x)
@@ -154,9 +161,9 @@ public class TestScene5 extends Scene
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			double radius = 36.0 + randInRange(0.0, 24.0);
-			double phi = -1.0 * Math.PI * Math.random();
-			inst.getTransform().translation(Math.cos(phi) * radius, 0, Math.sin(phi) * radius );//IA
-			inst.getTransform().scale(randInRange(3.0, 6.0));
+			double phi = -2.0 * Math.PI * Math.random();
+			inst.getTransform().translate(Math.cos(phi) * radius, 0, Math.sin(phi) * radius );//IA
+			inst.getTransform().scale(randInRange(3.0, 8.0));
 			double greyBase = 0.70;
 			inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
 			inst.updateBoundingBox();
@@ -216,7 +223,29 @@ public class TestScene5 extends Scene
 	@Override
 	public void update(UpdateData data)
 	{
-		elapsed = Math.PI/4.0;
+		elapsed += data.getDt();
+		
+		Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
+		
+		ProgrammableCamera acam = (ProgrammableCamera)activeCamera;
+		
+		CircularAperture cap = (CircularAperture)acam.getAperture();
+
+		cap.setRadius(Math.max(1.0-elapsed*1.5, 0.06));
+		
+		Vector4 camPos = acam.getPosition();
+		camPos.set(Math.cos(elapsed + Math.PI/2.0) * 8.0 + lotusCenter.get(0), 
+							Math.min(0.2 + elapsed*2, 3.6), 
+							Math.sin(elapsed + Math.PI/2.0) * 8.0  + lotusCenter.get(2), 
+							1.0);
+		
+		Vector4 lotusPos = new Vector4(lotusCenter);
+		lotusPos.set(1, 0);
+		lotusPos = lotusPos.subtract3(camPos);
+		lotusPos.set(1, Math.min(-2.0 + elapsed*0.40, 1.35));
+		acam.setViewingDirection(lotusPos);
+
+		acam.setFocalPlaneDistance(Math.min(1.0 + elapsed*1.5, lotusPos.subtract3(camPos).magnitude3()));
 		
 		//Update the children
 		super.update(data);
@@ -226,7 +255,7 @@ public class TestScene5 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		super.bake(data);
 	}
 }

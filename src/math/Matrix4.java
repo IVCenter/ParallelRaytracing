@@ -261,7 +261,7 @@ public class Matrix4 {
 	    return multiply(scale);
 	}
 
-	public Matrix4 nuscale(double sx, double sy, double sz)
+	public Matrix4 nonUniformScale(double sx, double sy, double sz)
 	{
 	    Matrix4 scale = new Matrix4();
 	    scale.identity();
@@ -272,7 +272,7 @@ public class Matrix4 {
 	    return multiply(scale);
 	}
 
-	public Matrix4 translation(Vector4 a)
+	public Matrix4 translate(Vector4 a)
 	{
 		m[3][0] += a.m[0];
 		m[3][1] += a.m[1];
@@ -281,7 +281,7 @@ public class Matrix4 {
 		return this;
 	}
 
-	public Matrix4 translation(double x, double y, double z)
+	public Matrix4 translate(double x, double y, double z)
 	{
 		m[3][0] += x;
 		m[3][1] += y;

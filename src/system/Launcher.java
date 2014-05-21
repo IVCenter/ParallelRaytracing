@@ -57,6 +57,8 @@ public class Launcher {
 			if(configFile.exists() && configFile.getName().endsWith(Constants.configurationFileExtension))
 			{
 				//TODO: Config file loader
+				
+				//TODO: Create folder structure if it doesn't exist under working directory
 			}
 			
 		}catch(Exception e) {

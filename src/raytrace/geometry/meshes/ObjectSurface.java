@@ -1,6 +1,7 @@
 package raytrace.geometry.meshes;
 
 import process.logging.Logger;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -53,6 +54,7 @@ public class ObjectSurface extends MeshSurface {
 		
 		int[][] verts;
 		Triangle triangle;
+		double area;
 		for(ObjModelData.Face face : obj.getFaces())
 		{
 			verts = face.getVertices();
@@ -63,7 +65,8 @@ public class ObjectSurface extends MeshSurface {
 									new Vertex(obj.getVertex(verts[1][0]), obj.getNormal(verts[1][2]), obj.getTexCoord(verts[1][1])),
 									new Vertex(obj.getVertex(verts[2][0]), obj.getNormal(verts[2][2]), obj.getTexCoord(verts[2][1])));
 
-			if(triangle.getArea() <= 0.0) {
+			area = triangle.getArea();
+			if(area <= 0.0 || Double.isNaN(area)) {
 				Logger.warning(-14, "ObjectSurface: Encountered Triangle with an area of [" + triangle.getArea() + "].");
 				continue;
 			}
@@ -103,6 +106,12 @@ public class ObjectSurface extends MeshSurface {
 	public void updateBoundingBox()
 	{
 		aabvh.updateBoundingBox();
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox()
+	{
+		return aabvh.getBoundingBox();
 	}
 
 	/*

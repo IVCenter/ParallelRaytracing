@@ -11,6 +11,8 @@ import network.send.MessageSender;
 import process.logging.Logger;
 import process.utils.TimeStamp;
 import raster.PixelBuffer;
+import raytrace.AnimationRenderer;
+import raytrace.framework.Renderer;
 import system.ApplicationDelegate;
 import system.Configuration;
 
@@ -47,7 +49,7 @@ public class DefaultKeyboard extends Keyboard {
 		if(e.getKeyCode() == KeyEvent.VK_P)
 		{
 			pixelBuffer.writeToFile(Configuration.getWorkingDirectory() + Configuration.getScreenshotSubDirectory()
-					+ "NightSky_Frame_" + TimeStamp.makeForFileName());
+					+ Configuration.getFrameFileNamePrefix() + TimeStamp.makeForFileName());
 		}
 		
 		//If Ctrl is down, and X is released, kill the program
@@ -108,6 +110,21 @@ public class DefaultKeyboard extends Keyboard {
 				sender.send(message, node.getIp());
 			}
 		}
+		
+		//If R is pressed, start/stop the animation renderer
+		if(e.getKeyCode() == KeyEvent.VK_R)
+		{
+			Renderer renderer = ApplicationDelegate.inst.getRenderer();
+			if(renderer instanceof AnimationRenderer)
+			{
+				AnimationRenderer ar = (AnimationRenderer)renderer;
+				if(ar.isRecording())
+					ar.stopRecording();
+				else
+					ar.startRecording();
+			}
+		}
+		
 		
 	}
 

@@ -95,6 +95,7 @@ public class ResourceManager {
 				return;
 			
 			CompositeSurface model = new CompositeObjectSurface(data);
+			model.updateBoundingBox();
 			model.setDynamic(false);
 			
 			surfaces.put(keyOrFilePath, model);

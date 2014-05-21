@@ -3,7 +3,7 @@ package tests;
 import math.Vector4;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
-import raytrace.camera.aperture.CircleAperture;
+import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -53,7 +53,7 @@ public class PerformanceTest1 extends Scene
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.00005, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.00005, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
@@ -66,7 +66,7 @@ public class PerformanceTest1 extends Scene
 		if(model != null)
 		{
 			model.getTransform().scale(0.15);
-			model.getTransform().translation(0.1, 0.005, -0.0);
+			model.getTransform().translate(0.1, 0.005, -0.0);
 			model.bake(null);
 			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 			//		0.80, 1000, 1000));
@@ -81,7 +81,7 @@ public class PerformanceTest1 extends Scene
 		if(model2 != null)
 		{
 			model2.getTransform().scale(0.15);
-			model2.getTransform().translation(0.1, 0.005, -0.4);
+			model2.getTransform().translate(0.1, 0.005, -0.4);
 			model2.bake(null);
 			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 			//		0.80, 1000, 1000));

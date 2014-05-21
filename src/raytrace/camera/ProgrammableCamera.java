@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import process.logging.Logger;
 import raytrace.camera.aperture.Aperture;
-import raytrace.camera.aperture.CircleAperture;
+import raytrace.camera.aperture.CircularAperture;
 
 //import math.CompositeRay;
 import math.Ray;
@@ -40,7 +40,7 @@ public class ProgrammableCamera extends Camera {
 	//protected Function2D superSampDistroFuncY;
 	
 	protected double focalPlaneDistance = 1.0;
-	protected Aperture aperture = new CircleAperture();
+	protected Aperture aperture = new CircularAperture();
 
 	protected double startPixelX = 0;
 	protected double startPixelY = 0;

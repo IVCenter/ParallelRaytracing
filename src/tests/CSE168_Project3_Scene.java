@@ -3,7 +3,7 @@ package tests;
 import process.logging.Logger;
 import math.Vector4;
 import raytrace.camera.ProgrammableCamera;
-import raytrace.camera.aperture.CircleAperture;
+import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -51,7 +51,7 @@ public class CSE168_Project3_Scene extends Scene
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.00005, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.00005, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
@@ -68,7 +68,7 @@ public class CSE168_Project3_Scene extends Scene
 		if(model != null)
 		{
 			model.getTransform().scale(0.1);
-			model.getTransform().translation(0.0, 0.055, 0.0);
+			model.getTransform().translate(0.0, 0.055, 0.0);
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.grey(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
@@ -82,7 +82,7 @@ public class CSE168_Project3_Scene extends Scene
 		if(model2 != null)
 		{
 			model2.getTransform().scale(0.1);
-			model2.getTransform().translation(0.0, 0.055, -0.1);
+			model2.getTransform().translate(0.0, 0.055, -0.1);
 			model2.bake(null);
 			model2.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100));
@@ -96,7 +96,7 @@ public class CSE168_Project3_Scene extends Scene
 		if(model3 != null)
 		{
 			model3.getTransform().scale(0.1);
-			model3.getTransform().translation(0.0, 0.055, -0.2);
+			model3.getTransform().translate(0.0, 0.055, -0.2);
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
@@ -110,7 +110,7 @@ public class CSE168_Project3_Scene extends Scene
 		if(model4 != null)
 		{
 			model4.getTransform().scale(0.1);
-			model4.getTransform().translation(0.0, 0.055, -0.3);
+			model4.getTransform().translate(0.0, 0.055, -0.3);
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));

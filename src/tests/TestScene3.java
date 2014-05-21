@@ -81,7 +81,7 @@ public class TestScene3 extends Scene
 				{
 					Instance inst = new Instance();
 					inst.addChild(sphereAABVH);
-					inst.getTransform().translation(x * size * (Math.random()+1), y * size * (Math.random()+1), z * size * (Math.random()+1));
+					inst.getTransform().translate(x * size * (Math.random()+1), y * size * (Math.random()+1), z * size * (Math.random()+1));
 					inst.updateBoundingBox();
 					inst.bake(null);
 					//inst.setDynamic(false);

@@ -60,7 +60,7 @@ public class CSE168_Project1_Scene extends Scene{
 		Matrix4 mtx = new Matrix4();
 		mtx.identity();
 		mtx.rotateX(0.5);
-		mtx.translation(0.0, 1.0, 0.0);
+		mtx.translate(0.0, 1.0, 0.0);
 		inst1.setTransform(mtx);
 		inst1.addChild(box2);
 		this.addChild(inst1);
@@ -72,7 +72,7 @@ public class CSE168_Project1_Scene extends Scene{
 		Matrix4 mtx2 = new Matrix4();
 		mtx2.identity();
 		mtx2.rotateY(1.0);
-		mtx2.translation(-1.0, 0.0, 1.0);
+		mtx2.translate(-1.0, 0.0, 1.0);
 		inst2.setTransform(mtx2);
 		inst2.addChild(box2);
 		this.addChild(inst2);

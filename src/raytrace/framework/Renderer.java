@@ -8,7 +8,7 @@ public interface Renderer {
 	/*
 	 * An API template for renderers
 	 * 
-	 * This interface and be implemented to allow any existing renderer to 
+	 * This interface can be implemented to allow any existing renderer to 
 	 * be controlled by this framework
 	 */
 	

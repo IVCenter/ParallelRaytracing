@@ -3,7 +3,7 @@ package tests;
 import math.Vector4;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
-import raytrace.camera.aperture.CircleAperture;
+import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
@@ -45,7 +45,7 @@ public class TestScene2 extends Scene
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircleAperture(0.2, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.2, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
 		((ProgrammableCamera)activeCamera).forceUpdate();
 		

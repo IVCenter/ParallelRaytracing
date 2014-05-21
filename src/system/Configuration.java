@@ -19,6 +19,8 @@ public class Configuration {
 	//Defined parameters
 	protected static String id = "Unassigned";
 	protected static String nodeIdPrefix = "NightSky_Node_";
+	protected static String frameFileNamePrefix = "NightSky_Frame_";
+	protected static String animationFolderNamePrefix = "NightSky_Animation_";
 	
 	protected static int screenWidth = 1024;
 	protected static int screenHeight = 640;
@@ -34,6 +36,7 @@ public class Configuration {
 	protected static String workingDirectory = "/";
 	protected static String modelsSubDirectory = "Models/";
 	protected static String screenshotSubDirectory = "Screenshots/";
+	protected static String animationSubDirectory = "Animations/";
 	
 
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,6 +107,14 @@ public class Configuration {
 	//Node Id Prefix
 	public static String getNodeIdPrefix() { return nodeIdPrefix; }
 	public static void setNodeIdPrefix(String nodeIdPrefix) { Configuration.nodeIdPrefix = nodeIdPrefix; }
+	
+	//Frame File Name Prefix
+	public static String getFrameFileNamePrefix() { return frameFileNamePrefix; }
+	public static void setFrameFileNamePrefix(String frameFileNamePrefix) { Configuration.frameFileNamePrefix = frameFileNamePrefix; }
+
+	//Animation Folder name Prefix
+	public static String getAnimationFolderNamePrefix() { return animationFolderNamePrefix; }
+	public static void setAnimationFolderNamePrefix(String animationFolderNamePrefix) { Configuration.animationFolderNamePrefix = animationFolderNamePrefix; }
 
 	//Screen Width
 	public static int getScreenWidth() { return screenWidth; }
@@ -148,5 +159,9 @@ public class Configuration {
 	//Screenshot Sub-directory
 	public static String getScreenshotSubDirectory() { return screenshotSubDirectory; }
 	public static void setScreenshotSubDirectory(String screenshotSubDirectory) { Configuration.screenshotSubDirectory = screenshotSubDirectory; }
+
+	//Animation Sub-directory
+	public static String getAnimationSubDirectory() { return animationSubDirectory; }
+	public static void setAnimationSubDirectory(String animationSubDirectory) { Configuration.animationSubDirectory = animationSubDirectory; }
 	
 }

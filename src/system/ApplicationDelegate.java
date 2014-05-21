@@ -23,6 +23,7 @@ import input.Keyboard;
 import process.Job;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
+import raytrace.AnimationRenderer;
 import raytrace.ConfigurableRayTracer;
 import raytrace.ParallelRayTracer;
 import raytrace.data.RenderData;
@@ -143,7 +144,7 @@ public class ApplicationDelegate extends Job{
 		configureAsController(Configuration.isController());
 		
 		//Is a clock?
-		configureAsController(Configuration.isClock());
+		configureAsClock(Configuration.isClock());
 	}
 	
 
@@ -206,7 +207,11 @@ public class ApplicationDelegate extends Job{
 	{
 		if(shouldConfigure)
 		{
-			//TODO: What do?
+			//Wrap the current renderer in an animation renderer if it isn't one already
+			if(renderer != null && !(renderer instanceof AnimationRenderer))
+			{
+				renderer = new AnimationRenderer(renderer);
+			}
 			
 		}else{
 			
@@ -291,7 +296,7 @@ public class ApplicationDelegate extends Job{
 
 			//Update the update data
 			udata.setScene(Configuration.getMasterScene());
-			udata.setDt(0.016667);
+			udata.setDt(0.0416667);
 			
 			//update
 			renderer.update(udata);

@@ -73,7 +73,7 @@ public class TestScene4 extends Scene
 		
 		if(model != null) {
 			model.getTransform().scale(0.18);//ia
-			model.getTransform().translation(-1.2, 0, 1.2);//IA
+			model.getTransform().translate(-1.2, 0, 1.2);//IA
 			model.getTransform().rotateY(0.15);
 			model.bake(null);
 			//model.setMaterial(new ReflectiveMaterial(new Color(0xff0068ff), .70));
@@ -91,7 +91,7 @@ public class TestScene4 extends Scene
 		
 		if(model2 != null) {
 			model2.getTransform().scale(0.20);//ia
-			model2.getTransform().translation(1, 0, 0);//IA
+			model2.getTransform().translate(1, 0, 0);//IA
 			model2.bake(null);
 			model2.setMaterial(new FresnelMetalMaterial(new Color(1.0, 0.8, 0.6, 1.0), 0.55, 5.20));
 			this.addChild(model2);

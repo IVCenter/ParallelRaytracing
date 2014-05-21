@@ -61,7 +61,7 @@ public class CSE168_Project2_Scene extends Scene
 		if(model != null)
 		{
 			model.getTransform().scale(0.1);
-			model.getTransform().translation(0, 0.05, 0);
+			model.getTransform().translate(0, 0.05, 0);
 			model.bake(null);
 			model.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
 			this.addChild(model);
@@ -74,7 +74,7 @@ public class CSE168_Project2_Scene extends Scene
 		if(model2 != null)
 		{
 			model2.getTransform().scale(0.1);
-			model2.getTransform().translation(-0.05, 0.05, -0.1);
+			model2.getTransform().translate(-0.05, 0.05, -0.1);
 			model2.getTransform().rotateY(Math.PI);
 			model2.bake(null);
 			model2.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));

@@ -2,7 +2,7 @@ package raytrace.camera.aperture;
 
 import math.Vector4;
 
-public class CircleAperture implements Aperture {
+public class CircularAperture implements Aperture {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -19,13 +19,13 @@ public class CircleAperture implements Aperture {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public CircleAperture()
+	public CircularAperture()
 	{
 		radius = 0.0;
 		distributionExponent = 0.5;
 	}
 	
-	public CircleAperture(double radius, double distributionExponent)
+	public CircularAperture(double radius, double distributionExponent)
 	{
 		super();
 		this.radius = radius;

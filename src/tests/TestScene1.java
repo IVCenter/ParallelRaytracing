@@ -120,9 +120,9 @@ public class TestScene1 extends Scene {
 		{
 			Matrix4 mat = new Matrix4();
 			mat.identity();
-			mat.translation(0, 0.22501, 2);
+			mat.translate(0, 0.22501, 2);
 			mat.rotateY(Math.PI/7.0);
-			mat.nuscale(2.0, 0.5, 2.0);
+			mat.nonUniformScale(2.0, 0.5, 2.0);
 			
 			//MatrixTransformSurface mts = new MatrixTransformSurface(mat);
 			//this.addChild(mts);
