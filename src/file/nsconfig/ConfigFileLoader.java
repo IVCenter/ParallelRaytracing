@@ -51,23 +51,23 @@ public class ConfigFileLoader {
 		//Iterate the lines in the given file
 		String lineKey;
 		StringParser<Configuration> parser;
-		int firstSpaceIndex = -1;
+		int firstEqualsSignIndex = -1;
 		
 		LineParser lines = new LineParser(file);
 		
 		for(String line : lines)
 		{
-			line = line.replace("\t", " ");
-			firstSpaceIndex = line.indexOf(" ");
+			//line = line.replace("\t", " ");
+			firstEqualsSignIndex = line.indexOf("=");
 			
 			//Skip empty or malformed lines
-			if(line.length() == 0 || firstSpaceIndex < 0) {
+			if(line.length() == 0 || firstEqualsSignIndex < 0) {
 				Logger.warning(-32, "ConfigFileLoader: Skipping line [" + line + "].");
 				continue;
 			}
 			
 			//Get the line key
-			lineKey = line.substring(0, firstSpaceIndex).trim();
+			lineKey = line.substring(0, firstEqualsSignIndex).trim();
 			
 			//Get the associated parser
 			parser = parsers.get(lineKey);
