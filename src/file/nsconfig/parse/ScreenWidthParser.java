@@ -20,7 +20,7 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 	public void parse(String str, Configuration pop)
 	{
 		//Get the tokens
-		String[] tokens = tokens(str.trim(), " ");
+		String[] tokens = splitAtFirst(str.trim(), "=");
 		
 		//Parse tokens
 		try{
