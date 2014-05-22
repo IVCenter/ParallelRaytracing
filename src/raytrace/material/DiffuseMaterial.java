@@ -37,20 +37,17 @@ public class DiffuseMaterial extends Material{
 		
 		double DdotN = normal.dot3(data.getRay().getDirection());
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
-		double normalFlip = 1.0;
 		if(DdotN > 0.0) {
-			normalFlip = -1.0;
+			normal = normal.multiply3(-1.0);
 		}
 		
-		double lightdot;
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			lightdot = normal.dot3(ildata.getDirection()) * -1.0 * normalFlip;
-			if(lightdot > 0.0)
-				shade.add3AfterMultiply3M(ildata.getColor(), lightdot);
+			//Add diffusely reflected light contribution to shade
+			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
 		
 		return shade.multiply3M(color);
