@@ -15,8 +15,6 @@ import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DielectricMaterial;
-import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
@@ -45,7 +43,6 @@ public class TestScene5 extends Scene
 
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
-		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
@@ -60,54 +57,24 @@ public class TestScene5 extends Scene
 		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 
-		//Instance model = ResourceManager.create("white_lotus_reduced.obj");
-		model = ResourceManager.create("white_lotus_reduced.obj");
-		//model = ResourceManager.create("white_lotus_reduced.obj");
-		
+		model = ResourceManager.create("white_lotus_reduced.obj");		
 		if(model != null) {
-			model.getTransform().scale(6.1);//ia
-			//model.getTransform().scale(0.2);//ia
-			model.getTransform().translate(0, 0.5, 2);//IA
+			model.getTransform().scale(6.1);
+			model.getTransform().translate(0, 0.5, 2);
 			model.bake(null);
 			model.updateBoundingBox();
-			//model.setMaterial(new DiffusePTMaterial(new Color(0xddddddff), 1));
 			model.setMaterial(new DiffusePTMaterial(new Color(0xcc1111ff), 1));
 			this.addChild(model);
-			
-			
-			
 		}else{
 			Logger.error(-13, "TestScene5: Model was null!");
 		}
-		/*
-		for(int i = 0; i < 8 * 0; ++i)
-		{
-			model = ResourceManager.create("white_lotus_reduced.obj");
-			
-			if(model != null) {
-				model.getTransform().scale(0.5 + Math.random() * 0.4);//ia
-				model.getTransform().rotateY(Math.random());
-				double radius = 0.0 + randInRange(0.0, 3.0);
-				double theta = 1.0 * Math.PI * Math.random();
-				model.getTransform().translation(Math.cos(theta) * radius, randInRange(0, 0), Math.sin(theta) * radius + 2);//IA
-				model.bake(null);
-				model.setMaterial(new DiffusePTMaterial(new Color(0xddddddff), 1));
-				this.addChild(model);
-			}else{
-				Logger.error(-13, "TestScene5: Model was null!");
-			}
-		}
-		*/
 		
+
+		Cube cube = new Cube(1.0, 1.0, 1.0);		
+		int cubeCount = 2480;
+		ArrayList<CompositeSurface> cubes = new ArrayList<CompositeSurface>(cubeCount + 1);
 		
-		
-		Cube cube = new Cube(1.0, 1.0, 1.0);
-		
-		
-		int blockCount = 2480;
-		ArrayList<CompositeSurface> blocks = new ArrayList<CompositeSurface>(blockCount + 1);
-		
-		for(int x = 0; x < blockCount; ++x)
+		for(int x = 0; x < cubeCount; ++x)
 		{
 			Instance inst = new Instance();
 			inst.addChild(cube);
@@ -117,7 +84,6 @@ public class TestScene5 extends Scene
 				double phi = -2.0 * Math.PI * Math.random();
 				double theta = 0.5 * Math.PI * Math.random();
 				inst.getTransform().translate(Math.sin(theta) * Math.cos(phi) * radius, Math.cos(theta) * radius, Math.sin(theta) * Math.sin(phi) * radius );//IA
-				//inst.getTransform().translation(randInRange(-4, 4), randInRange(0, 4), randInRange(-6, 2));
 				inst.getTransform().scale(randInRange(0.1, 0.4));
 				inst.getTransform().rotateX(Math.random());
 				inst.getTransform().rotateY(Math.random());
@@ -126,7 +92,6 @@ public class TestScene5 extends Scene
 				double radius = 1.0 + randInRange(0.0, 12.0);
 				double phi = 2.0 * Math.PI * Math.random();
 				inst.getTransform().translate(Math.cos(phi) * radius + 0.5, 0, Math.sin(phi) * radius - 2.0);//IA
-				//inst.getTransform().translation(randInRange(-4, 4), randInRange(0, 4), randInRange(-6, 2));
 				double scale = randInRange(0.1, 0.6);
 				scale = Math.pow(scale, 1.2);
 				inst.getTransform().scale(scale);
@@ -135,24 +100,18 @@ public class TestScene5 extends Scene
 				double greyBase = 0.30;
 				inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
 			}
-			//inst.setMaterial(new DiffuseMaterial(Color.random(0.8)));
+
 			inst.updateBoundingBox();
 			inst.bake(null);
-			//inst.setDynamic(false);
-			blocks.add(inst);
+			cubes.add(inst);
 		}
 		
-		AABVHSurface aabvh = AABVHSurface.makeAABVH(blocks, 1, 1);
+		AABVHSurface aabvh = AABVHSurface.makeAABVH(cubes, 1, 1);
 		//Add all spheres at once
 		this.addChild(aabvh);
 		
 		
-		
-		
-		
 		Sphere sphere = new Sphere();
-		
-		
 		int sphereCount = 256;
 		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(sphereCount + 1);
 		
@@ -168,19 +127,12 @@ public class TestScene5 extends Scene
 			inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
 			inst.updateBoundingBox();
 			inst.bake(null);
-			//inst.setDynamic(false);
 			spheres.add(inst);
 		}
 
-		
 		AABVHSurface aabvhSpheres = AABVHSurface.makeAABVH(spheres, 1, 4);
 		//Add all spheres at once
 		this.addChild(aabvhSpheres);
-		
-		
-		
-		
-		
 		
 		
 		//Directional Light
@@ -191,16 +143,15 @@ public class TestScene5 extends Scene
 		lightManager.addLight(directionalLight);
 		
 		
-		
 		//Update bounding boxes
 		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
 		
-		//AABVHSurface aabvh2 = AABVHSurface.makeAABVH(this.getChildren(), 1, 2);
-		//this.getChildren().clear();
-		//this.addChild(aabvh2);
+		AABVHSurface aabvh2 = AABVHSurface.makeAABVH(this.getChildren(), 1, 2);
+		this.getChildren().clear();
+		this.addChild(aabvh2);
 		
 		//Refresh
 		this.updateBoundingBox();
@@ -208,8 +159,6 @@ public class TestScene5 extends Scene
 
 		//Make a plane
 		Plane plane = new Plane();
-		//plane.setMaterial(new ReflectiveMaterial(new Color(0xffeeddff), 0.35));
-		//plane.setMaterial(new DielectricMaterial(new Color(0xffffffff), 1.35));
 		plane.setMaterial(new DiffusePTMaterial(Color.grey(0.8), 1));
 		this.addChild(plane);
 		
@@ -255,7 +204,7 @@ public class TestScene5 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		//this.updateBoundingBox();
+		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

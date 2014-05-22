@@ -128,7 +128,7 @@ public class ApplicationDelegate extends Job{
 		}
 		
 		
-		
+		//TODO: Proper handler for registration message loop
 		//Test message
 		//Message regMsg = CommonMessageConstructor.createRegistrationMessage();
 		//messageSender.send(regMsg, "137.110.52.67");

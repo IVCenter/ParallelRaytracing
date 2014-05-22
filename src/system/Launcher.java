@@ -43,6 +43,7 @@ public class Launcher {
 			Configuration.setController(true);
 			//TODO: Need a reliable and relative folder to write to
 			Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
+			//TODO: If working directory doesnt have a slash at the end, add it
 			Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST5));
 		}
 		
