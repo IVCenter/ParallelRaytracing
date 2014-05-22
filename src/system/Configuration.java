@@ -44,7 +44,7 @@ public class Configuration {
 	 * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 	public static class Networking
 	{
-		protected static int webInterfacePost = 9741;
+		protected static int webInterfacePort = 9741;
 		protected static int messageReceivePort = 9742;
 		protected static int messageSendPort = 9743;
 		protected static int messageThreadCount = 4;
@@ -52,8 +52,8 @@ public class Configuration {
 		protected static String controllerHostName = "localhost";
 		
 		
-		public static int getWebInterfacePost() { return webInterfacePost; }
-		public static void setWebInterfacePost(int webInterfacePost) { Networking.webInterfacePost = webInterfacePost; }
+		public static int getWebInterfacePort() { return webInterfacePort; }
+		public static void setWebInterfacePort(int webInterfacePort) { Networking.webInterfacePort = webInterfacePort; }
 		
 		public static int getMessageReceivePort() { return messageReceivePort; }
 		public static void setMessageReceivePort(int messageReceivePort) { Networking.messageReceivePort = messageReceivePort; }
