@@ -97,6 +97,7 @@ public class AnimationRenderer implements Renderer {
 		if(isRecording)
 			return;
 		
+		
 		//Setup recording values
 		animationStartTimeStamp = TimeStamp.makeForFileName();
 		frameNumber = 0;
@@ -118,13 +119,17 @@ public class AnimationRenderer implements Renderer {
 					outputFolderPath = null;
 					Logger.error(-31, "AnimationRenderer: Failed to create folder for the current animation. [" + 
 							outputFolder.getPath() + "]");
+					return;
 				}
 			}
 		}else{
 			Logger.error(-31, "AnimationRenderer: The top-level animation folder does not exist. [" +
 					animationDirectory.getPath() + "]");
+			return;
 		}
-		
+
+		//Start recording
+		Logger.progress(-31, "AnimationRenderer: Starting recording an animation... [" + outputFolder.getName() + "].");
 		isRecording = true;
 	}
 	
@@ -132,7 +137,8 @@ public class AnimationRenderer implements Renderer {
 	{
 		if(!isRecording)
 			return;
-		
+
+		Logger.progress(-31, "AnimationRenderer: Ending recording an animation.");
 		isRecording = false;
 	}
 	
