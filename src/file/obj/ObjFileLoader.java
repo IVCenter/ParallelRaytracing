@@ -57,12 +57,12 @@ public class ObjFileLoader {
 	{
 		//Make sure the file exists
 		if(!file.exists()) {
-			Logger.warning(-9, "ObjFileLoader: The specified file does not exist.");
+			Logger.warning(-9, "ObjFileLoader: The specified file does not exist [" + file.getPath() + "].");
 			return null;
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-9, "Starting loading of the model [" + file.getName() + "]...");
+		Logger.progress(-9, "ObjFileLoader: Starting loading of the model [" + file.getName() + "]...");
 		
 		//Create a new Object Model Data object
 		ObjModelData data = new ObjModelData();
@@ -80,7 +80,7 @@ public class ObjFileLoader {
 			firstSpaceIndex = line.indexOf(" ");
 			
 			if(line.length() == 0 || firstSpaceIndex < 0) {
-				Logger.warning(-6, "ObjFileLoader: Skipping line [" + line + "].");
+				Logger.warning(-9, "ObjFileLoader: Skipping line [" + line + "].");
 				continue;
 			}
 			
@@ -92,7 +92,7 @@ public class ObjFileLoader {
 			
 			//If we dont have a parser for this line, continue;
 			if(parser == null) {
-				Logger.warning(-8, "ObjFileLoader.load(): Encountered a line key [" + lineKey + "] that does not have" +
+				Logger.warning(-9, "ObjFileLoader.load(): Encountered a line key [" + lineKey + "] that does not have" +
 						" an associated parser.");
 				continue;
 			}
@@ -101,7 +101,7 @@ public class ObjFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-9, "Ending loading of the model [" + file.getName() + "]... (" + 
+		Logger.progress(-9, "ObjFileLoader: Ending loading of the model [" + file.getName() + "]... (" + 
 				(System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;
