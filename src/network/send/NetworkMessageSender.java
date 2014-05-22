@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +27,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 	protected final ExecutorService pool;
 	protected final Thread thisThread;
 	
-	protected final ConcurrentLinkedDeque<SendableMessage> messageQueue;
+	protected final ConcurrentLinkedQueue<SendableMessage> messageQueue;
 	
 	//Threading related
 	protected AtomicInteger wasNotified;
@@ -43,7 +43,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 		this.port = port;
 		pool = Executors.newFixedThreadPool(poolSize);
 		
-		messageQueue = new ConcurrentLinkedDeque<SendableMessage>();
+		messageQueue = new ConcurrentLinkedQueue<SendableMessage>();
 		
 		wasNotified = new AtomicInteger(0);
 		sendLock = new Object();
@@ -81,7 +81,9 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 				//While there are message to send, keep sending
 				while(!messageQueue.isEmpty())
 				{
-					pool.execute(messageQueue.removeFirst());
+					try {
+						pool.execute(messageQueue.remove());
+					}catch(Exception e) { /*Do nothing*/ }
 				}
 				
 				//Decrement the notification counter
