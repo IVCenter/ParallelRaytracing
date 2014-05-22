@@ -128,7 +128,7 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 				socket.close();
 				listen(message);
 				
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

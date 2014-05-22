@@ -210,7 +210,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 		        socket.close();
 
 				
-			} catch (IOException | ClassNotFoundException e)
+			} catch (Exception e)
 			{
 				Logger.error(-22, "NetworkMessageSender: Failed to send message.");
 				e.printStackTrace();
