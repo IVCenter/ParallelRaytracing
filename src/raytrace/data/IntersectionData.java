@@ -1,6 +1,7 @@
 package raytrace.data;
 
 import raytrace.material.Material;
+import raytrace.surfaces.CompositeSurface;
 import math.Ray;
 import math.Vector4;
 
@@ -9,14 +10,22 @@ public class IntersectionData {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
+	//Since API v1.0
 	protected double time;
 	protected double distance;
 	protected Vector4 point;
 	protected Vector4 normal;
 	protected boolean twoSided;
 	protected Ray ray;
-	//protected CompositeSurface surface;
 	protected Material material;
+	
+	//Since API v2.0
+	protected CompositeSurface surface;
+	protected Vector4 texcoord;
+	//protected Vector4 uTangent; //Calculated in material on demand
+	//protected Vector4 vTangent; //Calculated in material on demand
+	protected Vector4 localPoint;
+	protected int meshID;
 
 
 	/* *********************************************************************************************
@@ -26,15 +35,16 @@ public class IntersectionData {
 	{
 		time = Double.NEGATIVE_INFINITY;
 		distance = Double.POSITIVE_INFINITY;
-		
-		//point
-		//normal
-		
+		point = null;
+		normal = null;
 		twoSided = false;
+		ray = null;
+		material = null;
 		
-		//ray
-		
-		//surface
+		surface = null;
+		texcoord = null;
+		localPoint = null;
+		meshID = -1;
 	}
 
 
@@ -94,17 +104,6 @@ public class IntersectionData {
 	public void setTwoSided(boolean twoSided) {
 		this.twoSided = twoSided;
 	}
-
-	//Surface
-	/*
-	public CompositeSurface getSurface() {
-		return surface;
-	}
-
-	public void setSurface(CompositeSurface surface) {
-		this.surface = surface;
-	}
-	*/
 	
 	//Material
 	public Material getMaterial() {
@@ -113,5 +112,41 @@ public class IntersectionData {
 
 	public void setMaterial(Material material) {
 		this.material = material;
+	}
+
+	//Surface
+	public CompositeSurface getSurface() {
+		return surface;
+	}
+
+	public void setSurface(CompositeSurface surface) {
+		this.surface = surface;
+	}
+
+	//Texcoord
+	public Vector4 getTexcoord() {
+		return texcoord;
+	}
+
+	public void setTexcoord(Vector4 texcoord) {
+		this.texcoord = texcoord;
+	}
+
+	//Local Point
+	public Vector4 getLocalPoint() {
+		return localPoint;
+	}
+
+	public void setLocalPoint(Vector4 localPoint) {
+		this.localPoint = localPoint;
+	}
+
+	//MeshID
+	public int getMeshID() {
+		return meshID;
+	}
+
+	public void setMeshID(int meshID) {
+		this.meshID = meshID;
 	}
 }
