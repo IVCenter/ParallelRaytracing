@@ -9,5 +9,5 @@ public interface Function2D<INDEPENDENT_X, DEPENDENT_Y> {
 	/* *********************************************************************************************
 	 * Interface Methods
 	 * *********************************************************************************************/
-	public DEPENDENT_Y eval(INDEPENDENT_X x);
+	public DEPENDENT_Y evaluate(INDEPENDENT_X x);
 }
