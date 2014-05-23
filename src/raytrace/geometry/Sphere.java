@@ -90,7 +90,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		
 		
 		//Calculate Texcoords
-		double[] pcfM = pointFromCenter.getM();
+		double[] pcfM = pointFromCenter.getArray();
 		
 		double uCoord = (Math.atan2(pcfM[2], pcfM[0]) + Math.PI) / (2.0 * Math.PI);
 		double vCoord = Math.acos(pcfM[1]) / Math.PI;

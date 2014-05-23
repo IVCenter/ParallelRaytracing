@@ -58,8 +58,8 @@ public abstract class Material {
 		
 		double c = -2.0 * dir.dot3(normal);
 		
-		double[] dirm = dir.getM();
-		double[] nm = normal.getM();
+		double[] dirm = dir.getArray();
+		double[] nm = normal.getArray();
 
 		double rx = dirm[0] + nm[0] * c;
 		double ry = dirm[1] + nm[1] * c;
@@ -107,8 +107,8 @@ public abstract class Material {
 	
 	protected Vector4 halfVector(Vector4 a, Vector4 b)
 	{
-		double[] ma = a.getM();
-		double[] mb = b.getM();
+		double[] ma = a.getArray();
+		double[] mb = b.getArray();
 		double maga = 1.0/a.magnitude3();
 		double magb = 1.0/b.magnitude3();
 		
@@ -137,11 +137,11 @@ public abstract class Material {
 	{
 		Vector4 s = cosineWeightedSample();
 		
-		double[] sm = s.getM();
+		double[] sm = s.getArray();
 
-		double[] xam = xa.getM();
-		double[] yam = ya.getM();
-		double[] zam = za.getM();
+		double[] xam = xa.getArray();
+		double[] yam = ya.getArray();
+		double[] zam = za.getArray();
 		
 		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
 						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],

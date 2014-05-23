@@ -150,7 +150,7 @@ public class Matrix4 {
 	public Vector4 multiply(Vector4 a)
 	{
 		double[] v = new double[4];
-		double[] am = a.getM();
+		double[] am = a.getArray();
 		
 		double sum = 0.0;
 		for(int row = 0; row < 4; ++row)
@@ -221,7 +221,7 @@ public class Matrix4 {
 	    temp.identity();
 	    double var = 1-Math.cos(angle);
 	    
-	    double[] a = v.getM();
+	    double[] a = v.getArray();
 	    
 	    temp.array[0][0] = a[0]*a[0] + Math.cos(angle)*(1-a[0]*a[0]);
 	    temp.array[0][1] = a[0]*a[1]*var+a[2]*Math.sin(angle);

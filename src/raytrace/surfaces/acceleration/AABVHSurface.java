@@ -167,7 +167,7 @@ public class AABVHSurface extends CompositeSurface {
 		Vector4 center = centerPoint(surfaces);
 		
 		//Get axis data
-		double[] axisValues = center.getM();
+		double[] axisValues = center.getArray();
 		
 		//Make surface sets
 		ArrayList<SURFACE> negative = new ArrayList<SURFACE>();
@@ -305,7 +305,7 @@ public class AABVHSurface extends CompositeSurface {
 	private static <SURFACE extends CompositeSurface> Vector4 centerPoint(Collection<SURFACE> surfaces)
 	{
 		Vector4 center = new Vector4();
-		double[] m = center.getM();
+		double[] m = center.getArray();
 
 		double count = 0;
 		
@@ -316,7 +316,7 @@ public class AABVHSurface extends CompositeSurface {
 		{
 			bb = cs.getBoundingBox();
 			mp = bb.getMidpoint();
-			mpm = mp.getM();
+			mpm = mp.getArray();
 			m[0] += mpm[0];
 			m[1] += mpm[1];
 			m[2] += mpm[2];

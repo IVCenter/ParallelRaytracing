@@ -41,10 +41,10 @@ public class BoundingBox {
 	public double intersects(RayData data)
 	{
 		Ray ray = data.getRay();
-		double[] minm = min.getM();
-		double[] maxm = max.getM();
-		double[] o = ray.getOrigin().getM();
-		double[] d = ray.getDirection().getM();
+		double[] minm = min.getArray();
+		double[] maxm = max.getArray();
+		double[] o = ray.getOrigin().getArray();
+		double[] d = ray.getDirection().getArray();
 
 		double[] tmin = {(minm[0] - o[0]) / d[0], (minm[1] - o[1]) / d[1], (minm[2] - o[2]) / d[2]};
 		double[] tmax = {(maxm[0] - o[0]) / d[0], (maxm[1] - o[1]) / d[1], (maxm[2] - o[2]) / d[2]};
@@ -94,8 +94,8 @@ public class BoundingBox {
 	
 	public double getSurfaceArea()
 	{
-		double[] minm = min.getM();
-		double[] maxm = max.getM();
+		double[] minm = min.getArray();
+		double[] maxm = max.getArray();
 
 		double x = maxm[0]-minm[0];
 		double y = maxm[1]-minm[1];

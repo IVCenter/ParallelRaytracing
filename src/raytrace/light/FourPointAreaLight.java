@@ -80,10 +80,10 @@ public class FourPointAreaLight extends Light {
 	 * *********************************************************************************************/
 	protected void interpolate(double x, double y)
 	{
-		double[] v0 = points[0].getM();
-		double[] v1 = points[1].getM();
-		double[] v2 = points[2].getM();
-		double[] v3 = points[3].getM();
+		double[] v0 = points[0].getArray();
+		double[] v1 = points[1].getArray();
+		double[] v2 = points[2].getArray();
+		double[] v3 = points[3].getArray();
 		
 		double[] a0 = {v0[0] + (v3[0] - v0[0]) * x,
 					   v0[1] + (v3[1] - v0[1]) * x,

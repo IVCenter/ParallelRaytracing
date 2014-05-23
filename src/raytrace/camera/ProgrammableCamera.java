@@ -176,9 +176,9 @@ public class ProgrammableCamera extends Camera {
 		imagePlaneHeight = imagePlaneWidth / imagePlaneRatio;
 		
 		//
-		vdir = viewingDirection.getM();
-		camX = cameraX.getM();
-		camY = cameraY.getM();
+		vdir = viewingDirection.getArray();
+		camX = cameraX.getArray();
+		camY = cameraY.getArray();
 		
 		//
 		samplingDelta = 1.0/(double)superSamplingLevel;
@@ -464,10 +464,10 @@ public class ProgrammableCamera extends Camera {
 				
 				if(superSamplingLevel > 1)
 				{
-					dirM = dir.getM();
+					dirM = dir.getArray();
 					
 					apertureSample = aperture.sample(apertureSample);
-					sampleM = apertureSample.getM();
+					sampleM = apertureSample.getArray();
 					
 					apertureOrigin.set(camX[0] * sampleM[0] + camY[0] * sampleM[1],
 									   camX[1] * sampleM[0] + camY[1] * sampleM[1],
@@ -476,7 +476,7 @@ public class ProgrammableCamera extends Camera {
 					
 					
 					//Finalize Direction
-					origM = apertureOrigin.getM();
+					origM = apertureOrigin.getArray();
 					dir.set(dirM[0] - origM[0],
 							dirM[1] - origM[1],
 							dirM[2] - origM[2],
@@ -484,7 +484,7 @@ public class ProgrammableCamera extends Camera {
 					
 	
 					//Finalize Origin
-					origM = position.getM();
+					origM = position.getArray();
 					apertureOrigin.set(origM[0] + camX[0] * sampleM[0] + camY[0] * sampleM[1],
 									   origM[1] + camX[1] * sampleM[0] + camY[1] * sampleM[1],
 								   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1],

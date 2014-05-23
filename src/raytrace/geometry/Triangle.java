@@ -48,11 +48,11 @@ public class Triangle extends TerminalSurface {
 	{
 		Ray ray = data.getRay();
 		
-		double[] d = ray.getDirection().getM();
+		double[] d = ray.getDirection().getArray();
 
-		double[] a = vertices[0].getPosition().getM();
-		double[] b = vertices[1].getPosition().getM();
-		double[] c = vertices[2].getPosition().getM();
+		double[] a = vertices[0].getPosition().getArray();
+		double[] b = vertices[1].getPosition().getArray();
+		double[] c = vertices[2].getPosition().getArray();
 
 		double va = b[0] - a[0];
 		double vb = b[1] - a[1];
@@ -75,7 +75,7 @@ public class Triangle extends TerminalSurface {
 			return null;
 
 		
-		double[] e = ray.getOrigin().getM();
+		double[] e = ray.getOrigin().getArray();
 		
 		double vj = e[0] - a[0];
 		double vk = e[1] - a[1];
@@ -108,9 +108,9 @@ public class Triangle extends TerminalSurface {
 		
 		
 		//Interpolate the normals
-		double[] n0 = vertices[0].getNormal().getM();
-		double[] n1 = vertices[1].getNormal().getM();
-		double[] n2 = vertices[2].getNormal().getM();
+		double[] n0 = vertices[0].getNormal().getArray();
+		double[] n1 = vertices[1].getNormal().getArray();
+		double[] n2 = vertices[2].getNormal().getArray();
 		
 		double alpha = 1.0 - (gamma + beta);
 		
@@ -127,9 +127,9 @@ public class Triangle extends TerminalSurface {
 		
 		
 		//Interpolate the TexCoords
-		double[] tex0 = vertices[0].getNormal().getM();
-		double[] tex1 = vertices[1].getNormal().getM();
-		double[] tex2 = vertices[2].getNormal().getM();
+		double[] tex0 = vertices[0].getNormal().getArray();
+		double[] tex1 = vertices[1].getNormal().getArray();
+		double[] tex2 = vertices[2].getNormal().getArray();
 		
 		double uCoord = tex0[0] * alpha + tex1[0] * beta + tex2[0] * gamma;
 		double vCoord = tex0[1] * alpha + tex1[1] * beta + tex2[1] * gamma;
