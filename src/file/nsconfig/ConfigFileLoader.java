@@ -86,4 +86,10 @@ public class ConfigFileLoader {
 		Logger.progress(-32, "ConfigFileLoader: Ending loading of the configuration [" + file.getName() + "]... (" + 
 				(System.currentTimeMillis() - startTime) + "ms).");
 	}
+
+	
+	/* *********************************************************************************************
+	 * Private Constructor
+	 * *********************************************************************************************/
+	private ConfigFileLoader() { /*No Access*/ }
 }
