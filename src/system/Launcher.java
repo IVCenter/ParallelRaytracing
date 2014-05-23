@@ -20,6 +20,10 @@ public class Launcher {
 		 * 		-[0] = Configuration File 
 		 */
 		
+		//TODO: If working dir from args is missing a trailing slash, add it
+		
+		
+		
 		//Set up some defaults
 		Configuration.setId(Constants.Default.NODE_ID);
 		Configuration.setDrawToScreen(false);
@@ -81,7 +85,6 @@ public class Launcher {
 	 * 		-Configuration loader
 	 * 		-Intermediate results support
 	 * 		-Registration Loop (controller compares on both ID and IP?)
-	 * 		-Wrap network sender send calls in try catch
 	 * 		-Compress pixels before sending?
 	 */
 
