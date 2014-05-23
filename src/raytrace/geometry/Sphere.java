@@ -83,14 +83,32 @@ public class Sphere extends TerminalSurface implements Positionable {
 		if(t <= t0 || t > t1)
 			return null;
 		
+		
+		//Point
+		Vector4 point = ray.evaluateAtTime(t);
+		Vector4 pointFromCenter = point.subtract3(center).normalize3();
+		
+		
+		//Calculate Texcoords
+		double[] pcfM = pointFromCenter.getM();
+		
+		double uCoord = (Math.atan2(pcfM[2], pcfM[0]) + Math.PI) / (2.0 * Math.PI);
+		double vCoord = Math.acos(pcfM[1]) / Math.PI;
+		Vector4 texcoord = new Vector4(uCoord, vCoord, 0, 0);
+		
+		
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
 		idata.setTime(t);
 		idata.setRay(ray);
-		idata.setPoint(ray.evaluateAtTime(t));
+		idata.setPoint(point);
 		idata.setDistance(ray.getDirection().magnitude3() * t);
-		idata.setNormal(idata.getPoint().subtract3(center).normalize3());
+		idata.setNormal(pointFromCenter);
 		idata.setMaterial(material);
+
+		idata.setSurface(this);
+		idata.setTexcoord(texcoord);
+		idata.setLocalPoint(new Vector4(point));
 		
 		return idata;
 	}

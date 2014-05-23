@@ -106,6 +106,7 @@ public class Triangle extends TerminalSurface {
 		if(beta < 0 || beta > 1 - gamma)
 			return null;
 		
+		
 		//Interpolate the normals
 		double[] n0 = vertices[0].getNormal().getM();
 		double[] n1 = vertices[1].getNormal().getM();
@@ -121,15 +122,33 @@ public class Triangle extends TerminalSurface {
 		normal.normalize3();
 		
 		
+		//Point
+		Vector4 point = ray.evaluateAtTime(t);
+		
+		
+		//Interpolate the TexCoords
+		double[] tex0 = vertices[0].getNormal().getM();
+		double[] tex1 = vertices[1].getNormal().getM();
+		double[] tex2 = vertices[2].getNormal().getM();
+		
+		double uCoord = tex0[0] * alpha + tex1[0] * beta + tex2[0] * gamma;
+		double vCoord = tex0[1] * alpha + tex1[1] * beta + tex2[1] * gamma;
+		
+		Vector4 texcoord = new Vector4(uCoord, vCoord, 0, 0);
+		
+		
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
 		idata.setTime(t);
 		idata.setRay(ray);
-		idata.setPoint(ray.evaluateAtTime(t));
+		idata.setPoint(point);
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(normal);
-		//idata.setSurface(this);
 		idata.setMaterial(material);
+
+		idata.setSurface(this);
+		idata.setTexcoord(texcoord);
+		idata.setLocalPoint(new Vector4(point));
 		
 		return idata;
 	}

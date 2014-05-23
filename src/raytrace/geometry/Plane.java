@@ -64,17 +64,33 @@ public class Plane extends TerminalSurface implements Positionable {
 		//Test if t is in the given time range
 		if(t <= t0 || t > t1)
 			return null;
+		
+		//Point
+		Vector4 point = ray.evaluateAtTime(t);
+		
+		//Calculate texcoords
+		//TODO: This will cause NaNs at exactly when the normal faces towards the z-axis or the negative z-axis
+		Vector4 tangent = normal.cross3(Vector4.ZAXIS).normalize3();
+		Vector4 pointRelativeToPosition = point.subtract3(position);
+		
+		double relativePointDistanceSqrd = pointRelativeToPosition.magnitude3Sqrd();
+		double uCoord = tangent.dot3(pointRelativeToPosition);
+		double vCoord = Math.sqrt(relativePointDistanceSqrd - uCoord * uCoord);
+		
 			
 		//Return data about the intersection
 		IntersectionData idata = new IntersectionData();
 		idata.setTime(t);
 		idata.setRay(ray);
-		idata.setPoint(ray.evaluateAtTime(t));
+		idata.setPoint(point);
 		idata.setDistance(ray.getDirection().magnitude3() * t);
 		idata.setNormal(new Vector4(normal));
 		idata.setTwoSided(true);
-		//idata.setSurface(this);
 		idata.setMaterial(material);
+
+		idata.setSurface(this);
+		idata.setTexcoord(new Vector4(uCoord, vCoord, 0, 0));
+		idata.setLocalPoint(new Vector4(point));
 		
 		return idata;
 	}
