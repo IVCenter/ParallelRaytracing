@@ -2,6 +2,8 @@ package system;
 
 import java.io.File;
 
+import file.nsconfig.ConfigFileLoader;
+
 import process.Environment;
 import process.logging.Logger;
 import raytrace.scene.SceneLoader;
@@ -61,9 +63,12 @@ public class Launcher {
 			//If we have a config file, 
 			if(configFile.exists() && configFile.getName().endsWith(Constants.configurationFileExtension))
 			{
-				//TODO: Config file loader
+				ConfigFileLoader.load(configFile);
 				
-				//TODO: Create folder structure if it doesn't exist under working directory
+				//TODO: Create folder structure if necessary
+				//See if working dir exists, if not see if parent exists, if not set writing flag to false
+				//if necessary create working dir under exisitng parent
+				//if necessary create sub folders
 			}
 			
 		}catch(Exception e) {
@@ -89,7 +94,7 @@ public class Launcher {
 	 * 
 		//TODO: AddMaterial support for UV tangents
 		//TODO: Add Quad support to Triangle
-		//TODO: Add mesh ID lookup support to MeshSurface
+		//TODO: Add support for textures to existing materials
 	 */
 
 }
