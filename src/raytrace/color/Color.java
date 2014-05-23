@@ -1,8 +1,10 @@
 package raytrace.color;
 
 import process.utils.StringUtils;
+import raytrace.map.Texture2D;
+import raytrace.map.Texture3D;
 
-public class Color {
+public class Color implements Texture2D, Texture3D{
 	
 	/*
 	 * A simple color class
@@ -19,6 +21,15 @@ public class Color {
 	public Color()
 	{
 		channels = new double[4];
+	}
+	
+	public Color(Color color)
+	{
+		this();
+		this.channels[0] = color.channels[0];
+		this.channels[1] = color.channels[1];
+		this.channels[2] = color.channels[2];
+		this.channels[3] = color.channels[3];
 	}
 	
 	public Color(double[] channels)
@@ -173,6 +184,22 @@ public class Color {
 						 channels[2] * d + e, 
 						 channels[3]);
 	}
+
+	
+	/* *********************************************************************************************
+	 * Texture Override Methods
+	 * *********************************************************************************************/
+	@Override
+	public Color evaluate(Double x, Double y)
+	{
+		return this;
+	}
+	
+	@Override
+	public Color evaluate(Double x, Double y, Double z)
+	{
+		return this;
+	}
 	
 
 	/* *********************************************************************************************
@@ -246,4 +273,5 @@ public class Color {
 						 Math.random() * (1.0-min) + min, 
 						 1.0);
 	}
+	
 }
