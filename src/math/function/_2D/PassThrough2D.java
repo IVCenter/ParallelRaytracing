@@ -7,7 +7,7 @@ public class PassThrough2D<INDEPENDENT_X> implements Function2D<INDEPENDENT_X, I
 	 */
 
 	@Override
-	public INDEPENDENT_X eval(INDEPENDENT_X x)
+	public INDEPENDENT_X evaluate(INDEPENDENT_X x)
 	{
 		return x;
 	}
