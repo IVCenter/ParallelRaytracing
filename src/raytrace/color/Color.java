@@ -1,10 +1,10 @@
 package raytrace.color;
 
 import process.utils.StringUtils;
-import raytrace.map.Texture2D;
-import raytrace.map.Texture3D;
+import raytrace.data.IntersectionData;
+import raytrace.map.Texture;
 
-public class Color implements Texture2D, Texture3D{
+public class Color implements Texture {
 	
 	/*
 	 * A simple color class
@@ -190,13 +190,7 @@ public class Color implements Texture2D, Texture3D{
 	 * Texture Override Methods
 	 * *********************************************************************************************/
 	@Override
-	public Color evaluate(Double x, Double y)
-	{
-		return this;
-	}
-	
-	@Override
-	public Color evaluate(Double x, Double y, Double z)
+	public Color evaluate(IntersectionData data)
 	{
 		return this;
 	}
@@ -205,12 +199,18 @@ public class Color implements Texture2D, Texture3D{
 	/* *********************************************************************************************
 	 * Print Methods
 	 * *********************************************************************************************/
+	@Override
+	public String toString()
+	{
+		return "[" + StringUtils.column(""+channels[0], 8) + ", " + 
+				 	 StringUtils.column(""+channels[1], 8) + ", " +
+				 	 StringUtils.column(""+channels[2], 8) + ", " +
+				 	 StringUtils.column(""+channels[3], 8) + "]";
+	}
+	
 	public void print()
 	{
-		System.out.println("[" + StringUtils.column(""+channels[0], 8) + ", " + 
-								 StringUtils.column(""+channels[1], 8) + ", " +
-								 StringUtils.column(""+channels[2], 8) + ", " +
-								 StringUtils.column(""+channels[3], 8) + "]");
+		System.out.println(this.toString());
 	}
 	
 	
