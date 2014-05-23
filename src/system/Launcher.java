@@ -86,6 +86,10 @@ public class Launcher {
 	 * 		-Intermediate results support
 	 * 		-Registration Loop (controller compares on both ID and IP?)
 	 * 		-Compress pixels before sending?
+	 * 
+		//TODO: AddMaterial support for UV tangents
+		//TODO: Add Quad support to Triangle
+		//TODO: Add mesh ID lookup support to MeshSurface
 	 */
 
 }
