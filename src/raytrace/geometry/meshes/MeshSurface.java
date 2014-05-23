@@ -14,12 +14,28 @@ import raytrace.surfaces.TerminalSurface;
 public class MeshSurface extends TerminalSurface {
 	
 	/*
-	 * A simple sphere class
+	 * A simple mesh class
 	 */
+	/* *********************************************************************************************
+	 * Static Vars
+	 * *********************************************************************************************/
+	private static int nextMeshID = 0;
+	
+	
+	/* *********************************************************************************************
+	 * Static Helper Methods
+	 * *********************************************************************************************/
+	private synchronized static int nextMeshID()
+	{
+		return nextMeshID++;
+	}
+	
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected ArrayList<Triangle> triangles;
+	protected int meshID = nextMeshID();
 	
 
 	/* *********************************************************************************************
@@ -56,6 +72,8 @@ public class MeshSurface extends TerminalSurface {
 				closest = idata;
 			}
 		}
+		
+		closest.setMeshID(meshID);
 		
 		return closest;
 	}
@@ -106,6 +124,14 @@ public class MeshSurface extends TerminalSurface {
 
 	public void setTriangles(ArrayList<Triangle> triangles) {
 		this.triangles = triangles;
+	}
+
+	public int getMeshID() {
+		return meshID;
+	}
+
+	public void setMeshID(int meshID) {
+		this.meshID = meshID;
 	}
 	
 }
