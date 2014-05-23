@@ -1,8 +1,9 @@
 package raytrace.map;
 
 import raytrace.color.Color;
+import raytrace.data.IntersectionData;
 
-public interface Texture1D extends Map1D<Color> {
+public abstract class Texture1D implements Map1D<Color>, Texture {
 	
 	/*
 	 * A base class for 1D textures
@@ -13,5 +14,16 @@ public interface Texture1D extends Map1D<Color> {
 	 * *********************************************************************************************/
 	@Override
 	public abstract Color evaluate(Double x);
+
+	
+	/* *********************************************************************************************
+	 * Concrete Methods
+	 * *********************************************************************************************/
+	@Override
+	public Color evaluate(IntersectionData data)
+	{
+		//TODO: Do something a little more clever here.....
+		return evaluate(data.getLocalPoint().magnitude3());
+	}
 
 }
