@@ -91,7 +91,8 @@ public class MeshSurface extends TerminalSurface {
 			}
 		}
 		
-		closest.setMeshID(meshID);
+		if(closest != null)
+			closest.setMeshID(meshID);
 		
 		return closest;
 	}
