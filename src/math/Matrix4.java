@@ -13,14 +13,14 @@ public class Matrix4 {
 	/* *********************************************************************************************
 	 * Instnace Vars
 	 * *********************************************************************************************/
-	protected double[][] m;
+	protected double[][] array;
 
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
 	public Matrix4()
 	{
-		m = new double[4][4];
+		array = new double[4][4];
 	}
 	
 	public Matrix4(Matrix4 a)
@@ -47,22 +47,22 @@ public class Matrix4 {
 	                double m20, double m21, double m22, double m23,
 	                double m30, double m31, double m32, double m33)
 	{
-	    m[0][0] = m00;
-	    m[0][1] = m01;
-	    m[0][2] = m02;
-	    m[0][3] = m03;
-	    m[1][0] = m10;
-	    m[1][1] = m11;
-	    m[1][2] = m12;
-	    m[1][3] = m13;
-	    m[2][0] = m20;
-	    m[2][1] = m21;
-	    m[2][2] = m22;
-	    m[2][3] = m23;
-	    m[3][0] = m30;
-	    m[3][1] = m31;
-	    m[3][2] = m32;
-	    m[3][3] = m33;
+	    array[0][0] = m00;
+	    array[0][1] = m01;
+	    array[0][2] = m02;
+	    array[0][3] = m03;
+	    array[1][0] = m10;
+	    array[1][1] = m11;
+	    array[1][2] = m12;
+	    array[1][3] = m13;
+	    array[2][0] = m20;
+	    array[2][1] = m21;
+	    array[2][2] = m22;
+	    array[2][3] = m23;
+	    array[3][0] = m30;
+	    array[3][1] = m31;
+	    array[3][2] = m32;
+	    array[3][3] = m33;
 	}
 	
 	public void set(Matrix4 a)
@@ -77,19 +77,19 @@ public class Matrix4 {
 		{
 			for(int j = 0; j < 4; ++j)
 			{
-				m[i][j] = am[i][j];
+				array[i][j] = am[i][j];
 			}
 		}
 	}
 	
 	public void set(int vector, int element, double value)
 	{
-		m[vector][element] = value;
+		array[vector][element] = value;
 	}
 
 	double[][] getM()
 	{
-		return m;
+		return array;
 	}
 
 	public void identity()
@@ -98,7 +98,7 @@ public class Matrix4 {
 	    {
 	        for (int j=0; j<4; ++j)
 	        {
-	            m[i][j] = i == j ? 1 : 0;
+	            array[i][j] = i == j ? 1 : 0;
 	        }
 	    }
 	}
@@ -112,7 +112,7 @@ public class Matrix4 {
 
 	public double get(int vector,int element)
 	{
-	    return m[vector][element];
+	    return array[vector][element];
 	}
 
 	public Matrix4 multiply(Matrix4 a)
@@ -129,7 +129,7 @@ public class Matrix4 {
 				sum = 0.0;
 				for(int element = 0; element < 4; ++element)
 				{
-					sum += m[element][row] * am[col][element];
+					sum += array[element][row] * am[col][element];
 				}
 				n[col][row] = sum;
 			}
@@ -158,7 +158,7 @@ public class Matrix4 {
 			sum = 0.0;
 			for(int element = 0; element < 4; ++element)
 			{
-				sum += m[element][row] * am[element];
+				sum += array[element][row] * am[element];
 			}
 			v[row] = sum;
 		}
@@ -182,10 +182,10 @@ public class Matrix4 {
 	{
 	    Matrix4 temp = new Matrix4();;
 	    temp.identity();
-	    temp.m[1][1] = Math.cos(angle);
-	    temp.m[2][2] = Math.cos(angle);
-	    temp.m[1][2] = Math.sin(angle);
-	    temp.m[2][1] = -Math.sin(angle);
+	    temp.array[1][1] = Math.cos(angle);
+	    temp.array[2][2] = Math.cos(angle);
+	    temp.array[1][2] = Math.sin(angle);
+	    temp.array[2][1] = -Math.sin(angle);
 	    
 	    return multiply(temp);
 	}
@@ -194,10 +194,10 @@ public class Matrix4 {
 	{
 	    Matrix4 temp = new Matrix4();
 	    temp.identity();
-		temp.m[0][0] = Math.cos(angle);
-		temp.m[0][2] = -Math.sin(angle);
-		temp.m[2][0] = Math.sin(angle);
-		temp.m[2][2] = Math.cos(angle);
+		temp.array[0][0] = Math.cos(angle);
+		temp.array[0][2] = -Math.sin(angle);
+		temp.array[2][0] = Math.sin(angle);
+		temp.array[2][2] = Math.cos(angle);
 	    
 	    return multiply(temp);
 	}
@@ -206,10 +206,10 @@ public class Matrix4 {
 	{
 	    Matrix4 temp = new Matrix4();
 	    temp.identity();
-	    temp.m[0][0] = Math.cos(angle);
-	    temp.m[1][1] = Math.cos(angle);
-	    temp.m[0][1] = Math.sin(angle);
-	    temp.m[1][0] = -Math.sin(angle);
+	    temp.array[0][0] = Math.cos(angle);
+	    temp.array[1][1] = Math.cos(angle);
+	    temp.array[0][1] = Math.sin(angle);
+	    temp.array[1][0] = -Math.sin(angle);
 	    
 	    return multiply(temp);
 	}
@@ -223,30 +223,30 @@ public class Matrix4 {
 	    
 	    double[] a = v.getM();
 	    
-	    temp.m[0][0] = a[0]*a[0] + Math.cos(angle)*(1-a[0]*a[0]);
-	    temp.m[0][1] = a[0]*a[1]*var+a[2]*Math.sin(angle);
-	    temp.m[0][2] = a[0]*a[2]*var - a[1]*Math.sin(angle);
-	    temp.m[1][0] = -a[2]*Math.sin(angle) + var*a[0]*a[1];
-	    temp.m[1][1] = a[1]*a[1] + Math.cos(angle)*(1-a[1]*a[1]);
-	    temp.m[1][2] = a[1]*a[2]*var + a[0]*Math.sin(angle);
-	    temp.m[2][0] = a[0]*a[2]*(var)+a[1]*Math.sin(angle);
-	    temp.m[2][1] = a[1]*a[2]*(var) - a[0]*Math.sin(angle);
-	    temp.m[2][2] = a[2]*a[2] + Math.cos(angle)*(1-a[2]*a[2]);
+	    temp.array[0][0] = a[0]*a[0] + Math.cos(angle)*(1-a[0]*a[0]);
+	    temp.array[0][1] = a[0]*a[1]*var+a[2]*Math.sin(angle);
+	    temp.array[0][2] = a[0]*a[2]*var - a[1]*Math.sin(angle);
+	    temp.array[1][0] = -a[2]*Math.sin(angle) + var*a[0]*a[1];
+	    temp.array[1][1] = a[1]*a[1] + Math.cos(angle)*(1-a[1]*a[1]);
+	    temp.array[1][2] = a[1]*a[2]*var + a[0]*Math.sin(angle);
+	    temp.array[2][0] = a[0]*a[2]*(var)+a[1]*Math.sin(angle);
+	    temp.array[2][1] = a[1]*a[2]*(var) - a[0]*Math.sin(angle);
+	    temp.array[2][2] = a[2]*a[2] + Math.cos(angle)*(1-a[2]*a[2]);
 	    
 	    return multiply(temp);
 	}
 
 	public Matrix4 copyRotation(Matrix4 a)
 	{
-	    m[0][0] = a.m[0][0];
-	    m[0][1] = a.m[0][1];
-	    m[0][2] = a.m[0][2];
-	    m[1][0] = a.m[1][0];
-	    m[1][1] = a.m[1][1];
-	    m[1][2] = a.m[1][2];
-	    m[2][0] = a.m[2][0];
-	    m[2][1] = a.m[2][1];
-	    m[2][2] = a.m[2][2];
+	    array[0][0] = a.array[0][0];
+	    array[0][1] = a.array[0][1];
+	    array[0][2] = a.array[0][2];
+	    array[1][0] = a.array[1][0];
+	    array[1][1] = a.array[1][1];
+	    array[1][2] = a.array[1][2];
+	    array[2][0] = a.array[2][0];
+	    array[2][1] = a.array[2][1];
+	    array[2][2] = a.array[2][2];
 	    return this;
 	}
 
@@ -254,9 +254,9 @@ public class Matrix4 {
 	{
 		Matrix4 scale = new Matrix4();
 	    scale.identity();
-	    scale.m[0][0] = s;
-	    scale.m[1][1] = s;
-	    scale.m[2][2] = s;
+	    scale.array[0][0] = s;
+	    scale.array[1][1] = s;
+	    scale.array[2][2] = s;
 	    
 	    return multiply(scale);
 	}
@@ -265,41 +265,41 @@ public class Matrix4 {
 	{
 	    Matrix4 scale = new Matrix4();
 	    scale.identity();
-	    scale.m[0][0] = sx;
-	    scale.m[1][1] = sy;
-	    scale.m[2][2] = sz;
+	    scale.array[0][0] = sx;
+	    scale.array[1][1] = sy;
+	    scale.array[2][2] = sz;
 
 	    return multiply(scale);
 	}
 
 	public Matrix4 translate(Vector4 a)
 	{
-		m[3][0] += a.m[0];
-		m[3][1] += a.m[1];
-		m[3][2] += a.m[2];
+		array[3][0] += a.array[0];
+		array[3][1] += a.array[1];
+		array[3][2] += a.array[2];
 		
 		return this;
 	}
 
 	public Matrix4 translate(double x, double y, double z)
 	{
-		m[3][0] += x;
-		m[3][1] += y;
-		m[3][2] += z;
+		array[3][0] += x;
+		array[3][1] += y;
+		array[3][2] += z;
 		
 		return this;
 	}
 
 	public Vector4 getTranslation()
 	{
-	    return new Vector4(m[3][0], m[3][1], m[3][2], 1);
+	    return new Vector4(array[3][0], array[3][1], array[3][2], 1);
 	}
 
 	public void detranslate()
 	{
-	    m[3][0] = 0;
-	    m[3][1] = 0;
-	    m[3][2] = 0;
+	    array[3][0] = 0;
+	    array[3][1] = 0;
+	    array[3][2] = 0;
 	}
 
 
@@ -311,7 +311,7 @@ public class Matrix4 {
 	    	sb.append("[ ");
 	        for( int vector = 0; vector < 4; vector++)
 	        {
-	            sb.append(StringUtils.column(""+m[vector][element], 8) + " ");
+	            sb.append(StringUtils.column(""+array[vector][element], 8) + " ");
 	        }
 	        sb.append("]\n");
 	    }
@@ -326,9 +326,9 @@ public class Matrix4 {
 	    {
 	        for( int y = x+1; y < 4; y++)
 	        {
-	            temp = m[y][x];
-	            m[y][x] = m[x][y];
-	            m[x][y] = temp;
+	            temp = array[y][x];
+	            array[y][x] = array[x][y];
+	            array[x][y] = temp;
 	        }
 	    }
 
@@ -339,19 +339,19 @@ public class Matrix4 {
 	//http://stackoverflow.com/questions/2624422/efficient-4x4-matrix-inverse-affine-transform
 	public Matrix4 inverse()
 	{
-	    double s0 = m[0][0] * m[1][1] - m[1][0] * m[0][1];
-	    double s1 = m[0][0] * m[1][2] - m[1][0] * m[0][2];
-	    double s2 = m[0][0] * m[1][3] - m[1][0] * m[0][3];
-	    double s3 = m[0][1] * m[1][2] - m[1][1] * m[0][2];
-	    double s4 = m[0][1] * m[1][3] - m[1][1] * m[0][3];
-	    double s5 = m[0][2] * m[1][3] - m[1][2] * m[0][3];
+	    double s0 = array[0][0] * array[1][1] - array[1][0] * array[0][1];
+	    double s1 = array[0][0] * array[1][2] - array[1][0] * array[0][2];
+	    double s2 = array[0][0] * array[1][3] - array[1][0] * array[0][3];
+	    double s3 = array[0][1] * array[1][2] - array[1][1] * array[0][2];
+	    double s4 = array[0][1] * array[1][3] - array[1][1] * array[0][3];
+	    double s5 = array[0][2] * array[1][3] - array[1][2] * array[0][3];
 	    
-	    double c5 = m[2][2] * m[3][3] - m[3][2] * m[2][3];
-	    double c4 = m[2][1] * m[3][3] - m[3][1] * m[2][3];
-	    double c3 = m[2][1] * m[3][2] - m[3][1] * m[2][2];
-	    double c2 = m[2][0] * m[3][3] - m[3][0] * m[2][3];
-	    double c1 = m[2][0] * m[3][2] - m[3][0] * m[2][2];
-	    double c0 = m[2][0] * m[3][1] - m[3][0] * m[2][1];
+	    double c5 = array[2][2] * array[3][3] - array[3][2] * array[2][3];
+	    double c4 = array[2][1] * array[3][3] - array[3][1] * array[2][3];
+	    double c3 = array[2][1] * array[3][2] - array[3][1] * array[2][2];
+	    double c2 = array[2][0] * array[3][3] - array[3][0] * array[2][3];
+	    double c1 = array[2][0] * array[3][2] - array[3][0] * array[2][2];
+	    double c0 = array[2][0] * array[3][1] - array[3][0] * array[2][1];
 	    
 	    // Should check for 0 determinant
 	    double det = (s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0);
@@ -359,25 +359,25 @@ public class Matrix4 {
 	    
 	    Matrix4 b = new Matrix4();
 	    
-	    b.m[0][0] = ( m[1][1] * c5 - m[1][2] * c4 + m[1][3] * c3) * invdet;
-	    b.m[0][1] = (-m[0][1] * c5 + m[0][2] * c4 - m[0][3] * c3) * invdet;
-	    b.m[0][2] = ( m[3][1] * s5 - m[3][2] * s4 + m[3][3] * s3) * invdet;
-	    b.m[0][3] = (-m[2][1] * s5 + m[2][2] * s4 - m[2][3] * s3) * invdet;
+	    b.array[0][0] = ( array[1][1] * c5 - array[1][2] * c4 + array[1][3] * c3) * invdet;
+	    b.array[0][1] = (-array[0][1] * c5 + array[0][2] * c4 - array[0][3] * c3) * invdet;
+	    b.array[0][2] = ( array[3][1] * s5 - array[3][2] * s4 + array[3][3] * s3) * invdet;
+	    b.array[0][3] = (-array[2][1] * s5 + array[2][2] * s4 - array[2][3] * s3) * invdet;
 	    
-	    b.m[1][0] = (-m[1][0] * c5 + m[1][2] * c2 - m[1][3] * c1) * invdet;
-	    b.m[1][1] = ( m[0][0] * c5 - m[0][2] * c2 + m[0][3] * c1) * invdet;
-	    b.m[1][2] = (-m[3][0] * s5 + m[3][2] * s2 - m[3][3] * s1) * invdet;
-	    b.m[1][3] = ( m[2][0] * s5 - m[2][2] * s2 + m[2][3] * s1) * invdet;
+	    b.array[1][0] = (-array[1][0] * c5 + array[1][2] * c2 - array[1][3] * c1) * invdet;
+	    b.array[1][1] = ( array[0][0] * c5 - array[0][2] * c2 + array[0][3] * c1) * invdet;
+	    b.array[1][2] = (-array[3][0] * s5 + array[3][2] * s2 - array[3][3] * s1) * invdet;
+	    b.array[1][3] = ( array[2][0] * s5 - array[2][2] * s2 + array[2][3] * s1) * invdet;
 	    
-	    b.m[2][0] = ( m[1][0] * c4 - m[1][1] * c2 + m[1][3] * c0) * invdet;
-	    b.m[2][1] = (-m[0][0] * c4 + m[0][1] * c2 - m[0][3] * c0) * invdet;
-	    b.m[2][2] = ( m[3][0] * s4 - m[3][1] * s2 + m[3][3] * s0) * invdet;
-	    b.m[2][3] = (-m[2][0] * s4 + m[2][1] * s2 - m[2][3] * s0) * invdet;
+	    b.array[2][0] = ( array[1][0] * c4 - array[1][1] * c2 + array[1][3] * c0) * invdet;
+	    b.array[2][1] = (-array[0][0] * c4 + array[0][1] * c2 - array[0][3] * c0) * invdet;
+	    b.array[2][2] = ( array[3][0] * s4 - array[3][1] * s2 + array[3][3] * s0) * invdet;
+	    b.array[2][3] = (-array[2][0] * s4 + array[2][1] * s2 - array[2][3] * s0) * invdet;
 	    
-	    b.m[3][0] = (-m[1][0] * c3 + m[1][1] * c1 - m[1][2] * c0) * invdet;
-	    b.m[3][1] = ( m[0][0] * c3 - m[0][1] * c1 + m[0][2] * c0) * invdet;
-	    b.m[3][2] = (-m[3][0] * s3 + m[3][1] * s1 - m[3][2] * s0) * invdet;
-	    b.m[3][3] = ( m[2][0] * s3 - m[2][1] * s1 + m[2][2] * s0) * invdet;
+	    b.array[3][0] = (-array[1][0] * c3 + array[1][1] * c1 - array[1][2] * c0) * invdet;
+	    b.array[3][1] = ( array[0][0] * c3 - array[0][1] * c1 + array[0][2] * c0) * invdet;
+	    b.array[3][2] = (-array[3][0] * s3 + array[3][1] * s1 - array[3][2] * s0) * invdet;
+	    b.array[3][3] = ( array[2][0] * s3 - array[2][1] * s1 + array[2][2] * s0) * invdet;
 	    
 	    return b;
 	}
@@ -385,14 +385,14 @@ public class Matrix4 {
 	public Matrix4 frustum(double left, double right, double top, double bottom, double near, double far)
 	{
 	    identity();
-	    m[0][0] = (2.0 * near) / (right-left);
-	    m[1][1] = (2.0 * near) / (top-bottom);
-	    m[2][0] = (right+left) / (right-left);
-	    m[2][1] = (top+bottom) / (top-bottom);
-	    m[2][2] = -1.0 * (far+near) / (far-near);
-	    m[2][3] = -1.0;
-	    m[3][2] = -2.0 * (far*near) / (far-near);
-	    m[3][3] = 0.0;
+	    array[0][0] = (2.0 * near) / (right-left);
+	    array[1][1] = (2.0 * near) / (top-bottom);
+	    array[2][0] = (right+left) / (right-left);
+	    array[2][1] = (top+bottom) / (top-bottom);
+	    array[2][2] = -1.0 * (far+near) / (far-near);
+	    array[2][3] = -1.0;
+	    array[3][2] = -2.0 * (far*near) / (far-near);
+	    array[3][3] = 0.0;
 	    
 	    return this;
 	}
@@ -400,13 +400,13 @@ public class Matrix4 {
 	public Matrix4 viewport(double xmin, double xmax, double ymin, double ymax)
 	{
 	    identity();
-	    m[0][0] = (xmax - xmin) / 2.0;
-	    m[1][1] = (ymax - ymin) / 2.0;
-	    m[2][2] = 1.0 / 2.0;
-	    m[3][0] = (xmax + xmin) / 2.0;
-	    m[3][2] = (ymax + ymin) / 2.0;
-	    m[3][2] = 1.0 / 2.0;
-	    m[3][3] = 1.0;
+	    array[0][0] = (xmax - xmin) / 2.0;
+	    array[1][1] = (ymax - ymin) / 2.0;
+	    array[2][2] = 1.0 / 2.0;
+	    array[3][0] = (xmax + xmin) / 2.0;
+	    array[3][2] = (ymax + ymin) / 2.0;
+	    array[3][2] = 1.0 / 2.0;
+	    array[3][3] = 1.0;
 	    
 	    return this;
 	}
@@ -428,16 +428,16 @@ public class Matrix4 {
 	    halfWidth   = (float)width  / 2.0f;
 	    halfHeight  = (float)height / 2.0f;
 	    smallSize   = (halfWidth < halfHeight) ? halfWidth : halfHeight;
-	    v1.m[0]     = ((float)fromX - halfWidth)  / smallSize;
-	    v1.m[1]     = ((float)(height-fromY) - halfHeight) / smallSize;
-	    v2.m[0]     = ((float)toX   - halfWidth)  / smallSize;
-	    v2.m[1]     = ((float)(height-toY)   - halfHeight) / smallSize;
+	    v1.array[0]     = ((float)fromX - halfWidth)  / smallSize;
+	    v1.array[1]     = ((float)(height-fromY) - halfHeight) / smallSize;
+	    v2.array[0]     = ((float)toX   - halfWidth)  / smallSize;
+	    v2.array[1]     = ((float)(height-toY)   - halfHeight) / smallSize;
 	    
 	    // Compute z-coordinates on Gaussian trackball:
-	    d       = Math.sqrt(v1.m[0] * v1.m[0] + v1.m[1] * v1.m[1]);
-	    v1.m[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
-	    d       = Math.sqrt(v2.m[0] * v2.m[0] + v2.m[1] * v2.m[1]);
-	    v2.m[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
+	    d       = Math.sqrt(v1.array[0] * v1.array[0] + v1.array[1] * v1.array[1]);
+	    v1.array[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
+	    d       = Math.sqrt(v2.array[0] * v2.array[0] + v2.array[1] * v2.array[1]);
+	    v2.array[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
 	    
 	    // Compute rotational angle:
 	    angle = v1.angle3(v2);                             // angle = angle between v1 and v2

@@ -17,9 +17,17 @@ public class Vector4 implements Serializable{
 
 	
 	/* *********************************************************************************************
+	 * Static Vars
+	 * *********************************************************************************************/
+	public static final Vector4 XAXIS = new Vector4(1.0, 0.0, 0.0, 0.0);
+	public static final Vector4 YAXIS = new Vector4(0.0, 1.0, 0.0, 0.0);
+	public static final Vector4 ZAXIS = new Vector4(0.0, 0.0, 1.0, 0.0);
+
+	
+	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected double[] m;
+	protected double[] array;
 	
 
 	/* *********************************************************************************************
@@ -27,7 +35,7 @@ public class Vector4 implements Serializable{
 	 * *********************************************************************************************/
 	public Vector4()
 	{
-		m = new double[4];
+		array = new double[4];
 	}
 	
 	public Vector4(double x, double y, double z, double w)
@@ -51,31 +59,31 @@ public class Vector4 implements Serializable{
 	
 	public double[] getM()
 	{
-		return m;
+		return array;
 	}
 	
 	public double get(int element)
 	{
-		return m[element];
+		return array[element];
 	}
 	
 	public void set(double x, double y, double z, double w)
 	{
-		m[0] = x;
-		m[1] = y;
-		m[2] = z;
-		m[3] = w;
+		array[0] = x;
+		array[1] = y;
+		array[2] = z;
+		array[3] = w;
 	}
 	
 	public void set(int element, double value)
 	{
-		m[element] = value;
+		array[element] = value;
 	}
 	
 	public void set(double[] v)
 	{
 		for(int i = 0; i < 4; ++i)
-			m[i] = v[i];
+			array[i] = v[i];
 	}
 	
 	public void set(Vector4 v)
@@ -90,9 +98,9 @@ public class Vector4 implements Serializable{
 	public Vector4 cross3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		Vector4 res = new Vector4(m[1]*vm[2] - m[2]*vm[1],
-								  m[2]*vm[0] - m[0]*vm[2],
-								  m[0]*vm[1] - m[1]*vm[0],
+		Vector4 res = new Vector4(array[1]*vm[2] - array[2]*vm[1],
+								  array[2]*vm[0] - array[0]*vm[2],
+								  array[0]*vm[1] - array[1]*vm[0],
 								  0);
 		return res;
 	}
@@ -100,7 +108,7 @@ public class Vector4 implements Serializable{
 	public double dot3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		return m[0]*vm[0] + m[1]*vm[1] + m[2]*vm[2];
+		return array[0]*vm[0] + array[1]*vm[1] + array[2]*vm[2];
 	}
 	
 	public double angle3(Vector4 that)
@@ -111,96 +119,96 @@ public class Vector4 implements Serializable{
 	public Vector4 normalize3()
 	{
 		double mag = magnitude3();
-		m[0] = m[0]/mag;
-		m[1] = m[1]/mag;
-		m[2] = m[2]/mag;
+		array[0] = array[0]/mag;
+		array[1] = array[1]/mag;
+		array[2] = array[2]/mag;
 		return this;
 	}
 	
 	public double magnitude3Sqrd()
 	{
-		return m[0] * m[0] + m[1] * m[1] + m[2] * m[2];
+		return array[0] * array[0] + array[1] * array[1] + array[2] * array[2];
 	}
 	
 	public double magnitude3()
 	{
-		return Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
+		return Math.sqrt(array[0] * array[0] + array[1] * array[1] + array[2] * array[2]);
 	}
 	
 	public Vector4 multiply3(double d)
 	{
-		return new Vector4(m[0]*d, m[1]*d, m[2]*d, m[3]);
+		return new Vector4(array[0]*d, array[1]*d, array[2]*d, array[3]);
 	}
 	
 	public Vector4 add3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		return new Vector4(m[0]+vm[0], m[1]+vm[1], m[2]+vm[2], m[3]);
+		return new Vector4(array[0]+vm[0], array[1]+vm[1], array[2]+vm[2], array[3]);
 	}
 	
 	public Vector4 add3(double d)
 	{
-		return new Vector4(m[0]+d, m[1]+d, m[2]+d, m[3]);
+		return new Vector4(array[0]+d, array[1]+d, array[2]+d, array[3]);
 	}
 	
 	public Vector4 add3M(Vector4 that)
 	{
 		double[] vm = that.getM();
-		m[0] += vm[0];
-		m[1] += vm[1];
-		m[2] += vm[2];
+		array[0] += vm[0];
+		array[1] += vm[1];
+		array[2] += vm[2];
 		return this;
 	}
 	
 	public Vector4 add3M(double d)
 	{
-		m[0] += d;
-		m[1] += d;
-		m[2] += d;
+		array[0] += d;
+		array[1] += d;
+		array[2] += d;
 		return this;
 	}
 	
 	public Vector4 addMultiRight3(Vector4 that, double c)
 	{
 		double[] vm = that.getM();
-		return new Vector4(m[0]+vm[0]*c, m[1]+vm[1]*c, m[2]+vm[2]*c, m[3]);
+		return new Vector4(array[0]+vm[0]*c, array[1]+vm[1]*c, array[2]+vm[2]*c, array[3]);
 	}
 	
 	public Vector4 addMultiRight3M(Vector4 that, double c)
 	{
 		double[] vm = that.getM();
-		m[0] += vm[0]*c;
-		m[1] += vm[1]*c;
-		m[2] += vm[2]*c;
+		array[0] += vm[0]*c;
+		array[1] += vm[1]*c;
+		array[2] += vm[2]*c;
 		return this;
 	}
 	
 	public Vector4 subtract3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		return new Vector4(m[0]-vm[0], m[1]-vm[1], m[2]-vm[2], m[3]);
+		return new Vector4(array[0]-vm[0], array[1]-vm[1], array[2]-vm[2], array[3]);
 	}
 	
 	public Vector4 subtract3(double d)
 	{
-		return new Vector4(m[0]-d, m[1]-d, m[2]-d, m[3]);
+		return new Vector4(array[0]-d, array[1]-d, array[2]-d, array[3]);
 	}
 	
 	public Vector4 minimize3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		m[0] = m[0] < vm[0] ? m[0] : vm[0];
-		m[1] = m[1] < vm[1] ? m[1] : vm[1];
-		m[2] = m[2] < vm[2] ? m[2] : vm[2];
+		array[0] = array[0] < vm[0] ? array[0] : vm[0];
+		array[1] = array[1] < vm[1] ? array[1] : vm[1];
+		array[2] = array[2] < vm[2] ? array[2] : vm[2];
 		return this;
 	}
 	
 	public Vector4 maximize3(Vector4 that)
 	{
 		double[] vm = that.getM();
-		m[0] = m[0] > vm[0] ? m[0] : vm[0];
-		m[1] = m[1] > vm[1] ? m[1] : vm[1];
-		m[2] = m[2] > vm[2] ? m[2] : vm[2];
+		array[0] = array[0] > vm[0] ? array[0] : vm[0];
+		array[1] = array[1] > vm[1] ? array[1] : vm[1];
+		array[2] = array[2] > vm[2] ? array[2] : vm[2];
 		return this;
 	}
 
@@ -211,9 +219,9 @@ public class Vector4 implements Serializable{
 	 * *********************************************************************************************/
 	public void print()
 	{
-		System.out.println("[" + StringUtils.column(""+m[0], 24) + ", " + 
-								 StringUtils.column(""+m[1], 24) + ", " +
-								 StringUtils.column(""+m[2], 24) + ", " +
-								 StringUtils.column(""+m[3], 24) + "]");
+		System.out.println("[" + StringUtils.column(""+array[0], 24) + ", " + 
+								 StringUtils.column(""+array[1], 24) + ", " +
+								 StringUtils.column(""+array[2], 24) + ", " +
+								 StringUtils.column(""+array[3], 24) + "]");
 	}
 }
