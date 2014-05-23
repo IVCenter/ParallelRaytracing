@@ -1,6 +1,7 @@
 package raytrace.geometry.meshes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import math.Vector4;
 
@@ -20,6 +21,16 @@ public class MeshSurface extends TerminalSurface {
 	 * Static Vars
 	 * *********************************************************************************************/
 	private static int nextMeshID = 0;
+	private static HashMap<Integer, MeshSurface> meshes;
+	
+
+	/* *********************************************************************************************
+	 * Static Constructor
+	 * *********************************************************************************************/
+	static
+	{
+		meshes = new HashMap<Integer, MeshSurface>();
+	}
 	
 	
 	/* *********************************************************************************************
@@ -28,6 +39,11 @@ public class MeshSurface extends TerminalSurface {
 	private synchronized static int nextMeshID()
 	{
 		return nextMeshID++;
+	}
+	
+	public static void removeMeshReference(int meshID)
+	{
+		meshes.put(meshID, null);
 	}
 	
 	
@@ -43,11 +59,13 @@ public class MeshSurface extends TerminalSurface {
 	 * *********************************************************************************************/
 	public MeshSurface()
 	{
+		meshes.put(meshID, this);
 		triangles = new ArrayList<Triangle>();
 	}
 	
 	public MeshSurface(int triangleCount)
 	{
+		meshes.put(meshID, this);
 		triangles = new ArrayList<Triangle>(triangleCount);
 	}
 	
