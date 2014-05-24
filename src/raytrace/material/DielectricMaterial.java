@@ -3,7 +3,7 @@ package raytrace.material;
 import math.Vector4;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
-import raytrace.map.Texture;
+import raytrace.map.texture.Texture;
 
 public class DielectricMaterial extends Material{
 	

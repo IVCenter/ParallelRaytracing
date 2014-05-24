@@ -2,7 +2,7 @@ package raytrace.color;
 
 import process.utils.StringUtils;
 import raytrace.data.IntersectionData;
-import raytrace.map.Texture;
+import raytrace.map.texture.Texture;
 
 public class Color implements Texture {
 	

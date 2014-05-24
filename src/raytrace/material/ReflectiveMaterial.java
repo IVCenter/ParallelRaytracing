@@ -5,7 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
-import raytrace.map.Texture;
+import raytrace.map.texture.Texture;
 
 public class ReflectiveMaterial  extends Material{
 	

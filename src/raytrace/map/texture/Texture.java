@@ -1,4 +1,4 @@
-package raytrace.map;
+package raytrace.map.texture;
 
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;

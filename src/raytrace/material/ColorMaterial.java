@@ -2,7 +2,7 @@ package raytrace.material;
 
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
-import raytrace.map.Texture;
+import raytrace.map.texture.Texture;
 
 public class ColorMaterial extends Material {
 	

@@ -89,15 +89,14 @@ public class Launcher {
 	/*
 	 * Local TOOD:
 	 * 
-	 * 		-Test distribution stability
+	 * 		-Test distribution stability and performance on caves
 	 * 		-Configuration loader
 	 * 		-Intermediate results support
 	 * 		-Registration Loop (controller compares on both ID and IP?)
 	 * 		-Compress pixels before sending?
 	 * 
-		//TODO: AddMaterial support for UV tangents
+		//TODO: AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
 		//TODO: Add Quad support to Triangle
-		//TODO: Add support for textures to existing materials
 		//TODO: Discrete texture class that loads bmps, pngs, etc.
 		//TODO: A transform wrapper for texture
 	 */
