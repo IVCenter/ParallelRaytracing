@@ -14,10 +14,10 @@ import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
-import raytrace.material.CSE168Proj1_DiffuseMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
@@ -148,7 +148,7 @@ public class TestScene1 extends Scene {
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
 			}else if(rand < 0.0){
-				sphere.setMaterial(new CSE168Proj1_DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
+				sphere.setMaterial(new DiffusePTMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25))));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			}else if(rand < 1.0){

@@ -12,7 +12,6 @@ import raytrace.geometry.Sphere;
 import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
-import raytrace.material.DiffuseMaterial;
 import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
@@ -55,7 +54,7 @@ public class TestScene2 extends Scene
 		{
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new DiffuseMaterial(new Color(0.9, 0.3, 0.3)));
-			sphere.setMaterial(new FresnelDiffusePTMaterial(new Color(0.5, 0.2, 0.2), 0.9, 1.5, 1));
+			sphere.setMaterial(new FresnelDiffusePTMaterial(new Color(0.5, 0.2, 0.2), 0.9, 1.5));
 			sphere.setPosition(new Vector4(-3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
@@ -75,7 +74,7 @@ public class TestScene2 extends Scene
 			Color copper = new Color(0.98, 0.8, 0.6);
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
-			sphere.setMaterial(new FresnelMetalMaterial(copper.multiply3M(copper), 0.317, 2.63));
+			sphere.setMaterial(new FresnelMetalMaterial(copper.multiply3M(copper), 0.917, 2.63));
 			sphere.setPosition(new Vector4(3.5, 1, -1, 0));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
@@ -135,7 +134,7 @@ public class TestScene2 extends Scene
 	{
 		elapsed += data.getDt();
 		
-		Vector4 position = activeCamera.getPosition();
+		//Vector4 position = activeCamera.getPosition();
 		//position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8) * 5, 0);
 		//activeCamera.setPosition(position);
 		

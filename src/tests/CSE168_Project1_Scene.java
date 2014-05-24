@@ -11,8 +11,8 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
-import raytrace.material.CSE168Proj1_DiffuseMaterial;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DiffuseMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.MatrixTransformSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -48,12 +48,12 @@ public class CSE168_Project1_Scene extends Scene{
 		// Create boxes
 		//Box 1
 		MeshSurface box1 = new Cube(5.0, 0.1, 5.0);
-		box1.setMaterial(new CSE168Proj1_DiffuseMaterial(Color.white()));
+		box1.setMaterial(new DiffuseMaterial(Color.white()));
 		this.addChild(box1);
 		
 		//Box 2
 		MeshSurface box2 = new Cube(1.0, 1.0, 1.0);
-		box2.setMaterial(new CSE168Proj1_DiffuseMaterial(Color.white()));
+		box2.setMaterial(new DiffuseMaterial(Color.white()));
 
 		//Instance 1
 		MatrixTransformSurface inst1 = new MatrixTransformSurface();

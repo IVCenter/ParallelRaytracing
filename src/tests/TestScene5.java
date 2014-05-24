@@ -63,7 +63,7 @@ public class TestScene5 extends Scene
 			model.getTransform().translate(0, 0.5, 2);
 			model.bake(null);
 			model.updateBoundingBox();
-			model.setMaterial(new DiffusePTMaterial(new Color(0xcc1111ff), 1));
+			model.setMaterial(new DiffusePTMaterial(new Color(0xcc1111ff)));
 			this.addChild(model);
 		}else{
 			Logger.error(-13, "TestScene5: Model was null!");
@@ -87,7 +87,7 @@ public class TestScene5 extends Scene
 				inst.getTransform().scale(randInRange(0.1, 0.4));
 				inst.getTransform().rotateX(Math.random());
 				inst.getTransform().rotateY(Math.random());
-				inst.setMaterial(new DiffusePTMaterial(Color.random(0.85), 1));
+				inst.setMaterial(new DiffusePTMaterial(Color.random(0.85)));
 			}else{
 				double radius = 1.0 + randInRange(0.0, 12.0);
 				double phi = 2.0 * Math.PI * Math.random();
@@ -98,7 +98,7 @@ public class TestScene5 extends Scene
 				inst.getTransform().rotateX(Math.random() * 0.5);
 				inst.getTransform().rotateY(Math.random() * Math.PI);
 				double greyBase = 0.30;
-				inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
+				inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random())));
 			}
 
 			inst.updateBoundingBox();
@@ -124,7 +124,7 @@ public class TestScene5 extends Scene
 			inst.getTransform().translate(Math.cos(phi) * radius, 0, Math.sin(phi) * radius );//IA
 			inst.getTransform().scale(randInRange(3.0, 8.0));
 			double greyBase = 0.70;
-			inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random()), 1));
+			inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random())));
 			inst.updateBoundingBox();
 			inst.bake(null);
 			spheres.add(inst);
@@ -138,7 +138,7 @@ public class TestScene5 extends Scene
 		//Directional Light
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
-		directionalLight.setIntensity(0.65);
+		directionalLight.setIntensity(0.70);
 		directionalLight.setDirection(new Vector4(1,-1,-1,0));
 		lightManager.addLight(directionalLight);
 		
@@ -159,7 +159,7 @@ public class TestScene5 extends Scene
 
 		//Make a plane
 		Plane plane = new Plane();
-		plane.setMaterial(new DiffusePTMaterial(Color.grey(0.8), 1));
+		plane.setMaterial(new DiffusePTMaterial(Color.grey(0.8)));
 		this.addChild(plane);
 		
 	}
@@ -172,6 +172,7 @@ public class TestScene5 extends Scene
 	@Override
 	public void update(UpdateData data)
 	{
+		/*
 		elapsed += data.getDt();
 		
 		Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
@@ -195,7 +196,7 @@ public class TestScene5 extends Scene
 		acam.setViewingDirection(lotusPos);
 
 		acam.setFocalPlaneDistance(Math.min(1.0 + elapsed*1.5, lotusPos.subtract3(camPos).magnitude3()));
-		
+		*/
 		//Update the children
 		super.update(data);
 	}

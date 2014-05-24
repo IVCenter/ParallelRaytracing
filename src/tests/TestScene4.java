@@ -78,7 +78,7 @@ public class TestScene4 extends Scene
 			model.bake(null);
 			//model.setMaterial(new ReflectiveMaterial(new Color(0xff0068ff), .70));
 			//model.setMaterial(new DiffuseMaterial(new Color(0xffffffff)));
-			model.setMaterial(new DiffusePTMaterial(new Color(0xffffffff), 1));
+			model.setMaterial(new DiffusePTMaterial(new Color(0xffffffff)));
 			//model.setMaterial(new DielectricMaterial(new Color(1.9, 1.9, 1.2), 1.45));
 			this.addChild(model);
 		}else{

@@ -58,7 +58,7 @@ public class CSE168_Project3_Scene extends Scene
 		
 		//Ground
 		MeshSurface ground = new Cube(2.0, 0.11, 2.0);
-		ground.setMaterial(new DiffusePTMaterial(new Color(0.3, 0.3, 0.35), 1));
+		ground.setMaterial(new DiffusePTMaterial(new Color(0.3, 0.3, 0.35)));
 		this.addChild(ground);
 		
 		
