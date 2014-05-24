@@ -3,6 +3,7 @@ package raytrace.material;
 import math.Vector4;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
+import raytrace.map.Texture;
 
 public class DielectricMaterial extends Material{
 	
@@ -12,16 +13,16 @@ public class DielectricMaterial extends Material{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color tint;
+	protected Texture beerTexture;
 	double refractiveIndex = 1.0;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public DielectricMaterial(Color tint, double refractiveIndex)
+	public DielectricMaterial(Texture beerTexture, double refractiveIndex)
 	{
-		this.tint = tint;
+		this.beerTexture = beerTexture;
 		this.refractiveIndex = refractiveIndex;
 	}
 	
@@ -29,6 +30,9 @@ public class DielectricMaterial extends Material{
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Get color from texture
+		Color tint = beerTexture.evaluate(data.getIntersectionData());
+		
 		//Setup the point of intersection
 		Vector4 point = data.getIntersectionData().getPoint();
 		

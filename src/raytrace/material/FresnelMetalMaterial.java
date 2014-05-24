@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class FresnelMetalMaterial extends Material {
 	
@@ -14,7 +15,7 @@ public class FresnelMetalMaterial extends Material {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color color;
+	protected Texture tintTexture;
 	double refractiveReal = 2.485;//Steel
 	double refractiveImaginary = 3.433;//Steel
 	
@@ -22,9 +23,9 @@ public class FresnelMetalMaterial extends Material {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public FresnelMetalMaterial(Color color, double refractiveReal, double refractiveImaginary)
+	public FresnelMetalMaterial(Texture tintTexture, double refractiveReal, double refractiveImaginary)
 	{
-		this.color = color;
+		this.tintTexture = tintTexture;
 		this.refractiveReal = refractiveReal;
 		this.refractiveImaginary = refractiveImaginary;
 	}
@@ -33,7 +34,11 @@ public class FresnelMetalMaterial extends Material {
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Storage for the result color
 		Color shade = new Color(0x000000ff);
+		
+		//Get the material color from the texture
+		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
 		Vector4 normal = data.getIntersectionData().getNormal();
@@ -72,8 +77,7 @@ public class FresnelMetalMaterial extends Material {
 		
 
 		Color reflectiveColor = rflectColor.multiply3(
-				color.mixWithWhite(1.0 - reflectivePercent, reflectivePercent)
-						,1.0);
+				tint.mixWithWhite(1.0 - reflectivePercent, reflectivePercent));
 		return reflectiveColor;
 		
 	}

@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class AshikhminPTMaterial extends Material {
 	
@@ -14,8 +15,8 @@ public class AshikhminPTMaterial extends Material {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color diffuseTint = new Color();
-	protected Color specularTint = new Color();
+	protected Texture diffuseTexture;// = new Color();
+	protected Texture specularTexture;// = new Color();
 
 	protected double specularReflectance = 0.5;
 	protected double diffuseReflectance = 0.5;
@@ -26,11 +27,11 @@ public class AshikhminPTMaterial extends Material {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public AshikhminPTMaterial(Color diffuseTint, Color specularTint, double specularReflectance,
+	public AshikhminPTMaterial(Texture diffuseTexture, Texture specularTexture, double specularReflectance,
 			double diffuseReflectance, double uExponent, double vExponent)
 	{
-		this.diffuseTint = diffuseTint;
-		this.specularTint = specularTint;
+		this.diffuseTexture = diffuseTexture;
+		this.specularTexture = specularTexture;
 		this.specularReflectance = specularReflectance;
 		this.diffuseReflectance = diffuseReflectance;
 		this.uExponent = uExponent;
@@ -41,6 +42,10 @@ public class AshikhminPTMaterial extends Material {
 	@Override
 	public Color shade(ShadingData data)
 	{	
+		Color diffuseTint = diffuseTexture.evaluate(data.getIntersectionData());
+		Color specularTint = specularTexture.evaluate(data.getIntersectionData());
+		
+		
 		Color shade = new Color(0x000000ff);
 		
 		Vector4 point = data.getIntersectionData().getPoint();
@@ -78,8 +83,8 @@ public class AshikhminPTMaterial extends Material {
 			lightDir = ildata.getDirection().multiply3(-1.0).normalize3();
 			half = halfVector(rayDir, lightDir);
 
-			shade.add3M(ashikminSpecular(ildata.getColor(), rayDir, lightDir, normal, uTangent, vTangent, half));
-			shade.add3M(ashikminDiffuse(ildata.getColor(), rayDir, lightDir, normal, uTangent, vTangent, half));
+			shade.add3M(ashikminSpecular(ildata.getColor(), specularTint, rayDir, lightDir, normal, uTangent, vTangent, half));
+			shade.add3M(ashikminDiffuse(ildata.getColor(), diffuseTint, rayDir, lightDir, normal, uTangent, vTangent, half));
 		}
 		
 		
@@ -113,7 +118,7 @@ public class AshikhminPTMaterial extends Material {
 		return shade;
 	}
 	
-	private Color ashikminDiffuse(Color light, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
+	private Color ashikminDiffuse(Color light, Color diffuseTint, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
 	{	
 		//Diffuse component
 		double leadingCoeffDiff = ((28.0 * diffuseReflectance) / (23.0 * Math.PI)) * (1.0 - specularReflectance);
@@ -125,7 +130,7 @@ public class AshikhminPTMaterial extends Material {
 		return diffuseTint.multiply3(light).multiply3M(diffuseCoeff);
 	}
 	
-	private Color ashikminSpecular(Color light, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
+	private Color ashikminSpecular(Color light, Color specularTint, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
 	{	
 		//Specular component
 		double leadingCoeffSpec = (1.0 / (8.0 * Math.PI)) * Math.sqrt( (uExponent+ 1.0) * (vExponent + 1.0) );

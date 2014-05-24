@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class DiffuseMaterial extends Material{
 	
@@ -14,22 +15,26 @@ public class DiffuseMaterial extends Material{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color color;
+	protected Texture tintTexture;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public DiffuseMaterial(Color color)
+	public DiffuseMaterial(Texture tintTexture)
 	{
-		this.color = color;
+		this.tintTexture = tintTexture;
 	}
 	
 
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Storage for resulting color
 		Color shade = new Color(0x000000ff);
+		
+		//Get color from texture
+		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
 		Vector4 normal = data.getIntersectionData().getNormal();
@@ -50,7 +55,7 @@ public class DiffuseMaterial extends Material{
 			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
 		}
 		
-		return shade.multiply3M(color);
+		return shade.multiply3M(tint);
 	}
 
 }

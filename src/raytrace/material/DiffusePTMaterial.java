@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class DiffusePTMaterial extends Material{
 	
@@ -14,24 +15,26 @@ public class DiffusePTMaterial extends Material{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color color;
-	protected int sampleCount = 1;
+	protected Texture tintTexture;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public DiffusePTMaterial(Color color, int sampleCount)
+	public DiffusePTMaterial(Texture tintTexture)
 	{
-		this.color = color;
-		this.sampleCount = sampleCount;
+		this.tintTexture = tintTexture;
 	}
 	
 
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Storage for result color
 		Color shade = new Color(0x000000ff);
+		
+		//Get the material color from the texture
+		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
 		Vector4 normal = data.getIntersectionData().getNormal().normalize3();
@@ -68,22 +71,14 @@ public class DiffusePTMaterial extends Material{
 		//Sampling
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			//Sample random points
-			Color rflectColor = new Color();
-			Vector4 sampleDir;
-			for(int i = 0; i < sampleCount; ++i)
-			{
-				sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
-				
-				rflectColor.add3M(recurse(data, point, sampleDir, 1.0));
-			}
+			//Sample a random point
+			Vector4 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
 			
 			//Add the direct shading and samples shading together
-			if(sampleCount > 0)
-				shade.add3M(rflectColor.multiply3(1.0/sampleCount));
+			shade.add3M(recurse(data, point, sampleDir, 1.0));
 		}
 		
-		return shade.multiply3M(color);
+		return shade.multiply3M(tint);
 	}
 
 }

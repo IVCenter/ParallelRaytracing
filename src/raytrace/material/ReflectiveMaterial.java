@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class ReflectiveMaterial  extends Material{
 	
@@ -14,16 +15,16 @@ public class ReflectiveMaterial  extends Material{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color color;
+	protected Texture tintTexture;
 	double reflectivePercent = 0.5;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ReflectiveMaterial(Color color, double reflectivePercent)
+	public ReflectiveMaterial(Texture tintTexture, double reflectivePercent)
 	{
-		this.color = color;
+		this.tintTexture = tintTexture;
 		this.reflectivePercent = reflectivePercent;
 	}
 	
@@ -31,7 +32,11 @@ public class ReflectiveMaterial  extends Material{
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Storage for the result color
 		Color shade = new Color(0x000000ff);
+		
+		//Get the material color from the texture
+		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
 		Vector4 normal = data.getIntersectionData().getNormal();
@@ -54,7 +59,7 @@ public class ReflectiveMaterial  extends Material{
 		}
 		
 		
-		Color diffuseColor = color.multiply3(shade).multiply3(1.0 - reflectivePercent);
+		Color diffuseColor = tint.multiply3(shade).multiply3(1.0 - reflectivePercent);
 		Color reflectiveColor = rflectColor.multiply3(reflectivePercent);
 		return diffuseColor.add3(reflectiveColor);
 	}

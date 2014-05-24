@@ -5,6 +5,7 @@ import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
+import raytrace.map.Texture;
 
 public class FresnelDiffusePTMaterial extends Material{
 	
@@ -14,28 +15,30 @@ public class FresnelDiffusePTMaterial extends Material{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color tint;
+	protected Texture tintTexture;
 	protected double reflectiveRadius = 0.5;
 	protected double schlickExponent = 5.0;
-	protected int sampleCount = 1;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public FresnelDiffusePTMaterial(Color tint, double reflectiveRadius, double schlickExponent, int sampleCount)
+	public FresnelDiffusePTMaterial(Texture tintTexture, double reflectiveRadius, double schlickExponent)
 	{
-		this.tint = tint;
+		this.tintTexture = tintTexture;
 		this.reflectiveRadius = reflectiveRadius;
 		this.schlickExponent = schlickExponent;
-		this.sampleCount = sampleCount;
 	}
 	
 
 	@Override
 	public Color shade(ShadingData data)
 	{
+		//Storage for result color
 		Color shade = new Color(0x000000ff);
+		
+		//Get the material color from the texture
+		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
 		Vector4 normal = data.getIntersectionData().getNormal().normalize3();
@@ -76,24 +79,17 @@ public class FresnelDiffusePTMaterial extends Material{
 		{
 			//Sample random points
 			Color rflectColor = new Color();
-			Vector4 sampleDir;
-			double reflectiveCoeff;
-			for(int i = 0; i < sampleCount; ++i)
-			{	
-				sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
-				reflectiveCoeff = Math.pow((reflectiveRadius - DdotN) / (reflectiveRadius), schlickExponent);
-				
-				//if reflecting
-				if(DdotN < reflectiveRadius && Math.random() < reflectiveCoeff)
-				{
-					rflectColor.add3M(reflect(data, point, normal, AIR_REFRACTIVE_INDEX));
-				}else{
-					rflectColor.add3M(recurse(data, point, sampleDir, 1.0).multiply3(tint));
-				}
-			}
+			Vector4 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
+			double reflectiveCoeff = Math.pow((reflectiveRadius - DdotN) / (reflectiveRadius), schlickExponent);;
 			
+			//if reflecting
 			//Add the direct shading and samples shading together
-			shade.add3M(rflectColor.multiply3(1.0/sampleCount));
+			if(DdotN < reflectiveRadius && Math.random() < reflectiveCoeff)
+			{
+				shade.add3M(rflectColor.add3M(reflect(data, point, normal, AIR_REFRACTIVE_INDEX)));
+			}else{
+				shade.add3M(rflectColor.add3M(recurse(data, point, sampleDir, 1.0).multiply3(tint)));
+			}	
 		}
 		
 		return shade;

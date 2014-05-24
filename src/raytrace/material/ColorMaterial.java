@@ -2,6 +2,7 @@ package raytrace.material;
 
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
+import raytrace.map.Texture;
 
 public class ColorMaterial extends Material {
 	
@@ -11,22 +12,22 @@ public class ColorMaterial extends Material {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Color color;
+	protected Texture colorTexture;
 	
 
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ColorMaterial(Color color)
+	public ColorMaterial(Texture colorTexture)
 	{
-		this.color = color;
+		this.colorTexture = colorTexture;
 	}
 	
 
 	@Override
 	public Color shade(ShadingData data)
 	{
-		return color;
+		return colorTexture.evaluate(data.getIntersectionData());
 	}
 
 }
