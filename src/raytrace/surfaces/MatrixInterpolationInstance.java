@@ -51,7 +51,7 @@ public class MatrixInterpolationInstance extends Instance {
 		//Set matrix
 		
 		//As awkward as this seems, it works.
-		double time = data.getRay().getRandomValue();
+		//double time = data.getRay().getRandomValue();
 		
 		
 		

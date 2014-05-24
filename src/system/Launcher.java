@@ -22,7 +22,6 @@ public class Launcher {
 		 * 		-[0] = Configuration File 
 		 */
 		
-		//TODO: If working dir from args is missing a trailing slash, add it
 		
 		
 		
@@ -75,6 +74,10 @@ public class Launcher {
 			//Do nothing, this is acceptable
 		}
 		
+
+		//TODO: If working dir from args is missing a trailing slash, add it
+		
+		
 		
 		Logger.progress(-1, "Launching a Night Sky Node with ID:[" + Configuration.getId() + "]...");
 		
@@ -95,6 +98,8 @@ public class Launcher {
 		//TODO: AddMaterial support for UV tangents
 		//TODO: Add Quad support to Triangle
 		//TODO: Add support for textures to existing materials
+		//TODO: Discrete texture class that loads bmps, pngs, etc.
+		//TODO: A transform wrapper for texture
 	 */
 
 }

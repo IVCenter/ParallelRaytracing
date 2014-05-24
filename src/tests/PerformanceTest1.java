@@ -1,23 +1,17 @@
 package tests;
 
 import math.Vector4;
-import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Plane;
-import raytrace.geometry.meshes.Cube;
-import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
-import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
-import raytrace.material.DiffusePTMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
-import raytrace.surfaces.acceleration.AABVHSurface;
 import resource.ResourceManager;
 import system.Configuration;
 
