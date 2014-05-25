@@ -35,7 +35,6 @@ public class RegistrationHandler extends MessageHandler {
 	@Override
 	public void handle(Message message)
 	{
-		// TODO Auto-generated method stub
 		/*
 		 * Check ID against existing nodes id table
 		 * if exists, ignore
@@ -44,13 +43,7 @@ public class RegistrationHandler extends MessageHandler {
 		 * 
 		 * Get node IP (store in node object)
 		 * 
-		 * 
-		 * 
-		 * 
-		 * 
 		 */
-		
-		Logger.progress(-26, "RegistrationHandler: Registering new node...");
 		
 		/*
 		 * Create a new node object
@@ -78,17 +71,16 @@ public class RegistrationHandler extends MessageHandler {
 		
 		node.setIp(ip);
 		
-		node.setRegistrationTime(System.currentTimeMillis());
-		node.setLastMessageTime(System.currentTimeMillis());
+		//If there does not already exist this node
+		if(!ApplicationDelegate.inst.getNodeManager().hasNode(node))
+		{
+			Logger.progress(-26, "RegistrationHandler: Registering new node...");
+			
+			node.setRegistrationTime(System.currentTimeMillis());
+			node.setLastMessageTime(System.currentTimeMillis());
 		
-		
-		ApplicationDelegate.inst.getNodeManager().addNode(node);
-		
-		
-		/*
-		 * Send a configuration message
-		 */
-		//Message message = CommonMessageConstructor.createConfigurationMessage();
+			ApplicationDelegate.inst.getNodeManager().addNode(node);
+		}
 		
 	}
 
