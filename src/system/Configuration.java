@@ -29,6 +29,7 @@ public class Configuration {
 	protected static boolean isClock = false;
 	protected static boolean isLeaf = false;
 	protected static boolean isController = false;
+	protected static boolean isRealTime = false;
 	
 	protected static Scene masterScene = null;
 	
@@ -141,6 +142,10 @@ public class Configuration {
 	//Controller
 	public static boolean isController() { return isController; }
 	public static void setController(boolean isController) { Configuration.isController = isController; }
+
+	//Real Time
+	public static boolean isRealTime() { return isRealTime; }
+	public static void setRealTime(boolean isRealTime) { Configuration.isRealTime = isRealTime; }
 
 	//Master Scene
 	public static Scene getMasterScene() { return masterScene; }
