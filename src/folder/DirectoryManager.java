@@ -104,6 +104,10 @@ public class DirectoryManager {
 		//Models subfolder
 		Configuration.setModelsSubDirectory(addTrailingSlash(Configuration.getModelsSubDirectory()));
 		createSubDirectory(workDir, Configuration.getModelsSubDirectory(), "models");
+		
+		//Textures subfolder
+		Configuration.setTextureSubDirectory(addTrailingSlash(Configuration.getTextureSubDirectory()));
+		createSubDirectory(workDir, Configuration.getTextureSubDirectory(), "textures");
 	}
 	
 	public static String workingDirectory()
@@ -124,6 +128,11 @@ public class DirectoryManager {
 	public static String modelsDirectory()
 	{
 		return Configuration.getWorkingDirectory() + Configuration.getModelsSubDirectory();
+	}
+	
+	public static String texturesDirectory()
+	{
+		return Configuration.getWorkingDirectory() + Configuration.getTextureSubDirectory();
 	}
 	
 

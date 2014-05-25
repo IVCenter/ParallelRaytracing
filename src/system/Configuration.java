@@ -38,6 +38,7 @@ public class Configuration {
 	protected static String modelsSubDirectory = "Models/";
 	protected static String screenshotSubDirectory = "Screenshots/";
 	protected static String animationSubDirectory = "Animations/";
+	protected static String textureSubDirectory = "Textures/";
 	
 
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -164,6 +165,10 @@ public class Configuration {
 	//Animation Sub-directory
 	public static String getAnimationSubDirectory() { return animationSubDirectory; }
 	public static void setAnimationSubDirectory(String animationSubDirectory) { Configuration.animationSubDirectory = animationSubDirectory; }
+
+	//Texture sub-directory
+	public static String getTextureSubDirectory() { return textureSubDirectory; }
+	public static void setTextureSubDirectory(String textureSubDirectory) { Configuration.textureSubDirectory = textureSubDirectory; }
 
 	//Write to Disk
 	public static Boolean canWriteToDisk() { return canWriteToDisk; }
