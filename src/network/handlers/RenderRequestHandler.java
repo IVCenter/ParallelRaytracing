@@ -1,16 +1,12 @@
 package network.handlers;
 
-import java.util.ArrayList;
-
-import process.logging.Logger;
-import process.utils.StringUtils;
+import process.utils.RenderingUtils;
 
 import raytrace.camera.Camera;
 import raytrace.data.RenderData;
 import system.ApplicationDelegate;
 import system.Configuration;
 import system.Constants;
-import math.Ray;
 import network.CommonMessageConstructor;
 import network.Message;
 
@@ -68,8 +64,21 @@ public class RenderRequestHandler extends MessageHandler {
 		rdata.setPixelBuffer(ApplicationDelegate.inst.getPixelBuffer());
 		rdata.setScene(Configuration.getMasterScene());
 		
+		//If not rendering in realtime
+		Thread intermediateThread = null;
+		if(!Configuration.isRealTime())
+		{
+			intermediateThread = startIntermediateResultsLoop(camera, (String)message.getData().get(Constants.Message.NODE_IP));
+		}
+		
 		//Get rendering
 		ApplicationDelegate.inst.getRenderer().render(rdata);
+		
+		//If an intermediate thread was created, stop it here.
+		if(intermediateThread != null)
+		{
+			intermediateThread.interrupt();
+		}
 		
 		//Replace the scenes camera
 		Configuration.getMasterScene().setActiveCamera(sceneCamera);
@@ -79,46 +88,41 @@ public class RenderRequestHandler extends MessageHandler {
 		//Send a response message with the camera and pixels
 		Message response = CommonMessageConstructor.createRenderResponseMessage();
 		response.getData().set(Constants.Message.NODE_CAMERA, camera);
-		response.getData().set(Constants.Message.NODE_PIXELS, packPixels(
+		response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
 				ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
 		
 		String returnIP = message.getData().get(Constants.Message.NODE_IP);
 		ApplicationDelegate.inst.getMessageSender().send(response, returnIP);
 	}
 	
-	/**
-	 * 
-	 * @param buffer
-	 * @param camera
-	 * @return
-	 */
-	private int[] packPixels(int[] buffer, Camera camera)
+	private Thread startIntermediateResultsLoop(final Camera camera, final String controllerIP)
 	{
-		ArrayList<Integer> pixels = new ArrayList<Integer>();
-		
-		try{
-			
-			for(Ray ray : camera)
-			{
-				pixels.add(buffer[(int)(ray.getPixelY() * camera.getPixelWidth() + ray.getPixelX())]);
-			}
-			
-			//Pack the pixels into an array
-			int[] arr = new int[pixels.size()];
-			for(int i = 0; i < pixels.size(); ++i)
-			{
-				arr[i] = pixels.get(i);
-			}
-			
-			return arr;
-			
-		} catch(Exception e)
+		Thread intermediateThread = new Thread(new Runnable()
 		{
-			Logger.error(-30, "RenderRequestHandler: Encountered an error while packing pixels.");
-			Logger.error(-30, StringUtils.stackTraceToString(e));
-		}
+			@Override
+			public void run()
+			{
+				for(;!Thread.currentThread().isInterrupted();)//While not interupted
+				{
+					//Sleep for some period of time
+					try {
+						Thread.sleep(Constants.Default.INTERMEDIATE_RESULT_LOOP_SLEEP_TIME);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+
+					//Send an intermedaite result message
+					Message response = CommonMessageConstructor.createIntermediateRenderResponseMessage();
+					response.getData().set(Constants.Message.NODE_CAMERA, camera);
+					response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
+							ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
+					
+					ApplicationDelegate.inst.getMessageSender().send(response, controllerIP);
+				}
+			}
+		});
 		
-		return new int[0];
+		return intermediateThread;
 	}
 
 }

@@ -105,8 +105,6 @@ public class CommonMessageConstructor {
 		Message message = new Message();
 		message.setType(Message.Type.UpdateResponse);
 		
-		//message.getData().set(Constants.Message.NODE_ID, Configuration.getId());
-		
 		return message;
 	}
 
@@ -134,7 +132,17 @@ public class CommonMessageConstructor {
 		Message message = new Message();
 		message.setType(Message.Type.RenderResponse);
 		
-		//message.getData().set(Constants.Message.NODE_ID, Configuration.getId());
+		return message;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Message createIntermediateRenderResponseMessage()
+	{
+		Message message = new Message();
+		message.setType(Message.Type.IntermediateRenderResponse);
 		
 		return message;
 	}
