@@ -60,8 +60,13 @@ public class ConfigFileLoader {
 			//line = line.replace("\t", " ");
 			firstEqualsSignIndex = line.indexOf("=");
 			
-			//Skip empty or malformed lines
-			if(line.length() == 0 || firstEqualsSignIndex < 0) {
+			//Skip empty ...
+			if(line.trim().length() == 0) {
+				continue;
+			}
+			
+			//...or malformed lines
+			if(firstEqualsSignIndex < 0) {
 				Logger.warning(-32, "ConfigFileLoader: Skipping line [" + line + "].");
 				continue;
 			}
