@@ -224,7 +224,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 			} catch (Exception e)
 			{
 				Logger.error(-22, "NetworkMessageSender: Failed to send message.");
-				e.printStackTrace();
+				//e.printStackTrace();
 				
 				//Attempt to close the socket if it is not null
 				if(socket != null)
