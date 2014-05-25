@@ -63,16 +63,16 @@ public class Launcher {
 	{
 		//Feel free to over write these with your own settings
 		Configuration.setId("Debug Node");
-		Configuration.setScreenWidth(1368);
-		Configuration.setScreenHeight(752);
-		//Configuration.setScreenWidth(800);
-		//Configuration.setScreenHeight(600);
+		//Configuration.setScreenWidth(1368);
+		//Configuration.setScreenHeight(752);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);//The top most node must have clock set to true (this includes stand-alone nodes)
-		Configuration.setLeaf(true);//true for local, false for networked
+		Configuration.setLeaf(false);//true for local, false for networked
 		Configuration.setController(true);
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST5));
+		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST2));
 
 		//Create the directory structure for the debug config
 		DirectoryManager.createFolderStructure();
