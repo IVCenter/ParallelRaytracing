@@ -363,6 +363,40 @@ public class ApplicationDelegate extends Job{
 		}
 	}
 	
+	
+	
+	public void shutdown()
+	{
+		//Logger is threaded so there is a good chance it will never get around to processing this message
+		//Logger.progress(-7, "Shuting down...");
+
+		System.out.println("Shutting down...");
+		
+		//Tell all children to shutdown (if there are any)
+		if(nodeManager.getNodeCount() > 0)
+		{
+			Message message = CommonMessageConstructor.createShutdownMessage();
+			
+			//Send a request to each child node
+			for(Node node : nodeManager)
+			{
+				messageSender.send(message, node.getIp());
+			}
+			
+			//Wait a short while for shutdown messages to be sent
+			for(;messageSender.isSending();)
+			{
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+			}
+		}
+		
+		System.exit(1);
+	}
+	
 
 	/* *********************************************************************************************
 	 * Getters/Setters?

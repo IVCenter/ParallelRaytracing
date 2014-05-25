@@ -40,5 +40,7 @@ public abstract class MessageSender {
 	 * Sending Methods
 	 * *********************************************************************************************/
 	public abstract void send(Message message, String destination);
+	
+	public abstract boolean isSending();
 
 }

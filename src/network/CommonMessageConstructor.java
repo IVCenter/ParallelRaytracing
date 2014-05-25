@@ -38,6 +38,18 @@ public class CommonMessageConstructor {
 		
 		return message;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static Message createShutdownMessage()
+	{
+		Message message = new Message();
+		message.setType(Message.Type.Shutdown);
+		
+		return message;
+	}
 
 	/**
 	 * 

@@ -1,5 +1,6 @@
 package network.handlers;
 
+import system.ApplicationDelegate;
 import network.Message;
 
 public class ShutdownHandler extends MessageHandler {
@@ -29,7 +30,9 @@ public class ShutdownHandler extends MessageHandler {
 	@Override
 	public void handle(Message message)
 	{
-		// TODO Auto-generated method stub
+		//Request shutdown via Application Delegate
+		//This will guarantee that all children also receive a shutdown request
+		ApplicationDelegate.inst.shutdown();
 	}
 
 }

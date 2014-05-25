@@ -58,11 +58,7 @@ public class DefaultKeyboard extends Keyboard {
 		//If Ctrl is down, and X is released, kill the program
 		if(keyIsDown(KeyEvent.VK_CONTROL) && e.getKeyCode() == KeyEvent.VK_X)
 		{
-			//Logger is threaded so there is a good chance it will never get around to processing this message
-			//Logger.progress(-7, "Shuting down...");
-
-			System.out.println("Shutting down...");
-			System.exit(1);
+			ApplicationDelegate.inst.shutdown();
 		}
 		
 		//If N is released, print the current nodes under the node manager
