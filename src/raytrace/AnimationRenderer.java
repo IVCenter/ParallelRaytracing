@@ -76,7 +76,7 @@ public class AnimationRenderer implements Renderer {
 		}
 		
 		//Save pixel buffer to file 
-		if(isRecording && outputFolderPath != null)
+		if(isRecording && outputFolderPath != null && Configuration.canWriteToDisk())
 		{
 			ApplicationDelegate.inst.getPixelBuffer().writeToFile(
 					outputFolderPath + Configuration.getFrameFileNamePrefix() + animationStartTimeStamp + "_"
@@ -96,6 +96,12 @@ public class AnimationRenderer implements Renderer {
 	{
 		if(isRecording)
 			return;
+		
+		if(!Configuration.canWriteToDisk())
+		{
+			Logger.warning(-31, "AnimationRenderer: Unable to start recording, writing to disk is disabled.");
+			return;
+		}
 		
 		
 		//Setup recording values

@@ -48,8 +48,11 @@ public class DefaultKeyboard extends Keyboard {
 		//If P is pressed, take a screen shot of the current pixel buffer
 		if(e.getKeyCode() == KeyEvent.VK_P)
 		{
-			pixelBuffer.writeToFile(Configuration.getWorkingDirectory() + Configuration.getScreenshotSubDirectory()
-					+ Configuration.getFrameFileNamePrefix() + TimeStamp.makeForFileName());
+			if(Configuration.canWriteToDisk())
+			{
+				pixelBuffer.writeToFile(Configuration.getWorkingDirectory() + Configuration.getScreenshotSubDirectory()
+						+ Configuration.getFrameFileNamePrefix() + TimeStamp.makeForFileName());
+			}
 		}
 		
 		//If Ctrl is down, and X is released, kill the program
