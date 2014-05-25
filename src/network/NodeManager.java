@@ -54,6 +54,11 @@ public class NodeManager implements Iterable<Node> {
 		idToNodeMap.put(node.getId(), null);
 		nodes.remove(node);
 	}
+	
+	public boolean hasNode(Node node)
+	{
+		return idToNodeMap.containsKey(node.getId());
+	}
 
 	
 	/* *********************************************************************************************
