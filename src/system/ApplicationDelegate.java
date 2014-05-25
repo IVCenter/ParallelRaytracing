@@ -66,8 +66,12 @@ public class ApplicationDelegate extends Job{
 	
 	protected MessageListener messageListener;
 	protected MessageSender messageSender;
+	protected boolean isRegistering;
+	protected Thread registrationLoopThread;
+	
 	protected NodeManager nodeManager;
 	protected Node thisNode;
+	
 	
 	
 	/* *********************************************************************************************
@@ -80,6 +84,7 @@ public class ApplicationDelegate extends Job{
 		inst = this;
 		
 		isStarted = false;
+		isRegistering = true;
 	}
 	
 
@@ -126,12 +131,6 @@ public class ApplicationDelegate extends Job{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		//TODO: Proper handler for registration message loop
-		//Test message
-		//Message regMsg = CommonMessageConstructor.createRegistrationMessage();
-		//messageSender.send(regMsg, "137.110.52.67");
 		
 
 		//Drawing to Screen?
@@ -197,16 +196,16 @@ public class ApplicationDelegate extends Job{
 			//
 			
 		}else{
-			//If not a controller, attempt to register with controller
-			//TOOD: register loop? how to kill once registered?
 			
 		}
 	}
 	
 	public void configureAsClock(boolean shouldConfigure)
 	{
+		//Configure as clock
 		if(shouldConfigure)
 		{
+			isRegistering = false;
 			//Wrap the current renderer in an animation renderer if it isn't one already
 			if(renderer != null && !(renderer instanceof AnimationRenderer))
 			{
@@ -215,8 +214,19 @@ public class ApplicationDelegate extends Job{
 			
 		}else{
 			
-			//TODO: What do?
-			
+			isRegistering = true;
+		}
+		
+		
+		//Setup a registration thread regardless of clock flag
+		//Pause/Resume it via flags as set by clock flag
+		if(registrationLoopThread == null) {
+			registrationLoopThread = new Thread(new Runnable()
+			{
+				@Override
+				public void run() {	startRegistrationLoop(); }	
+			});
+			registrationLoopThread.start();
 		}
 	}
 
@@ -328,6 +338,33 @@ public class ApplicationDelegate extends Job{
 	
 
 	/* *********************************************************************************************
+	 * Registration Loop Methods
+	 * *********************************************************************************************/
+	protected void startRegistrationLoop()
+	{
+		progress("Starting Registration Loop...");
+		
+		//Registration Loop
+		for(;;)//While spider face holds true
+		{
+			//Sleep for some period of time
+			try {
+				Thread.sleep(Constants.Default.REGISTRATION_LOOP_SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			//Send a registration message
+			if(isRegistering)
+			{
+				Message regMsg = CommonMessageConstructor.createRegistrationMessage();
+				messageSender.send(regMsg, Configuration.Networking.getControllerHostName());
+			}
+		}
+	}
+	
+
+	/* *********************************************************************************************
 	 * Getters/Setters?
 	 * *********************************************************************************************/
 	public ScreenDrawer getScreenDrawer() {
@@ -372,6 +409,14 @@ public class ApplicationDelegate extends Job{
 
 	public MessageSender getMessageSender() {
 		return messageSender;
+	}
+
+	public boolean isRegistering() {
+		return isRegistering;
+	}
+
+	public void setRegistering(boolean isRegistering) {
+		this.isRegistering = isRegistering;
 	}
 
 	public void setMessageSender(MessageSender messageSender) {
