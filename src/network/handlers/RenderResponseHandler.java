@@ -3,6 +3,7 @@ package network.handlers;
 import process.logging.Logger;
 import process.utils.StringUtils;
 
+import raytrace.AnimationRenderer;
 import raytrace.camera.Camera;
 import raytrace.framework.Renderer;
 import system.ApplicationDelegate;
@@ -70,10 +71,16 @@ public class RenderResponseHandler extends MessageHandler {
 		
 		
 		//If the renderer is a network renderer, let it know we completed a request
+		//TODO: There has to be a better way to detect if there is a network renderer in the render chain
+		//		besides unwrapping it.
+		//TODO: UpdateResponse has this same problem
 		Renderer renderer = ApplicationDelegate.inst.getRenderer();
 		if(renderer instanceof NetworkRenderer)
 		{
 			((NetworkRenderer)renderer).completedARequest();
+		}else if(renderer instanceof AnimationRenderer && ((AnimationRenderer)renderer).getRenderer() instanceof NetworkRenderer)
+		{
+			((NetworkRenderer)((AnimationRenderer)renderer).getRenderer()).completedARequest();
 		}
 	}
 	

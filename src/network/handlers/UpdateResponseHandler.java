@@ -2,6 +2,7 @@ package network.handlers;
 
 import network.Message;
 import network.NetworkRenderer;
+import raytrace.AnimationRenderer;
 import raytrace.framework.Renderer;
 import system.ApplicationDelegate;
 
@@ -39,6 +40,9 @@ public class UpdateResponseHandler extends MessageHandler {
 		if(renderer instanceof NetworkRenderer)
 		{
 			((NetworkRenderer)renderer).completedARequest();
+		}else if(renderer instanceof AnimationRenderer && ((AnimationRenderer)renderer).getRenderer() instanceof NetworkRenderer)
+		{
+			((NetworkRenderer)((AnimationRenderer)renderer).getRenderer()).completedARequest();
 		}
 	}
 
