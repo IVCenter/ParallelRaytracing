@@ -101,6 +101,7 @@ public class Constants {
 	public static class Default
 	{
 		public static final String NODE_ID = "Unassigned";
+		public static final int REGISTRATION_LOOP_SLEEP_TIME = 10000;
 	}
 	
 	
