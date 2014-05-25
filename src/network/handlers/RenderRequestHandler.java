@@ -68,7 +68,8 @@ public class RenderRequestHandler extends MessageHandler {
 		Thread intermediateThread = null;
 		if(!Configuration.isRealTime())
 		{
-			intermediateThread = startIntermediateResultsLoop(camera, (String)message.getData().get(Constants.Message.NODE_IP));
+			intermediateThread = startIntermediateResultsLoop(camera.duplicate(), (String)message.getData().get(Constants.Message.NODE_IP));
+			intermediateThread.start();
 		}
 		
 		//Get rendering
@@ -78,7 +79,9 @@ public class RenderRequestHandler extends MessageHandler {
 		if(intermediateThread != null)
 		{
 			intermediateThread.interrupt();
+			synchronized(this){/**/}//Block until we have access
 		}
+		
 		
 		//Replace the scenes camera
 		Configuration.getMasterScene().setActiveCamera(sceneCamera);
@@ -102,22 +105,25 @@ public class RenderRequestHandler extends MessageHandler {
 			@Override
 			public void run()
 			{
-				for(;!Thread.currentThread().isInterrupted();)//While not interupted
+				synchronized(this)
 				{
-					//Sleep for some period of time
-					try {
-						Thread.sleep(Constants.Default.INTERMEDIATE_RESULT_LOOP_SLEEP_TIME);
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
+					for(;!Thread.currentThread().isInterrupted();)//While not interupted
+					{
+						//Sleep for some period of time
+						try {
+							Thread.sleep(Constants.Default.INTERMEDIATE_RESULT_LOOP_SLEEP_TIME);
+						} catch (InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+	
+						//Send an intermedaite result message
+						Message response = CommonMessageConstructor.createIntermediateRenderResponseMessage();
+						response.getData().set(Constants.Message.NODE_CAMERA, camera);
+						response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
+								ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
+						
+						ApplicationDelegate.inst.getMessageSender().send(response, controllerIP);
 					}
-
-					//Send an intermedaite result message
-					Message response = CommonMessageConstructor.createIntermediateRenderResponseMessage();
-					response.getData().set(Constants.Message.NODE_CAMERA, camera);
-					response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
-							ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
-					
-					ApplicationDelegate.inst.getMessageSender().send(response, controllerIP);
 				}
 			}
 		});

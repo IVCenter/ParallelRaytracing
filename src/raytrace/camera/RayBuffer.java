@@ -73,5 +73,13 @@ public class RayBuffer extends Camera {
 		// TODO Mmmmm
 		return null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Camera duplicate()
+	{
+		RayBuffer rbuf = new RayBuffer();
+		rbuf.rays = (ArrayList<Ray>)rays.clone();
+		return rbuf;
+	}
 
 }

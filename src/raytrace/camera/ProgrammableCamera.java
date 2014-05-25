@@ -243,7 +243,7 @@ public class ProgrammableCamera extends Camera {
 		return cams;
 	}
 	
-	private ProgrammableCamera duplicate()
+	public ProgrammableCamera duplicate()
 	{
 		ProgrammableCamera cam = new ProgrammableCamera();
 		cam.setPosition(position);

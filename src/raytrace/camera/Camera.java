@@ -57,6 +57,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	protected abstract void wasModified();
 	protected abstract Ray getRay(double x, double y);
 	public abstract Collection<Camera> decompose(int count);
+	public abstract Camera duplicate();
 	//protected abstract Ray getRay(double x, double y, Ray ray);
 	//protected Ray getRay(double x, double y)
 	//{
