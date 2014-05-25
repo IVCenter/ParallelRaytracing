@@ -12,6 +12,7 @@ import network.handlers.IntermediateRenderResponseHandler;
 import network.handlers.RegistrationHandler;
 import network.handlers.RenderRequestHandler;
 import network.handlers.RenderResponseHandler;
+import network.handlers.ShutdownHandler;
 import network.handlers.UpdateRequestHandler;
 import network.handlers.UpdateResponseHandler;
 import network.listen.MessageListener;
@@ -118,6 +119,7 @@ public class ApplicationDelegate extends Job{
 			messageListener.addMessageHandler(new RenderRequestHandler());
 			messageListener.addMessageHandler(new IntermediateRenderResponseHandler());
 			messageListener.addMessageHandler(new RenderResponseHandler());
+			messageListener.addMessageHandler(new ShutdownHandler());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -347,18 +349,18 @@ public class ApplicationDelegate extends Job{
 		//Registration Loop
 		for(;;)//While spider face holds true
 		{
-			//Sleep for some period of time
-			try {
-				Thread.sleep(Constants.Default.REGISTRATION_LOOP_SLEEP_TIME);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
 			//Send a registration message
 			if(isRegistering)
 			{
 				Message regMsg = CommonMessageConstructor.createRegistrationMessage();
 				messageSender.send(regMsg, Configuration.Networking.getControllerHostName());
+			}
+
+			//Sleep for some period of time
+			try {
+				Thread.sleep(Constants.Default.REGISTRATION_LOOP_SLEEP_TIME);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
