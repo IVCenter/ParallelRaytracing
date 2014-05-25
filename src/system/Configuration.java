@@ -17,7 +17,7 @@ public class Configuration {
 	protected static final Environment env;
 	
 	//Defined parameters
-	protected static String id = "Unassigned";
+	protected static String id = Constants.Default.NODE_ID;
 	protected static String nodeIdPrefix = "NightSky_Node_";
 	protected static String frameFileNamePrefix = "NightSky_Frame_";
 	protected static String animationFolderNamePrefix = "NightSky_Animation_";
@@ -28,11 +28,12 @@ public class Configuration {
 	protected static boolean drawToScreen = false;
 	protected static boolean isClock = false;
 	protected static boolean isLeaf = false;
-	protected static boolean isController = true;
+	protected static boolean isController = false;
 	
 	protected static Scene masterScene = null;
 	
 	protected static Keyboard keyboard = null;
+	protected static Boolean canWriteToDisk = true;
 	protected static String workingDirectory = "/";
 	protected static String modelsSubDirectory = "Models/";
 	protected static String screenshotSubDirectory = "Screenshots/";
@@ -163,5 +164,9 @@ public class Configuration {
 	//Animation Sub-directory
 	public static String getAnimationSubDirectory() { return animationSubDirectory; }
 	public static void setAnimationSubDirectory(String animationSubDirectory) { Configuration.animationSubDirectory = animationSubDirectory; }
+
+	//Write to Disk
+	public static Boolean canWriteToDisk() { return canWriteToDisk; }
+	public static void setCanWriteToDisk(Boolean canWriteToDisk) { Configuration.canWriteToDisk = canWriteToDisk; }
 	
 }
