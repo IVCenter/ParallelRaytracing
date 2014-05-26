@@ -69,10 +69,10 @@ public class Launcher {
 		Configuration.setScreenHeight(720);
 		Configuration.setDrawToScreen(true);
 		Configuration.setClock(true);//The top most node must have clock set to true (this includes stand-alone nodes)
-		Configuration.setLeaf(false);//true for local, false for networked
+		Configuration.setLeaf(true);//true for local, false for networked
 		Configuration.setController(true);
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST2));
+		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST5));
 
 		//Create the directory structure for the debug config
 		DirectoryManager.createFolderStructure();
@@ -83,7 +83,6 @@ public class Launcher {
 	 * 
 	 * 		-Test distribution stability and performance on caves
 	 * 		-Configuration loader
-	 * 		-Intermediate results support
 	 * 		-Compress pixels before sending?
 	 * 
 		//TODO: AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
