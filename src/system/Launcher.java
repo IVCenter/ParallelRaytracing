@@ -82,7 +82,7 @@ public class Launcher {
 	 * Local TOOD:
 	 * 
 	 * 		-Test distribution stability and performance on caves
-	 * 		-Configuration loader
+	 * 		-Test configuration loader
 	 * 		-Compress pixels before sending?
 	 * 
 		//TODO: AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)

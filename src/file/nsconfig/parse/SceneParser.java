@@ -36,7 +36,8 @@ public class SceneParser extends StringParser<Configuration> {
 			//Make sure the Scene is reasonable
 			if (scene == null || scene.isEmpty())
 				throw new Exception("SceneParser: Scene was invalid [" + scene + "].");
-			
+
+			Logger.progress(-32, "ConfigFileLoader: Setting Scene [" + scene + "].");
 			Scene masterScene = SceneLoader.load(scene);
 			
 			//Make sure the master scene isnt null
@@ -45,7 +46,6 @@ public class SceneParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setMasterScene(masterScene);
-			Logger.progress(-32, "ConfigFileLoader: Setting Scene [" + scene + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-43, "SceneParser: Failed to parse a scene line. [" + str + "]");

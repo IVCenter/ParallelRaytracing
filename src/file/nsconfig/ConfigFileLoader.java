@@ -20,6 +20,7 @@ public class ConfigFileLoader {
 	 * *********************************************************************************************/
 	protected static HashMap<String, StringParser<Configuration>> parsers;
 	protected static StringParser<Configuration> defaultParser;
+	protected static StringParser<Configuration> commentParser;
 	
 
 	/* *********************************************************************************************
@@ -28,8 +29,6 @@ public class ConfigFileLoader {
 	static
 	{
 		parsers = new HashMap<String, StringParser<Configuration>>();
-		
-		(new CommentParser()).addTo(parsers);
 
 		(new IdParser()).addTo(parsers);
 		(new NodeIdPrefixParser()).addTo(parsers);
@@ -64,6 +63,7 @@ public class ConfigFileLoader {
 		
 		
 		defaultParser = new EnvironmentVariableParser();
+		commentParser = new CommentParser();
 	}
 	
 
@@ -91,13 +91,18 @@ public class ConfigFileLoader {
 		
 		for(String line : lines)
 		{
-			//line = line.replace("\t", " ");
-			firstEqualsSignIndex = line.indexOf("=");
+			//Parse comments
+			if(line.startsWith("#")) {
+				commentParser.parse(line, null);
+				continue;
+			}
 			
 			//Skip empty ...
 			if(line.trim().length() == 0) {
 				continue;
 			}
+
+			firstEqualsSignIndex = line.indexOf("=");
 			
 			//...or malformed lines
 			if(firstEqualsSignIndex < 0) {
