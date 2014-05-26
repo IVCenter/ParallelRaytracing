@@ -116,7 +116,7 @@ public class ConfigFileLoader {
 			//Get the associated parser
 			parser = parsers.get(lineKey);
 			
-			//If we dont have a parser for this line, continue;
+			//If we dont have a parser for this line, process as envvar and continue;
 			if(parser == null) {
 				Logger.warning(-32, "ConfigFileLoader.load(): Encountered a line key [" + lineKey + "] that does not have" +
 						" an associated parser.  Setting as an environment variable.");
