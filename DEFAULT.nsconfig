@@ -1,0 +1,63 @@
+#Sample Configuration
+#All of the configurable settings use the defaults given below
+#When creating a new configuration only the settings you wish to override need to be included.
+
+#Node ID Settings
+
+id=Unassigned
+nodeIdPrefix=NightSky_Node_
+frameFileNamePrefix=NightSky_Frame_
+animationFolderNamePrefix=NightSky_Animation_
+
+
+#Screen Settings
+
+screenWidth=1024
+screenHeight=640
+
+
+#Instance Operation Flags
+
+isClock=true
+isController=true
+isLeaf=true
+isDrawingToScreen=true
+isRealTime=false
+
+
+#Scene Settings
+
+scene=null
+
+
+#File/Folder Settings
+
+canWriteToDisk=true
+workingDirectory=/
+modelsSubDirectory=Models/
+screenshotSubDirectory=Screenshots/
+animationSubDirectory=Animations/
+textureSubDirectory=Textures/
+
+
+#Network Settings
+#Note: web interface and message receive ports are currently unsupported
+#Note: Consider raising the message thread count when distributing to many nodes
+
+controllerHostName=localhost
+webInterfacePort=9741
+messageReceivePort=9742
+messageSendPort=9743
+messageThreadCount=4
+
+
+#Environment Settings
+#The configuration supports, in addition to the above settings, a configurable environment
+#The environment allows the user to specify their own set of settings and then access
+#	those settings from within the rendering engine.
+#An example use would be to set a "tinting" color for each node, and then in the scene tint all 
+#	pixels with the tinting color.  The resulting rendering at the head node will visibly show
+#	which nodes rendered which pixels, making it easy to debug distribution and load balancing
+#	issues.
+
+myCustomSetting=Currently only strings are supported.
