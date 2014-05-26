@@ -25,7 +25,7 @@ import process.Job;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
 import raytrace.AnimationRenderer;
-import raytrace.ConfigurableRayTracer;
+import raytrace.ConfigurableRayTracingRenderer;
 import raytrace.ParallelRayTracer;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
@@ -185,7 +185,7 @@ public class ApplicationDelegate extends Job{
 		//	If has children its a network distribution renderer
 		if(shouldConfigure)
 		{
-			renderer = new ConfigurableRayTracer(new ParallelRayTracer());
+			renderer = new ConfigurableRayTracingRenderer(new ParallelRayTracer());
 		}else{
 			renderer = new NetworkRenderer(nodeManager, messageSender);
 		}
