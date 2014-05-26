@@ -153,72 +153,13 @@ public class ParallelRayTracer implements Tracer {
 	//@SuppressWarnings("unchecked")
 	private void distributeRays(Camera camera)
 	{
-		//if(camera == cameraUsedForDistro)
-		//	return;
-
-		//cameraUsedForDistro = camera;
-		
 		rayBuffers.clear();
 		
 		Collection<Camera> cams = camera.decompose(threadCount);
 		
 		for(Camera cam : cams)
 			rayBuffers.add(cam);
-		
-		
-		/*
-		if(camera == cameraUsedForDistro && camera.getRaySetID() == cameraRaySetID)
-			return;
-		
-		cameraUsedForDistro = camera;
-		cameraRaySetID = camera.getRaySetID();
-		
-		int bufCount = rayBuffers.size();
-		ArrayList<Ray>[] buffers = (ArrayList<Ray>[])new ArrayList[bufCount];
-		
-		//Get the buffers and clear them
-		int i = 0;
-		ArrayList<Ray> temp;
-		for(RayBuffer buffer : rayBuffers) {
-			temp = buffer.getRays();
-			temp.clear();
-			buffers[i++] = temp;
-		}
-		
-		//Distribute the rays to each buffer
-		i = 0;
-		for(Ray ray : camera)
-		{
-			buffers[(i++)%bufCount].add(ray);
-		}
-		
-		//If randomize is set to true, shuffle the rays around
-		if(randomize)
-		{
-			//Randomize the rays
-			Ray tempRay;
-			int leftIndex, rightIndex;
-			int leftRayIndex, rightRayIndex;
-			for(i *= 4; i >= 0; --i)
-			{
-				//Calculate buffer indices
-				leftIndex = (int)Math.floor((Math.random() * bufCount));
-				rightIndex = leftIndex;
-				if(bufCount != 1)
-					while(rightIndex == leftIndex) {
-						rightIndex = (int)Math.floor((Math.random() * bufCount));
-					}
-				
-				//Swap random rays from the two buffers
-				leftRayIndex = (int)Math.floor((Math.random() * buffers[leftIndex].size()));
-				rightRayIndex = (int)Math.floor((Math.random() * buffers[rightIndex].size()));
-				
-				tempRay = buffers[leftIndex].get(leftRayIndex);
-				buffers[leftIndex].set(leftRayIndex, buffers[rightIndex].get(rightRayIndex));
-				buffers[rightIndex].set(rightRayIndex, tempRay);
-			}
-		}
-		*/
+	
 	}
 	
 
