@@ -79,6 +79,10 @@ public class NetworkRenderer implements Renderer {
 	{
 		Logger.progress(-1, "Rendering...");
 		
+		//Start distributing
+		Logger.progress(-1, "Starting Distributing...(" + nodeManager.getNodeCount() + " nodes).");
+		long startTime = System.currentTimeMillis();
+		
 		//TODO: Per-frame Load balance
 		
 		//TODO: Decompose Camera
@@ -97,6 +101,9 @@ public class NetworkRenderer implements Renderer {
 		
 		//Wait until all nodes are done
 		waitOnOutstandingRequests();
+		
+		//Distributing done
+		Logger.progress(-1, "Ending Distributing... (" + (System.currentTimeMillis()-startTime) + "ms).");
 	}
 	
 	private void waitOnOutstandingRequests()
