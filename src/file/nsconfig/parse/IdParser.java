@@ -5,12 +5,12 @@ import process.utils.StringUtils;
 import system.Configuration;
 import file.StringParser;
 
-public class ScreenWidthParser extends StringParser<Configuration> {
+public class IdParser extends StringParser<Configuration> {
 	
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ScreenWidthParser() { keyToken = "screenWidth"; }
+	public IdParser() { keyToken = "id"; }
 	
 
 	/* *********************************************************************************************
@@ -27,21 +27,21 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 			
 			//First make sure the first token matches the key token
 			if(!tokens[0].equals(keyToken))
-				throw new Exception("ScreenWidthParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
+				throw new Exception("IdParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			int screenWidth = Integer.parseInt(tokens[1]);
+			String id = tokens[1];
 			
-			//Make sure the screen width is reasonable
-			if (screenWidth <= 0)
-				throw new Exception("ScreenWidthParser: Screen width was invalid [" + screenWidth + "].");
+			//Make sure the Node ID is reasonable
+			if (id == null || id.isEmpty())
+				throw new Exception("IdParser: Node ID was invalid [" + id + "].");
 			
 			//Set it
-			Configuration.setScreenWidth(screenWidth);
-			Logger.progress(-32, "ConfigFileLoader: Setting screen width [" + screenWidth + "].");
+			Configuration.setId(id);
+			Logger.progress(-32, "ConfigFileLoader: Setting Node ID [" + id + "].");
 			
 		}catch(Exception e) {
-			Logger.error(-33, "ScreenWidthParser: Failed to parse a screen width line. [" + str + "]");
-			Logger.error(-33, StringUtils.stackTraceToString(e));
+			Logger.error(-36, "IdParser: Failed to parse a Node ID line. [" + str + "]");
+			Logger.error(-36, StringUtils.stackTraceToString(e));
 		}
 	}
 }

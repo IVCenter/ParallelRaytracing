@@ -5,12 +5,12 @@ import process.utils.StringUtils;
 import system.Configuration;
 import file.StringParser;
 
-public class ScreenWidthParser extends StringParser<Configuration> {
+public class TextureSubDirectoryParser extends StringParser<Configuration> {
 	
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ScreenWidthParser() { keyToken = "screenWidth"; }
+	public TextureSubDirectoryParser() { keyToken = "textureSubDirectory"; }
 	
 
 	/* *********************************************************************************************
@@ -27,21 +27,21 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 			
 			//First make sure the first token matches the key token
 			if(!tokens[0].equals(keyToken))
-				throw new Exception("ScreenWidthParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
+				throw new Exception("TextureSubDirectoryParser: Expected a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			int screenWidth = Integer.parseInt(tokens[1]);
+			String textureDir = tokens[1];
 			
-			//Make sure the screen width is reasonable
-			if (screenWidth <= 0)
-				throw new Exception("ScreenWidthParser: Screen width was invalid [" + screenWidth + "].");
+			//Make sure the Texture Directory is reasonable
+			if (textureDir == null || textureDir.isEmpty())
+				throw new Exception("TextureSubDirectoryParser: Texture Directory was invalid [" + textureDir + "].");
 			
 			//Set it
-			Configuration.setScreenWidth(screenWidth);
-			Logger.progress(-32, "ConfigFileLoader: Setting screen width [" + screenWidth + "].");
+			Configuration.setTextureSubDirectory(textureDir);
+			Logger.progress(-32, "ConfigFileLoader: Setting Texture Directory [" + textureDir + "].");
 			
 		}catch(Exception e) {
-			Logger.error(-33, "ScreenWidthParser: Failed to parse a screen width line. [" + str + "]");
-			Logger.error(-33, StringUtils.stackTraceToString(e));
+			Logger.error(-49, "TextureSubDirectoryParser: Failed to parse a Texture Directory line. [" + str + "]");
+			Logger.error(-49, StringUtils.stackTraceToString(e));
 		}
 	}
 }

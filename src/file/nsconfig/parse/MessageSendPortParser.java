@@ -5,12 +5,12 @@ import process.utils.StringUtils;
 import system.Configuration;
 import file.StringParser;
 
-public class ScreenWidthParser extends StringParser<Configuration> {
+public class MessageSendPortParser extends StringParser<Configuration> {
 	
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ScreenWidthParser() { keyToken = "screenWidth"; }
+	public MessageSendPortParser() { keyToken = "messageSendPort"; }
 	
 
 	/* *********************************************************************************************
@@ -27,21 +27,21 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 			
 			//First make sure the first token matches the key token
 			if(!tokens[0].equals(keyToken))
-				throw new Exception("ScreenWidthParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
+				throw new Exception("MessageSendPortParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			int screenWidth = Integer.parseInt(tokens[1]);
+			int port = Integer.parseInt(tokens[1]);
 			
-			//Make sure the screen width is reasonable
-			if (screenWidth <= 0)
-				throw new Exception("ScreenWidthParser: Screen width was invalid [" + screenWidth + "].");
+			//Make sure the Message Send Port is reasonable
+			if (port <= 0)
+				throw new Exception("MessageSendPortParser: Message Send Port was invalid [" + port + "].");
 			
 			//Set it
-			Configuration.setScreenWidth(screenWidth);
-			Logger.progress(-32, "ConfigFileLoader: Setting screen width [" + screenWidth + "].");
+			Configuration.Networking.setMessageSendPort(port);
+			Logger.progress(-32, "ConfigFileLoader: Setting Message Send Port [" + port + "].");
 			
 		}catch(Exception e) {
-			Logger.error(-33, "ScreenWidthParser: Failed to parse a screen width line. [" + str + "]");
-			Logger.error(-33, StringUtils.stackTraceToString(e));
+			Logger.error(-51, "MessageSendPortParser: Failed to parse a Message Send Port line. [" + str + "]");
+			Logger.error(-51, StringUtils.stackTraceToString(e));
 		}
 	}
 }

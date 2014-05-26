@@ -5,12 +5,12 @@ import process.utils.StringUtils;
 import system.Configuration;
 import file.StringParser;
 
-public class ScreenWidthParser extends StringParser<Configuration> {
+public class IsLeafParser extends StringParser<Configuration> {
 	
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ScreenWidthParser() { keyToken = "screenWidth"; }
+	public IsLeafParser() { keyToken = "isLeaf"; }
 	
 
 	/* *********************************************************************************************
@@ -27,21 +27,17 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 			
 			//First make sure the first token matches the key token
 			if(!tokens[0].equals(keyToken))
-				throw new Exception("ScreenWidthParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
+				throw new Exception("IsLeafParser: Expected a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			int screenWidth = Integer.parseInt(tokens[1]);
-			
-			//Make sure the screen width is reasonable
-			if (screenWidth <= 0)
-				throw new Exception("ScreenWidthParser: Screen width was invalid [" + screenWidth + "].");
+			boolean isLeaf = Boolean.parseBoolean(tokens[1]);
 			
 			//Set it
-			Configuration.setScreenWidth(screenWidth);
-			Logger.progress(-32, "ConfigFileLoader: Setting screen width [" + screenWidth + "].");
+			Configuration.setLeaf(isLeaf);
+			Logger.progress(-32, "ConfigFileLoader: Setting Leaf Flag [" + isLeaf + "].");
 			
 		}catch(Exception e) {
-			Logger.error(-33, "ScreenWidthParser: Failed to parse a screen width line. [" + str + "]");
-			Logger.error(-33, StringUtils.stackTraceToString(e));
+			Logger.error(-40, "IsLeafParser: Failed to parse a Leaf Flag line. [" + str + "]");
+			Logger.error(-40, StringUtils.stackTraceToString(e));
 		}
 	}
 }
