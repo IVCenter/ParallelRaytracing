@@ -7,7 +7,7 @@ import process.logging.Logger;
 import system.Configuration;
 import file.LineParser;
 import file.StringParser;
-import file.nsconfig.parse.ScreenWidthParser;
+import file.nsconfig.parse.*;
 
 public class ConfigFileLoader {
 	
@@ -19,6 +19,7 @@ public class ConfigFileLoader {
 	 * Static Parsers
 	 * *********************************************************************************************/
 	protected static HashMap<String, StringParser<Configuration>> parsers;
+	protected static StringParser<Configuration> defaultParser;
 	
 
 	/* *********************************************************************************************
@@ -27,9 +28,42 @@ public class ConfigFileLoader {
 	static
 	{
 		parsers = new HashMap<String, StringParser<Configuration>>();
+		
+		(new CommentParser()).addTo(parsers);
 
+		(new IdParser()).addTo(parsers);
+		(new NodeIdPrefixParser()).addTo(parsers);
+		(new FrameFileNamePrefixParser()).addTo(parsers);
+		(new AnimationFolderNamePrefixParser()).addTo(parsers);
+		
 		(new ScreenWidthParser()).addTo(parsers);
+		(new ScreenHeightParser()).addTo(parsers);
+		
+		(new IsClockParser()).addTo(parsers);
+		(new IsControllerParser()).addTo(parsers);
+		(new IsLeafParser()).addTo(parsers);
+		(new IsDrawingToScreenParser()).addTo(parsers);
+		(new IsRealTimeParser()).addTo(parsers);
+
+		(new SceneParser()).addTo(parsers);
+
+		(new CanWriteToDiskParser()).addTo(parsers);
+		(new WorkingDirectoryParser()).addTo(parsers);
+		(new ModelsSubDirectoryParser()).addTo(parsers);
+		(new ScreenshotSubDirectoryParser()).addTo(parsers);
+		(new AnimationSubDirectoryParser()).addTo(parsers);
+		(new TextureSubDirectoryParser()).addTo(parsers);
+
+		(new ControllerHostNameParser()).addTo(parsers);
+		//(new WebInterfacePortParser()).addTo(parsers);
+		//(new MessageReceivePortParser()).addTo(parsers);
+		(new MessageSendPortParser()).addTo(parsers);
+		(new MessageThreadCountParser()).addTo(parsers);
+		
 		//TODO: The rest
+		
+		
+		defaultParser = new EnvironmentVariableParser();
 	}
 	
 
@@ -80,7 +114,8 @@ public class ConfigFileLoader {
 			//If we dont have a parser for this line, continue;
 			if(parser == null) {
 				Logger.warning(-32, "ConfigFileLoader.load(): Encountered a line key [" + lineKey + "] that does not have" +
-						" an associated parser.");
+						" an associated parser.  Setting as an environment variable.");
+				defaultParser.parse(line, null);
 				continue;
 			}
 			
