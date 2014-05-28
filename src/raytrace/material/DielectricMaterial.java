@@ -59,26 +59,12 @@ public class DielectricMaterial extends Material{
 		double incomingRefractiveIndex = data.getRefractiveIndex();
 		double refractiveRatio = incomingRefractiveIndex / thisRefractiveIndex;
 		
-		
 		//Calculate the refraction direction
 		double phiDiscrim = 1.0 - (refractiveRatio * refractiveRatio) *
 							(1.0 - (DdotN * DdotN));
 		
-		
-		Color refractColor = new Color();
-		if(phiDiscrim > 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
-		{
-			Vector4 rayDir = data.getRay().getDirection();
-			Vector4 thetaSide = rayDir.subtract3(normal.multiply3(DdotN)).multiply3(refractiveRatio);
-			Vector4 phiSide = normal.multiply3(Math.sqrt(phiDiscrim));
-			Vector4 refracDir = thetaSide.subtract3(phiSide);
-			
-			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
-		}
-		
-		
-		
-		
+
+		//Calculate reflectiveness
 		double reflectiveCoeff = 0.0;
 		//If there was no refraction, fix reflective coeff
 		if(phiDiscrim <= 0.0)
@@ -92,6 +78,19 @@ public class DielectricMaterial extends Material{
 			
 			//Schlick Approx
 			reflectiveCoeff = baseReflectiveCoeff + (1.0 - baseReflectiveCoeff) * Math.pow(1.0 - Math.abs(DdotN), 5.0);
+		}
+		
+		
+		//Get the refractive color
+		Color refractColor = new Color();
+		if(phiDiscrim > 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
+		{
+			Vector4 rayDir = data.getRay().getDirection();
+			Vector4 thetaSide = rayDir.subtract3(normal.multiply3(DdotN)).multiply3(refractiveRatio);
+			Vector4 phiSide = normal.multiply3(Math.sqrt(phiDiscrim));
+			Vector4 refracDir = thetaSide.subtract3(phiSide);
+			
+			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
 		}
 		
 
@@ -121,6 +120,7 @@ public class DielectricMaterial extends Material{
 
 			totalColor = totalColor.multiply3(beerColor);
 		}
+		
 		return totalColor;
 	}
 
