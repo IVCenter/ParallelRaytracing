@@ -237,6 +237,29 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 
+	public double distance(Vector4 that)
+	{
+		double x = array[0] - that.array[0];
+		double y = array[1] - that.array[1];
+		double z = array[2] - that.array[2];
+		return Math.sqrt(x * x + y * y + z * z);
+	}
+
+	public double manhattanDistance(Vector4 that)
+	{
+		double x = array[0] - that.array[0];
+		double y = array[1] - that.array[1];
+		double z = array[2] - that.array[2];
+		return Math.abs(x) + Math.abs(y) + Math.abs(z);
+	}
+
+	public double tchebyshevDistance(Vector4 that)
+	{
+		double x = array[0] - that.array[0];
+		double y = array[1] - that.array[1];
+		double z = array[2] - that.array[2];
+		return Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z)));
+	}
 	
 
 	/* *********************************************************************************************
