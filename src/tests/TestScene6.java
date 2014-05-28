@@ -2,7 +2,11 @@ package tests;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import math.Vector4;
+import math.noise.WorleyNoise3D;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
@@ -14,6 +18,7 @@ import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
+import raytrace.map.texture._3D.SimplexInterpolationTexture3D;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
@@ -53,7 +58,7 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -67,18 +72,22 @@ public class TestScene6 extends Scene
 		
 		//Make a cylinder
 		{
+			SimplexInterpolationTexture3D sit3d = new SimplexInterpolationTexture3D(
+				new Color(0.96, 0.96, 0.96), new Color(0, 0, 0));
+		
+			
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			inst.setMaterial(
-					new InterpolationBBlend(
-							new DielectricPTMaterial(new Color(1.0, 1.0, 1.0), 1.4),
-							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
-							0.2
-					)
+					//new InterpolationBBlend(
+					//		new DielectricPTMaterial(new Color(1.0, 1.0, 1.0), 1.4),
+							new AshikhminPTMaterial(new Color(0.3, 0.05, 0.05), sit3d, 0.8, 0.2, 100, 1000)//,
+					//		0.2
+					//)
 					);
 			inst.getTransform().translate(0, 2.0, 0.0);
-			inst.getTransform().scale(1.0);
+			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			
 			inst.updateBoundingBox();
