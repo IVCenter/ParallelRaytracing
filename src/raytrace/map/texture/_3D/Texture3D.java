@@ -1,20 +1,21 @@
-package raytrace.map.texture;
+package raytrace.map.texture._3D;
 
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;
-import raytrace.map.Map1D;
+import raytrace.map.Map3D;
+import raytrace.map.texture.Texture;
 
-public abstract class Texture1D implements Map1D<Color>, Texture {
+public abstract class Texture3D implements Map3D<Color>, Texture {
 	
 	/*
-	 * A base class for 1D textures
+	 * A base class for 3D textures
 	 */
 
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	@Override
-	public abstract Color evaluate(Double x);
+	public abstract Color evaluate(Double x, Double y, Double z);
 
 	
 	/* *********************************************************************************************
@@ -23,8 +24,7 @@ public abstract class Texture1D implements Map1D<Color>, Texture {
 	@Override
 	public Color evaluate(IntersectionData data)
 	{
-		//TODO: Do something a little more clever here.....
-		return evaluate(data.getLocalPoint().magnitude3());
+		double[] point = data.getLocalPoint().getArray();
+		return evaluate(point[0], point[1], point[2]);
 	}
-
 }
