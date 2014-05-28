@@ -128,8 +128,8 @@ public class MeshSurface extends TerminalSurface {
 			min = bb.min;
 			max = bb.max;
 
-			boundingBox.min.minimize3(min);
-			boundingBox.max.maximize3(max);
+			boundingBox.min.minimize3M(min);
+			boundingBox.max.maximize3M(max);
 		}
 	}
 	

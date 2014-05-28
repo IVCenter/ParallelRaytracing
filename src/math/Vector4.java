@@ -140,6 +140,14 @@ public class Vector4 implements Serializable{
 		return new Vector4(array[0]*d, array[1]*d, array[2]*d, array[3]);
 	}
 	
+	public Vector4 multiply3M(double d)
+	{
+		array[0] *= d;
+		array[1] *= d;
+		array[2] *= d;
+		return this;
+	}
+	
 	public Vector4 add3(Vector4 that)
 	{
 		double[] vm = that.getArray();
@@ -194,7 +202,24 @@ public class Vector4 implements Serializable{
 		return new Vector4(array[0]-d, array[1]-d, array[2]-d, array[3]);
 	}
 	
-	public Vector4 minimize3(Vector4 that)
+	public Vector4 subtract3M(Vector4 that)
+	{
+		double[] vm = that.getArray();
+		array[0] -= vm[0];
+		array[1] -= vm[1];
+		array[2] -= vm[2];
+		return this;
+	}
+	
+	public Vector4 subtract3M(double d)
+	{
+		array[0] -= d;
+		array[1] -= d;
+		array[2] -= d;
+		return this;
+	}
+	
+	public Vector4 minimize3M(Vector4 that)
 	{
 		double[] vm = that.getArray();
 		array[0] = array[0] < vm[0] ? array[0] : vm[0];
@@ -203,7 +228,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 maximize3(Vector4 that)
+	public Vector4 maximize3M(Vector4 that)
 	{
 		double[] vm = that.getArray();
 		array[0] = array[0] > vm[0] ? array[0] : vm[0];

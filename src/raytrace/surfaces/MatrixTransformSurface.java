@@ -132,8 +132,8 @@ public class MatrixTransformSurface extends CompositeSurface {
 		boundingBox.clear();
 		for(int i = 0; i < 8; ++i)
 		{
-			boundingBox.min.minimize3(corners[i]);
-			boundingBox.max.maximize3(corners[i]);
+			boundingBox.min.minimize3M(corners[i]);
+			boundingBox.max.maximize3M(corners[i]);
 		}
 	}
 

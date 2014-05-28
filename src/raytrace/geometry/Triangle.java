@@ -169,8 +169,8 @@ public class Triangle extends TerminalSurface {
 	public void updateBoundingBox()
 	{
 		boundingBox.clear();
-		boundingBox.min.minimize3(vertices[0].getPosition()).minimize3(vertices[1].getPosition()).minimize3(vertices[2].getPosition());
-		boundingBox.max.maximize3(vertices[0].getPosition()).maximize3(vertices[1].getPosition()).maximize3(vertices[2].getPosition());
+		boundingBox.min.minimize3M(vertices[0].getPosition()).minimize3M(vertices[1].getPosition()).minimize3M(vertices[2].getPosition());
+		boundingBox.max.maximize3M(vertices[0].getPosition()).maximize3M(vertices[1].getPosition()).maximize3M(vertices[2].getPosition());
 	}
 	
 	public void generateFaceNormal()

@@ -117,8 +117,8 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			min = bb.min;
 			max = bb.max;
 
-			boundingBox.min.minimize3(min);
-			boundingBox.max.maximize3(max);
+			boundingBox.min.minimize3M(min);
+			boundingBox.max.maximize3M(max);
 		}
 	}
 	
