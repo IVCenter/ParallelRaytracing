@@ -1,4 +1,4 @@
-package raytrace.map;
+package math.map;
 
 import math.function._2D.Function2D;
 

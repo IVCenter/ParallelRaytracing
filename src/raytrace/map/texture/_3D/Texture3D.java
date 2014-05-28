@@ -1,8 +1,8 @@
 package raytrace.map.texture._3D;
 
+import math.map.Map3D;
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;
-import raytrace.map.Map3D;
 import raytrace.map.texture.Texture;
 
 public abstract class Texture3D implements Map3D<Color>, Texture {

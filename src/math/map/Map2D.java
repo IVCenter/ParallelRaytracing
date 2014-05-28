@@ -1,8 +1,8 @@
-package raytrace.map;
+package math.map;
 
-import math.function._4D.Function4D;
+import math.function._3D.Function3D;
 
-public interface Map3D<DEPENDENT_W> extends Function4D<Double, Double, Double, DEPENDENT_W> {
+public interface Map2D<DEPENDENT_Z> extends Function3D<Double, Double, DEPENDENT_Z> {
 	
 	/*
 	 * A base class for maps like textures, normal maps, height fields, masks, etc.
@@ -12,6 +12,6 @@ public interface Map3D<DEPENDENT_W> extends Function4D<Double, Double, Double, D
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	@Override
-	public abstract DEPENDENT_W evaluate(Double x, Double y, Double z);
+	public DEPENDENT_Z evaluate(Double x, Double y);
 
 }
