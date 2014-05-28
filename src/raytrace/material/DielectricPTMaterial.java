@@ -8,7 +8,7 @@ import raytrace.map.texture.Texture;
 public class DielectricPTMaterial extends Material{
 	
 	/*
-	 * A apthtracing implementation of a dielectric material
+	 * A path tracing implementation of a dielectric material
 	 */
 	/* *********************************************************************************************
 	 * Instance Vars
