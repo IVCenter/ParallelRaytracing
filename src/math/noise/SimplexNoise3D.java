@@ -72,8 +72,8 @@ public class SimplexNoise3D implements Map3D<Double> {
 		//Shuffle
 		for(int i = 0; i < shuffleCount; i++)
 		{
-			a1 = rand.nextInt() % 256;
-			a2 = rand.nextInt() % 256;
+			a1 = Math.abs(rand.nextInt()) % 256;
+			a2 = Math.abs(rand.nextInt()) % 256;
 			
 			temp = p[a1];
 			p[a1] = p[a2];
