@@ -88,6 +88,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 			closest.setNormal(transform.multiply3(closest.getNormal()).normalize3());
 			closest.setPoint(transform.multiplyPt(closest.getPoint()));
 			closest.setDistance(closest.getPoint().subtract3(ray.getOrigin()).magnitude3());
+			closest.setTime(closest.getDistance());
 		}
 		
 		return closest;
