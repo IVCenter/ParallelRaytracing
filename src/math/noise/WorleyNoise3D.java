@@ -11,7 +11,7 @@ import math.function._3D.EuclideanDistance3D;
 import math.function._3D.Function3D;
 import math.map.Map3D;
 
-public class WorleyNoise implements Map3D<Double> {
+public class WorleyNoise3D implements Map3D<Double> {
 	
 	/* 
 	 * An implementation of Worley Noise
@@ -180,7 +180,7 @@ public class WorleyNoise implements Map3D<Double> {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public WorleyNoise()
+	public WorleyNoise3D()
 	{
 		seed = (new Random()).nextInt();
 		distanceFunction = new EuclideanDistance3D();
