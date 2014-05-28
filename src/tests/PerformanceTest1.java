@@ -64,7 +64,7 @@ public class PerformanceTest1 extends Scene
 			model.bake(null);
 			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 			//		0.80, 1000, 1000));
-			model.setMaterial(new DiffuseMaterial(Color.grey(0.8)));
+			model.setMaterial(new DiffuseMaterial(Color.gray(0.8)));
 			this.addChild(model);
 		}
 		
@@ -79,7 +79,7 @@ public class PerformanceTest1 extends Scene
 			model2.bake(null);
 			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 			//		0.80, 1000, 1000));
-			model2.setMaterial(new DiffuseMaterial(Color.grey(0.8)));
+			model2.setMaterial(new DiffuseMaterial(Color.gray(0.8)));
 			//this.addChild(model2);
 		}
 		

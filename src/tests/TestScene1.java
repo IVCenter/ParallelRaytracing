@@ -63,7 +63,7 @@ public class TestScene1 extends Scene {
 		sphere = new Sphere();
 		sphere.setRadius(1.8);
 		//sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7)));
-		sphere.setMaterial(new ReflectiveMaterial(Color.grey(0.7), 0.98));
+		sphere.setMaterial(new ReflectiveMaterial(Color.gray(0.7), 0.98));
 		//sphere.setMaterial(new DielectricMaterial(new Color(1.01, 1.01, 0.99), 1.45));
 		//this.addChild(sphere);
 		
@@ -146,9 +146,9 @@ public class TestScene1 extends Scene {
 			if(rand < 0.0) {
 				sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
 			}else if(rand < 0.0){
-				sphere.setMaterial(new DiffuseMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25)   )));
+				sphere.setMaterial(new DiffuseMaterial(Color.gray(0.7 + (Math.random()/2.0 - 0.25)   )));
 			}else if(rand < 0.0){
-				sphere.setMaterial(new DiffusePTMaterial(Color.grey(0.7 + (Math.random()/2.0 - 0.25))));
+				sphere.setMaterial(new DiffusePTMaterial(Color.gray(0.7 + (Math.random()/2.0 - 0.25))));
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			}else if(rand < 1.0){

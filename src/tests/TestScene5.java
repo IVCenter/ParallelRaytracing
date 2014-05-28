@@ -98,7 +98,7 @@ public class TestScene5 extends Scene
 				inst.getTransform().rotateX(Math.random() * 0.5);
 				inst.getTransform().rotateY(Math.random() * Math.PI);
 				double greyBase = 0.30;
-				inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random())));
+				inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
 			}
 
 			inst.updateBoundingBox();
@@ -124,7 +124,7 @@ public class TestScene5 extends Scene
 			inst.getTransform().translate(Math.cos(phi) * radius, 0, Math.sin(phi) * radius );//IA
 			inst.getTransform().scale(randInRange(3.0, 8.0));
 			double greyBase = 0.70;
-			inst.setMaterial(new DiffusePTMaterial(Color.grey(greyBase + (1.0 - greyBase) * Math.random())));
+			inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
 			inst.updateBoundingBox();
 			inst.bake(null);
 			spheres.add(inst);
@@ -159,7 +159,7 @@ public class TestScene5 extends Scene
 
 		//Make a plane
 		Plane plane = new Plane();
-		plane.setMaterial(new DiffusePTMaterial(Color.grey(0.8)));
+		plane.setMaterial(new DiffusePTMaterial(Color.gray(0.8)));
 		this.addChild(plane);
 		
 	}

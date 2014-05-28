@@ -70,7 +70,7 @@ public class CSE168_Project3_Scene extends Scene
 			model.getTransform().scale(0.1);
 			model.getTransform().translate(0.0, 0.055, 0.0);
 			model.bake(null);
-			model.setMaterial(new AshikhminPTMaterial(Color.grey(0.7), Color.black(), 0.0,
+			model.setMaterial(new AshikhminPTMaterial(Color.gray(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
 			this.addChild(model);
 		}
@@ -84,7 +84,7 @@ public class CSE168_Project3_Scene extends Scene
 			model2.getTransform().scale(0.1);
 			model2.getTransform().translate(0.0, 0.055, -0.1);
 			model2.bake(null);
-			model2.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.9, 0.6, 0.5), 1.0,
+			model2.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100));
 			this.addChild(model2);
 		}
@@ -98,7 +98,7 @@ public class CSE168_Project3_Scene extends Scene
 			model3.getTransform().scale(0.1);
 			model3.getTransform().translate(0.0, 0.055, -0.2);
 			model3.bake(null);
-			model3.setMaterial(new AshikhminPTMaterial(Color.grey(0.0), new Color(0.95, 0.7, 0.3), 1.0,
+			model3.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
 			this.addChild(model3);
 		}

@@ -245,12 +245,12 @@ public class Color implements Texture {
 		return new Color(0.0, 0.0, 0.0, 1.0);
 	}
 	
-	public static Color grey()
+	public static Color gray()
 	{
 		return new Color(0.5, 0.5, 0.5, 1.0);
 	}
 	
-	public static Color grey(double ratio)
+	public static Color gray(double ratio)
 	{
 		return new Color(ratio, ratio, ratio, 1.0);
 	}
