@@ -89,7 +89,7 @@ public class Launcher {
 	 * 		-(LP) Add Quad support to Triangle
 	 * 		-Discrete texture class that loads bmps, pngs, etc.
 	 * 		-A transform wrapper for texture
-	 * 		-[BROKEN] Cylinder
+	 * 		-[BROKEN] Cylinder (cap)
 	 * 		-[BROKEN] AABVH improperly handles cylinders
 	 * 
 	 * 		-Primitive Geometry Tesellation
@@ -101,8 +101,7 @@ public class Launcher {
 	 * 
 	 * 		-Subsurface Scattering
 	 * 
-	 * 		-Composite Material Interface
-	 * 		-Material Blending API
+	 * 		-Texture blending API
 	 * 		-Material Generation API
 	 * 		-Loading/Saving Materials from/to disk
 	 * 
