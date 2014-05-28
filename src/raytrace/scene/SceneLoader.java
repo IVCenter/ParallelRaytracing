@@ -12,6 +12,7 @@ import tests.TestScene2;
 import tests.TestScene3;
 import tests.TestScene4;
 import tests.TestScene5;
+import tests.TestScene6;
 
 public class SceneLoader {
 	
@@ -117,6 +118,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new PerformanceTest1();
 				scene.setSceneKey(Constants.SceneKeys.Performance_TEST1);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST6, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene6();
+				scene.setSceneKey(Constants.SceneKeys.TEST6);
 				return scene;
 			}
 		});

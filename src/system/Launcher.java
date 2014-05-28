@@ -72,23 +72,51 @@ public class Launcher {
 		Configuration.setLeaf(true);//true for local, false for networked
 		Configuration.setController(true);
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST5));
+		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST6));
 
 		//Create the directory structure for the debug config
 		DirectoryManager.createFolderStructure();
 	}
 	
 	/*
-	 * Local TOOD:
+	 * Local TODO for NightSky:
+	 * 
+	 * 		#An entry that starts with (LP) is considered Low Priority
 	 * 
 	 * 		-Test distribution stability and performance on caves
-	 * 		-Test configuration loader
-	 * 		-Compress pixels before sending?
+	 * 		-(LP) Compress pixels before sending?
+	 * 		-AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
+	 * 		-(LP) Add Quad support to Triangle
+	 * 		-Discrete texture class that loads bmps, pngs, etc.
+	 * 		-A transform wrapper for texture
+	 * 		-[BROKEN] Cylinder
+	 * 		-[BROKEN] AABVH improperly handles cylinders
 	 * 
-		//TODO: AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
-		//TODO: Add Quad support to Triangle
-		//TODO: Discrete texture class that loads bmps, pngs, etc.
-		//TODO: A transform wrapper for texture
+	 * 		-Primitive Geometry Tesellation
+	 * 			-Cube
+	 * 			-Sphere
+	 * 			-Cylinder
+	 * 
+	 * 		-More Materials
+	 * 
+	 * 		-Subsurface Scattering
+	 * 
+	 * 		-Composite Material Interface
+	 * 		-Material Blending API
+	 * 		-Material Generation API
+	 * 		-Loading/Saving Materials from/to disk
+	 * 
+	 * 		-Geometry Generation API
+	 * 			-Ex: Rocks, mechanical shapes, abstract shapes
+	 * 		-Geometry placement API
+	 * 			-Automatically layout generated geometry onto a surface
+	 * 				-Ex: Create a BSphere via BB, shoot rays at the surface, place objects at intersections
+	 * 
+	 * 		-Post Processing Pass
+	 * 		-Tone Mapping
+	 * 
+	 * 		-Camera Lens API
+	 * 
 	 */
 
 }
