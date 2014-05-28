@@ -17,6 +17,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
+import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
@@ -71,13 +72,13 @@ public class TestScene6 extends Scene
 			inst.addChild(sphere);
 			inst.setMaterial(
 					new InterpolationBBlend(
-							new DielectricMaterial(new Color(1.0, 1.0, 1.0), 1.4),
+							new DielectricPTMaterial(new Color(1.0, 1.0, 1.0), 1.4),
 							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
 							0.2
 					)
 					);
 			inst.getTransform().translate(0, 2.0, 0.0);
-			inst.getTransform().scale(2.0);
+			inst.getTransform().scale(1.0);
 			//inst.getTransform().rotateX(1);
 			
 			inst.updateBoundingBox();
