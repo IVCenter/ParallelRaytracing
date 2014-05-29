@@ -184,6 +184,19 @@ public class Color implements Texture {
 						 channels[2] * d + e, 
 						 channels[3]);
 	}
+	
+	public Color duplicate()
+	{
+		return new Color(this);
+	}
+	
+	public Color clamp3M()
+	{
+		channels[0] = Math.min(1.0, Math.max(0.0, channels[0]));
+		channels[1] = Math.min(1.0, Math.max(0.0, channels[1]));
+		channels[2] = Math.min(1.0, Math.max(0.0, channels[2]));
+		return this;
+	}
 
 	
 	/* *********************************************************************************************
