@@ -97,6 +97,17 @@ public class Launcher {
 	 * 			-Sphere
 	 * 			-Cylinder
 	 * 
+	 * 		-Progressive Tracer
+	 * 			-Sobol psuedo random instead of stratified?
+	 * 			-Iterator memorization?
+	 * 			-Ray index used for multiply and sum-in
+	 * 			-Keyboard keys for moving the camera
+	 * 			-Detecting a dirty camera
+	 * 			-Progressive Tracer...
+	 * 				-Cycles on camera until camera has a request for next frame
+	 * 				-request can be caused by camera.update
+	 * 				-or 
+	 * 
 	 * 		-More Materials
 	 * 
 	 * 		-Subsurface Scattering
