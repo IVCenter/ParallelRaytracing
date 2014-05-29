@@ -44,9 +44,9 @@ public class MaskT3DBlend extends Texture3D {
 		double[] firstColor = firstTexture.evaluate(x, y, z).getChannels();
 		double[] secondColor = secondTexture.evaluate(x, y, z).getChannels();
 		double[] maskColor = mask.evaluate(x, y, z).duplicate().clamp3M().getChannels();
-		return new Color(firstColor[0] * maskColor[0] + secondColor[0] * (1.0 - maskColor[0]),
-						 firstColor[1] * maskColor[1] + secondColor[1] * (1.0 - maskColor[1]),
-						 firstColor[2] * maskColor[2] + secondColor[2] * (1.0 - maskColor[2]));
+		return new Color(secondColor[0] * maskColor[0] + firstColor[0] * (1.0 - maskColor[0]),
+						 secondColor[1] * maskColor[1] + firstColor[1] * (1.0 - maskColor[1]),
+						 secondColor[2] * maskColor[2] + firstColor[2] * (1.0 - maskColor[2]));
 	}
 	
 	
