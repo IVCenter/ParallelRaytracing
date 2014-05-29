@@ -25,8 +25,11 @@ public class DielectricPTMaterial extends Material{
 		this.beerTexture = beerTexture;
 		this.refractiveIndex = refractiveIndex;
 	}
-	
 
+
+	/* *********************************************************************************************
+	 * Material Override
+	 * *********************************************************************************************/
 	@Override
 	public Color shade(ShadingData data)
 	{
