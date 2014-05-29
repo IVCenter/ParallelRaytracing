@@ -1,11 +1,12 @@
-package raytrace.map.texture._3D;
+package raytrace.map.texture._3D.blend;
 
 import java.util.Random;
 
 import math.noise.SimplexNoise3D;
 import raytrace.color.Color;
+import raytrace.map.texture._3D.Texture3D;
 
-public class SimplexInterpolationTexture3D extends Texture3D {
+public class SimplexInterpolationT3DBlend extends Texture3D {
 	
 	/*
 	 * A test implementation of using a Simplex Noise function for texture generation.
@@ -23,7 +24,7 @@ public class SimplexInterpolationTexture3D extends Texture3D {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public SimplexInterpolationTexture3D(Color firstColor, Color secondColor)
+	public SimplexInterpolationT3DBlend(Color firstColor, Color secondColor)
 	{
 		this.firstColor = firstColor;
 		this.secondColor = secondColor;
@@ -31,7 +32,7 @@ public class SimplexInterpolationTexture3D extends Texture3D {
 		noiseFunction = new SimplexNoise3D(seed);
 	}
 	
-	public SimplexInterpolationTexture3D(Color firstColor, Color secondColor, long seed)
+	public SimplexInterpolationT3DBlend(Color firstColor, Color secondColor, long seed)
 	{
 		this.firstColor = firstColor;
 		this.secondColor = secondColor;
