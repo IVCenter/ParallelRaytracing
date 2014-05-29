@@ -109,6 +109,11 @@ public class Launcher {
 	 * 				-or 
 	 * 
 	 * 		-More Materials
+	 * 		
+	 * 		-Normal maps from textures
+	 * 			-gradient based?
+	 * 
+	 * 		-Spatial geometry maps
 	 * 
 	 * 		-Subsurface Scattering
 	 * 

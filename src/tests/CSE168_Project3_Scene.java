@@ -4,6 +4,7 @@ import process.logging.Logger;
 import math.Vector4;
 import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
+import math.function._3D.ManhattanDistance3D;
 import math.function._3D.TchebyshevDistance3D;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
@@ -15,6 +16,7 @@ import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.SphericalSineWaveTexture3D;
 import raytrace.map.texture._3D.WorleyNoiseTexture3D;
 import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
@@ -25,8 +27,11 @@ import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffusePTMaterial;
+import raytrace.material.Material;
+import raytrace.material.PassThroughMaterial;
 import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.TextureMaskBBlend;
+import raytrace.material.blend.unary.MultiplicativeUBlend;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -56,7 +61,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(8);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
@@ -158,6 +163,9 @@ public class CSE168_Project3_Scene extends Scene
 			
 			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
 			
+			//MatrixTransformTexture3D subBlendTrans = new MatrixTransformTexture3D(subBlend);
+			//subBlendTrans.getTransform().scale(2.0);
+			
 			
 			model2.getTransform().scale(0.1);
 			model2.getTransform().translate(0.0, 0.055, -0.1);
@@ -169,7 +177,7 @@ public class CSE168_Project3_Scene extends Scene
 							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
 							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
 							subBlend,
-							0.7
+							0.60
 						)
 					);
 			this.addChild(model2);
@@ -181,12 +189,47 @@ public class CSE168_Project3_Scene extends Scene
 		
 		if(model3 != null)
 		{
+			WorleyNoiseTexture3D worleyTex1 = new WorleyNoiseTexture3D();
+			worleyTex1.getNoiseFunction().setDistanceFunction(new ManhattanDistance3D());
+			worleyTex1.getNoiseFunction().setSelectionFunction(new SelectDifferenceNthMthNearest2D(6,1));
+			
+			MatrixTransformTexture3D mtrans3 = new MatrixTransformTexture3D(worleyTex1);
+			mtrans3.getTransform().scale(16);
+			
+			WorleyNoiseTexture3D worleyTex2 = new WorleyNoiseTexture3D();
+			worleyTex2.getNoiseFunction().setDistanceFunction(new ManhattanDistance3D());
+			worleyTex2.getNoiseFunction().setSelectionFunction(new SelectNthNearest2D(3));
+			worleyTex2.setSecondColor(new Color(1.1, 1.1, 1.1));
+			
+			MatrixTransformTexture3D mtrans4 = new MatrixTransformTexture3D(worleyTex2);
+			mtrans4.getTransform().scale(8);
+			
+			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
+			
+			SphericalSineWaveTexture3D sineTex = new SphericalSineWaveTexture3D();
+			MatrixTransformTexture3D sineTrans = new MatrixTransformTexture3D(sineTex);
+			sineTrans.getTransform().scale(128);
+			sineTrans.getTransform().translate(0, 3, 1);
+			
 			model3.getTransform().scale(0.1);
 			model3.getTransform().translate(0.0, 0.055, -0.2);
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
-			//this.addChild(model3);
+			model3.setMaterial(
+					new PosterMaskBBlend(
+							//new DielectricPTMaterial(new Color(1000000000000000.0, 10000000.9, 1000000000000000.0), 1.31),
+							new MultiplicativeUBlend(
+									new DielectricPTMaterial(new Color(100000000.0, 0.80 * 100000.0, 0.80 * 10000.0), 0.95), 
+									new Color(0.5, 0.5, 1.0)
+								),
+							//new PassThroughMaterial(new Color(0.7, 1.05, 1.05), 1.31),
+							new PassThroughMaterial(Color.white()/*new Color(0.7, 1.1, 1.1)*/, 1.31),
+							sineTrans,
+							0.1
+						)
+					);
+			this.addChild(model3);
 		}
 		
 
@@ -200,7 +243,7 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
-			this.addChild(model4);
+			//this.addChild(model4);
 		}
 		
 		
