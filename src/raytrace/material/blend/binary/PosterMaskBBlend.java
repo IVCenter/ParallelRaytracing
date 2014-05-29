@@ -35,6 +35,25 @@ public class PosterMaskBBlend extends BinaryBlend {
 		this.level = level;
 	}
 	
+
+	/* *********************************************************************************************
+	 * Material Overrides
+	 * *********************************************************************************************/
+	@Override
+	public Color shade(ShadingData data)
+	{
+		double[] maskColor = mask.evaluate(data.getIntersectionData()).duplicate().clamp3M().getChannels();
+		
+		//If all channels will be from the same material, only evaluate that one.
+		if(maskColor[0] < level && maskColor[1] < level && maskColor[2] < level ||
+				maskColor[0] > level && maskColor[1] > level && maskColor[2] > level)
+		{
+			return maskColor[0] < level ? firstMaterial.shade(data) : secondMaterial.shade(data);
+		}
+		
+		return blend(firstMaterial.shade(data), secondMaterial.shade(data), data);
+	}
+	
 	
 	/* *********************************************************************************************
 	 * Blend Override
