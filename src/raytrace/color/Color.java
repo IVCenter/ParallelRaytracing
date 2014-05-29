@@ -115,6 +115,45 @@ public class Color implements Texture {
 		return this;
 	}
 	
+	public Color add3(double d)
+	{
+		return new Color(channels[0] + d, channels[1] + d, channels[2] + d, channels[3]);
+	}
+	
+	public Color add3M(double d)
+	{
+		channels[0] += d;
+		channels[1] += d;
+		channels[2] += d;
+		return this;
+	}
+	
+	public Color subtract3(Color c)
+	{
+		return new Color(channels[0] - c.channels[0], channels[1] - c.channels[1], channels[2] - c.channels[2], channels[3]);
+	}
+	
+	public Color subtract3M(Color c)
+	{
+		channels[0] -= c.channels[0];
+		channels[1] -= c.channels[1];
+		channels[2] -= c.channels[2];
+		return this;
+	}
+	
+	public Color subtract3(double d)
+	{
+		return new Color(channels[0] - d, channels[1] - d, channels[2] - d, channels[3]);
+	}
+	
+	public Color subtract3M(double d)
+	{
+		channels[0] -= d;
+		channels[1] -= d;
+		channels[2] -= d;
+		return this;
+	}
+	
 	public Color add3AfterMultiply3M(Color c, Color d)
 	{
 		channels[0] += c.channels[0] * d.channels[0];
