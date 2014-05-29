@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import math.Vector4;
+import math.function._2D.SelectDifferenceNthMthNearest2D;
+import math.function._2D.SelectNthNearest2D;
+import math.function._3D.TchebyshevDistance3D;
 import math.noise.SimplexNoise3D;
 import math.noise.WorleyNoise3D;
 import process.logging.Logger;
@@ -21,10 +24,13 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.WorleyNoiseTexture3D;
 import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MaskT3DBlend;
 import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
+import raytrace.map.texture._3D.blend.OneMinusT3DBlend;
 import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
+import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
@@ -33,6 +39,7 @@ import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.blend.binary.InterpolationBBlend;
+import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.material.blend.unary.FullySaturateUBlend;
 import raytrace.material.blend.unary.GrayscaleUBlend;
@@ -110,22 +117,44 @@ public class TestScene6 extends Scene
 			//MaskT3DBlend maskblend = new MaskT3DBlend();
 			//maskblend.setFirstTexture(mtrans1);
 			//maskblend.setSecondTexture(mtrans2);
+			
+			WorleyNoiseTexture3D worleyTex1 = new WorleyNoiseTexture3D();
+			worleyTex1.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
+			worleyTex1.getNoiseFunction().setSelectionFunction(new SelectDifferenceNthMthNearest2D(7,1));
+			
+			MatrixTransformTexture3D mtrans3 = new MatrixTransformTexture3D(worleyTex1);
+			mtrans3.getTransform().scale(32);
+			
+			WorleyNoiseTexture3D worleyTex2 = new WorleyNoiseTexture3D();
+			worleyTex2.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
+			worleyTex2.getNoiseFunction().setSelectionFunction(new SelectNthNearest2D(3));
+			worleyTex2.setSecondColor(new Color(1.1, 1.1, 1.1));
+			
+			MatrixTransformTexture3D mtrans4 = new MatrixTransformTexture3D(worleyTex2);
+			mtrans4.getTransform().scale(8);
+			
+			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
 		
 			
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			inst.setMaterial(
-					new TextureMaskBBlend(
+					new PosterMaskBBlend(
 							//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
-							new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
-							//new DiffusePTMaterial(new Color(0.35, 0.35, 0.35)),
+							//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
 							//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
+							//new AshikhminPTMaterial(Color.gray(0.0), Color.gray(1.0), 0.2, 0.8, 10, 10),
+							//new AshikhminPTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
+							//		Color.gray(1.0), 0.2, 0.95, 10, 1000),
+							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
 							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
-							addBlend
+							subBlend,
+							0.5
 						)
 					);
-			inst.getTransform().translate(0, 2.0, 0.0);
+			//inst.setMaterial(new DiffusePTMaterial(subBlend));
+			inst.getTransform().translate(0, 2.0, -1.0);
 			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			

@@ -2,6 +2,9 @@ package tests;
 
 import process.logging.Logger;
 import math.Vector4;
+import math.function._2D.SelectDifferenceNthMthNearest2D;
+import math.function._2D.SelectNthNearest2D;
+import math.function._3D.TchebyshevDistance3D;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
@@ -12,13 +15,17 @@ import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.WorleyNoiseTexture3D;
 import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
+import raytrace.map.texture._3D.blend.OneMinusT3DBlend;
 import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
+import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffusePTMaterial;
+import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
@@ -133,11 +140,38 @@ public class CSE168_Project3_Scene extends Scene
 		
 		if(model2 != null)
 		{
+
+			WorleyNoiseTexture3D worleyTex1 = new WorleyNoiseTexture3D();
+			worleyTex1.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
+			worleyTex1.getNoiseFunction().setSelectionFunction(new SelectDifferenceNthMthNearest2D(7,1));
+			
+			MatrixTransformTexture3D mtrans3 = new MatrixTransformTexture3D(worleyTex1);
+			mtrans3.getTransform().scale(32);
+			
+			WorleyNoiseTexture3D worleyTex2 = new WorleyNoiseTexture3D();
+			worleyTex2.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
+			worleyTex2.getNoiseFunction().setSelectionFunction(new SelectNthNearest2D(3));
+			worleyTex2.setSecondColor(new Color(1.1, 1.1, 1.1));
+			
+			MatrixTransformTexture3D mtrans4 = new MatrixTransformTexture3D(worleyTex2);
+			mtrans4.getTransform().scale(8);
+			
+			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
+			
+			
 			model2.getTransform().scale(0.1);
 			model2.getTransform().translate(0.0, 0.055, -0.1);
 			model2.bake(null);
 			model2.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100));
+			model2.setMaterial(
+					new PosterMaskBBlend(
+							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
+							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
+							subBlend,
+							0.5
+						)
+					);
 			this.addChild(model2);
 		}
 		
@@ -166,7 +200,7 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
-			//this.addChild(model4);
+			this.addChild(model4);
 		}
 		
 		
