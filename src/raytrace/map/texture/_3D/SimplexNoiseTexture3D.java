@@ -16,6 +16,8 @@ public class SimplexNoiseTexture3D extends Texture3D {
 	 * *********************************************************************************************/
 	protected long seed;
 	protected SimplexNoise3D noiseFunction;
+	protected Color firstColor;
+	protected Color secondColor;
 	
 
 	/* *********************************************************************************************
@@ -25,12 +27,32 @@ public class SimplexNoiseTexture3D extends Texture3D {
 	{
 		seed = (new Random()).nextLong();
 		noiseFunction = new SimplexNoise3D(seed);
+		this.firstColor = Color.black();
+		this.secondColor = Color.white();
 	}
 	
 	public SimplexNoiseTexture3D(long seed)
 	{
 		this.seed = seed;
 		noiseFunction = new SimplexNoise3D(seed);
+		this.firstColor = Color.black();
+		this.secondColor = Color.white();
+	}
+	
+	public SimplexNoiseTexture3D(Color firstColor, Color secondColor)
+	{
+		seed = (new Random()).nextLong();
+		noiseFunction = new SimplexNoise3D(seed);
+		this.firstColor = firstColor;
+		this.secondColor = secondColor;
+	}
+	
+	public SimplexNoiseTexture3D(long seed, Color firstColor, Color secondColor)
+	{
+		this.seed = seed;
+		noiseFunction = new SimplexNoise3D(seed);
+		this.firstColor = firstColor;
+		this.secondColor = secondColor;
 	}
 	
 
@@ -41,7 +63,7 @@ public class SimplexNoiseTexture3D extends Texture3D {
 	public Color evaluate(Double x, Double y, Double z)
 	{
 		double t = noiseFunction.evaluate(x, y, z);
-		return Color.gray(t);
+		return firstColor.interpolate(firstColor, secondColor, t);
 	}
 	
 	
@@ -62,6 +84,22 @@ public class SimplexNoiseTexture3D extends Texture3D {
 
 	public void setNoiseFunction(SimplexNoise3D noiseFunction) {
 		this.noiseFunction = noiseFunction;
+	}
+
+	public Color getFirstColor() {
+		return firstColor;
+	}
+
+	public void setFirstColor(Color firstColor) {
+		this.firstColor = firstColor;
+	}
+
+	public Color getSecondColor() {
+		return secondColor;
+	}
+
+	public void setSecondColor(Color secondColor) {
+		this.secondColor = secondColor;
 	}
 
 }
