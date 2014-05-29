@@ -66,7 +66,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 	/* *********************************************************************************************
 	 * Static Calculation Methods
 	 * *********************************************************************************************/
-	public static double noise(Vector4 input, int seed, 
+	public static double noise(Vector4 input, long seed, 
 			Function3D<Vector4, Vector4, Double> distanceFuncion, 
 			Function2D<Collection<Double>, Double> selectionFunction)
 	{
@@ -172,7 +172,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected int seed;
+	protected long seed;
 	protected Function3D<Vector4, Vector4, Double> distanceFunction;
 	protected Function2D<Collection<Double>, Double> selectionFunction;
 	
@@ -182,9 +182,24 @@ public class WorleyNoise3D implements Map3D<Double> {
 	 * *********************************************************************************************/
 	public WorleyNoise3D()
 	{
-		seed = (new Random()).nextInt();
-		distanceFunction = new EuclideanDistance3D();
-		selectionFunction = new SelectNthNearest2D(3);
+		this.seed = (new Random()).nextLong();
+		this.distanceFunction = new EuclideanDistance3D();
+		this.selectionFunction = new SelectNthNearest2D(3);
+	}
+	
+	public WorleyNoise3D(long seed)
+	{
+		this.seed = seed;
+		this.distanceFunction = new EuclideanDistance3D();
+		this.selectionFunction = new SelectNthNearest2D(3);
+	}
+	
+	public WorleyNoise3D(long seed, Function3D<Vector4, Vector4, Double> distanceFunction, 
+			Function2D<Collection<Double>, Double> selectionFunction)
+	{
+		this.seed = seed;
+		this.distanceFunction = distanceFunction;
+		this.selectionFunction = selectionFunction;
 	}
 	
 	
@@ -201,7 +216,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public int getSeed() {
+	public long getSeed() {
 		return seed;
 	}
 
