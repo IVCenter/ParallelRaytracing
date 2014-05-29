@@ -80,8 +80,8 @@ public class CSE168_Project3_Scene extends Scene
 		
 		if(model != null)
 		{
-			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
-					new Color(100.4, 1.0, 0.95), new Color(100.3, 0.95, 100.3));
+			//SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
+			//		new Color(100.4, 1.0, 0.95), new Color(100.3, 0.95, 100.3));
 			
 			SimplexNoiseTexture3D sntex1 = new SimplexNoiseTexture3D();
 			sntex1.setFirstColor(new Color(0.0, 0.0, 0.0));
@@ -101,9 +101,9 @@ public class CSE168_Project3_Scene extends Scene
 			mtrans2.getTransform().rotateZ(0.4);
 			
 			
-			MultiplicativeT3DBlend multiBlend = new MultiplicativeT3DBlend();
-			multiBlend.setFirstTexture(mtrans1);
-			multiBlend.setSecondTexture(mtrans2);
+			//MultiplicativeT3DBlend multiBlend = new MultiplicativeT3DBlend();
+			//multiBlend.setFirstTexture(mtrans1);
+			//multiBlend.setSecondTexture(mtrans2);
 
 			AdditiveT3DBlend addBlend = new AdditiveT3DBlend();
 			addBlend.setFirstTexture(mtrans1);
@@ -112,9 +112,9 @@ public class CSE168_Project3_Scene extends Scene
 			
 			
 			
-			MatrixTransformTexture3D mtex = new MatrixTransformTexture3D(sit3d);
-			mtex.getTransform().nonUniformScale(32, 64, 32);
-			mtex.getTransform().rotateZ(-0.05);
+			//MatrixTransformTexture3D mtex = new MatrixTransformTexture3D(sit3d);
+			//mtex.getTransform().nonUniformScale(32, 64, 32);
+			//mtex.getTransform().rotateZ(-0.05);
 			
 			model.getTransform().scale(0.1);
 			model.getTransform().translate(0.0, 0.055, 0.0);
@@ -169,7 +169,7 @@ public class CSE168_Project3_Scene extends Scene
 							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
 							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
 							subBlend,
-							0.5
+							0.7
 						)
 					);
 			this.addChild(model2);

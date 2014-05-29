@@ -58,6 +58,7 @@ public class TestScene6 extends Scene
 	 */
 	double elapsed = 0.0;
 	Instance model;
+	PosterMaskBBlend posterMat;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -72,7 +73,7 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(16);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -80,7 +81,7 @@ public class TestScene6 extends Scene
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.06, 0.5));
-		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
+		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(4.5);
 		
 		
 		//Make a cylinder
@@ -135,26 +136,28 @@ public class TestScene6 extends Scene
 			
 			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
 		
+			posterMat = new PosterMaskBBlend(
+					//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
+					//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
+					//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
+					//new AshikhminPTMaterial(Color.gray(0.0), Color.gray(1.0), 0.2, 0.8, 10, 10),
+					//new AshikhminPTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
+					//		Color.gray(1.0), 0.2, 0.95, 10, 1000),
+					new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
+					new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
+					subBlend,
+					0.8
+				);
+			
 			
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			inst.setMaterial(
-					new PosterMaskBBlend(
-							//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
-							//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
-							//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
-							//new AshikhminPTMaterial(Color.gray(0.0), Color.gray(1.0), 0.2, 0.8, 10, 10),
-							//new AshikhminPTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
-							//		Color.gray(1.0), 0.2, 0.95, 10, 1000),
-							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
-							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
-							subBlend,
-							0.5
-						)
+					posterMat
 					);
 			//inst.setMaterial(new DiffusePTMaterial(subBlend));
-			inst.getTransform().translate(0, 2.0, -1.0);
+			inst.getTransform().translate(0, 2.0, 0.0);
 			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			
@@ -282,34 +285,49 @@ public class TestScene6 extends Scene
 		return min + Math.random() * (max-min);
 	}
 	
+	private double lvlMulti = 1.0;
+	private double level = 0.0;
+	
 	@Override
 	public void update(UpdateData data)
 	{
-		/*
+		
 		elapsed += data.getDt();
 		
-		Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
+		level += lvlMulti * data.getDt() * 4.0;
+		
+		if(level > 0.8 || level < 0.0)
+			lvlMulti *= -1.0;
+		
+		System.out.println("Level: " + level);
+		
+		posterMat.setLevel(level);
+		
+		//Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
 		
 		ProgrammableCamera acam = (ProgrammableCamera)activeCamera;
-		
+		/*
 		CircularAperture cap = (CircularAperture)acam.getAperture();
 
 		cap.setRadius(Math.max(1.0-elapsed*1.5, 0.06));
-		
+		*/
 		Vector4 camPos = acam.getPosition();
-		camPos.set(Math.cos(elapsed + Math.PI/2.0) * 8.0 + lotusCenter.get(0), 
-							Math.min(0.2 + elapsed*2, 3.6), 
-							Math.sin(elapsed + Math.PI/2.0) * 8.0  + lotusCenter.get(2), 
+		camPos.set(Math.cos(elapsed + Math.PI/2.0) * 5.0, 
+							2.5,//Math.min(0.2 + elapsed*2, 3.6), 
+							Math.sin(elapsed + Math.PI/2.0) * 5.0, 
 							1.0);
 		
-		Vector4 lotusPos = new Vector4(lotusCenter);
-		lotusPos.set(1, 0);
-		lotusPos = lotusPos.subtract3(camPos);
-		lotusPos.set(1, Math.min(-2.0 + elapsed*0.40, 1.35));
-		acam.setViewingDirection(lotusPos);
+		Vector4 center = new Vector4();
+		//lotusPos.set(1, 0);
+		center = center.subtract3(camPos);
+		center.set(1, 0);
+		center.normalize3();
+		center.set(1, -0.15);
+		center.normalize3();
+		acam.setViewingDirection(center);
 
-		acam.setFocalPlaneDistance(Math.min(1.0 + elapsed*1.5, lotusPos.subtract3(camPos).magnitude3()));
-		*/
+		//acam.setFocalPlaneDistance(Math.min(1.0 + elapsed*1.5, lotusPos.subtract3(camPos).magnitude3()));
+		
 		//Update the children
 		super.update(data);
 	}
