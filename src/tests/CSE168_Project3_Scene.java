@@ -11,11 +11,15 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
+import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
+import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
 import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffusePTMaterial;
+import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -72,6 +76,35 @@ public class CSE168_Project3_Scene extends Scene
 			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
 					new Color(100.4, 1.0, 0.95), new Color(100.3, 0.95, 100.3));
 			
+			SimplexNoiseTexture3D sntex1 = new SimplexNoiseTexture3D();
+			sntex1.setFirstColor(new Color(0.0, 0.0, 0.0));
+			sntex1.setSecondColor(new Color(1.0, 1.0, 1.0));
+			
+			MatrixTransformTexture3D mtrans1 = new MatrixTransformTexture3D(sntex1);
+			mtrans1.getTransform().nonUniformScale(2, 64, 2);
+			mtrans1.getTransform().rotateZ(-0.1);
+			
+
+			SimplexNoiseTexture3D sntex2 = new SimplexNoiseTexture3D();
+			sntex2.setFirstColor(new Color(0.0, 0.0, 0.0));
+			sntex2.setSecondColor(new Color(1.0, 1.0, 1.0));
+			
+			MatrixTransformTexture3D mtrans2 = new MatrixTransformTexture3D(sntex2);
+			mtrans2.getTransform().nonUniformScale(5, 60, 10);
+			mtrans2.getTransform().rotateZ(0.4);
+			
+			
+			MultiplicativeT3DBlend multiBlend = new MultiplicativeT3DBlend();
+			multiBlend.setFirstTexture(mtrans1);
+			multiBlend.setSecondTexture(mtrans2);
+
+			AdditiveT3DBlend addBlend = new AdditiveT3DBlend();
+			addBlend.setFirstTexture(mtrans1);
+			addBlend.setSecondTexture(mtrans2);
+			
+			
+			
+			
 			MatrixTransformTexture3D mtex = new MatrixTransformTexture3D(sit3d);
 			mtex.getTransform().nonUniformScale(32, 64, 32);
 			mtex.getTransform().rotateZ(-0.05);
@@ -81,7 +114,16 @@ public class CSE168_Project3_Scene extends Scene
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.gray(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
-			model.setMaterial(new DielectricPTMaterial(mtex, 100.01));
+			model.setMaterial(
+					new TextureMaskBBlend(
+							//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
+							new DielectricPTMaterial(new Color(10000000000.2, 10000000000.95, 10000000000.2), 1.31),
+							//new DiffusePTMaterial(new Color(0.35, 0.35, 0.35)),
+							//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
+							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
+							addBlend
+						)
+						);
 			this.addChild(model);
 		}
 		
@@ -110,7 +152,7 @@ public class CSE168_Project3_Scene extends Scene
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
-			this.addChild(model3);
+			//this.addChild(model3);
 		}
 		
 
@@ -124,7 +166,7 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
-			this.addChild(model4);
+			//this.addChild(model4);
 		}
 		
 		

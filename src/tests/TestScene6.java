@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import math.Vector4;
+import math.noise.SimplexNoise3D;
 import math.noise.WorleyNoise3D;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
@@ -18,6 +19,11 @@ import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
+import raytrace.map.texture._3D.MatrixTransformTexture3D;
+import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
+import raytrace.map.texture._3D.blend.MaskT3DBlend;
+import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
 import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
@@ -27,6 +33,7 @@ import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.blend.binary.InterpolationBBlend;
+import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.material.blend.unary.FullySaturateUBlend;
 import raytrace.material.blend.unary.GrayscaleUBlend;
 import raytrace.scene.Scene;
@@ -58,7 +65,7 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(16);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -73,17 +80,50 @@ public class TestScene6 extends Scene
 		{
 			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
 				new Color(1.4, 1.0, 0.95), new Color(1.3, 0.95, 1.3));
+			
+			SimplexNoiseTexture3D sntex1 = new SimplexNoiseTexture3D();
+			sntex1.setFirstColor(new Color(0.0, 0.0, 0.0));
+			sntex1.setSecondColor(new Color(1.0, 1.0, 1.0));
+			
+			MatrixTransformTexture3D mtrans1 = new MatrixTransformTexture3D(sntex1);
+			mtrans1.getTransform().nonUniformScale(1, 32, 1);
+			mtrans1.getTransform().rotateZ(-0.1);
+			
+
+			SimplexNoiseTexture3D sntex2 = new SimplexNoiseTexture3D();
+			sntex2.setFirstColor(new Color(0.0, 0.0, 0.0));
+			sntex2.setSecondColor(new Color(1.0, 1.0, 1.0));
+			
+			MatrixTransformTexture3D mtrans2 = new MatrixTransformTexture3D(sntex2);
+			mtrans2.getTransform().nonUniformScale(2, 24, 4);
+			mtrans2.getTransform().rotateZ(0.4);
+			
+			
+			MultiplicativeT3DBlend multiBlend = new MultiplicativeT3DBlend();
+			multiBlend.setFirstTexture(mtrans1);
+			multiBlend.setSecondTexture(mtrans2);
+
+			AdditiveT3DBlend addBlend = new AdditiveT3DBlend();
+			addBlend.setFirstTexture(mtrans1);
+			addBlend.setSecondTexture(mtrans2);
+
+			//MaskT3DBlend maskblend = new MaskT3DBlend();
+			//maskblend.setFirstTexture(mtrans1);
+			//maskblend.setSecondTexture(mtrans2);
 		
 			
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			inst.setMaterial(
-					//new InterpolationBBlend(
-							new DielectricPTMaterial(sit3d/*new Color(1.05, 1.0, 1.05)*/, 1.4)//,
-					//		new AshikhminPTMaterial(new Color(0.3, 0.05, 0.05), sit3d, 0.8, 0.2, 100, 1000),
-					//		0.3
-					//)
+					new TextureMaskBBlend(
+							//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
+							new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
+							//new DiffusePTMaterial(new Color(0.35, 0.35, 0.35)),
+							//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
+							new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
+							addBlend
+						)
 					);
 			inst.getTransform().translate(0, 2.0, 0.0);
 			inst.getTransform().scale(1.5);
