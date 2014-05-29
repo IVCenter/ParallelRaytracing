@@ -73,7 +73,7 @@ public class CSE168_Project3_Scene extends Scene
 					new Color(100.4, 1.0, 0.95), new Color(100.3, 0.95, 100.3));
 			
 			MatrixTransformTexture3D mtex = new MatrixTransformTexture3D(sit3d);
-			mtex.getTransform().nonUniformScale(32, 1024, 32);
+			mtex.getTransform().nonUniformScale(32, 64, 32);
 			mtex.getTransform().rotateZ(-0.05);
 			
 			model.getTransform().scale(0.1);
@@ -81,7 +81,7 @@ public class CSE168_Project3_Scene extends Scene
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.gray(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
-			model.setMaterial(new DielectricPTMaterial(mtex, 1.01));
+			model.setMaterial(new DielectricPTMaterial(mtex, 100.01));
 			this.addChild(model);
 		}
 		
