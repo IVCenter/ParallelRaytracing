@@ -54,7 +54,6 @@ public class TestScene5 extends Scene
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.06, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
-		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 
 		model = ResourceManager.create("white_lotus_reduced.obj");		

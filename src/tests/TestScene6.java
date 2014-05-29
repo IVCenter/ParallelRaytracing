@@ -18,7 +18,7 @@ import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
-import raytrace.map.texture._3D.SimplexInterpolationTexture3D;
+import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
@@ -67,13 +67,12 @@ public class TestScene6 extends Scene
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.06, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
-		((ProgrammableCamera)activeCamera).forceUpdate();
 		
 		
 		//Make a cylinder
 		{
-			SimplexInterpolationTexture3D sit3d = new SimplexInterpolationTexture3D(
-				new Color(0.96, 0.96, 0.96), new Color(0, 0, 0));
+			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
+				new Color(1.4, 1.0, 0.95), new Color(1.3, 0.95, 1.3));
 		
 			
 			Sphere sphere = new Sphere();
@@ -81,9 +80,9 @@ public class TestScene6 extends Scene
 			inst.addChild(sphere);
 			inst.setMaterial(
 					//new InterpolationBBlend(
-					//		new DielectricPTMaterial(new Color(1.0, 1.0, 1.0), 1.4),
-							new AshikhminPTMaterial(new Color(0.3, 0.05, 0.05), sit3d, 0.8, 0.2, 100, 1000)//,
-					//		0.2
+							new DielectricPTMaterial(sit3d/*new Color(1.05, 1.0, 1.05)*/, 1.4)//,
+					//		new AshikhminPTMaterial(new Color(0.3, 0.05, 0.05), sit3d, 0.8, 0.2, 100, 1000),
+					//		0.3
 					//)
 					);
 			inst.getTransform().translate(0, 2.0, 0.0);

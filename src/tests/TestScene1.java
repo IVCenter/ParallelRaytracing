@@ -54,8 +54,6 @@ public class TestScene1 extends Scene {
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).forceUpdate();
-		//this.addChild(activeCamera);
 		
 		
 		

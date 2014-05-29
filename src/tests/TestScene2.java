@@ -46,8 +46,6 @@ public class TestScene2 extends Scene
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.2, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.0);
-		((ProgrammableCamera)activeCamera).forceUpdate();
-		
 		
 		
 		//Diffuse Sphere

@@ -43,7 +43,6 @@ public class CSE168_Project1_Scene extends Scene{
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
-		((ProgrammableCamera)activeCamera).forceUpdate();
 		
 		// Create boxes
 		//Box 1

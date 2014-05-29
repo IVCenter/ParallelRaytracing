@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import process.logging.Logger;
 import raytrace.camera.aperture.Aperture;
 import raytrace.camera.aperture.CircularAperture;
 
@@ -36,8 +35,6 @@ public class ProgrammableCamera extends Camera {
 	protected int superSamplingLevel = 1;
 	protected double samplingDelta = 1.0;
 	protected boolean stratifiedSampling = false;
-	//protected Function2D<Double, Double> superSampDistroFuncX = new PassThrough2D<Double>();
-	//protected Function2D superSampDistroFuncY;
 	
 	protected double focalPlaneDistance = 1.0;
 	protected Aperture aperture = new CircularAperture();
@@ -95,6 +92,7 @@ public class ProgrammableCamera extends Camera {
 
 	public void setSuperSamplingLevel(int superSamplingLevel) {
 		this.superSamplingLevel = superSamplingLevel;
+		wasModified();
 	}
 
 	public boolean isStratifiedSampling() {
@@ -189,13 +187,6 @@ public class ProgrammableCamera extends Camera {
 	{
 		update();
 	}
-	
-	//TODO: This is not exactly good design.....
-	public void forceUpdate()
-	{
-		Logger.progress(-8, "PinholeCamera: Forcing Update...");
-		update();
-	}
 
 	
 	/* *********************************************************************************************
@@ -209,7 +200,6 @@ public class ProgrammableCamera extends Camera {
 	
 	public void setVerticalFieldOfView(double fov)
 	{
-		//fieldOfView = 2.0 * Math.atan((imagePlaneWidth/imagePlaneHeight) * Math.tan(fov/2.0));
 		fieldOfView = 2.0 * Math.atan((pixelWidth/pixelHeight) * Math.tan(fov/2.0));
 		wasModified();
 	}
@@ -262,6 +252,9 @@ public class ProgrammableCamera extends Camera {
 		cam.setStartPixelX(startPixelX);
 		cam.setStartPixelY(startPixelY);
 		cam.setPixelStepSize(pixelStepSize);
+		
+		//cam.setProgressive(progressive);
+		//TODO: Should copy global sub pixel values?
 		
 		cam.update();
 		
@@ -446,7 +439,7 @@ public class ProgrammableCamera extends Camera {
 	
 			@Override
 			public Ray next()
-			{
+			{	
 				//Get the next ray
 				//Calculate sampling offsets
 				woffset = subPixelU * samplingDelta + (stratifiedSampling ? Math.random()*samplingDelta : samplingDelta/2.0);
@@ -503,7 +496,6 @@ public class ProgrammableCamera extends Camera {
 					subPixelU = 0;
 					++subPixelV;
 				}
-				
 				
 				return ray;
 			}

@@ -49,7 +49,6 @@ public class PerformanceTest1 extends Scene
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.00005, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
-		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
 		

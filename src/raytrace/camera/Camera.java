@@ -29,6 +29,8 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
 	
+	//protected boolean progressive = false;
+	
 
 	/* *********************************************************************************************
 	 * Constructors
@@ -127,4 +129,13 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 		this.pixelHeight = pixelHeight;
 		wasModified();
 	}
+	/*
+	public boolean isProgressive() {
+		return progressive;
+	}
+
+	public void setProgressive(boolean progressive) {
+		this.progressive = progressive;
+	}
+	*/
 }

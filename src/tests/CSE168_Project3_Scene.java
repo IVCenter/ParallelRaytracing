@@ -10,8 +10,11 @@ import raytrace.data.UpdateData;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
+import raytrace.map.texture._3D.MatrixTransformTexture3D;
+import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
@@ -42,7 +45,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(8);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
@@ -53,7 +56,6 @@ public class CSE168_Project3_Scene extends Scene
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.00005, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(0.50);
-		((ProgrammableCamera)activeCamera).forceUpdate();
 	
 		
 		//Ground
@@ -67,11 +69,19 @@ public class CSE168_Project3_Scene extends Scene
 		
 		if(model != null)
 		{
+			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
+					new Color(100.4, 1.0, 0.95), new Color(100.3, 0.95, 100.3));
+			
+			MatrixTransformTexture3D mtex = new MatrixTransformTexture3D(sit3d);
+			mtex.getTransform().nonUniformScale(32, 1024, 32);
+			mtex.getTransform().rotateZ(-0.05);
+			
 			model.getTransform().scale(0.1);
 			model.getTransform().translate(0.0, 0.055, 0.0);
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.gray(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
+			model.setMaterial(new DielectricPTMaterial(mtex, 1.01));
 			this.addChild(model);
 		}
 		
