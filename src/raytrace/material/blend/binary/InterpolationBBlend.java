@@ -1,9 +1,10 @@
 package raytrace.material.blend.binary;
 
 import raytrace.color.Color;
+import raytrace.data.ShadingData;
 import raytrace.material.Material;
 
-public class InterpolationBBlend  extends BinaryBlend {
+public class InterpolationBBlend extends BinaryBlend {
 
 	/*
 	 * A binary blend for interpolating between two materials
@@ -29,7 +30,7 @@ public class InterpolationBBlend  extends BinaryBlend {
 	 * Blend Override
 	 * *********************************************************************************************/
 	@Override
-	public Color blend(Color firstShade, Color secondShade)
+	public Color blend(Color firstShade, Color secondShade, ShadingData data)
 	{
 		return firstShade.interpolate(firstShade, secondShade, t);
 	}

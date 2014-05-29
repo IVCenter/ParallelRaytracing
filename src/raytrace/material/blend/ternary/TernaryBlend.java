@@ -35,7 +35,7 @@ public abstract class TernaryBlend extends Material implements Blend {
 	/* *********************************************************************************************
 	 * Abstract Blend Method
 	 * *********************************************************************************************/
-	public abstract Color blend(Color firstShade, Color secondShade, Color thirdShade);
+	public abstract Color blend(Color firstShade, Color secondShade, Color thirdShade, ShadingData data);
 
 
 	/* *********************************************************************************************
@@ -44,7 +44,7 @@ public abstract class TernaryBlend extends Material implements Blend {
 	@Override
 	public Color shade(ShadingData data)
 	{
-		return blend(firstMaterial.shade(data), secondMaterial.shade(data), thirdMaterial.shade(data));
+		return blend(firstMaterial.shade(data), secondMaterial.shade(data), thirdMaterial.shade(data), data);
 	}
 
 

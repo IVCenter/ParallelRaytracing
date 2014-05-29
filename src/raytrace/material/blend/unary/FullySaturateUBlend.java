@@ -1,6 +1,7 @@
 package raytrace.material.blend.unary;
 
 import raytrace.color.Color;
+import raytrace.data.ShadingData;
 import raytrace.material.Material;
 
 public class FullySaturateUBlend extends UnaryBlend {
@@ -22,7 +23,7 @@ public class FullySaturateUBlend extends UnaryBlend {
 	 * Blend Override
 	 * *********************************************************************************************/
 	@Override
-	public Color blend(Color shade)
+	public Color blend(Color shade, ShadingData data)
 	{
 		double[] channels = shade.getChannels();
 		double min = Math.min(Math.min(channels[0], channels[1]), channels[2]);

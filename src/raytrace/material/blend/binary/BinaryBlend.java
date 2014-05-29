@@ -33,7 +33,7 @@ public abstract class BinaryBlend extends Material implements Blend {
 	/* *********************************************************************************************
 	 * Abstract Blend Method
 	 * *********************************************************************************************/
-	public abstract Color blend(Color firstShade, Color secondShade);
+	public abstract Color blend(Color firstShade, Color secondShade, ShadingData data);
 
 
 	/* *********************************************************************************************
@@ -42,7 +42,7 @@ public abstract class BinaryBlend extends Material implements Blend {
 	@Override
 	public Color shade(ShadingData data)
 	{
-		return blend(firstMaterial.shade(data), secondMaterial.shade(data));
+		return blend(firstMaterial.shade(data), secondMaterial.shade(data), data);
 	}
 
 

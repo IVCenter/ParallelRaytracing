@@ -34,7 +34,7 @@ public abstract class NaryBlend extends Material implements Blend {
 	/* *********************************************************************************************
 	 * Abstract Blend Method
 	 * *********************************************************************************************/
-	public abstract Color blend(Collection<Color> colors);
+	public abstract Color blend(Collection<Color> colors, ShadingData data);
 
 
 	/* *********************************************************************************************
@@ -49,7 +49,7 @@ public abstract class NaryBlend extends Material implements Blend {
 		for(Material material : materials)
 			colors.add(material.shade(data));
 		
-		return blend(colors);
+		return blend(colors, data);
 	}
 
 

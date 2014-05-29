@@ -31,7 +31,7 @@ public abstract class UnaryBlend extends Material implements Blend {
 	/* *********************************************************************************************
 	 * Abstract Blend Method
 	 * *********************************************************************************************/
-	public abstract Color blend(Color shade);
+	public abstract Color blend(Color shade, ShadingData data);
 
 	
 	/* *********************************************************************************************
@@ -40,7 +40,7 @@ public abstract class UnaryBlend extends Material implements Blend {
 	@Override
 	public Color shade(ShadingData data)
 	{
-		return blend(material.shade(data));
+		return blend(material.shade(data), data);
 	}
 
 
