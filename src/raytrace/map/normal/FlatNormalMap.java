@@ -6,7 +6,7 @@ import raytrace.data.IntersectionData;
 public class FlatNormalMap implements NormalMap {
 
 	/*
-	 * A normal map that is always flat
+	 * A normal map that is always flat (returns the original normal)
 	 */
 	
 	/* *********************************************************************************************
@@ -15,7 +15,7 @@ public class FlatNormalMap implements NormalMap {
 	@Override
 	public Vector4 evaluate(IntersectionData data)
 	{
-		return new Vector4(0, 1, 0, 0);
+		return data.getNormal();
 	}
 
 }
