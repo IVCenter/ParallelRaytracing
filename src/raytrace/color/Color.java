@@ -236,6 +236,11 @@ public class Color implements Texture {
 		channels[2] = Math.min(1.0, Math.max(0.0, channels[2]));
 		return this;
 	}
+	
+	public double intensity3()
+	{
+		return (channels[0] + channels[1] + channels[2]) / 3.0;
+	}
 
 	
 	/* *********************************************************************************************
