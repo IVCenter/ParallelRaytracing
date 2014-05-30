@@ -22,6 +22,7 @@ import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
+import raytrace.map.normal._3D.TextureGradientNormalMap3D;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
 import raytrace.map.texture._3D.WorleyNoiseTexture3D;
@@ -29,6 +30,7 @@ import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MaskT3DBlend;
 import raytrace.map.texture._3D.blend.MultiplicativeT3DBlend;
 import raytrace.map.texture._3D.blend.OneMinusT3DBlend;
+import raytrace.map.texture._3D.blend.PosterMaskT3DBlend;
 import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
@@ -43,6 +45,7 @@ import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.material.blend.unary.FullySaturateUBlend;
 import raytrace.material.blend.unary.GrayscaleUBlend;
+import raytrace.material.composite.NormalMapCMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
@@ -73,14 +76,14 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.06, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.02, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(4.5);
 		
 		
@@ -139,26 +142,33 @@ public class TestScene6 extends Scene
 			posterMat = new PosterMaskBBlend(
 					//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
 					//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
-					//new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)),
+					//new DiffusePTMaterial(new Color(1.0, 0.6, 0.65)),
 					//new AshikhminPTMaterial(Color.gray(0.0), Color.gray(1.0), 0.2, 0.8, 10, 10),
 					//new AshikhminPTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
 					//		Color.gray(1.0), 0.2, 0.95, 10, 1000),
 					new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
 					new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
 					subBlend,
-					0.8
+					0.5
 				);
+			
+			OneMinusT3DBlend oneminus = new OneMinusT3DBlend(subBlend);
+			TextureGradientNormalMap3D normalMap = new TextureGradientNormalMap3D(subBlend);
+			normalMap.setSamplingRadius(0.01);
+			normalMap.setStrength(100.01);
+			NormalMapCMaterial normMat = new NormalMapCMaterial(posterMat, normalMap);
+			//NormalMapCMaterial normMat = new NormalMapCMaterial(new DielectricPTMaterial(new Color(1.1, 1.1, 1.0), 1.31), normalMap);
 			
 			
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
 			inst.setMaterial(
-					posterMat
+					normMat
 					);
 			//inst.setMaterial(new DiffusePTMaterial(subBlend));
 			inst.getTransform().translate(0, 2.0, 0.0);
-			inst.getTransform().scale(1.5);
+			inst.getTransform().scale(2.5);
 			//inst.getTransform().rotateX(1);
 			
 			inst.updateBoundingBox();
@@ -293,7 +303,7 @@ public class TestScene6 extends Scene
 	{
 		
 		elapsed += data.getDt();
-		
+		/*
 		level += lvlMulti * data.getDt() * 4.0;
 		
 		if(level > 0.8 || level < 0.0)
@@ -302,6 +312,7 @@ public class TestScene6 extends Scene
 		System.out.println("Level: " + level);
 		
 		posterMat.setLevel(level);
+		*/
 		
 		//Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
 		
