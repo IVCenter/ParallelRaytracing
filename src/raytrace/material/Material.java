@@ -22,8 +22,10 @@ public abstract class Material {
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 
 	protected static final double oneOverPi = 1.0 / Math.PI;
-	
-	protected static final Vector4 positiveYAxis = new Vector4(0,1,0,0);
+
+	public static final Vector4 positiveXAxis = new Vector4(1,0,0,0);
+	public static final Vector4 positiveYAxis = new Vector4(0,1,0,0);
+	public static final Vector4 positiveZAxis = new Vector4(0,0,1,0);
 
 	/* *********************************************************************************************
 	 * Cosntructors

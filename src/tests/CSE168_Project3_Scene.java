@@ -11,6 +11,7 @@ import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
+import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
@@ -253,6 +254,13 @@ public class CSE168_Project3_Scene extends Scene
 		directionalLight.setIntensity(1.0);
 		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
 		lightManager.addLight(directionalLight);
+		
+		//Sphere Light
+		{
+			Sphere sphere = new Sphere(1.0, new Vector4(1.5, 1.5, 1.5, 1));
+			sphere.setMaterial(new ColorMaterial(new Color(2.0, 2.0, 2.0)));
+			//this.addChild(sphere);
+		}
 		
 		
 		
