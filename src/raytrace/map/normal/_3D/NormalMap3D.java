@@ -1,0 +1,31 @@
+package raytrace.map.normal._3D;
+
+import math.Vector4;
+import math.map.Map3D;
+import raytrace.data.IntersectionData;
+import raytrace.map.normal.NormalMap;
+
+public abstract class NormalMap3D implements Map3D<Vector4>, NormalMap {
+	
+	/*
+	 * A base class for 3D normal maps
+	 */
+
+	/* *********************************************************************************************
+	 * Abstract Methods
+	 * *********************************************************************************************/
+	@Override
+	public abstract Vector4 evaluate(Double x, Double y, Double z);
+
+	
+	/* *********************************************************************************************
+	 * Concrete Methods
+	 * *********************************************************************************************/
+	@Override
+	public Vector4 evaluate(IntersectionData data)
+	{
+		double[] point = data.getLocalPoint().getArray();
+		return evaluate(point[0], point[1], point[2]);
+	}
+
+}
