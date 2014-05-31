@@ -59,7 +59,11 @@ public class NodeManager implements Iterable<Node> {
 	{
 		//TODO: Should this also check against IP?
 		//TODO: Should two nodes ever have the same IP?
-		return idToNodeMap.containsKey(node.getId());
+		Node existing = idToNodeMap.get(node.getId());
+		if(existing == null)
+			return false;
+		
+		return existing.getIp().equals(node.getIp());
 	}
 
 	
