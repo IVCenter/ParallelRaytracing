@@ -35,7 +35,7 @@ public class UpdateRequestHandler extends MessageHandler {
 	public void handle(Message message)
 	{
 		//
-		double deltaTime = message.getData().get(Constants.Message.DELTA_TIME);
+		Double deltaTime = message.getData().get(Constants.Message.DELTA_TIME);
 		
 		//Setup a render data object
 		UpdateData udata = new UpdateData();
