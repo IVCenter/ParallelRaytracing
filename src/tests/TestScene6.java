@@ -61,7 +61,7 @@ public class TestScene6 extends Scene
 	 */
 	double elapsed = 0.0;
 	Instance model;
-	PosterMaskBBlend posterMat;
+	PosterMaskBBlend goldAndFrostMat;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -76,7 +76,7 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -126,20 +126,20 @@ public class TestScene6 extends Scene
 			worleyTex1.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
 			worleyTex1.getNoiseFunction().setSelectionFunction(new SelectDifferenceNthMthNearest2D(7,1));
 			
-			MatrixTransformTexture3D mtrans3 = new MatrixTransformTexture3D(worleyTex1);
-			mtrans3.getTransform().scale(32);
+			MatrixTransformTexture3D worleyTex1Trans = new MatrixTransformTexture3D(worleyTex1);
+			worleyTex1Trans.getTransform().scale(32);
 			
 			WorleyNoiseTexture3D worleyTex2 = new WorleyNoiseTexture3D();
 			worleyTex2.getNoiseFunction().setDistanceFunction(new TchebyshevDistance3D());
 			worleyTex2.getNoiseFunction().setSelectionFunction(new SelectNthNearest2D(3));
 			worleyTex2.setSecondColor(new Color(1.1, 1.1, 1.1));
 			
-			MatrixTransformTexture3D mtrans4 = new MatrixTransformTexture3D(worleyTex2);
-			mtrans4.getTransform().scale(8);
+			MatrixTransformTexture3D worleyTex2Trans = new MatrixTransformTexture3D(worleyTex2);
+			worleyTex2Trans.getTransform().scale(8);
 			
-			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(mtrans4, mtrans3);
+			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(worleyTex2Trans, worleyTex1Trans);
 		
-			posterMat = new PosterMaskBBlend(
+			goldAndFrostMat = new PosterMaskBBlend(
 					//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
 					//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
 					//new DiffusePTMaterial(new Color(1.0, 0.6, 0.65)),
@@ -155,8 +155,8 @@ public class TestScene6 extends Scene
 			OneMinusT3DBlend oneminus = new OneMinusT3DBlend(subBlend);
 			TextureGradientNormalMap3D normalMap = new TextureGradientNormalMap3D(subBlend);
 			normalMap.setSamplingRadius(0.01);
-			normalMap.setStrength(100.01);
-			NormalMapCMaterial normMat = new NormalMapCMaterial(posterMat, normalMap);
+			normalMap.setStrength(10.01);
+			NormalMapCMaterial normMat = new NormalMapCMaterial(goldAndFrostMat, normalMap);
 			//NormalMapCMaterial normMat = new NormalMapCMaterial(new DielectricPTMaterial(new Color(1.1, 1.1, 1.0), 1.31), normalMap);
 			
 			

@@ -109,11 +109,14 @@ public class Launcher {
 	 * 				-or 
 	 * 
 	 * 		-More Materials
+	 * 		-Brick pattern + coloring + blend + material
 	 * 		
 	 * 		-Normal maps from textures
 	 * 			-gradient based?
 	 * 
 	 * 		-Spatial geometry maps
+	 * 
+	 * 		-Sobol pseudo noise generator
 	 * 
 	 * 		-Subsurface Scattering
 	 * 
