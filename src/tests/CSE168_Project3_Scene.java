@@ -127,6 +127,7 @@ public class CSE168_Project3_Scene extends Scene
 			model.bake(null);
 			model.setMaterial(new AshikhminPTMaterial(Color.gray(0.7), Color.black(), 0.0,
 					1.0, 0, 0));
+			/*
 			model.setMaterial(
 					new TextureMaskBBlend(
 							//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
@@ -137,6 +138,7 @@ public class CSE168_Project3_Scene extends Scene
 							addBlend
 						)
 						);
+						*/
 			this.addChild(model);
 		}
 		
@@ -173,6 +175,7 @@ public class CSE168_Project3_Scene extends Scene
 			model2.bake(null);
 			model2.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.9, 0.6, 0.5), 1.0,
 					0.0, 100, 100));
+			/*
 			model2.setMaterial(
 					new PosterMaskBBlend(
 							new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
@@ -181,6 +184,7 @@ public class CSE168_Project3_Scene extends Scene
 							0.60
 						)
 					);
+					*/
 			this.addChild(model2);
 		}
 		
@@ -217,6 +221,7 @@ public class CSE168_Project3_Scene extends Scene
 			model3.bake(null);
 			model3.setMaterial(new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0,
 					0.0, 1, 1000));
+			/*
 			model3.setMaterial(
 					new PosterMaskBBlend(
 							//new DielectricPTMaterial(new Color(1000000000000000.0, 10000000.9, 1000000000000000.0), 1.31),
@@ -225,11 +230,12 @@ public class CSE168_Project3_Scene extends Scene
 									new Color(0.5, 0.5, 1.0)
 								),
 							//new PassThroughMaterial(new Color(0.7, 1.05, 1.05), 1.31),
-							new PassThroughMaterial(Color.white()/*new Color(0.7, 1.1, 1.1)*/, 1.31),
+							new PassThroughMaterial(Color.white(), 1.31),
 							sineTrans,
 							0.1
 						)
 					);
+					*/
 			this.addChild(model3);
 		}
 		
@@ -244,7 +250,7 @@ public class CSE168_Project3_Scene extends Scene
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
-			//this.addChild(model4);
+			this.addChild(model4);
 		}
 		
 		
