@@ -16,7 +16,7 @@ public class NodeManager implements Iterable<Node> {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected ArrayList<Node> nodes;
-	protected HashMap<String, Node> idToNodeMap;
+	protected HashMap<String, Node> ipToNodeMap;
 	
 
 	/* *********************************************************************************************
@@ -25,7 +25,7 @@ public class NodeManager implements Iterable<Node> {
 	public NodeManager()
 	{
 		nodes = new ArrayList<Node>();
-		idToNodeMap = new HashMap<String, Node>();
+		ipToNodeMap = new HashMap<String, Node>();
 	}
 
 	/* *********************************************************************************************
@@ -39,19 +39,19 @@ public class NodeManager implements Iterable<Node> {
 			return;
 		}
 		
-		idToNodeMap.put(node.getId(), node);
+		ipToNodeMap.put(node.getIp(), node);
 		nodes.add(node);
 	}
 	
 	public void removeNode(Node node)
 	{
-		if(idToNodeMap.containsKey(node.getId()))
+		if(ipToNodeMap.containsKey(node.getId()))
 		{
 			Logger.warning(-25, "NodeManager: Can not remove a node it does not contain. Node ID [" + node.getId() + "].");
 			return;
 		}
 		
-		idToNodeMap.put(node.getId(), null);
+		ipToNodeMap.put(node.getIp(), null);
 		nodes.remove(node);
 	}
 	
@@ -59,11 +59,14 @@ public class NodeManager implements Iterable<Node> {
 	{
 		//TODO: Should this also check against IP?
 		//TODO: Should two nodes ever have the same IP?
-		Node existing = idToNodeMap.get(node.getId());
+		/*
+		Node existing = ipToNodeMap.containsKey(node.getId());
 		if(existing == null)
 			return false;
 		
 		return existing.getIp().equals(node.getIp());
+		*/
+		return ipToNodeMap.containsKey(node.getIp());
 	}
 
 	
