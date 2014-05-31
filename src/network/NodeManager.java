@@ -33,7 +33,7 @@ public class NodeManager implements Iterable<Node> {
 	 * *********************************************************************************************/
 	public void addNode(Node node)
 	{
-		if(idToNodeMap.containsKey(node.getId()))
+		if(this.hasNode(node))
 		{
 			Logger.warning(-25, "NodeManager: Can not add two nodes with the same ID [" + node.getId() + "].");
 			return;
