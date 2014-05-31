@@ -69,8 +69,8 @@ public class TestScene6 extends Scene
 	@Override
 	protected void initialize()
 	{
-		Configuration.setScreenWidth(800);
-		Configuration.setScreenHeight(600);
+		//Configuration.setScreenWidth(800);
+		//Configuration.setScreenHeight(600);
 
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
