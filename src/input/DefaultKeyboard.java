@@ -75,7 +75,7 @@ public class DefaultKeyboard extends Keyboard {
 				Logger.progress(-32, node.toString());
 			}
 			
-			Logger.progress(-23, "Total Available Cores: " + totalCores);
+			Logger.progress(-23, "Total Rendering Cores: " + totalCores);
 		}
 		
 		//If S is released, start/stop the renderer
