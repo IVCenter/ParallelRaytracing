@@ -71,6 +71,7 @@ public class Constants {
 		public static final KeySet KEYS = new KeySet();
 
 		public static final String NODE_ID = KEYS.addKey("NODE_ID");
+		public static final String NODE_CORES = KEYS.addKey("NODE_CORES");
 		public static final String NODE_IP = KEYS.addKey("NODE_IP");
 
 		public static final String SCREEN_WIDTH = KEYS.addKey("SCREEN_WIDTH");
