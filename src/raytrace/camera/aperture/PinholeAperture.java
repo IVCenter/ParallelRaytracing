@@ -2,13 +2,14 @@ package raytrace.camera.aperture;
 
 import math.Vector4;
 
-public class PinholeAperture implements Aperture {
+public class PinholeAperture extends Aperture {
 	
 	private static final long serialVersionUID = 1L;
 	
 	/*
 	 * A simple pinhole aperture
 	 */
+	
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
@@ -16,6 +17,7 @@ public class PinholeAperture implements Aperture {
 	{	
 		/**/
 	}
+	
 
 	/* *********************************************************************************************
 	 * Interface Overrides

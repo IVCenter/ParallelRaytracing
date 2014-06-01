@@ -2,17 +2,17 @@ package raytrace.camera.aperture;
 
 import math.Vector4;
 
-public class PolygonalAperture implements Aperture {
+public class PolygonalAperture extends Aperture {
 	
 	private static final long serialVersionUID = 1L;
 	
 	/*
 	 * A simple polygonal aperture
 	 */
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected double radius;
 	protected int elements;
 	
 
@@ -68,14 +68,6 @@ public class PolygonalAperture implements Aperture {
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public double getRadius() {
-		return radius;
-	}
-
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
-
 	public int getElements() {
 		return elements;
 	}
