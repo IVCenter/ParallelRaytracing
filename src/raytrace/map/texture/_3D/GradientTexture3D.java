@@ -47,7 +47,7 @@ public class GradientTexture3D extends Texture3D {
 	@Override
 	public Color evaluate(Double x, Double y, Double z)
 	{
-		double t = Math.min(1.0, Math.max(0.0, y + 0.5));
+		double t = Math.min(1.0, Math.max(0.0, y + 1.0));
 		return firstColor.interpolate(firstColor, secondColor, Math.pow(t, weight));
 	}
 	
