@@ -22,6 +22,7 @@ public class Spline extends ArrayList<Vector4> {
 	static
 	{
 		//Set up the first 100 factorials
+		factorials = new ArrayList<Long>(101);
 		factorials.add(1L);
 		for(long i = 1; i < 100; ++i)
 		{
@@ -75,6 +76,7 @@ public class Spline extends ArrayList<Vector4> {
 	        coords[0] += bezier(n, i, t, point.get(0));
 	        coords[1] += bezier(n, i, t, point.get(1));
 	        coords[2] += bezier(n, i, t, point.get(2));
+	        i++;
 	    }
 	    
 	    return new Vector4(coords);
