@@ -88,7 +88,6 @@ public class Launcher {
 	 * 		-AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
 	 * 		-(LP) Add Quad support to Triangle
 	 * 		-Discrete texture class that loads bmps, pngs, etc.
-	 * 		-A transform wrapper for texture
 	 * 		-[BROKEN] Cylinder (cap)
 	 * 		-[BROKEN] AABVH improperly handles cylinders
 	 * 
@@ -119,6 +118,11 @@ public class Launcher {
 	 * 		-Sobol pseudo noise generator
 	 * 
 	 * 		-Subsurface Scattering
+	 * 
+	 * 
+	 * 		-
+	 * 
+	 * 
 	 * 
 	 * 		-Texture blending API
 	 * 		-Material Generation API

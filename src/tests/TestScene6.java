@@ -23,8 +23,12 @@ import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.map.normal._3D.TextureGradientNormalMap3D;
+import raytrace.map.texture._3D.CircularGradientTexture3D;
+import raytrace.map.texture._3D.ColorTexture3D;
+import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
+import raytrace.map.texture._3D.SphericalGradientTexture3D;
 import raytrace.map.texture._3D.WorleyNoiseTexture3D;
 import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MaskT3DBlend;
@@ -139,6 +143,8 @@ public class TestScene6 extends Scene
 			
 			SubtractiveT3DBlend subBlend = new SubtractiveT3DBlend(worleyTex2Trans, worleyTex1Trans);
 		
+			double temperature = 0.5;
+			
 			goldAndFrostMat = new PosterMaskBBlend(
 					//new DielectricPTMaterial(new Color(1.3, 1.3, 0.92), 3.01),
 					//new DielectricPTMaterial(new Color(1.8, 1.95, 1.8), 1.31),
@@ -147,15 +153,23 @@ public class TestScene6 extends Scene
 					//new AshikhminPTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
 					//		Color.gray(1.0), 0.2, 0.95, 10, 1000),
 					new DiffusePTMaterial(new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend))),
-					new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 1, 1000),
+					//new FresnelMetalMaterial(new Color(0.95, 0.7, 0.3), 0.8, 2.1),
+					new AshikhminPTMaterial(Color.gray(0.0), new Color(0.95, 0.7, 0.3), 1.0, 0.0, 256, 256),
 					subBlend,
-					0.5
+					temperature
 				);
 			
-			OneMinusT3DBlend oneminus = new OneMinusT3DBlend(subBlend);
-			TextureGradientNormalMap3D normalMap = new TextureGradientNormalMap3D(subBlend);
+			//OneMinusT3DBlend oneminus = new OneMinusT3DBlend(subBlend);
+			PosterMaskT3DBlend posterBlend = new PosterMaskT3DBlend(
+					new OneMinusT3DBlend(new MultiplicativeT3DBlend(subBlend, subBlend)), 
+					new ColorTexture3D(Color.gray(0.4)), 
+					subBlend, 
+					temperature-0.1
+					);
+			
+			TextureGradientNormalMap3D normalMap = new TextureGradientNormalMap3D(posterBlend);
 			normalMap.setSamplingRadius(0.01);
-			normalMap.setStrength(10.01);
+			normalMap.setStrength(100.01);
 			NormalMapCMaterial normMat = new NormalMapCMaterial(goldAndFrostMat, normalMap);
 			//NormalMapCMaterial normMat = new NormalMapCMaterial(new DielectricPTMaterial(new Color(1.1, 1.1, 1.0), 1.31), normalMap);
 			
@@ -163,12 +177,13 @@ public class TestScene6 extends Scene
 			Sphere sphere = new Sphere();
 			Instance inst = new Instance();
 			inst.addChild(sphere);
+			//inst.addChild(new Cube(1.0, 1.0, 1.0));
 			inst.setMaterial(
-					normMat
+					new ColorMaterial(new GradientTexture3D(new Color(0xff0066ff), new Color(0xffff00ff), 1.0))//normMat
 					);
 			//inst.setMaterial(new DiffusePTMaterial(subBlend));
-			inst.getTransform().translate(0, 2.0, 0.0);
-			inst.getTransform().scale(2.5);
+			inst.getTransform().translate(2.0, 2.0, 0.0);
+			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			
 			inst.updateBoundingBox();
