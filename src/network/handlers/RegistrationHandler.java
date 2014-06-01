@@ -53,23 +53,30 @@ public class RegistrationHandler extends MessageHandler {
 		
 		
 		String id = message.getData().get(Constants.Message.NODE_ID);
-		
 		if(id == null || id.isEmpty() || id.equals(Constants.Default.NODE_ID))
 		{
 			id = Configuration.getNodeIdPrefix() + node.getNodeNumber();
 		}
-		
 		node.setId(id);
 		
 		
 		String ip = message.getData().get(Constants.Message.NODE_IP);
-		
 		if(ip == null)
 		{
 			ip = "Unknown IP Address";
 		}
-		
 		node.setIp(ip);
+		
+
+		Integer numberOfCores = message.getData().get(Constants.Message.NODE_CORES);
+		if(numberOfCores == null)
+		{
+			numberOfCores = 0;
+		}
+		node.setNumberOfCores(numberOfCores);
+		
+		
+		node.setLastMessageTime(System.currentTimeMillis());
 		
 		//If there does not already exist this node
 		if(!ApplicationDelegate.inst.getNodeManager().hasNode(node))
@@ -77,9 +84,15 @@ public class RegistrationHandler extends MessageHandler {
 			Logger.progress(-26, "RegistrationHandler: Registering new node...");
 			
 			node.setRegistrationTime(System.currentTimeMillis());
-			node.setLastMessageTime(System.currentTimeMillis());
 		
 			ApplicationDelegate.inst.getNodeManager().addNode(node);
+			
+		}else{
+			
+			Logger.progress(-26, "RegistrationHandler: Updating existing node...");
+			
+			//Update the node data if it exists
+			ApplicationDelegate.inst.getNodeManager().updateNode(node);
 		}
 		
 	}
