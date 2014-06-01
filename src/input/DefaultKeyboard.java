@@ -68,10 +68,14 @@ public class DefaultKeyboard extends Keyboard {
 			
 			NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
 			
+			int totalCores = 0;
 			for(Node node : nodes)
 			{
+				totalCores += node.getNumberOfCores();
 				Logger.progress(-32, node.toString());
 			}
+			
+			Logger.progress(-23, "Total Available Cores: " + totalCores);
 		}
 		
 		//If S is released, start/stop the renderer
