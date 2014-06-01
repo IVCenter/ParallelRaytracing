@@ -43,6 +43,23 @@ public class NodeManager implements Iterable<Node> {
 		nodes.add(node);
 	}
 	
+	public void updateNode(Node node)
+	{
+		if(!this.hasNode(node))
+		{
+			Logger.warning(-25, "NodeManager: Can not update an unknown node with ID [" + node.getId() + "].");
+			return;
+		}
+		
+		Node existing = ipToNodeMap.get(node.getIp());
+		existing.setId(node.getId());
+		existing.setLastMessageTime(node.getLastMessageTime());
+		existing.setLoadPercent(node.getLoadPercent());
+		existing.setMemoryPercent(node.getMemoryPercent());
+		existing.setNumberOfCores(node.getNumberOfCores());
+		existing.setPerformanceScore(node.getPerformanceScore());
+	}
+	
 	public void removeNode(Node node)
 	{
 		if(ipToNodeMap.containsKey(node.getId()))
