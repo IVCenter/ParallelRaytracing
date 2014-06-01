@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import math.Spline;
 import math.Vector4;
 import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
@@ -13,6 +14,7 @@ import math.noise.SimplexNoise3D;
 import math.noise.WorleyNoise3D;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
+import raytrace.camera.ProgrammableCameraController;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
@@ -66,6 +68,7 @@ public class TestScene6 extends Scene
 	double elapsed = 0.0;
 	Instance model;
 	PosterMaskBBlend goldAndFrostMat;
+	ProgrammableCameraController camController;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -80,7 +83,7 @@ public class TestScene6 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -89,6 +92,77 @@ public class TestScene6 extends Scene
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.02, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(4.5);
+		
+		
+		
+		camController = new ProgrammableCameraController((ProgrammableCamera)activeCamera);
+		
+		//Position Spline
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
+			spline.add(new Vector4(-5.0, 2.5, 5.0, 0.0));
+			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
+			camController.addPositionSpline(spline, 0.2);
+		}
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector4(-5.0, 2.5, -5.0, 0.0));
+			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
+			camController.addPositionSpline(spline, 0.2);
+		}
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
+			spline.add(new Vector4(5.0, 2.5, -5.0, 0.0));
+			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
+			camController.addPositionSpline(spline, 0.2);
+		}
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector4(5.0, 2.5, 5.0, 0.0));
+			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
+			camController.addPositionSpline(spline, 0.2);
+		}
+		
+		//Look At
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
+			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
+			camController.addLookAtSpline(spline, 0.8);
+		}
+		
+		//Camera Radius
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(0.5, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
+			camController.addApertureRadiusSpline(spline, 0.8);
+		}
+		
+		//Focal Distance
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(8.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(1.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
+			camController.addFocalDistanceSpline(spline, 0.8);
+		}
+		
+		//Field of View
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(Math.PI/1.2, 0.0, 0.0, 0.0));
+			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
+			camController.addFocalDistanceSpline(spline, 0.8);
+		}
+		
 		
 		
 		//Make a cylinder
@@ -182,7 +256,7 @@ public class TestScene6 extends Scene
 					new ColorMaterial(new GradientTexture3D(new Color(0xff0066ff), new Color(0xffff00ff), 1.0))//normMat
 					);
 			//inst.setMaterial(new DiffusePTMaterial(subBlend));
-			inst.getTransform().translate(2.0, 2.0, 0.0);
+			inst.getTransform().translate(0.0, 2.0, 0.0);
 			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			
@@ -318,6 +392,8 @@ public class TestScene6 extends Scene
 	{
 		
 		elapsed += data.getDt();
+		
+		camController.upate(data.getDt());
 		/*
 		level += lvlMulti * data.getDt() * 4.0;
 		
@@ -331,12 +407,13 @@ public class TestScene6 extends Scene
 		
 		//Vector4 lotusCenter = model.getBoundingBox().getMidpoint();
 		
-		ProgrammableCamera acam = (ProgrammableCamera)activeCamera;
+		//ProgrammableCamera acam = (ProgrammableCamera)activeCamera;
 		/*
 		CircularAperture cap = (CircularAperture)acam.getAperture();
 
 		cap.setRadius(Math.max(1.0-elapsed*1.5, 0.06));
 		*/
+		/*
 		Vector4 camPos = acam.getPosition();
 		camPos.set(Math.cos(elapsed + Math.PI/2.0) * 5.0, 
 							2.5,//Math.min(0.2 + elapsed*2, 3.6), 
@@ -351,6 +428,7 @@ public class TestScene6 extends Scene
 		center.set(1, -0.15);
 		center.normalize3();
 		acam.setViewingDirection(center);
+		*/
 
 		//acam.setFocalPlaneDistance(Math.min(1.0 + elapsed*1.5, lotusPos.subtract3(camPos).magnitude3()));
 		
