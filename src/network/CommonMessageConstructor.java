@@ -2,6 +2,7 @@ package network;
 
 import raytrace.camera.Camera;
 import raytrace.data.UpdateData;
+import system.ApplicationDelegate;
 import system.Configuration;
 import system.Constants;
 
@@ -33,8 +34,21 @@ public class CommonMessageConstructor {
 	{
 		Message message = new Message();
 		message.setType(Message.Type.Registration);
-		
+
 		message.getData().set(Constants.Message.NODE_ID, Configuration.getId());
+		
+		int totalCores = 0;
+		if(ApplicationDelegate.inst.getNodeManager().getNodeCount() > 0)
+		{
+			for(Node node : ApplicationDelegate.inst.getNodeManager())
+			{
+				totalCores += node.getNumberOfCores();
+			}
+		}else{
+			totalCores = Runtime.getRuntime().availableProcessors();
+		}
+
+		message.getData().set(Constants.Message.NODE_CORES, totalCores);
 		
 		return message;
 	}
