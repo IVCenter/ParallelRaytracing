@@ -65,11 +65,18 @@ public class ProgrammableCameraController {
 		Vector4 apertureRadius = point(apertureRadiusSplines, elapsedTime);
 		
 		//Update camera properties
-		camera.setPosition(position);
-		camera.setViewingDirection(lookAt.subtract3M(position));
-		camera.setFieldOfView(fieldOfView.get(0));
-		camera.setFocalPlaneDistance(focalDistance.get(0));
-		camera.getAperture().setRadius(apertureRadius.get(0));
+		if(position != null)
+			camera.setPosition(position);
+		if(lookAt != null && position != null)
+			camera.setViewingDirection(lookAt.subtract3M(position));
+		if(fieldOfView != null)
+			camera.setFieldOfView(fieldOfView.get(0));
+		if(focalDistance != null)
+			camera.setFocalPlaneDistance(focalDistance.get(0));
+		if(apertureRadius != null)
+			camera.getAperture().setRadius(apertureRadius.get(0));
+		
+		position.print();
 		
 		//Update the camera
 		camera.update();
@@ -79,7 +86,7 @@ public class ProgrammableCameraController {
 	
 	protected Vector4 point(LinkedList<CameraSpline> splines, double time)
 	{
-		Vector4 p;
+		Vector4 p = null;
 	    double summedTime = 0.0;
 	    
 	    //Prevent negative time
@@ -103,9 +110,6 @@ public class ProgrammableCameraController {
 	            p = point(splines, time % summedTime);
 	        }
 	    }
-	    
-	    //If p is null at this point, set it to the origin
-	    p = new Vector4();
 	    
 	    return p;
 	}
