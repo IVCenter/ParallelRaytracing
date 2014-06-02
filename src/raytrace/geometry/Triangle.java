@@ -127,9 +127,9 @@ public class Triangle extends TerminalSurface {
 		
 		
 		//Interpolate the TexCoords
-		double[] tex0 = vertices[0].getNormal().getArray();
-		double[] tex1 = vertices[1].getNormal().getArray();
-		double[] tex2 = vertices[2].getNormal().getArray();
+		double[] tex0 = vertices[0].getTexCoord().getArray();
+		double[] tex1 = vertices[1].getTexCoord().getArray();
+		double[] tex2 = vertices[2].getTexCoord().getArray();
 		
 		double uCoord = tex0[0] * alpha + tex1[0] * beta + tex2[0] * gamma;
 		double vCoord = tex0[1] * alpha + tex1[1] * beta + tex2[1] * gamma;
@@ -178,7 +178,7 @@ public class Triangle extends TerminalSurface {
 		Vector4 normal = vertices[0].position.subtract3(vertices[1].position).cross3(
 				vertices[2].position.subtract3(vertices[1].position)).normalize3();
 		for(Vertex v : vertices)
-			v.setNormal(normal);
+			v.normal = normal;
 	}
 
 	
