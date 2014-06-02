@@ -145,7 +145,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 		
 		double phi = 0.0;
-		double phiDelta = (2.0 * Math.PI) * (1.0 / (double)resolution);
+		double phiDelta = (2.0 * Math.PI) * (1.0 / (double)(resolution*2));
 		double theta = 0.0;
 		double thetaDelta = (Math.PI) * (1.0 / (double)resolution);
 
@@ -157,61 +157,62 @@ public class Sphere extends TerminalSurface implements Positionable {
 		Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
 
 		//Polar Phi
-		for(int x = 0; x < resolution; ++x)
+		for(int x = 0; x < resolution*2; ++x)
 		{
-			phi = (2.0 * Math.PI) * ((double)x / (double)resolution);
+			phi = (2.0 * Math.PI) * ((double)x / (double)(resolution*2));
 			
 			//Vertical Theta
-			for(int y = 0; y < resolution; y++)
+			for(int y = 0; y < resolution; ++y)
 			{
 				theta = (Math.PI) * ((double)y / (double)resolution);
 				
 				v0.set(radius * Math.sin(theta) * Math.cos(phi), 
-					   radius * Math.sin(theta) * Math.cos(phi), 
-					   radius * Math.cos(theta), 0);
+					   radius * Math.cos(theta),
+					   radius * Math.sin(theta) * Math.sin(phi),  0);
 				v1.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi), 
-					   radius * Math.sin(theta+thetaDelta) * Math.cos(phi), 
-					   radius * Math.cos(theta+thetaDelta), 0);
+					   radius * Math.cos(theta+thetaDelta),
+					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi),  0);
 				v2.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi+phiDelta), 
-					   radius * Math.sin(theta+thetaDelta) * Math.cos(phi+phiDelta), 
-					   radius * Math.cos(theta+thetaDelta), 0);
+					   radius * Math.cos(theta+thetaDelta),
+					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi+phiDelta),  0);
 				v3.set(radius * Math.sin(theta) * Math.cos(phi+phiDelta), 
-					   radius * Math.sin(theta) * Math.cos(phi+phiDelta), 
-					   radius * Math.cos(theta), 0);
+					   radius * Math.cos(theta),
+					   radius * Math.sin(theta) * Math.sin(phi+phiDelta),  0);
 				
 				//Generate for sub vertices
 				subV0 = new Vertex(
 						v0.add3(center), 
 						v0.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
 				
 				subV0_2 = new Vertex(
 						v0.add3(center), 
 						v0.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
 				
 				subV1 = new Vertex(
 						v1.add3(center), 
 						v1.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
 				
 				subV2 = new Vertex(
 						v2.add3(center), 
 						v2.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
 				
 				subV2_2 = new Vertex(
 						v2.add3(center), 
 						v2.add3(0.0).normalize3(),
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
 				
 				subV3 = new Vertex(
 						v3.add3(center), 
 						v3.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
 				
-
-				triangles.add(new Triangle(subV0, subV1, subV2));
+				if(y != resolution-1)
+					triangles.add(new Triangle(subV0, subV1, subV2));
+				if(y != 0)
 				triangles.add(new Triangle(subV0_2, subV2_2, subV3));
 			}
 		}
