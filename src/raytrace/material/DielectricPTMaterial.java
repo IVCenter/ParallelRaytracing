@@ -15,6 +15,7 @@ public class DielectricPTMaterial extends Material{
 	 * *********************************************************************************************/
 	protected Texture beerTexture;
 	double refractiveIndex = 1.0;
+	double roughness = 0.0;
 	
 
 	/* *********************************************************************************************
@@ -24,6 +25,13 @@ public class DielectricPTMaterial extends Material{
 	{
 		this.beerTexture = beerTexture;
 		this.refractiveIndex = refractiveIndex;
+	}
+	
+	public DielectricPTMaterial(Texture beerTexture, double refractiveIndex, double roughness)
+	{
+		this.beerTexture = beerTexture;
+		this.refractiveIndex = refractiveIndex;
+		this.roughness = roughness;
 	}
 
 
@@ -101,7 +109,24 @@ public class DielectricPTMaterial extends Material{
 			}else{
 				
 				Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim));
+				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3();
+				
+				//0.0 is no roughness, 1.0 is lots of roughness
+				//TODO: Use something better here......
+				if(roughness > 0.0)
+				{
+					Vector4 roughDir = new Vector4();
+					Vector4 offset = new Vector4();
+					do
+					{
+						offset.set(Math.random() * roughness, Math.random() * roughness, Math.random() * roughness, 0);
+						roughDir.set(refracDir);
+						roughDir.add3M(offset);
+					} while(roughDir.dot3(refracDir) <= 0.0);
+					
+					refracDir = roughDir.normalize3();
+				}
+				
 				recursionColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
 				
 			}
