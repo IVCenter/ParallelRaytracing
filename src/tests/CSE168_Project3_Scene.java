@@ -15,6 +15,7 @@ import raytrace.geometry.Sphere;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
+import raytrace.light.PointLight;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
 import raytrace.map.texture._3D.SphericalSineWaveTexture3D;
@@ -28,8 +29,11 @@ import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffusePTMaterial;
+import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.Material;
 import raytrace.material.PassThroughMaterial;
+import raytrace.material.SubsurfaceScatterPTMaterial;
+import raytrace.material.blend.binary.InterpolationBBlend;
 import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.TextureMaskBBlend;
 import raytrace.material.blend.unary.MultiplicativeUBlend;
@@ -55,6 +59,7 @@ public class CSE168_Project3_Scene extends Scene
 	{
 		//Sky Material
 		skyMaterial = new ColorMaterial(new Color(0.8, 0.9, 1.0));
+		//skyMaterial = new ColorMaterial(new Color(0.1, 0.1, 0.1));
 
 		Configuration.setScreenWidth(800);
 		Configuration.setScreenHeight(600);
@@ -62,7 +67,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
@@ -139,7 +144,7 @@ public class CSE168_Project3_Scene extends Scene
 						)
 						);
 						*/
-			this.addChild(model);
+			//this.addChild(model);
 		}
 		
 		
@@ -185,7 +190,7 @@ public class CSE168_Project3_Scene extends Scene
 						)
 					);
 					*/
-			this.addChild(model2);
+			//this.addChild(model2);
 		}
 		
 
@@ -236,7 +241,7 @@ public class CSE168_Project3_Scene extends Scene
 						)
 					);
 					*/
-			this.addChild(model3);
+			//this.addChild(model3);
 		}
 		
 
@@ -245,11 +250,23 @@ public class CSE168_Project3_Scene extends Scene
 		
 		if(model4 != null)
 		{
+			Color color = new Color(0xccccccff);
+			DiffusePTMaterial dmat = new DiffusePTMaterial(color);
+			PassThroughMaterial pmat = new PassThroughMaterial(Color.gray(1.0));
+			InterpolationBBlend interblend = new InterpolationBBlend(pmat, dmat, 0.5);
+			//FresnelDiffusePTMaterial mat = new FresnelDiffusePTMaterial(new Color(0xffccddff), 1.0, 0.4);
+			Material scatterMat = new SubsurfaceScatterPTMaterial(dmat, color, 1.01, 
+					2.0, 1.0, 0.05);
+			
+			Material dimat = new DielectricPTMaterial(new Color(1000000.0, 1000000.0, 10000.0),  1.31, 0.5);
+			
+			
 			model4.getTransform().scale(0.1);
 			model4.getTransform().translate(0.0, 0.055, -0.3);
 			model4.bake(null);
 			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
 					0.80, 1000, 1000));
+			model4.setMaterial(dimat);
 			this.addChild(model4);
 		}
 		
@@ -260,6 +277,24 @@ public class CSE168_Project3_Scene extends Scene
 		directionalLight.setIntensity(1.0);
 		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
 		lightManager.addLight(directionalLight);
+		
+		//Yellow Light
+		{
+			PointLight plight = new PointLight();
+			plight.setColor(new Color(0xffbb66ff));
+			plight.setIntensity(8.0);
+			plight.setPosition(new Vector4(0.1, 0.1, -0.4, 0));
+			//lightManager.addLight(plight);
+		}
+		
+		//Red Light
+		{
+			PointLight plight = new PointLight();
+			plight.setColor(new Color(0xff0000ff));
+			plight.setIntensity(4.0);
+			plight.setPosition(new Vector4(0.0, 0.2, -0.3, 0));
+			//lightManager.addLight(plight);
+		}
 		
 		//Sphere Light
 		{
