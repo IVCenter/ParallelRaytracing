@@ -1,11 +1,14 @@
 package raytrace.geometry;
 
+import java.util.ArrayList;
+
 import math.Ray;
 import math.Vector4;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.framework.Positionable;
+import raytrace.geometry.meshes.MeshSurface;
 import raytrace.surfaces.TerminalSurface;
 
 public class Sphere extends TerminalSurface implements Positionable {
@@ -130,6 +133,93 @@ public class Sphere extends TerminalSurface implements Positionable {
 		boundingBox.clear();
 		boundingBox.min.set(center.subtract3(radius));
 		boundingBox.max.set(center.add3(radius));
+	}
+	
+	
+	/* *********************************************************************************************
+	 * Tessellation Methods
+	 * *********************************************************************************************/
+	public MeshSurface tessellate(int resolution)
+	{
+		//Triangles
+		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+		
+		double phi = 0.0;
+		double phiDelta = (2.0 * Math.PI) * (1.0 / (double)resolution);
+		double theta = 0.0;
+		double thetaDelta = (Math.PI) * (1.0 / (double)resolution);
+
+		Vector4 v0 = new Vector4();
+		Vector4 v1 = new Vector4();
+		Vector4 v2 = new Vector4();
+		Vector4 v3 = new Vector4();
+
+		Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
+
+		//Polar Phi
+		for(int x = 0; x < resolution; ++x)
+		{
+			phi = (2.0 * Math.PI) * ((double)x / (double)resolution);
+			
+			//Vertical Theta
+			for(int y = 0; y < resolution; y++)
+			{
+				theta = (Math.PI) * ((double)y / (double)resolution);
+				
+				v0.set(radius * Math.sin(theta) * Math.cos(phi), 
+					   radius * Math.sin(theta) * Math.cos(phi), 
+					   radius * Math.cos(theta), 0);
+				v1.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi), 
+					   radius * Math.sin(theta+thetaDelta) * Math.cos(phi), 
+					   radius * Math.cos(theta+thetaDelta), 0);
+				v2.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi+phiDelta), 
+					   radius * Math.sin(theta+thetaDelta) * Math.cos(phi+phiDelta), 
+					   radius * Math.cos(theta+thetaDelta), 0);
+				v3.set(radius * Math.sin(theta) * Math.cos(phi+phiDelta), 
+					   radius * Math.sin(theta) * Math.cos(phi+phiDelta), 
+					   radius * Math.cos(theta), 0);
+				
+				//Generate for sub vertices
+				subV0 = new Vertex(
+						v0.add3(center), 
+						v0.add3(0.0).normalize3(), 
+						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+				
+				subV0_2 = new Vertex(
+						v0.add3(center), 
+						v0.add3(0.0).normalize3(), 
+						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+				
+				subV1 = new Vertex(
+						v1.add3(center), 
+						v1.add3(0.0).normalize3(), 
+						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+				
+				subV2 = new Vertex(
+						v2.add3(center), 
+						v2.add3(0.0).normalize3(), 
+						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+				
+				subV2_2 = new Vertex(
+						v2.add3(center), 
+						v2.add3(0.0).normalize3(),
+						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+				
+				subV3 = new Vertex(
+						v3.add3(center), 
+						v3.add3(0.0).normalize3(), 
+						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+				
+
+				triangles.add(new Triangle(subV0, subV1, subV2));
+				triangles.add(new Triangle(subV0_2, subV2_2, subV3));
+			}
+		}
+		
+		MeshSurface mesh = new MeshSurface();
+		mesh.setTriangles(triangles);
+		
+		return mesh;
 	}
 	
 
