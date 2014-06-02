@@ -58,6 +58,9 @@ public class ProgrammableCameraController {
 	 * *********************************************************************************************/
 	public void upate(double dt)
 	{
+		if(paused)
+			return;
+		
 		Vector4 position = point(positionSplines, elapsedTime);
 		Vector4 lookAt = point(lookAtSplines, elapsedTime);
 		Vector4 fieldOfView = point(fieldOfViewSplines, elapsedTime);
@@ -120,22 +123,23 @@ public class ProgrammableCameraController {
 	 * *********************************************************************************************/
 	public void start()
 	{
-		
+		this.paused = false;
 	}
 	
 	public void pause()
 	{
-		
+		this.paused = true;
 	}
 	
 	public void stop()
 	{
-		
+		this.paused = true;
+		restart();
 	}
 	
 	public void restart()
 	{
-		
+		this.elapsedTime = 0;
 	}
 	
 	
