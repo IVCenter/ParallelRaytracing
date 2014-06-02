@@ -63,7 +63,7 @@ public class SimplexNoise3D implements Map3D<Double> {
 			p[i] = i;
 		}
 		
-		int shuffleCount = p.length * 4;
+		int shuffleCount = p.length * 8;
 		
 		int temp;
 		int a1;
