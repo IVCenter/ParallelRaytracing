@@ -37,6 +37,7 @@ import raytrace.map.texture._3D.blend.SimplexInterpolationT3DBlend;
 import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.composite.NormalMapCMaterial;
@@ -90,10 +91,10 @@ public class TestScene8 extends Scene
 		
 		MeshSurface mesh = base.tessellate(300);
 		//mesh.synchronizeVertices();
-		ArrayList<Triangle> triangles = mesh.getTriangles();
+		//ArrayList<Triangle> triangles =;
 		
 		Vector4 multi = new Vector4();
-		for(Triangle tri : triangles)
+		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
@@ -113,12 +114,12 @@ public class TestScene8 extends Scene
 		
 		//Add mode noise!
 		multi = new Vector4();
-		for(Triangle tri : triangles)
+		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
 				Vector4 pos = vert.getPosition();
-				Color noise = simplexTrans2.evaluate(pos.get(0), pos.get(1), pos.get(2));
+				Color noise = simplexTrans2.evaluate(pos.get(0) * 2.0, pos.get(1) * 2.0, pos.get(2) * 2.0);
 				vert.setPosition(pos.add3M(vert.getNormal().multiply3(noise.intensity3())));
 				//vert.getPosition().print();
 			}
@@ -127,7 +128,7 @@ public class TestScene8 extends Scene
 			//tri.updateBoundingBox();
 			//tri.setDynamic(false);
 		}
-		for(Triangle tri : triangles)
+		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
 			tri.setDynamic(true);
@@ -135,8 +136,27 @@ public class TestScene8 extends Scene
 			tri.setDynamic(false);
 		}
 		
+		//double maxLength = 0.15;
+		Logger.progress(-50, "Tesselating " + mesh.getTriangles().size() + " triangles.");
+		//mesh.tessellateMeshByTriangleLongestSideConstraint(maxLength);
+		Logger.progress(-50, "Tesselating resulted in " + mesh.getTriangles().size() + " triangles.");
+
 		
-		CompositeSurface cube = AABVHSurface.makeAABVH(triangles);
+		//Smooth out the normals
+		mesh.smoothNormals();
+		
+		/*
+		for(Triangle tri : mesh.getTriangles())
+		{
+			//tri.generateFaceNormal();
+			tri.setDynamic(true);
+			tri.updateBoundingBox();
+			tri.setDynamic(false);
+		}
+		*/
+		
+		
+		CompositeSurface cube = AABVHSurface.makeAABVH(mesh.getTriangles());
 		
 		
 		
@@ -159,6 +179,7 @@ public class TestScene8 extends Scene
 			inst.getTransform().translate(0, 2, 0);
 			inst.getTransform().scale(2.5);
 			inst.setMaterial(new DiffusePTMaterial(gradientTrans));
+			//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
 			inst.updateBoundingBox();
 			inst.bake(null);
@@ -244,7 +265,7 @@ public class TestScene8 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));

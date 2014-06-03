@@ -1,5 +1,7 @@
 package raytrace.geometry;
 
+import java.util.ArrayList;
+
 import math.Ray;
 import math.Vector4;
 import raytrace.data.BakeData;
@@ -180,6 +182,102 @@ public class Triangle extends TerminalSurface {
 		for(Vertex v : vertices)
 			v.normal = normal;
 	}
+	
+	public ArrayList<Triangle> tessellateByAreaConstraint(double areaConstraint)
+	{
+		//If the triangle's area is larger than the constraint we have to tessellate it until its small enough
+		if(getArea() <= areaConstraint)
+		{
+			ArrayList<Triangle> thisTriangle = new ArrayList<Triangle>(1);
+			thisTriangle.add(this);
+			return thisTriangle;
+		}
+		
+		//Call split
+		Triangle[] tessellated = splitDownLongestSide();
+
+		//Recurse
+		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+		triangles.addAll(tessellated[0].tessellateByAreaConstraint(areaConstraint));
+		triangles.addAll(tessellated[1].tessellateByAreaConstraint(areaConstraint));
+		
+		return triangles;
+	}
+	
+	public ArrayList<Triangle> tessellateByLongestSideConstraint(double lengthConstraint)
+	{
+		//If the triangle's area is larger than the constraint we have to tessellate it until its small enough
+		if(getLongestSide() <= lengthConstraint)
+		{
+			ArrayList<Triangle> thisTriangle = new ArrayList<Triangle>(1);
+			thisTriangle.add(this);
+			return thisTriangle;
+		}
+		
+		//Call split
+		Triangle[] tessellated = splitDownLongestSide();
+
+		//Recurse
+		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+		triangles.addAll(tessellated[0].tessellateByLongestSideConstraint(lengthConstraint));
+		triangles.addAll(tessellated[1].tessellateByLongestSideConstraint(lengthConstraint));
+		
+		return triangles;
+	}
+	
+	protected Triangle[] splitDownLongestSide()
+	{
+		//Since the tringle is too large, tessellate recursively by splitting along the longest edge
+		double d01 = vertices[0].position.distance(vertices[1].position);
+		double d02 = vertices[0].position.distance(vertices[2].position);
+		double d12 = vertices[1].position.distance(vertices[2].position);
+		
+		Triangle[] tessellated = null;
+		if(d01 >= d02 && d01 >= d12)
+		{
+			//Edge 01 is the longest
+			tessellated = makeTessellatedTriangles(vertices[0], vertices[2], vertices[1]);
+			
+		}else if(d02 >= d01 && d02 >= d12)
+		{
+			//Edge 02 is the longest
+			tessellated = makeTessellatedTriangles(vertices[0], vertices[1], vertices[2]);
+			
+		}else{
+			//Edge 12 is the longest
+			tessellated = makeTessellatedTriangles(vertices[1], vertices[0], vertices[2]);
+		}
+		
+		return tessellated;
+	}
+	
+	protected Triangle[] makeTessellatedTriangles(Vertex left, Vertex center, Vertex right)
+	{
+		Vertex subL0, subS0, subC0, subR1, subS1, subC1;
+		
+		//Generate for sub vertices
+		subL0 = left;
+		
+		subR1 = right;
+		
+		subC0 = center;
+		
+		subC1 = center.copy();
+		
+		subS0 = new Vertex(left.position.add3(right.position.subtract3(left.position).multiply3M(right.position.distance(left.position)/2.0)),
+				left.normal.multiply3(0.5).add3M(right.normal.multiply3(0.5)).normalize3(),
+				left.texCoord.multiply3(0.5).add3M(right.texCoord.multiply3(0.5))
+				);
+		
+		subS1 = subS0.copy();
+		
+		Triangle[] triangles = {
+			new Triangle(subC0, subS0, subL0),
+			new Triangle(subR1, subS1, subC1)
+		};
+		
+		return triangles;
+	}
 
 	
 	/* *********************************************************************************************
@@ -225,6 +323,15 @@ public class Triangle extends TerminalSurface {
 		Vector4 b = vertices[2].getPosition().subtract3(vertices[1].getPosition());
 		
 		return a.cross3(b).magnitude3()/2.0;
+	}
+	
+	public double getLongestSide()
+	{
+		double d01 = vertices[0].position.distance(vertices[1].position);
+		double d02 = vertices[0].position.distance(vertices[2].position);
+		double d12 = vertices[1].position.distance(vertices[2].position);
+		
+		return Math.max(d01, Math.max(d02, d12));
 	}
 	
 }

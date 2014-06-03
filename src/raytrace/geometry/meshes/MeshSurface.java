@@ -2,6 +2,8 @@ package raytrace.geometry.meshes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import math.Vector4;
 
@@ -128,11 +130,100 @@ public class MeshSurface extends TerminalSurface {
 	public void smoothNormals()
 	{
 		//Another encoding and hash based method for fast processing of triangle normals
+		//Collect all Vertices that share a position
+		//For each group, average the normals
+		
+		HashMap<String, LinkedList<Vertex>> groups = new HashMap<String, LinkedList<Vertex>>();
+		
+		String encoding;
+		LinkedList<Vertex> group;
+		for(Triangle tri : triangles)
+		{
+			for(Vertex vert : tri.getVertices())
+			{
+				encoding = encodeVector(vert.getPosition());
+				group = groups.get(encoding);
+				
+				if(group == null) {
+					group = new LinkedList<Vertex>();
+					groups.put(encoding, group);
+				}
+				
+				group.add(vert);
+			}
+		}
+		
+		//For each group generate an average and set them
+		Vector4 averageNormal = new Vector4();
+		Vector4 tempNormal;
+		for(Map.Entry<String, LinkedList<Vertex>> entry : groups.entrySet())
+		{
+			group = entry.getValue();
+			averageNormal.set(0,0,0,0);
+			
+			for(Vertex vert : group)
+			{
+				averageNormal.add3M(vert.getNormal());
+			}
+			
+			averageNormal.normalize3();
+			
+			tempNormal = averageNormal.add3(0);
+			
+			for(Vertex vert : group)
+			{
+				vert.setNormal(tempNormal);
+			}
+			
+		}
 	}
 	
 	public void tessellateMeshByTriangleAreaConstraint(double areaConstraint)
 	{
-		//
+		ArrayList<Triangle> newTriangles = new ArrayList<Triangle>();
+		ArrayList<Triangle> tessellated;
+		
+		for(Triangle tri : triangles)
+		{
+			if(tri.getArea() > areaConstraint)
+			{
+				//Tessellate the triangle
+				tessellated = tri.tessellateByAreaConstraint(areaConstraint);
+				for(Triangle ttri : tessellated)
+				{
+					newTriangles.add(ttri);
+				}
+			}else{
+				newTriangles.add(tri);
+			}
+		}
+		
+		triangles.clear();
+		triangles = newTriangles;
+	}
+	
+	public void tessellateMeshByTriangleLongestSideConstraint(double lengthConstraint)
+	{
+		ArrayList<Triangle> newTriangles = new ArrayList<Triangle>();
+		ArrayList<Triangle> tessellated;
+		
+		for(Triangle tri : triangles)
+		{
+			if(tri.getLongestSide() > lengthConstraint)
+			{
+				//Tessellate the triangle
+				tessellated = tri.tessellateByLongestSideConstraint(lengthConstraint);
+				for(Triangle ttri : tessellated)
+				{
+					newTriangles.add(ttri);
+				}
+			}else{
+				newTriangles.add(tri);
+			}
+		}
+		
+		triangles.clear();
+		triangles = newTriangles;
 	}
 	
 	private String encodeVector(Vector4 v)

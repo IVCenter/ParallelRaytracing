@@ -32,6 +32,12 @@ public class Vertex {
 		this.texCoord = texCoord;
 	}
 	
+	public Vertex copy()
+	{
+		Vertex v = new Vertex(position.add3(0), normal.add3(0), texCoord.add3(0));
+		return v;
+	}
+	
 
 	/* *********************************************************************************************
 	 * Getters/Setters

@@ -213,7 +213,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 				if(y != resolution-1)
 					triangles.add(new Triangle(subV0, subV1, subV2));
 				if(y != 0)
-				triangles.add(new Triangle(subV0_2, subV2_2, subV3));
+					triangles.add(new Triangle(subV0_2, subV2_2, subV3));
 			}
 		}
 		
