@@ -109,6 +109,7 @@ public class DefaultKeyboard extends Keyboard {
 						false, 								//Drawing to screen is false
 						false, 								//Clock is false
 						false, 								//Controller is false
+						Configuration.isRealTime(), 								//Controller is false
 						Configuration.getMasterScene().getSceneKey());
 				sender.send(message, node.getIp());
 			}

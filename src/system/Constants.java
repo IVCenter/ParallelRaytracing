@@ -85,6 +85,7 @@ public class Constants {
 		public static final String STATE_IS_DRAWINGTOSCREEN = KEYS.addKey("STATE_IS_DRAWINGTOSCREEN");
 		public static final String STATE_IS_CLOCK = KEYS.addKey("STATE_IS_CLOCK");
 		public static final String STATE_IS_CONTROLLER = KEYS.addKey("STATE_IS_CONTROLLER");
+		public static final String STATE_IS_REALTIME = KEYS.addKey("STATE_IS_REALTIME");
 		
 		public static final String SCENE_KEY = KEYS.addKey("SCENE_KEY");
 

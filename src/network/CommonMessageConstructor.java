@@ -78,7 +78,7 @@ public class CommonMessageConstructor {
 	 * @return
 	 */
 	public static Message createConfigurationMessage(String id, Integer screenWidth, Integer screenHeight,
-			Boolean isLeaf, Boolean isDrawingToScreen, Boolean isClock, Boolean isController, String sceneKey)
+			Boolean isLeaf, Boolean isDrawingToScreen, Boolean isClock, Boolean isController, Boolean isRealtime, String sceneKey)
 	{
 		Message message = new Message();
 		message.setType(Message.Type.Configure);
@@ -90,6 +90,7 @@ public class CommonMessageConstructor {
 		message.getData().set(Constants.Message.STATE_IS_DRAWINGTOSCREEN, isDrawingToScreen);
 		message.getData().set(Constants.Message.STATE_IS_CLOCK, isClock);
 		message.getData().set(Constants.Message.STATE_IS_CONTROLLER, isController);
+		message.getData().set(Constants.Message.STATE_IS_REALTIME, isRealtime);
 		message.getData().set(Constants.Message.SCENE_KEY, sceneKey);
 		
 		return message;

@@ -146,6 +146,9 @@ public class ApplicationDelegate extends Job{
 		
 		//Is a clock?
 		configureAsClock(Configuration.isClock());
+		
+		//Is Real Time?
+		configureAsRealTime(Configuration.isRealTime());
 	}
 	
 
@@ -229,6 +232,17 @@ public class ApplicationDelegate extends Job{
 				public void run() {	startRegistrationLoop(); }	
 			});
 			registrationLoopThread.start();
+		}
+	}
+
+	public void configureAsRealTime(boolean shouldConfigure)
+	{
+		if(shouldConfigure)
+		{
+			//
+			
+		}else{
+			
 		}
 	}
 

@@ -135,6 +135,16 @@ public class ConfigurationHandler extends MessageHandler {
 			ApplicationDelegate.inst.configureAsController(isController);
 		}
 		*/
+
+		Boolean isRealtime = message.getData().get(Constants.Message.STATE_IS_REALTIME);
+		if(isRealtime != null && Configuration.isRealTime() != isRealtime)
+		{
+			Logger.progress(-27, "ConfigurationHander: Setting real-time state to [" + isRealtime + "].");
+			
+			Configuration.setRealTime(isRealtime);
+			
+			ApplicationDelegate.inst.configureAsRealTime(isRealtime);
+		}
 		
 		
 		String sceneKey = message.getData().get(Constants.Message.SCENE_KEY);
