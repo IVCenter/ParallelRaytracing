@@ -291,7 +291,8 @@ public class TestScene10 extends Scene
 	{
 		elapsed += data.getDt();
 		
-		camController.upate(data.getDt());
+		if(Configuration.isClock())
+			camController.upate(data.getDt());
 		
 		//Update the children
 		super.update(data);

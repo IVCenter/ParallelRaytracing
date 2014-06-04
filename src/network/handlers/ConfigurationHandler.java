@@ -107,13 +107,13 @@ public class ConfigurationHandler extends MessageHandler {
 			Configuration.setDrawToScreen(isDrawingToScreen);
 
 			ApplicationDelegate.inst.configureAsDrawingToScreen(isDrawingToScreen);
-		}else if(didChangeScreenSize)
+		}else*/ if(didChangeScreenSize)
 		{
 			Logger.progress(-27, "ConfigurationHander: Updating pixel buffer size.");
 			ApplicationDelegate.inst.configureAsDrawingToScreen(Configuration.isDrawingToScreen());
 		}
 		
-		
+		/*
 		Boolean isClock = message.getData().get(Constants.Message.STATE_IS_CLOCK);
 		if(isClock != null && Configuration.isClock() != isClock)
 		{
