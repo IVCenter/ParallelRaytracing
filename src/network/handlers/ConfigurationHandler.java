@@ -5,7 +5,11 @@ import raytrace.scene.SceneLoader;
 import system.ApplicationDelegate;
 import system.Configuration;
 import system.Constants;
+import network.CommonMessageConstructor;
 import network.Message;
+import network.Node;
+import network.NodeManager;
+import network.send.MessageSender;
 
 public class ConfigurationHandler extends MessageHandler {
 	
@@ -80,6 +84,10 @@ public class ConfigurationHandler extends MessageHandler {
 		}
 		
 
+		//TODO: UNCOMMENT AFTER DEMO
+		//TODO: How to we properly handle setting of configuration states?
+		
+		/*
 		Boolean isLeaf = message.getData().get(Constants.Message.STATE_IS_LEAF);
 		if(isLeaf != null && Configuration.isLeaf() != isLeaf)
 		{
@@ -126,15 +134,31 @@ public class ConfigurationHandler extends MessageHandler {
 			
 			ApplicationDelegate.inst.configureAsController(isController);
 		}
-		
+		*/
 		
 		
 		String sceneKey = message.getData().get(Constants.Message.SCENE_KEY);
-		if(sceneKey != null && 
-				(Configuration.getMasterScene() == null || !Configuration.getMasterScene().getSceneKey().equals(sceneKey)))
+		if(sceneKey != null/* && 
+				(Configuration.getMasterScene() == null || !Configuration.getMasterScene().getSceneKey().equals(sceneKey))*/)
 		{
 			Logger.progress(-27, "ConfigurationHander: Setting scene to [" + sceneKey + "].");
+
+			//Make sure we clean up the previous scene
+			Configuration.setMasterScene(null);
+			System.gc();
+			
+			//Load the new scene
 			Configuration.setMasterScene(SceneLoader.load(sceneKey));
+		}
+		
+		
+		//If this node has children nodes, send the message along
+		MessageSender sender = ApplicationDelegate.inst.getMessageSender();
+
+		NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
+		for(Node node : nodes)
+		{
+			sender.send(message, node.getIp());
 		}
 	}
 

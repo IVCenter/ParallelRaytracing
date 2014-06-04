@@ -8,6 +8,7 @@ import tests.CSE168_Project2_Scene;
 import tests.CSE168_Project3_Scene;
 import tests.PerformanceTest1;
 import tests.TestScene1;
+import tests.TestScene10;
 import tests.TestScene2;
 import tests.TestScene3;
 import tests.TestScene4;
@@ -15,6 +16,7 @@ import tests.TestScene5;
 import tests.TestScene6;
 import tests.TestScene7;
 import tests.TestScene8;
+import tests.TestScene9;
 
 public class SceneLoader {
 	
@@ -147,6 +149,24 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new TestScene8();
 				scene.setSceneKey(Constants.SceneKeys.TEST8);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST9, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene9();
+				scene.setSceneKey(Constants.SceneKeys.TEST9);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST10, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene10();
+				scene.setSceneKey(Constants.SceneKeys.TEST10);
 				return scene;
 			}
 		});

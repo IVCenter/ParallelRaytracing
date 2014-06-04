@@ -172,7 +172,7 @@ public class TestScene8 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -575,7 +575,7 @@ public class TestScene8 extends Scene
 					);
 					*/
 			SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
-					(new Color(0xff1178)).multiply3M(1.2), 
+					(new Color(0xff1178ff)).multiply3M(1.2), 
 					new Color(0xefefefff), 
 					0.8
 					);
