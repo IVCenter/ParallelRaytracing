@@ -210,7 +210,7 @@ public class ProgrammableCamera extends Camera {
 		//If the count of decompositions is one or less, just use this camera
 		if(count <= 1) {
 			ArrayList<Camera> oneCam = new ArrayList<Camera>(1);
-			oneCam.add(this);
+			oneCam.add(this.duplicate());
 			return oneCam;
 		}
 		

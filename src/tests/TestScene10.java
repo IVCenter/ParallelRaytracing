@@ -1,6 +1,7 @@
 package tests;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import math.Spline;
 import math.Vector4;
@@ -56,6 +57,8 @@ public class TestScene10 extends Scene
 	/*
 	 * A simple test scene for debugging
 	 */
+	Random seedGen;
+	
 	double elapsed = 0.0;
 	Instance model;
 	PosterMaskBBlend goldAndFrostMat;
@@ -67,7 +70,7 @@ public class TestScene10 extends Scene
 	@Override
 	protected void initialize()
 	{
-		
+		seedGen = new Random(0x07b56c7168a2dL);
 		//Configuration.setScreenWidth(800);
 		//Configuration.setScreenHeight(600);
 
@@ -163,7 +166,7 @@ public class TestScene10 extends Scene
 			return;
 		
 		//If this nose is a controller, we don't need any more loaded
-		if(Configuration.isController())
+		if(Configuration.isController() && !Configuration.isLeaf())
 			return;
 		
 		
@@ -172,12 +175,12 @@ public class TestScene10 extends Scene
 		
 		MeshSurface mesh = (new Cube(1, 1, 1)).tessellate(100);
 		
-		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(Color.gray(-0.8), Color.gray(1.0));
+		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.8), Color.gray(1.0));
 		MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
 		simplexTrans.getTransform().nonUniformScale(4.0, 4.0, 4.0);
 		
 
-		SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(Color.gray(-0.00), Color.gray(-0.08));
+		SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.00), Color.gray(-0.08));
 		//SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(Color.gray(0.1), Color.gray(1.0));//Used for visualizing
 		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
 		simplexTrans2.getTransform().nonUniformScale(64.0, 64.0, 64.0);
@@ -282,10 +285,6 @@ public class TestScene10 extends Scene
 		
 	}
 	
-	private double randInRange(double min, double max)
-	{
-		return min + Math.random() * (max-min);
-	}
 	
 	@Override
 	public void update(UpdateData data)
