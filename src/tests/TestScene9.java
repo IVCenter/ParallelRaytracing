@@ -96,6 +96,15 @@ public class TestScene9 extends Scene
 		
 		
 		
+
+
+		//If this node is a middle tier, we dont need any data at all
+		if(!Configuration.isClock() && !Configuration.isLeaf())
+			return;
+		
+		//If this nose is a controller, we don't need any more loaded
+		if(Configuration.isController() && !Configuration.isLeaf())
+			return;
 		
 		
 		
@@ -153,8 +162,11 @@ public class TestScene9 extends Scene
 	{
 		
 		elapsed += data.getDt();
+
 		
-		camController.upate(data.getDt());
+		if(Configuration.isClock())
+			camController.upate(data.getDt());
+		
 		
 		super.update(data);
 	}

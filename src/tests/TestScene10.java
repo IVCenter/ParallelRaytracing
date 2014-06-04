@@ -71,8 +71,8 @@ public class TestScene10 extends Scene
 	protected void initialize()
 	{
 		seedGen = new Random(0x07b56c7168a2dL);
-		//Configuration.setScreenWidth(800);
-		//Configuration.setScreenHeight(600);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
 
 		//skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		skyMaterial = new RecursionMinimumCMaterial(new ColorMaterial(new Color(0xddeeffff)), 1);
@@ -82,7 +82,7 @@ public class TestScene10 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(3);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
