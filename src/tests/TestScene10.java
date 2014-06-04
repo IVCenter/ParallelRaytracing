@@ -67,9 +67,6 @@ public class TestScene10 extends Scene
 	@Override
 	protected void initialize()
 	{
-		//If this node is a middle tier, we dont need any data at all
-		if(!Configuration.isClock() && !Configuration.isLeaf())
-			return;
 		
 		//Configuration.setScreenWidth(800);
 		//Configuration.setScreenHeight(600);
@@ -160,6 +157,10 @@ public class TestScene10 extends Scene
 			camController.addFocalDistanceSpline(spline, 10.0);
 		}
 		
+
+		//If this node is a middle tier, we dont need any data at all
+		if(!Configuration.isClock() && !Configuration.isLeaf())
+			return;
 		
 		//If this nose is a controller, we don't need any more loaded
 		if(Configuration.isController())
