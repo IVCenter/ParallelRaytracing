@@ -89,10 +89,11 @@ public class RenderRequestHandler extends MessageHandler {
 		
 		//TODO: Compress pixels?
 		//Send a response message with the camera and pixels
+		Camera freshCamera = camera.duplicate();
 		Message response = CommonMessageConstructor.createRenderResponseMessage();
-		response.getData().set(Constants.Message.NODE_CAMERA, camera);
+		response.getData().set(Constants.Message.NODE_CAMERA, freshCamera);
 		response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
-				ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
+				ApplicationDelegate.inst.getPixelBuffer().getPixels(), freshCamera));
 		
 		String returnIP = message.getData().get(Constants.Message.NODE_IP);
 		ApplicationDelegate.inst.getMessageSender().send(response, returnIP);

@@ -91,9 +91,15 @@ public class NetworkRenderer implements Renderer {
 		//
 		
 		//For all nodes, send a render request
+		Camera nextCamera = null;
 		for(Node node : nodeManager)
 		{
-			Message message = CommonMessageConstructor.createRenderRequestMessage(cameras.next());
+			if(nodeManager.getNodeCount() == 1)
+				nextCamera = cameras.next().duplicate();
+			else
+				nextCamera = cameras.next();
+			
+			Message message = CommonMessageConstructor.createRenderRequestMessage(nextCamera);
 			messageSender.send(message, node.ip);
 			
 			outstandingRequests++;
