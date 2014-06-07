@@ -121,11 +121,11 @@ public class TestScene9 extends Scene
 		
 		System.gc();
 
-		setupCenterPiece();
+		//setupCenterPiece();
 		
 		System.gc();
 		
-		setupRocks();
+		//setupRocks();
 		
 		System.gc();
 		
@@ -201,14 +201,14 @@ public class TestScene9 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(64);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(16);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(/*0.02*/0.035, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(/*0.02*/0.02, 0.5));//0604 shot at 0.035
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.6);
 		
 		
@@ -310,11 +310,11 @@ public class TestScene9 extends Scene
 		{
 			Grid base = new Grid(28.0, 28.0);
 			
-			SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.004), Color.gray(0.12));
+			SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.004), Color.gray(0.09));//was .12
 			MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
 			simplexTrans.getTransform().nonUniformScale(10.0, 10.0, 10.0);
 	
-			SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(0), Color.gray(0.001));
+			SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(0), Color.gray(0.001));//was .001
 			//SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(Color.gray(0.1), Color.gray(1.0));//Used for visualizing
 			MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
 			simplexTrans2.getTransform().nonUniformScale(31.0, 31.0, 31.0);
@@ -385,7 +385,7 @@ public class TestScene9 extends Scene
 
 				SimplexNoiseTexture3D simplex5 = new SimplexNoiseTexture3D(seedGen.nextLong());
 				MatrixTransformTexture3D simplexTrans5 = new MatrixTransformTexture3D(simplex5);
-				simplexTrans5.getTransform().nonUniformScale(63, 61, 63);
+				simplexTrans5.getTransform().nonUniformScale(73, 71, 73);//0604 was 63, 61, 62
 
 				SimplexNoiseTexture3D simplex6 = new SimplexNoiseTexture3D(seedGen.nextLong());
 				MatrixTransformTexture3D simplexTrans6 = new MatrixTransformTexture3D(simplex6);
@@ -460,6 +460,8 @@ public class TestScene9 extends Scene
 				tri.setDynamic(false);
 			}
 			
+			
+			mesh.smoothNormals();
 			
 			CompositeSurface cube = AABVHSurface.makeAABVH(mesh.getTriangles());
 			
