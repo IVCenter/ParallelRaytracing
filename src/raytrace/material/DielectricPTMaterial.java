@@ -14,8 +14,8 @@ public class DielectricPTMaterial extends Material{
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Texture beerTexture;
-	double refractiveIndex = 1.0;
-	double roughness = 0.0;
+	protected double refractiveIndex = 1.0;
+	protected double roughness = 0.0;
 	
 
 	/* *********************************************************************************************
