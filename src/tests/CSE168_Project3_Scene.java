@@ -249,6 +249,7 @@ public class CSE168_Project3_Scene extends Scene
 
 		//Dragon 4
 		Instance model4 = ResourceManager.create("dragon_smooth.obj");
+		//Instance model4 = ResourceManager.create("bunny_n.obj");
 		
 		if(model4 != null)
 		{
@@ -262,10 +263,10 @@ public class CSE168_Project3_Scene extends Scene
 			
 			//Material dimat = new DielectricPTMaterial(new Color(1000000.0, 1000000.0, 10000.0),  1.31, 0.5);
 			
-			Material ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(0xf8f8f8ff)), 
-					new ColorTexture3D(new Color(1.0 * 100.0, 1.3 * 1000000.0, 1.1 * 10000.0)), 
-					0.7, //scatter coeff 
-					1.9, //refractive index
+			Material ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(1.1, 1.1, 1.1)), 
+					new ColorTexture3D(new Color(10.0, 10.0, 10.0)/*new Color(1.0 * 1.0, 1.3 * 100.0, 1.1 * 10.0)*/), 
+					0.90, //scatter coeff 
+					1.0, //refractive index
 					1.0, //roughness
 					10);
 			

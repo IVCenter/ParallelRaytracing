@@ -141,26 +141,32 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				double phiDiscrim = 1.0 - (refractiveRatio * refractiveRatio) *
 									(1.0 - (DdotN * DdotN));
 				
-				Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3();
-				
-				//0.0 is no roughness, 1.0 is lots of roughness
-				//TODO: Use something better here......
-				if(roughness > 0.0)
+				if(phiDiscrim >= 0)
 				{
-					Vector4 roughDir = new Vector4();
-					Vector4 offset = new Vector4();
-					do
-					{
-						offset.set(Math.random() * roughness, Math.random() * roughness, Math.random() * roughness, 0);
-						roughDir.set(refracDir);
-						roughDir.add3M(offset);
-					} while(roughDir.dot3(refracDir) <= 0.0);
-					
-					refracDir = roughDir.normalize3();
-				}
 				
-				recursionColor = recurse(data, point, refracDir, refractiveIndex);
+					Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
+					Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3();
+					
+					//0.0 is no roughness, 1.0 is lots of roughness
+					//TODO: Use something better here......
+					if(roughness > 0.0 && refracDir.dot3(normal) < 0.0)
+					{
+						Vector4 roughDir = new Vector4();
+						Vector4 offset = new Vector4();
+						do
+						{
+							offset = uniformSphereSample().multiply3M(roughness);
+							roughDir.set(refracDir);
+							roughDir.add3M(offset);
+						} while(roughDir.dot3(normal) > 0.0);
+						
+						refracDir = roughDir.normalize3();
+					}
+					
+					recursionColor = recurse(data, point, refracDir, refractiveIndex);
+				}else{
+					recursionColor = new Color();
+				}
 				
 			}
 		}else{
