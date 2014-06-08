@@ -47,6 +47,8 @@ import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.Material;
 import raytrace.material.SkyGradientMaterial;
+import raytrace.material.SubSurfaceDiffusePTTestMaterial;
+import raytrace.material.blend.binary.FastIntensityMaskBBlend;
 import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.composite.NormalMapCMaterial;
 import raytrace.scene.Scene;
@@ -121,7 +123,7 @@ public class TestScene9 extends Scene
 		
 		System.gc();
 
-		//setupCenterPiece();
+		setupCenterPiece();
 		
 		System.gc();
 		
@@ -201,7 +203,7 @@ public class TestScene9 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -952,19 +954,38 @@ public class TestScene9 extends Scene
 					);
 					*/
 			SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
-					(new Color(0xff1178ff)).multiply3M(1.05), 
+					(new Color(0xff1178ff)).multiply3M(1.15), //was 1.05 when there was no sss
 					new Color(0xefefefff), 
+					0.8
+					);
+			SphericalGradientTexture3D gradientInv = new SphericalGradientTexture3D(
+					Color.white().subtract3M((new Color(0xff1178ff)).multiply3M(1.35)).add3M(Color.white()), //was 1.05
+					Color.white().subtract3M(new Color(0xefefefff)).add3M(Color.white()).multiply3M(0.8), 
 					0.8
 					);
 			MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(gradient);
 			gradientTrans.getTransform().scale(1.0);
+			
+			DiffusePTMaterial surfaceColor = new DiffusePTMaterial(gradientTrans);
+			Material ssmat = new SubSurfaceDiffusePTTestMaterial(surfaceColor, 
+					gradientInv, 
+					0.95, //scatter coeff 
+					1.0, //refractive index
+					1.0, //roughness
+					10);
+			
+			FastIntensityMaskBBlend intMask = new FastIntensityMaskBBlend(
+					ssmat, 
+					surfaceColor, 
+					new SphericalGradientTexture3D(Color.black(), Color.white(),1.5));
+			
 			
 			Instance inst = new Instance();
 			inst.addChild(cube);
 			
 			inst.getTransform().translate(0, 2.5, -2);
 			inst.getTransform().scale(2.7);
-			inst.setMaterial(new DiffusePTMaterial(gradientTrans));
+			inst.setMaterial(intMask);
 			//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
 			inst.updateBoundingBox();

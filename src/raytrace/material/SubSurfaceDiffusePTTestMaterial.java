@@ -84,7 +84,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
 		Color recursionColor = null;
-		if(DdotN > 0.0) 
+		if(DdotN > 0.0 && data.getRefractiveIndex() != Material.AIR_REFRACTIVE_INDEX) 
 		{
 			recursionColor = exiting(data);
 			
@@ -231,7 +231,8 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 					vTangent = uTangent.cross3(normal).normalize3();
 					
 					//Sample a random point
-					Vector4 sampleDir = uniformHemisphereSample(uTangent, normal, vTangent);
+					//Vector4 sampleDir = uniformHemisphereSample(uTangent, normal, vTangent);
+					Vector4 sampleDir = uniformSphereSample();
 					
 					//Add the direct shading and samples shading together
 					shade.add3M(recurse(data, point, sampleDir, 1.0));

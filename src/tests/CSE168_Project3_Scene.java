@@ -69,7 +69,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(20);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
