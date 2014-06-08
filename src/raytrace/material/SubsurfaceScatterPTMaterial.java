@@ -168,7 +168,7 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		
 		return shade.add3M(recursionColor);
 	}
-	
+	/*
 	//Get a random sample on a disk
 	private Vector4 diskSample(double radius, double weight)
 	{
@@ -187,6 +187,7 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		}
 		return sample.normalize3();
 	}
+	*/
 	
 	private Color lightForPoint(ShadingData data, Vector4 point, double z, double sigma, double s)
 	{

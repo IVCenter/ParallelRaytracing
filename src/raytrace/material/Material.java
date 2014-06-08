@@ -152,4 +152,55 @@ public abstract class Material {
 		
 		return s.normalize3();
 	}
+	
+	protected Vector4 uniformHemisphereSample()
+	{
+		Vector4 sample = new Vector4();
+		
+		do {
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
+		} while(sample.magnitude3Sqrd() > 1.0 || sample.get(1) < 0.0);
+		
+		return sample.normalize3();
+	}
+	
+	protected Vector4 uniformHemisphereSample(Vector4 xa, Vector4 ya, Vector4 za)
+	{
+		Vector4 s = uniformHemisphereSample();
+		
+		double[] sm = s.getArray();
+
+		double[] xam = xa.getArray();
+		double[] yam = ya.getArray();
+		double[] zam = za.getArray();
+		
+		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
+						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
+						   0);
+		
+		return s.normalize3();
+	}
+
+	protected Vector4 diskSample(double radius, double weight)
+	{
+		Vector4 sample = new Vector4();
+		
+		double theta = Math.random() * Math.PI * 2.0;
+		double distance = Math.pow(Math.random(), weight) * radius;
+		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0, 0);
+		
+		return sample;
+	}
+	
+	protected Vector4 uniformSphereSample()
+	{
+		Vector4 sample = new Vector4();
+		
+		do {
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
+		} while(sample.magnitude3Sqrd() > 1.0);
+		
+		return sample.normalize3();
+	}
 }
