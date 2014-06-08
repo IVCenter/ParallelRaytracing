@@ -201,14 +201,14 @@ public class TestScene9 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(16);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(/*0.02*/0.02, 0.5));//0604 shot at 0.035
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(/*0.02*/0.026, 0.5));//0604 shot at 0.035
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(6.6);
 		
 		
@@ -310,7 +310,7 @@ public class TestScene9 extends Scene
 		{
 			Grid base = new Grid(28.0, 28.0);
 			
-			SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.004), Color.gray(0.09));//was .12
+			SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.004), Color.gray(0.11));//was .12
 			MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
 			simplexTrans.getTransform().nonUniformScale(10.0, 10.0, 10.0);
 	
@@ -343,7 +343,7 @@ public class TestScene9 extends Scene
 			AdditiveT3DBlend add3 = new AdditiveT3DBlend(multiHills, add2);
 			
 			
-			MeshSurface mesh = base.tessellate(600);
+			MeshSurface mesh = base.tessellate(700);
 			
 			
 			//Shift Y

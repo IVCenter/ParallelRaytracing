@@ -16,6 +16,7 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
+import raytrace.map.texture._3D.ColorTexture3D;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
 import raytrace.map.texture._3D.SphericalSineWaveTexture3D;
@@ -32,6 +33,7 @@ import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.Material;
 import raytrace.material.PassThroughMaterial;
+import raytrace.material.SubSurfaceDiffusePTTestMaterial;
 import raytrace.material.SubsurfaceScatterPTMaterial;
 import raytrace.material.blend.binary.InterpolationBBlend;
 import raytrace.material.blend.binary.PosterMaskBBlend;
@@ -67,7 +69,7 @@ public class CSE168_Project3_Scene extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(20);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
@@ -251,22 +253,29 @@ public class CSE168_Project3_Scene extends Scene
 		if(model4 != null)
 		{
 			Color color = new Color(0xccccccff);
-			DiffusePTMaterial dmat = new DiffusePTMaterial(color);
-			PassThroughMaterial pmat = new PassThroughMaterial(Color.gray(1.0));
-			InterpolationBBlend interblend = new InterpolationBBlend(pmat, dmat, 0.5);
+			//DiffusePTMaterial dmat = new DiffusePTMaterial(color);
+			//PassThroughMaterial pmat = new PassThroughMaterial(Color.gray(1.0));
+			//InterpolationBBlend interblend = new InterpolationBBlend(pmat, dmat, 0.5);
 			//FresnelDiffusePTMaterial mat = new FresnelDiffusePTMaterial(new Color(0xffccddff), 1.0, 0.4);
-			Material scatterMat = new SubsurfaceScatterPTMaterial(dmat, color, 1.01, 
-					2.0, 1.0, 0.05);
+			//Material scatterMat = new SubsurfaceScatterPTMaterial(dmat, color, 1.01, 
+			//		2.0, 1.0, 0.05);
 			
-			Material dimat = new DielectricPTMaterial(new Color(1000000.0, 1000000.0, 10000.0),  1.31, 0.5);
+			//Material dimat = new DielectricPTMaterial(new Color(1000000.0, 1000000.0, 10000.0),  1.31, 0.5);
+			
+			Material ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(0xf8f8f8ff)), 
+					new ColorTexture3D(new Color(1.0 * 100.0, 1.3 * 1000000.0, 1.1 * 10000.0)), 
+					0.7, //scatter coeff 
+					1.9, //refractive index
+					1.0, //roughness
+					10);
 			
 			
-			model4.getTransform().scale(0.1);
-			model4.getTransform().translate(0.0, 0.055, -0.3);
+			model4.getTransform().scale(0.18);//was 0.1
+			model4.getTransform().translate(0.0, 0.055, -0.2);//was -0.3 in z
 			model4.bake(null);
-			model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
-					0.80, 1000, 1000));
-			model4.setMaterial(dimat);
+			//model4.setMaterial(new AshikhminPTMaterial(new Color(1.0, 0.1, 0.1), new Color(1.0, 1.0, 1.0), 0.20,
+			//		0.80, 1000, 1000));
+			model4.setMaterial(ssmat);
 			this.addChild(model4);
 		}
 		
