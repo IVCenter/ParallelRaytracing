@@ -10,6 +10,8 @@ import tests.PerformanceTest1;
 import tests.TestScene1;
 import tests.TestScene10;
 import tests.TestScene11;
+import tests.TestScene12;
+import tests.TestScene13;
 import tests.TestScene2;
 import tests.TestScene3;
 import tests.TestScene4;
@@ -177,6 +179,24 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new TestScene11();
 				scene.setSceneKey(Constants.SceneKeys.TEST11);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST12, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene12();
+				scene.setSceneKey(Constants.SceneKeys.TEST12);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST13, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene13();
+				scene.setSceneKey(Constants.SceneKeys.TEST13);
 				return scene;
 			}
 		});

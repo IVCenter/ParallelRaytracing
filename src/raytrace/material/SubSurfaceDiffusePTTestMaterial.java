@@ -1,5 +1,6 @@
 package raytrace.material;
 
+import process.logging.Logger;
 import math.Vector4;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
@@ -96,13 +97,10 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		return recursionColor;
 	}
 
-	
-	
-	
-	
-	
-	
-	
+
+	/* *********************************************************************************************
+	 * Entering Material
+	 * *********************************************************************************************/
 	private Color entering(ShadingData data)
 	{
 		//Caluclate the reflected light 
@@ -177,9 +175,9 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 	}
 	
 	
-	
-	
-	
+	/* *********************************************************************************************
+	 * Exiting Material
+	 * *********************************************************************************************/
 	private Color exiting(ShadingData data)
 	{
 
@@ -196,12 +194,12 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 			double recursionDirection = Math.random();
 			
 			//If direction < refrectance, go reflectin
-			if(recursionDirection > scatterCoeff)
-			{
+			//if(recursionDirection > scatterCoeff)
+			//{
 				//If no scatter, Sample surface material
-				recursionColor = new Color();
+			//	recursionColor = new Color();
 					
-			}else{
+			//}else{
 				
 				//Direct Illumination (diffuse)
 				IlluminationData ildata;
@@ -262,7 +260,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				}
 				
 				recursionColor = shade;
-			}
+			//}
 			
 		}else{
 			recursionColor = new Color();
@@ -271,4 +269,57 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		
 		return recursionColor;
 	}
+
+	
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public Material getSurfaceMaterial() {
+		return surfaceMaterial;
+	}
+
+	public void setSurfaceMaterial(Material surfaceMaterial) {
+		this.surfaceMaterial = surfaceMaterial;
+	}
+
+	public Texture3D getVolumeTexture() {
+		return volumeTexture;
+	}
+
+	public void setVolumeTexture(Texture3D volumeTexture) {
+		this.volumeTexture = volumeTexture;
+	}
+
+	public double getScatterCoeff() {
+		return scatterCoeff;
+	}
+
+	public void setScatterCoeff(double scatterCoeff) {
+		this.scatterCoeff = scatterCoeff;
+	}
+
+	public double getRefractiveIndex() {
+		return refractiveIndex;
+	}
+
+	public void setRefractiveIndex(double refractiveIndex) {
+		this.refractiveIndex = refractiveIndex;
+	}
+
+	public double getRoughness() {
+		return roughness;
+	}
+
+	public void setRoughness(double roughness) {
+		this.roughness = roughness;
+	}
+
+	public int getScatterSampleCount() {
+		return scatterSampleCount;
+	}
+
+	public void setScatterSampleCount(int scatterSampleCount) {
+		this.scatterSampleCount = scatterSampleCount;
+	}
+	
 }

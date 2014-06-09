@@ -10,6 +10,7 @@ import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
 import math.function._3D.TchebyshevDistance3D;
 import process.logging.Logger;
+import raytrace.bounding.BoundingBox;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.ProgrammableCameraController;
 import raytrace.camera.aperture.CircularAperture;
@@ -33,6 +34,7 @@ import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
 import raytrace.map.texture._3D.SimplexNoiseTexture3D;
 import raytrace.map.texture._3D.SphericalGradientTexture3D;
+import raytrace.map.texture._3D.SphericalSineWaveTexture3D;
 import raytrace.map.texture._3D.WorleyNoiseTexture3D;
 import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.MaskT3DBlend;
@@ -48,6 +50,7 @@ import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.Material;
+import raytrace.material.PassThroughMaterial;
 import raytrace.material.SkyGradientMaterial;
 import raytrace.material.SubSurfaceDiffusePTTestMaterial;
 import raytrace.material.blend.binary.FastIntensityMaskBBlend;
@@ -148,6 +151,16 @@ public class TestScene11 extends Scene
 		
 		System.gc();
 		
+		setupKoi();
+		
+		System.gc();
+		
+
+		BoundingBox bb = new BoundingBox(new Vector4(-10, -0, -10, 0), new Vector4(10, 10, 10, 0));
+		setupSnowParticles(bb, 1, 0.02, 0.01);
+		
+		System.gc();
+		
 		
 		//Setup the lighting
 		setupLights();
@@ -225,7 +238,7 @@ public class TestScene11 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -516,7 +529,7 @@ public class TestScene11 extends Scene
 				
 				inst.getTransform().translate(0, 0.09, 0);
 				inst.getTransform().scale(2.0);
-				inst.setMaterial(new DielectricPTMaterial(new Color(1.02, 1.018, 1.015), 1.31, 0.1));
+				inst.setMaterial(new DielectricPTMaterial(new Color(1.02, 1.018, 1.015), 1.91, 0.1));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
 				inst.updateBoundingBox();
@@ -1206,7 +1219,7 @@ public class TestScene11 extends Scene
 				);
 		SphericalGradientTexture3D beer = new SphericalGradientTexture3D(
 				new Color(0.9, 200.6, 80.0), 
-				new Color(0.9, 2.2, 1.63), 
+				new Color(0.9, 3.2, 1.83), 
 				//(new Color(2.2, 1.63, 0.9)).mixWithWhite(0.9, 0.1), 
 				//new Color(0.95, 0.95, 0.95), 
 				300000.0
@@ -1216,7 +1229,7 @@ public class TestScene11 extends Scene
 				0.97, //scatter coeff 
 				1.0, //refractive index
 				1.0, //roughness
-				2);
+				3);
 		
 		
 		{
@@ -1299,6 +1312,213 @@ public class TestScene11 extends Scene
 				this.addChild(trans);
 			}
 		}
+	}
+	
+	
+	private void setupKoi()
+	{
+		Instance koi = makeKoiObject();
+		Material koiMat = koi.getMaterial();
+		
+		{
+			Instance instance = new Instance();
+			instance.addChild(koi);
+			instance.setMaterial(koiMat);
+			instance.getTransform().scale(0.18);
+			instance.getTransform().translate(-2.0, -0.34, 0.8);
+			
+			instance.setDynamic(true);
+			instance.updateBoundingBox();
+			instance.bake(null);
+			instance.setDynamic(false);
+			
+			this.addChild(instance);
+		}
+		
+		{
+			Instance instance = new Instance();
+			instance.addChild(koi);
+			instance.setMaterial(koiMat);
+			instance.getTransform().scale(0.15);
+			instance.getTransform().translate(-2.4, -0.28, 0.35);
+			
+			instance.setDynamic(true);
+			instance.updateBoundingBox();
+			instance.bake(null);
+			instance.setDynamic(false);
+			
+			this.addChild(instance);
+		}
+		
+		{
+			Instance instance = new Instance();
+			instance.addChild(koi);
+			instance.setMaterial(koiMat);
+			instance.getTransform().scale(0.12);
+			instance.getTransform().translate(-2.0, -0.20, 0.05);
+			
+			instance.setDynamic(true);
+			instance.updateBoundingBox();
+			instance.bake(null);
+			instance.setDynamic(false);
+			
+			this.addChild(instance);
+		}
+		
+		{
+			Instance instance = new Instance();
+			instance.addChild(koi);
+			instance.setMaterial(koiMat);
+			instance.getTransform().scale(0.18);
+			instance.getTransform().translate(-2.5, -0.30, -1.8);
+			instance.getTransform().rotateY(Math.PI/2.0);
+			
+			instance.setDynamic(true);
+			instance.updateBoundingBox();
+			instance.bake(null);
+			instance.setDynamic(false);
+			
+			this.addChild(instance);
+		}
+	}
+	
+	private Instance makeKoiObject()
+	{
+		MeshSurface mesh = (new Sphere()).tessellate(20);
+		
+		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.2), Color.gray(0.2));
+		MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
+		simplexTrans.getTransform().nonUniformScale(1.0, 1.0, 1.0);
+		
+
+		SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.05), Color.gray(0.05));
+		//SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(Color.gray(0.1), Color.gray(1.0));//Used for visualizing
+		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
+		simplexTrans2.getTransform().nonUniformScale(1.2, 1.2, 1.2);
+		
+		Vector4 multi = new Vector4();
+		for(Triangle tri : mesh.getTriangles())
+		{
+			for(Vertex vert : tri.getVertices())
+			{
+				Vector4 pos = vert.getPosition();
+				Color noise = simplexTrans.evaluate(pos.get(0), pos.get(1), pos.get(2));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
+				Vector4 newPos = pos.multiply3(multi);
+				vert.setPosition(newPos);
+			}
+			tri.generateFaceNormal();
+			tri.setDynamic(true);
+			tri.updateBoundingBox();
+			tri.setDynamic(false);
+		}
+		
+		//Add mode noise!
+		multi = new Vector4();
+		for(Triangle tri : mesh.getTriangles())
+		{
+			for(Vertex vert : tri.getVertices())
+			{
+				Vector4 pos = vert.getPosition();
+				Color noise = simplexTrans2.evaluate(pos.get(0), pos.get(1), pos.get(2));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
+				vert.setPosition(pos.multiply3(multi));
+			}
+		}
+		
+		for(Triangle tri : mesh.getTriangles())
+		{
+			tri.generateFaceNormal();
+			tri.setDynamic(true);
+			tri.updateBoundingBox();
+			tri.setDynamic(false);
+		}
+
+		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
+		mesh.smoothNormals();
+		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles());
+		
+		
+		accelerated.updateBoundingBox();
+		//accelerated.setDynamic(false);
+		
+		
+		SphericalSineWaveTexture3D sine3D = new SphericalSineWaveTexture3D(
+				(new Color(0xfefefeff)), 
+				(new Color(0xff6800ff))
+				);
+		
+		MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(sine3D);
+		gradientTrans.getTransform().scale(32.0);
+		gradientTrans.getTransform().translate(10, 0, 0);
+		
+		
+		
+		Instance instance = new Instance();
+		instance.addChild(accelerated);
+		//instance.setMaterial(new FresnelDiffusePTMaterial(Color.gray(0.8), 0.9, 2.0));//
+		//instance.setMaterial(new AshikhminPTMaterial(gradientTrans, Color.gray(1.0), 0.3, 0.7, 0, 0));//
+		instance.setMaterial(new DiffusePTMaterial(gradientTrans));//
+		instance.getTransform().nonUniformScale(2.0, 1.0, 1.0);
+		instance.getTransform().scale(1.0);
+		
+		instance.setDynamic(true);
+		instance.updateBoundingBox();
+		instance.bake(null);
+		instance.setDynamic(false);
+		
+		return instance;
+	}
+	
+
+	
+	private void setupSnowParticles(BoundingBox volume, double particlesPerUnit, double particleSize, double particleSizeVariation)
+	{
+		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(0.5), Color.gray(0.6));
+		MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
+		simplexTrans.getTransform().scale(89.0);
+		
+
+		SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(0.55), Color.gray(0.6));
+		//SimplexNoiseTexture3D simplex2 = new SimplexNoiseTexture3D(Color.gray(0.1), Color.gray(1.0));//Used for visualizing
+		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
+		simplexTrans2.getTransform().scale(96.0);
+		
+		AdditiveT3DBlend addTex = new AdditiveT3DBlend(simplexTrans, simplexTrans2);
+		
+		ColorMaterial diffmat = new ColorMaterial(addTex);
+		PassThroughMaterial pmat = new PassThroughMaterial(Color.white(), 1.02);
+		
+		FastIntensityMaskBBlend maskmat = new FastIntensityMaskBBlend(diffmat, pmat, Color.gray(0.9));
+		
+		
+		double volumeDelta = 1.0 / particlesPerUnit;
+
+		for(double x = volume.min.get(0); x < volume.max.get(0); x+=volumeDelta)
+		{
+			for(double y = volume.min.get(1); y < volume.max.get(1); y+=volumeDelta)
+			{
+				for(double z = volume.min.get(2); z < volume.max.get(2); z+=volumeDelta)
+				{
+					Vector4 position = stratifiedVector(x, y, z, volumeDelta);
+					
+					
+					Sphere particle = new Sphere(random.nextDouble() * particleSizeVariation + particleSize, position);
+					particle.setMaterial(maskmat);
+					this.addChild(particle);
+				}
+			}
+		}
+		
+	}
+	
+	private Vector4 stratifiedVector(double xmin, double ymin, double zmin, double range)
+	{
+		return new Vector4(
+				xmin + random.nextDouble() * range,
+				ymin + random.nextDouble() * range,
+				zmin + random.nextDouble() * range,
+				0);
 	}
 	
 }
