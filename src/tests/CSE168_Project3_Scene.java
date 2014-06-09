@@ -263,9 +263,9 @@ public class CSE168_Project3_Scene extends Scene
 			
 			//Material dimat = new DielectricPTMaterial(new Color(1000000.0, 1000000.0, 10000.0),  1.31, 0.5);
 			
-			Material ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(1.1, 1.1, 1.1)), 
-					new ColorTexture3D(new Color(10.0, 10.0, 10.0)/*new Color(1.0 * 1.0, 1.3 * 100.0, 1.1 * 10.0)*/), 
-					0.90, //scatter coeff 
+			Material ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(1.0, 1.0, 1.0)), 
+					new ColorTexture3D(new Color(1000.0, 1000.0, 1.0)/*new Color(1.0 * 1.0, 1.3 * 100.0, 1.1 * 10.0)*/), 
+					0.95, //scatter coeff 
 					1.0, //refractive index
 					1.0, //roughness
 					10);

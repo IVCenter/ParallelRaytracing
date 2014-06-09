@@ -9,6 +9,7 @@ import tests.CSE168_Project3_Scene;
 import tests.PerformanceTest1;
 import tests.TestScene1;
 import tests.TestScene10;
+import tests.TestScene11;
 import tests.TestScene2;
 import tests.TestScene3;
 import tests.TestScene4;
@@ -167,6 +168,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new TestScene10();
 				scene.setSceneKey(Constants.SceneKeys.TEST10);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.TEST11, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new TestScene11();
+				scene.setSceneKey(Constants.SceneKeys.TEST11);
 				return scene;
 			}
 		});
