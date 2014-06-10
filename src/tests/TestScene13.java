@@ -1,5 +1,6 @@
 package tests;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 import math.Spline;
@@ -162,12 +163,102 @@ public class TestScene13 extends Scene
 		//Setup scene geometry
 		
 		//Make koi object
-		makeKoiObject();
+		//makeKoiObject();
 		
 		
 		//Make snow particles
-		BoundingBox bb = new BoundingBox(new Vector4(-1, -1, -1, 0), new Vector4(1, 1, 1, 0));
-		setupSnowParticles(bb, 4, 0.02, 0.01);
+		//BoundingBox bb = new BoundingBox(new Vector4(-1, -1, -1, 0), new Vector4(1, 1, 1, 0));
+		//setupSnowParticles(bb, 4, 0.02, 0.01);
+		
+		/*
+		{
+			Spline spline = new Spline();
+			spline.add(new Vector4(0, 0, 0, 0));
+			spline.add(new Vector4(-1, 0, 0, 0));
+			spline.add(new Vector4(-1, 0.5, 0, 0));
+			spline.add(new Vector4(0, 0.5, 0, 0));
+			spline.add(new Vector4(1, 0.5, 0, 0));
+			spline.add(new Vector4(1, 1, 0, 0));
+			spline.add(new Vector4(0, 1, 0, 0));
+			spline.add(new Vector4(-1, 1, 0, 0));
+			
+			AABVHSurface accel = AABVHSurface.makeAABVH(spline.tessellate(30, 10, 0.2, 0.01));
+			
+			Instance inst = new Instance();
+			inst.addChild(accel);
+			inst.setMaterial(new DiffusePTMaterial(new Color(0xbbbbbbff)));
+			
+			this.addChild(inst);
+		}
+		*/
+		Random random = new Random(0xf463a23bcd139L);
+
+		Color color1 = new Color(0xffffaaff);
+		Color color2 = new Color(0x885522ff);
+		
+		double baseDistRad = 0.6;
+		double baseDistPower = 1.0;
+		double topDistRad = 1.25;
+		double topDistPower = 0.8;
+		double distFromBase = 0;
+		int count = 100;
+		Vector4 basePos = new Vector4(0.0, 0.0, 0.0, 0.0);
+		Vector4 thisBase;
+		
+		double bladeHeightMin = 1.8;
+		double bladeHeightVariation = 1.2;
+		double bladeHeightPower = 1.0;
+		double bladeHeight = 0.0;
+		
+		double middleOffset = 0.001;
+		
+		LinkedList<Triangle> grassTriangles = new LinkedList<Triangle>();
+		MeshSurface tempMesh = new MeshSurface();;
+		
+		for(int i = 0; i < count; ++i)
+		{
+			thisBase = basePos.add3(new Vector4(
+					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
+					0, 
+					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
+					0));
+			
+			distFromBase = thisBase.distance(basePos);
+			
+			bladeHeight = (bladeHeightMin + random.nextDouble() * bladeHeightVariation) / Math.pow(1.0 + distFromBase, bladeHeightPower);
+			
+			Spline spline = new Spline();
+			spline.add(thisBase);
+			
+			spline.add(thisBase.add3(new Vector4(
+					randInRange(-middleOffset, middleOffset),
+					bladeHeight/2.0,
+					randInRange(-middleOffset, middleOffset),
+					0)));
+			
+			spline.add(thisBase.add3(new Vector4(
+					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
+					bladeHeight, 
+					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
+					0)));
+			
+			
+			tempMesh.setTriangles(spline.tessellate(10, 3, 0.03, 0.01));
+			tempMesh.setMaterial(new DiffusePTMaterial(color1.interpolate(color1, color2, random.nextDouble())));
+			
+			grassTriangles.addAll(tempMesh.getTriangles());
+			
+			
+		}
+		
+		AABVHSurface accel = AABVHSurface.makeAABVH(grassTriangles);
+		
+		Instance inst = new Instance();
+		inst.addChild(accel);
+		//inst.setMaterial(new DiffusePTMaterial(color1.interpolate(color1, color2, random.nextDouble())));
+		
+		this.addChild(inst);
+		
 		
 		
 		
@@ -195,6 +286,17 @@ public class TestScene13 extends Scene
 		//Refresh
 		this.updateBoundingBox();
 		
+	}
+
+	
+	private double randInRange(double min, double max)
+	{
+		return min + Math.random() * (max-min);
+	}
+	
+	private double randSign(double percentFlip)
+	{
+		return random.nextDouble() < percentFlip ? -1.0 : 1.0;
 	}
 	
 	

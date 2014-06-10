@@ -13,6 +13,7 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
+import raytrace.material.Material;
 import raytrace.surfaces.TerminalSurface;
 
 public class MeshSurface extends TerminalSurface {
@@ -298,6 +299,12 @@ public class MeshSurface extends TerminalSurface {
 
 	public void setMeshID(int meshID) {
 		this.meshID = meshID;
+	}
+
+	public void setMaterial(Material material)
+	{
+		for(Triangle cs : triangles)
+			cs.setMaterial(material);
 	}
 	
 }

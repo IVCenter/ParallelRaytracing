@@ -63,7 +63,7 @@ public class TestScene12 extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(32);
 		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
 		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -129,25 +129,33 @@ public class TestScene12 extends Scene
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
 	
+	int startFrame = 40;
+	int frame = 0;
+	
 	@Override
 	public void update(UpdateData data)
 	{
-		dragon.getTransform().rotateY(data.getDt() * Math.PI);
-		dragon.setDynamic(true);
-		dragon.updateBoundingBox();
-		dragon.bake(null);
-		dragon.setDynamic(false);
+		do{
+			dragon.getTransform().rotateY(data.getDt() * Math.PI);
+			dragon.setDynamic(true);
+			dragon.updateBoundingBox();
+			dragon.bake(null);
+			dragon.setDynamic(false);
+			
+			ssmat.setScatterCoeff(sslevel);
+			
+			
+			
+			elapsed += data.getDt();
+			
+			sslevel += data.getDt() / 2.0;
+			
+			//Update the children
+			super.update(data);
+			
+			frame++;
 		
-		ssmat.setScatterCoeff(sslevel);
-		
-		
-		
-		elapsed += data.getDt();
-		
-		sslevel += data.getDt() / 2.0;
-		
-		//Update the children
-		super.update(data);
+		} while (frame < startFrame);
 	}
 	
 	@Override
