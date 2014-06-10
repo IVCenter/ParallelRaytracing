@@ -247,7 +247,7 @@ public class TestScene11 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
