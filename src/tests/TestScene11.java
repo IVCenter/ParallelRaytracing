@@ -161,6 +161,10 @@ public class TestScene11 extends Scene
 		
 		System.gc();
 		
+		setupGrass();
+		
+		System.gc();
+		
 		
 		//Setup the lighting
 		setupLights();
@@ -241,7 +245,7 @@ public class TestScene11 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -1522,6 +1526,111 @@ public class TestScene11 extends Scene
 				ymin + random.nextDouble() * range,
 				zmin + random.nextDouble() * range,
 				0);
+	}
+	
+	
+	
+	private void setupGrass()
+	{
+		this.addChild(grassPatch(new Color(0xffffaaff), 
+				new Color(0x885522ff), 
+				6.0, 1.0, 
+				0.05, 1.2,
+				300, 
+				new Vector4(3.0, 0.2, 0, 0), 
+				0.5, 1.9, 1.5, 
+				0.001)
+			);
+		
+		//
+		//instance.getTransform().translate();
+		this.addChild(grassPatch(new Color(0xffffaaff), 
+				new Color(0x885522ff), 
+				0.3, 1.0, 
+				0.02, 1.2,
+				30, 
+				new Vector4(5.6, 0, -0.6, 0), 
+				3.0, 1.9, 1.0, 
+				0.001)
+			);
+	}
+	
+	private Instance grassPatch(
+	
+		Color color1,
+		Color color2,
+		
+		double baseDistRad,
+		double baseDistPower,
+		double topDistRad,
+		double topDistPower,
+		
+		int count,
+		Vector4 basePos,
+		
+		double bladeHeightMin,
+		double bladeHeightVariation,
+		double bladeHeightPower,
+		
+		double middleOffset
+		)
+	{
+
+		Vector4 thisBase;
+		double distFromBase;
+		double bladeHeight = 0.0;
+		
+		LinkedList<Triangle> grassTriangles = new LinkedList<Triangle>();
+		MeshSurface tempMesh = new MeshSurface();;
+		
+		for(int i = 0; i < count; ++i)
+		{
+			thisBase = basePos.add3(new Vector4(
+					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
+					0, 
+					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
+					0));
+			
+			distFromBase = thisBase.distance(basePos);
+			
+			bladeHeight = (bladeHeightMin + random.nextDouble() * bladeHeightVariation) / Math.pow(1.0 + distFromBase, bladeHeightPower);
+			
+			Spline spline = new Spline();
+			spline.add(thisBase);
+			
+			spline.add(thisBase.add3(new Vector4(
+					randInRange(-middleOffset, middleOffset),
+					bladeHeight/2.0,
+					randInRange(-middleOffset, middleOffset),
+					0)));
+			
+			spline.add(thisBase.add3(new Vector4(
+					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
+					bladeHeight, 
+					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
+					0)));
+			
+			
+			tempMesh.setTriangles(spline.tessellate(8, 3, 0.008, 0.002));
+			tempMesh.smoothNormals();
+			tempMesh.setMaterial(new DiffusePTMaterial(color1.interpolate(color1, color2, random.nextDouble())));
+			
+			grassTriangles.addAll(tempMesh.getTriangles());
+			
+			
+		}
+		
+		AABVHSurface accel = AABVHSurface.makeAABVH(grassTriangles);
+		
+		Instance inst = new Instance();
+		inst.addChild(accel);
+		
+		return inst;
+	}
+	
+	private double randSign(double percentFlip)
+	{
+		return random.nextDouble() < percentFlip ? -1.0 : 1.0;
 	}
 	
 }

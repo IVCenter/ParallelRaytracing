@@ -153,64 +153,6 @@ public class ApplicationDelegate extends Job{
 		//Is Real Time?
 		configureAsRealTime(Configuration.isRealTime());
 		
-		
-		
-		
-		
-		
-		//ULTRA GHETTO -> REMOVE
-		Timer timer = new Timer(true);
-		
-		timer.schedule(new TimerTask()
-		{
-			@Override
-			public void run()
-			{
-				Message message;
-				
-				MessageSender sender = ApplicationDelegate.inst.getMessageSender();
-
-				NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
-				for(Node node : nodes)
-				{
-					message = CommonMessageConstructor.createConfigurationMessage(
-							node.getId(), 
-							Configuration.getScreenWidth(),
-							Configuration.getScreenHeight(), 
-							true,								//Leaf is true
-							false, 								//Drawing to screen is false
-							false, 								//Clock is false
-							false, 								//Controller is false
-							Configuration.isRealTime(), 								//Controller is false
-							Configuration.getMasterScene().getSceneKey());
-					sender.send(message, node.getIp());
-				}
-			}
-		}, 20000);
-		
-		timer.schedule(new TimerTask()
-		{
-			@Override
-			public void run()
-			{
-				Logger.progress(-24, "Starting Rendering...");
-				ApplicationDelegate.inst.start();
-			}
-		}, 90000);
-		
-		timer.schedule(new TimerTask()
-		{
-			@Override
-			public void run()
-			{
-				Renderer renderer = ApplicationDelegate.inst.getRenderer();
-				if(renderer instanceof AnimationRenderer)
-				{
-					AnimationRenderer ar = (AnimationRenderer)renderer;
-					ar.startRecording();
-				}
-			}
-		}, 95000);
 	}
 	
 
