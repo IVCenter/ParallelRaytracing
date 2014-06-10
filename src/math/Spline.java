@@ -2,6 +2,12 @@ package math;
 
 import java.util.ArrayList;
 
+import process.logging.Logger;
+
+import raytrace.geometry.Triangle;
+import raytrace.geometry.Vertex;
+import raytrace.material.Material;
+
 public class Spline extends ArrayList<Vector4> {
 	
 	/*
@@ -92,6 +98,128 @@ public class Spline extends ArrayList<Vector4> {
 	    post.subtract3M(pre);
 	    
 	    return post.normalize3();
+	}
+	
+	public ArrayList<Triangle> tessellate(int segments, int slices, double radiusStart, double radiusEnd)
+	{
+		ArrayList<Triangle> triangles = new ArrayList<Triangle>(segments * slices * 2 + 1);
+		
+		double segmentDelta = 1.0 / (double)segments;
+		
+		Vector4 thisPoint;
+		Vector4 nextPoint = this.get(0);
+		
+		Vector4 thisNormal;
+		Vector4 nextNormal = tangent(0);
+		
+		double thisRadius;
+		double nextRadius = radiusStart;
+		
+		//This Basis
+		Vector4 thisUTangent;
+		Vector4 thisVTangent;
+
+		//Next Basis
+		Vector4 nextUTangent;
+		Vector4 nextVTangent;
+		
+		if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
+			nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3();
+		else
+			nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3();
+		nextVTangent = nextUTangent.cross3(nextNormal).normalize3();
+		
+		
+		for(double t = 0.0; t < 1.0; t += segmentDelta)
+		{	
+			Logger.progress(-79, "T as of now: " + t);
+			thisPoint = nextPoint;
+			nextPoint = point(t + segmentDelta);
+			
+			thisNormal = nextNormal;
+			nextNormal = tangent(t + segmentDelta);
+			
+			thisRadius = nextRadius;
+			nextRadius = (t + segmentDelta) * radiusEnd + (1.0 - (t + segmentDelta)) * radiusStart;
+			
+			thisUTangent = nextUTangent;
+			thisVTangent = nextVTangent;
+			
+			if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
+				nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3();
+			else
+				nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3();
+			
+			if(nextUTangent.dot3(thisUTangent) < 0.0)
+				nextUTangent.multiply3M(-1.0);
+			
+			nextVTangent = nextUTangent.cross3(nextNormal).normalize3();
+			
+			
+			/*
+			 * TODO:
+			 * 
+			 * 		Radially sample both tangent disks n slices
+			 * 		Generate triangles between sample points
+			 */
+			double angleDelta = (Math.PI * 2.0) / (double) slices;
+			Vector4 v0, v1, v2, v3;
+			Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
+			Triangle tri1, tri2;
+			
+			for(double theta = 0; theta < (Math.PI * 2.0); theta += angleDelta)
+			{
+				//Get the four points
+				v1 = thisUTangent.multiply3(Math.cos(theta) * thisRadius).add3M(thisVTangent.multiply3(Math.sin(theta) * thisRadius));
+				v0 = nextUTangent.multiply3(Math.cos(theta) * nextRadius).add3M(nextVTangent.multiply3(Math.sin(theta) * nextRadius));
+				v2 = thisUTangent.multiply3(Math.cos(theta + angleDelta) * thisRadius).add3M(thisVTangent.multiply3(Math.sin(theta + angleDelta) * thisRadius));
+				v3 = nextUTangent.multiply3(Math.cos(theta + angleDelta) * nextRadius).add3M(nextVTangent.multiply3(Math.sin(theta + angleDelta) * nextRadius));
+				
+				//Make vertices
+				//Generate for sub vertices
+				subV0 = new Vertex(
+						v0.add3(nextPoint), 
+						v0.add3(0.0).normalize3(), 
+						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
+				
+				subV0_2 = new Vertex(
+						v0.add3(nextPoint), 
+						v0.add3(0.0).normalize3(), 
+						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
+				
+				subV1 = new Vertex(
+						v1.add3(thisPoint), 
+						v1.add3(0.0).normalize3(), 
+						new Vector4(theta / (Math.PI*2.0), t, 0, 0));
+				
+				subV2 = new Vertex(
+						v2.add3(thisPoint), 
+						v2.add3(0.0).normalize3(), 
+						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
+				
+				subV2_2 = new Vertex(
+						v2.add3(thisPoint), 
+						v2.add3(0.0).normalize3(),
+						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
+				
+				subV3 = new Vertex(
+						v3.add3(nextPoint), 
+						v3.add3(0.0).normalize3(), 
+						new Vector4((theta + angleDelta) / (Math.PI*2.0), t + segmentDelta, 0, 0));
+				
+				tri1 = new Triangle(subV0, subV1, subV2);
+				tri2 = new Triangle(subV0_2, subV2_2, subV3);
+				tri1.generateFaceNormal();
+				tri2.generateFaceNormal();
+				triangles.add(tri1);
+				triangles.add(tri2);
+				
+				Logger.progress(-79, "Triangles: " + triangles.size());
+			}
+			
+		}
+		
+		return triangles;
 	}
 
 	
