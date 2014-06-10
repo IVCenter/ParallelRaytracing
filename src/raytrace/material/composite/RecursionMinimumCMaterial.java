@@ -2,6 +2,7 @@ package raytrace.material.composite;
 
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
+import raytrace.material.ColorMaterial;
 import raytrace.material.Material;
 
 public class RecursionMinimumCMaterial extends CompositeMaterial {
@@ -16,6 +17,7 @@ public class RecursionMinimumCMaterial extends CompositeMaterial {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected int recursionMinimum;
+	protected Material belowMinimumMaterial;
 	
 	
 	/* *********************************************************************************************
@@ -25,12 +27,21 @@ public class RecursionMinimumCMaterial extends CompositeMaterial {
 	{
 		super(material);
 		recursionMinimum = 0;
+		belowMinimumMaterial = new ColorMaterial(Color.black());
 	}
 	
 	public RecursionMinimumCMaterial(Material material, int recursionMinimum)
 	{
 		super(material);
 		this.recursionMinimum = recursionMinimum;
+		this.belowMinimumMaterial = new ColorMaterial(Color.black());
+	}
+	
+	public RecursionMinimumCMaterial(Material material, Material belowMinimumMaterial, int recursionMinimum)
+	{
+		super(material);
+		this.recursionMinimum = recursionMinimum;
+		this.belowMinimumMaterial = belowMinimumMaterial;
 	}
 
 	
@@ -41,7 +52,7 @@ public class RecursionMinimumCMaterial extends CompositeMaterial {
 	public Color shade(ShadingData data)
 	{
 		if(data.getRecursionDepth() < recursionMinimum)
-			return Color.black();
+			return belowMinimumMaterial.shade(data);
 		
 		//Shade
 		return material.shade(data);

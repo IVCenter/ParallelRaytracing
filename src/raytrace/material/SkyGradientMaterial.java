@@ -34,8 +34,13 @@ public class SkyGradientMaterial extends Material {
 		if(idata == null)
 		{
 			idata = new IntersectionData();
-			idata.setLocalPoint(new Vector4(data.getRay().getDirection()));
-			idata.setTexcoord(new Vector4(0, Math.sin(data.getRay().getDirection().dot3(positiveYAxis)), 0, 0));
+			idata.setLocalPoint(
+					new Vector4(data.getRay().getDirection().multiply3M(1.0/data.getRay().getDirection().magnitude3()).add3(new Vector4(0, -0.5, 0, 0))));
+			idata.setTexcoord(new Vector4(
+					0, 
+					0.5 * (Math.cos(data.getRay().getDirection().dot3(positiveYAxis) / data.getRay().getDirection().magnitude3()) + 1.0), 
+					0, 
+					0));
 		}
 		
 		return colorTexture.evaluate(idata);

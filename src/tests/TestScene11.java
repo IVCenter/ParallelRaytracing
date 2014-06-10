@@ -232,9 +232,11 @@ public class TestScene11 extends Scene
 		skyMaterial = new SkyGradientMaterial(new GradientTexture3D(new Color(0xe8f8ffff), new Color(0xddeeffff)));
 		//skyMaterial = new SkyGradientMaterial(new GradientTexture3D(new Color(0x1828ffff), new Color(0xcce2ffff), 1.0));
 
-		//skyMaterial = new RecursionMinimumCMaterial(
-		//		new SkyGradientMaterial(new GradientTexture3D(new Color(0xffddeeff), new Color(0xddeeffff))), 1
-		//		);
+		skyMaterial = new RecursionMinimumCMaterial(
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0x8c96eeff), 5.0)),
+				1
+				);
 	}
 	
 
@@ -1226,7 +1228,7 @@ public class TestScene11 extends Scene
 				);
 		SphericalGradientTexture3D beer = new SphericalGradientTexture3D(
 				new Color(0.9, 200.6, 80.0), 
-				new Color(0.9, 3.2, 1.83), 
+				new Color(0.9, 2.2, 1.63), 
 				//(new Color(2.2, 1.63, 0.9)).mixWithWhite(0.9, 0.1), 
 				//new Color(0.95, 0.95, 0.95), 
 				300000.0
@@ -1535,7 +1537,7 @@ public class TestScene11 extends Scene
 		this.addChild(grassPatch(new Color(0xffffaaff), 
 				new Color(0x885522ff), 
 				6.0, 1.0, 
-				0.05, 1.2,
+				0.18, 1.2,
 				300, 
 				new Vector4(3.0, 0.2, 0, 0), 
 				0.5, 1.9, 1.5, 
@@ -1546,11 +1548,11 @@ public class TestScene11 extends Scene
 		//instance.getTransform().translate();
 		this.addChild(grassPatch(new Color(0xffffaaff), 
 				new Color(0x885522ff), 
-				0.3, 1.0, 
-				0.02, 1.2,
+				0.2, 1.5, 
+				0.2, 1.2,
 				30, 
-				new Vector4(5.6, 0, -0.6, 0), 
-				3.0, 1.9, 1.0, 
+				new Vector4(5.8, 0, -0.4, 0), 
+				1.0, 1.9, 1.0, 
 				0.001)
 			);
 	}
