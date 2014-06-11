@@ -247,7 +247,7 @@ public class TestScene11 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
 		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -1592,6 +1592,10 @@ public class TestScene11 extends Scene
 					0, 
 					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
 					0));
+			
+			//TEMP to remove grass in water
+			if(thisBase.get(0) < 0.0)
+				continue;
 			
 			distFromBase = thisBase.distance(basePos);
 			
