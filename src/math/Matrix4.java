@@ -7,13 +7,14 @@ import process.utils.StringUtils;
 public class Matrix4 {
 	
 	/*
-	 * An extension of the Matrix4d class to allow additional features
+	 * A simple implementation of a 4x4 Matrix
 	 */
 	
 	/* *********************************************************************************************
 	 * Instnace Vars
 	 * *********************************************************************************************/
 	protected double[][] array;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -67,7 +68,7 @@ public class Matrix4 {
 	
 	public void set(Matrix4 a)
 	{
-		double[][] am = a.getM();
+		double[][] am = a.getArray();
 		set(am);
 	}
 	
@@ -87,7 +88,7 @@ public class Matrix4 {
 		array[vector][element] = value;
 	}
 
-	double[][] getM()
+	double[][] getArray()
 	{
 		return array;
 	}
@@ -119,7 +120,7 @@ public class Matrix4 {
 	{
 		double[][] n = new double[4][4];
 		
-		double[][] am = a.getM();
+		double[][] am = a.getArray();
 		
 		double sum = 0.0;
 		for(int row = 0; row < 4; ++row)
