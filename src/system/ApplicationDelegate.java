@@ -1,8 +1,6 @@
 package system;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import network.CommonMessageConstructor;
 import network.Message;
@@ -24,7 +22,6 @@ import network.send.NetworkMessageSender;
 import input.DefaultKeyboard;
 import input.Keyboard;
 import process.Job;
-import process.logging.Logger;
 import raster.PixelBuffer;
 import raster.ScreenDrawer;
 import raytrace.AnimationRenderer;
@@ -161,7 +158,7 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	public void configureAs(boolean shouldConfigure)
 	{
-		
+		//Placeholder
 	}
 	
 	public void configureAsDrawingToScreen(boolean shouldConfigure)
@@ -264,7 +261,7 @@ public class ApplicationDelegate extends Job{
 		//If this node is the clock, start the main loop, else, sleep this thread
 		//The sleep prevents this Job subclass from finalizing, and instead of using
 		//	a loop for timing, this relies on a parent node to send timing signals
-		if(Configuration.isClock() /*&& Configuration.isLeaf()*/)
+		if(Configuration.isClock())
 		{
 			startMainLoop();
 		}else{
@@ -290,19 +287,12 @@ public class ApplicationDelegate extends Job{
 	 * Main Loop Methods
 	 * *********************************************************************************************/
 	protected void startMainLoop()
-	{
-		//If not already started
-		//if(isStarted) {
-		//	warning("ApplicationDelegate: Main loop is already started.  The loop must be stopped before it can" +
-		//			"be started again.");
-		//	return;
-		//}
-		
-		
+	{	
 		progress("Starting Main Loop...");
 		
-		//If this is a clock (implicit by this method being called), and its a lead, then this is a stand-alone node
+		//If this is a clock (implicit by this method being called), and its a leaf, then this is a stand-alone node
 		//So set the started flag to true
+		//This will cause rendering to begin even without a start signal
 		if(Configuration.isLeaf)
 			isStarted = true;
 		
@@ -326,7 +316,7 @@ public class ApplicationDelegate extends Job{
 
 			//Update the update data
 			udata.setScene(Configuration.getMasterScene());
-			udata.setDt(0.0416667);
+			udata.setDt(0.0416667);//TODO:  Make this a configuration variable (flag for dynamic/static, if static: desired rate)
 			
 			//update
 			renderer.update(udata);
@@ -383,13 +373,12 @@ public class ApplicationDelegate extends Job{
 		}
 	}
 	
-	
-	
+
+	/* *********************************************************************************************
+	 * Shutdown Methods
+	 * *********************************************************************************************/
 	public void shutdown()
 	{
-		//Logger is threaded so there is a good chance it will never get around to processing this message
-		//Logger.progress(-7, "Shuting down...");
-
 		System.out.println("Shutting down...");
 		
 		//Tell all children to shutdown (if there are any)
