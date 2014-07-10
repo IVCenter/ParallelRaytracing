@@ -109,7 +109,7 @@ public class Spline extends ArrayList<Vector4> {
 		Vector4 thisPoint;
 		Vector4 nextPoint = this.get(0);
 		
-		Vector4 thisNormal;
+		//Vector4 thisNormal;
 		Vector4 nextNormal = tangent(0);
 		
 		double thisRadius;
@@ -136,7 +136,7 @@ public class Spline extends ArrayList<Vector4> {
 			thisPoint = nextPoint;
 			nextPoint = point(t + segmentDelta);
 			
-			thisNormal = nextNormal;
+			//thisNormal = nextNormal;
 			nextNormal = tangent(t + segmentDelta);
 			
 			thisRadius = nextRadius;
