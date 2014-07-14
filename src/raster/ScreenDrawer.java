@@ -53,6 +53,8 @@ public class ScreenDrawer extends JFrame {
 	protected boolean refreshScreen = true;
 	protected boolean verticalSynchronize = true;//Setting this to true fixes screen tearing...and murders the frame rate
 	
+	protected boolean loggingFramesPerSecond = false;
+	
 
 	/* *********************************************************************************************
 	 * Constructor
@@ -141,7 +143,15 @@ public class ScreenDrawer extends JFrame {
 		this.verticalSynchronize = verticalSynchronize;
 	}
 
-	
+	public boolean isLoggingFramesPerSecond() {
+		return loggingFramesPerSecond;
+	}
+
+	public void setLoggingFramesPerSecond(boolean loggingFramesPerSecond) {
+		this.loggingFramesPerSecond = loggingFramesPerSecond;
+	}
+
+
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
@@ -231,7 +241,8 @@ public class ScreenDrawer extends JFrame {
 	            	
 	            	//If its been about a second or so, print the current fps
 	            	if(loopStart - start >= 1000) {
-	            		Logger.progress(-2, "ScreenDrawer: FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
+	            		if(loggingFramesPerSecond)
+	            			Logger.progress(-2, "ScreenDrawer: FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
 	            		start = loopStart;
 	            		frames = 0;
 	            	}
