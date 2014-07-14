@@ -45,6 +45,7 @@ public class MeshSurface extends TerminalSurface {
 		return nextMeshID++;
 	}
 	
+	@Deprecated
 	public static void removeMeshReference(int meshID)
 	{
 		meshes.put(meshID, null);
@@ -63,13 +64,15 @@ public class MeshSurface extends TerminalSurface {
 	 * *********************************************************************************************/
 	public MeshSurface()
 	{
-		meshes.put(meshID, this);
+		//TODO: This can cause leaks, disabled for now
+		//meshes.put(meshID, this);
 		triangles = new ArrayList<Triangle>();
 	}
 	
 	public MeshSurface(int triangleCount)
 	{
-		meshes.put(meshID, this);
+		//TODO: This can cause leaks, disabled for now
+		//meshes.put(meshID, this);
 		triangles = new ArrayList<Triangle>(triangleCount);
 	}
 	
