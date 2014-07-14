@@ -3,21 +3,13 @@ ParallelRaytracing
 
 #Description
 
-*Todo*
+ParallelRaytracing is a highly scalable path-tracer written in Java.  Some of its features include: the ability to scale seamlessly from a single node (any device running the software) to any number of nodes, support for distribution to arbitrarily shaped trees of rendering nodes, a scene management system that is decoupled from the disribution system, use of no third-party libraries, and the ability to run on any vanilla JVM with a version of 1.6 or higher.
 
-#Features
+For a more detailed description and a full list of features, please see the project wiki page: http://ivl.calit2.net/wiki/index.php/Parallel_Raytracing
 
 ##Todo List
-*Note: This is not comprehensive, not even in the slightest.  Consider this more of a fluid list of things not to forget.*
+*Note: This is not comprehensive.
 
-* Composite Mapping interface
-* Blending interface for composite maps
-* Material support for the basic maps (texture, normal, specular, displacement)
-* Material level support for processing of light by wavelength
-* .
-* Procedural Generation of Surfaces, Materials, and Maps
-* .
 * Improve Camera decomposition when distributing to compute nodes of varying load capabilities.
 * Dynamic Load Balancing
-* Improve distributed rendering stability
-* Intermediate rendering result handler (determining which pixels were updated, packing and sending to controlller, unpacking and updating of pixel buffer)
+* Improve distributed rendering stability over long renders (renders that take more than several hours)
