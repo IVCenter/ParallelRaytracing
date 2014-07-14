@@ -82,7 +82,7 @@ public class TestScene10 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
@@ -225,7 +225,7 @@ public class TestScene10 extends Scene
 		}
 
 		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
-		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles());
+		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles(), 16, 8);
 		
 		
 		
