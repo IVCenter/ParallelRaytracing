@@ -141,13 +141,17 @@ public class Sphere extends TerminalSurface implements Positionable {
 	 * *********************************************************************************************/
 	public MeshSurface tessellate(int resolution)
 	{
+		return tessellate(resolution, 2 * resolution);
+	}
+	public MeshSurface tessellate(int verticalResolution, int horizontalResolution)
+	{
 		//Triangles
 		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 		
 		double phi = 0.0;
-		double phiDelta = (2.0 * Math.PI) * (1.0 / (double)(resolution*2));
+		double phiDelta = (2.0 * Math.PI) * (1.0 / (double)(horizontalResolution));
 		double theta = 0.0;
-		double thetaDelta = (Math.PI) * (1.0 / (double)resolution);
+		double thetaDelta = (Math.PI) * (1.0 / (double)verticalResolution);
 
 		Vector4 v0 = new Vector4();
 		Vector4 v1 = new Vector4();
@@ -157,14 +161,14 @@ public class Sphere extends TerminalSurface implements Positionable {
 		Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
 
 		//Polar Phi
-		for(int x = 0; x < resolution*2; ++x)
+		for(int x = 0; x < horizontalResolution; ++x)
 		{
-			phi = (2.0 * Math.PI) * ((double)x / (double)(resolution*2));
+			phi = (2.0 * Math.PI) * ((double)x / (double)(horizontalResolution));
 			
 			//Vertical Theta
-			for(int y = 0; y < resolution; ++y)
+			for(int y = 0; y < verticalResolution; ++y)
 			{
-				theta = (Math.PI) * ((double)y / (double)resolution);
+				theta = (Math.PI) * ((double)y / (double)verticalResolution);
 				
 				v0.set(radius * Math.sin(theta) * Math.cos(phi), 
 					   radius * Math.cos(theta),
@@ -183,34 +187,34 @@ public class Sphere extends TerminalSurface implements Positionable {
 				subV0 = new Vertex(
 						v0.add3(center), 
 						v0.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
 				subV0_2 = new Vertex(
 						v0.add3(center), 
 						v0.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
 				subV1 = new Vertex(
 						v1.add3(center), 
 						v1.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 0) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV2 = new Vertex(
 						v2.add3(center), 
 						v2.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV2_2 = new Vertex(
 						v2.add3(center), 
 						v2.add3(0.0).normalize3(),
-						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV3 = new Vertex(
 						v3.add3(center), 
 						v3.add3(0.0).normalize3(), 
-						new Vector4((double)(x + 1) / (double)(resolution*2), (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
-				if(y != resolution-1)
+				if(y != verticalResolution-1)
 					triangles.add(new Triangle(subV0, subV1, subV2));
 				if(y != 0)
 					triangles.add(new Triangle(subV0_2, subV2_2, subV3));
