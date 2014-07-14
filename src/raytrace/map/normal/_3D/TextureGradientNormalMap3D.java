@@ -88,7 +88,7 @@ public class TextureGradientNormalMap3D extends NormalMap3D {
 		double posUValue = getTextureValue(samplePoint, uTangent, samplingRadius);
 		
 		//Get the tangent contribution for u
-		double uTanMag = Math.cos(Math.atan( (negUValue - posUValue) / (samplingRadius2) ));
+		//double uTanMag = Math.cos(Math.atan( (negUValue - posUValue) / (samplingRadius2) ));
 				
 
 		//get negative V value
@@ -100,7 +100,7 @@ public class TextureGradientNormalMap3D extends NormalMap3D {
 		double posVValue = getTextureValue(samplePoint, vTangent, samplingRadius);
 
 		//Get the tangent contribution for v
-		double vTanMag = Math.cos(Math.atan( (negVValue - posVValue) / (samplingRadius2) ));
+		//double vTanMag = Math.cos(Math.atan( (negVValue - posVValue) / (samplingRadius2) ));
 		
 		
 		Vector4 newNormal = new Vector4();
