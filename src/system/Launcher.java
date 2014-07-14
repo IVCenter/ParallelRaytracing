@@ -83,18 +83,59 @@ public class Launcher {
 	 * 
 	 * 		#An entry that starts with (LP) is considered Low Priority
 	 * 
-	 * 		-Test distribution stability and performance on caves
-	 * 		-(LP) Compress pixels before sending?
-	 * 		-AddMaterial support for UV tangents (if uv coords are bad, use existing YAXIS methods)
-	 * 		-(LP) Add Quad support to Triangle
-	 * 		-Discrete texture class that loads bmps, pngs, etc.
-	 * 		-[BROKEN] Cylinder (cap)
-	 * 		-[BROKEN] AABVH improperly handles cylinders
+	 * 		-Network
+	 * 			-Pixel Buffer compression
+	 * 			-Clock edge prediction (pre-predict when the next clock edge (render call) will come 
+	 * 				and begin rendering as soon as resources are available)
+	 * 			-Open message streams (open them once and use a thread to keep them live)
+	 * 			-
 	 * 
-	 * 		-Primitive Geometry Tesellation
-	 * 			-Cube
-	 * 			-Sphere
-	 * 			-Cylinder
+	 * 		-User Interface
+	 * 			-Web-based (Polymer?)
+	 * 			-System control, Node statistics, scheudle rendering jobs, etc.
+	 * 
+	 * 		-Camera
+	 * 			-Lens API
+	 * 
+	 * 		-Post Processing
+	 * 			-Post processing pass
+	 * 			-Exposure
+	 * 			-HDR
+	 * 			-Shading API
+	 * 				-Painting style, line drawing, etc.
+	 * 
+	 * 		-Geometry
+	 * 			-Support for Quads (two triangle? or direct coplanar?)
+	 * 			-Cylinder does not render correctly (cap, and under transforms)
+	 * 			-AABVH does not handle cylinders correctly (bounding box? transfomr issue?)
+	 * 			-Cylinder tessellation
+	 * 		
+	 * 		-Volume Rendering
+	 * 			-Marching cubes
+	 * 				-Mesh generation
+	 * 				-Direct tracing
+	 * 			-Ray Marching
+	 * 
+	 * 		-Material
+	 * 			-Support for UV tangents (calculated from UV coords, fallback to primitive defaults, else 
+	 * 				YAxis method if not available)
+	 * 			-Brick pattern + coloring + blend + material
+	 * 			-More Materials
+	 * 			-Illustration materials
+	 * 
+	 * 		-Mapping
+	 * 			-Discrete texture loading class (support for ppm, png, jpg, bmp, etc.)
+	 * 				-Wrapping modes (clamp, mirror, repeat, single color, etc.  for both axes)
+	 * 			-
+	 * 
+	 * 		-Math
+	 * 			-Sobol random number generator
+	 * 			-Vector4 -> Vector3
+	 * 
+	 * 		-File Formats
+	 * 			-Import MMD
+	 * 			-Material format (save/load, JSON?)
+	 * 			-
 	 * 
 	 * 		-Progressive Tracer
 	 * 			-Sobol psuedo random instead of stratified?
@@ -107,32 +148,6 @@ public class Launcher {
 	 * 				-request can be caused by camera.update
 	 * 				-or 
 	 * 
-	 * 		-More Materials
-	 * 		-Brick pattern + coloring + blend + material
-	 * 		
-	 * 		-Normal maps from textures
-	 * 			-gradient based?
-	 * 
-	 * 		-Spatial geometry maps
-	 * 
-	 * 		-Sobol pseudo noise generator
-	 * 
-	 * 		-Subsurface Scattering
-	 * 
-	 * 
-	 * 		-
-	 * 
-	 * 
-	 * 
-	 * 		-Texture blending API
-	 * 		-Material Generation API
-	 * 		-Loading/Saving Materials from/to disk
-	 * 
-	 * 		-Geometry Generation API
-	 * 			-Ex: Rocks, mechanical shapes, abstract shapes
-	 * 		-Geometry placement API
-	 * 			-Automatically layout generated geometry onto a surface
-	 * 				-Ex: Create a BSphere via BB, shoot rays at the surface, place objects at intersections
 	 * 
 	 * 		-Post Processing Pass
 	 * 		-Tone Mapping
