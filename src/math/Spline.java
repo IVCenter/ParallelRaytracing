@@ -97,7 +97,7 @@ public class Spline extends ArrayList<Vector4> {
 	    
 	    post.subtract3M(pre);
 	    
-	    return post.normalize3();
+	    return post.normalize3M();
 	}
 	
 	public ArrayList<Triangle> tessellate(int segments, int slices, double radiusStart, double radiusEnd)
@@ -124,10 +124,10 @@ public class Spline extends ArrayList<Vector4> {
 		Vector4 nextVTangent;
 		
 		if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
-			nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3();
+			nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3M();
 		else
-			nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3();
-		nextVTangent = nextUTangent.cross3(nextNormal).normalize3();
+			nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3M();
+		nextVTangent = nextUTangent.cross3(nextNormal).normalize3M();
 		
 		
 		for(double t = 0.0; t < 1.0; t += segmentDelta)
@@ -146,14 +146,14 @@ public class Spline extends ArrayList<Vector4> {
 			thisVTangent = nextVTangent;
 			
 			if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
-				nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3();
+				nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3M();
 			else
-				nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3();
+				nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3M();
 			
 			if(nextUTangent.dot3(thisUTangent) < 0.0)
 				nextUTangent.multiply3M(-1.0);
 			
-			nextVTangent = nextUTangent.cross3(nextNormal).normalize3();
+			nextVTangent = nextUTangent.cross3(nextNormal).normalize3M();
 			
 			
 			/*
@@ -179,32 +179,32 @@ public class Spline extends ArrayList<Vector4> {
 				//Generate for sub vertices
 				subV0 = new Vertex(
 						v0.add3(nextPoint), 
-						v0.add3(0.0).normalize3(), 
+						v0.add3(0.0).normalize3M(), 
 						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
 				
 				subV0_2 = new Vertex(
 						v0.add3(nextPoint), 
-						v0.add3(0.0).normalize3(), 
+						v0.add3(0.0).normalize3M(), 
 						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
 				
 				subV1 = new Vertex(
 						v1.add3(thisPoint), 
-						v1.add3(0.0).normalize3(), 
+						v1.add3(0.0).normalize3M(), 
 						new Vector4(theta / (Math.PI*2.0), t, 0, 0));
 				
 				subV2 = new Vertex(
 						v2.add3(thisPoint), 
-						v2.add3(0.0).normalize3(), 
+						v2.add3(0.0).normalize3M(), 
 						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
 				
 				subV2_2 = new Vertex(
 						v2.add3(thisPoint), 
-						v2.add3(0.0).normalize3(),
+						v2.add3(0.0).normalize3M(),
 						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
 				
 				subV3 = new Vertex(
 						v3.add3(nextPoint), 
-						v3.add3(0.0).normalize3(), 
+						v3.add3(0.0).normalize3M(), 
 						new Vector4((theta + angleDelta) / (Math.PI*2.0), t + segmentDelta, 0, 0));
 				
 				tri1 = new Triangle(subV0, subV1, subV2);

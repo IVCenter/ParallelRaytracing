@@ -51,7 +51,7 @@ public class DielectricPTMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3();
+		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
 		
 		
 		double DdotN = normal.dot3(rayDir);
@@ -109,7 +109,7 @@ public class DielectricPTMaterial extends Material{
 			}else{
 				
 				Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3();
+				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3M();
 				
 				//0.0 is no roughness, 1.0 is lots of roughness
 				//TODO: Use something better here......
@@ -124,7 +124,7 @@ public class DielectricPTMaterial extends Material{
 						roughDir.add3M(offset);
 					} while(roughDir.dot3(refracDir) <= 0.0);
 					
-					refracDir = roughDir.normalize3();
+					refracDir = roughDir.normalize3M();
 				}
 				
 				recursionColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);

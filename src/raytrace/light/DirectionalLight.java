@@ -57,7 +57,7 @@ public class DirectionalLight extends Light {
 	}
 
 	public void setDirection(Vector4 direction) {
-		this.direction = direction.normalize3();
+		this.direction = direction.normalize3M();
 	}
 
 }

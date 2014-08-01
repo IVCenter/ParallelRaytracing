@@ -452,7 +452,7 @@ public class Matrix4 {
 	    mInv.copyRotation(this);                           // copy rotational part of mv to mInv
 	    mInv.transpose();                                  // invert orthogonal matrix mInv
 	    v2 = mInv.multiply3(v2);                           // v2 = v2 x mInv (matrix multiplication)
-	    v2.normalize3();                                   // normalize v2 before rotation
+	    v2.normalize3M();                                   // normalize v2 before rotation
 	    
 	    // Perform acutal model view matrix modification:
 	    rotateArbitrary(v2,-angle);      // rotate model view matrix

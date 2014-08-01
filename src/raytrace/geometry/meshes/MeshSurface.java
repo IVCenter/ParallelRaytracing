@@ -170,7 +170,7 @@ public class MeshSurface extends TerminalSurface {
 				averageNormal.add3M(vert.getNormal());
 			}
 			
-			averageNormal.normalize3();
+			averageNormal.normalize3M();
 			
 			tempNormal = averageNormal.add3(0);
 			

@@ -69,7 +69,7 @@ public class FourPointAreaLight extends Light {
 		
 		
 		ildata.setColor(totalLight.multiply3M(1.0 / (double)sampleCount));
-		ildata.setDirection(toPoint.normalize3());
+		ildata.setDirection(toPoint.normalize3M());
 		ildata.setDistance(distance);
 		
 		return ildata;

@@ -89,7 +89,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		
 		//Point
 		Vector4 point = ray.evaluateAtTime(t);
-		Vector4 pointFromCenter = point.subtract3(center).normalize3();
+		Vector4 pointFromCenter = point.subtract3(center).normalize3M();
 		
 		
 		//Calculate Texcoords
@@ -186,32 +186,32 @@ public class Sphere extends TerminalSurface implements Positionable {
 				//Generate for sub vertices
 				subV0 = new Vertex(
 						v0.add3(center), 
-						v0.add3(0.0).normalize3(), 
+						v0.add3(0.0).normalize3M(), 
 						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
 				subV0_2 = new Vertex(
 						v0.add3(center), 
-						v0.add3(0.0).normalize3(), 
+						v0.add3(0.0).normalize3M(), 
 						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
 				subV1 = new Vertex(
 						v1.add3(center), 
-						v1.add3(0.0).normalize3(), 
+						v1.add3(0.0).normalize3M(), 
 						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV2 = new Vertex(
 						v2.add3(center), 
-						v2.add3(0.0).normalize3(), 
+						v2.add3(0.0).normalize3M(), 
 						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV2_2 = new Vertex(
 						v2.add3(center), 
-						v2.add3(0.0).normalize3(),
+						v2.add3(0.0).normalize3M(),
 						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
 				
 				subV3 = new Vertex(
 						v3.add3(center), 
-						v3.add3(0.0).normalize3(), 
+						v3.add3(0.0).normalize3M(), 
 						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
 				
 				if(y != verticalResolution-1)

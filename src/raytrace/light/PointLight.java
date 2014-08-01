@@ -35,7 +35,7 @@ public class PointLight extends Light {
 		
 		
 		ildata.setColor(color.multiply3( intensity * ( 1.0 / attenuation) * blocked));
-		ildata.setDirection(toPoint.normalize3());
+		ildata.setDirection(toPoint.normalize3M());
 		ildata.setDistance(distance);
 		
 		return ildata;

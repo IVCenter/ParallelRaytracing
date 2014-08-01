@@ -56,7 +56,7 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3();
+		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
 		
 		
 		double DdotN = normal.dot3(rayDir);
@@ -81,10 +81,10 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		Vector4 vTangent;
 		
 		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(positiveXAxis).normalize3();
+			uTangent = normal.cross3(positiveXAxis).normalize3M();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3();
-		vTangent = uTangent.cross3(normal).normalize3();
+			uTangent = normal.cross3(positiveYAxis).normalize3M();
+		vTangent = uTangent.cross3(normal).normalize3M();
 		
 		
 		

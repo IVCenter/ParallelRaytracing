@@ -50,7 +50,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3();
+		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
 		
 		
 		
@@ -124,7 +124,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				Vector4 normal = data.getIntersectionData().getNormal();
 				
 				//Ray Direction
-				Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3();
+				Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
 				
 				
 				double DdotN = normal.dot3(rayDir);
@@ -143,7 +143,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				{
 				
 					Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-					Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3();
+					Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3M();
 					
 					//0.0 is no roughness, 1.0 is lots of roughness
 					//TODO: Use something better here......
@@ -158,7 +158,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 							roughDir.add3M(offset);
 						} while(roughDir.dot3(normal) > 0.0);
 						
-						refracDir = roughDir.normalize3();
+						refracDir = roughDir.normalize3M();
 					}
 					
 					recursionColor = recurse(data, point, refracDir, refractiveIndex);
@@ -223,10 +223,10 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 					Vector4 vTangent;
 					
 					if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-						uTangent = normal.cross3(cosineWeightedSample()).normalize3();
+						uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
 					else
-						uTangent = normal.cross3(positiveYAxis).normalize3();
-					vTangent = uTangent.cross3(normal).normalize3();
+						uTangent = normal.cross3(positiveYAxis).normalize3M();
+					vTangent = uTangent.cross3(normal).normalize3M();
 					
 					//Sample a random point
 					//Vector4 sampleDir = uniformHemisphereSample(uTangent, normal, vTangent);

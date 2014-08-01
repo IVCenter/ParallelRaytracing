@@ -49,8 +49,8 @@ public class AshikhminPTMaterial extends Material {
 		Color shade = new Color(0x000000ff);
 		
 		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal().normalize3();
-		Vector4 rayDir = data.getRay().getDirection().multiply3(-1.0).normalize3();
+		Vector4 normal = data.getIntersectionData().getNormal().normalize3M();
+		Vector4 rayDir = data.getRay().getDirection().multiply3(-1.0).normalize3M();
 		
 		double DdotN = normal.dot3(rayDir);
 		//If the normal is facing the wrong direction, flip it
@@ -65,10 +65,10 @@ public class AshikhminPTMaterial extends Material {
 		Vector4 vTangent;
 		
 		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(cosineWeightedSample()).normalize3();
+			uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3();
-		vTangent = uTangent.cross3(normal).normalize3();
+			uTangent = normal.cross3(positiveYAxis).normalize3M();
+		vTangent = uTangent.cross3(normal).normalize3M();
 		
 		
 		//Direct Illumination
@@ -80,7 +80,7 @@ public class AshikhminPTMaterial extends Material {
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			lightDir = ildata.getDirection().multiply3(-1.0).normalize3();
+			lightDir = ildata.getDirection().multiply3(-1.0).normalize3M();
 			half = halfVector(rayDir, lightDir);
 
 			shade.add3M(ashikminSpecular(ildata.getColor(), specularTint, rayDir, lightDir, normal, uTangent, vTangent, half));
@@ -186,12 +186,12 @@ public class AshikhminPTMaterial extends Material {
 		
 		half = half.addMultiRight3M(normal, zCoeff).addMultiRight3M(vTangent, yCoeff * quad2).addMultiRight3M(uTangent, xCoeff * quad1);
 		
-		return half.normalize3();
+		return half.normalize3M();
 	}
 	
 	private Vector4 createSample(Vector4 half, Vector4 k1/*rayDir*/)
 	{
-		return k1.multiply3(-1.0).add3M(half.multiply3(half.dot3(k1) * 2.0)).normalize3();
+		return k1.multiply3(-1.0).add3M(half.multiply3(half.dot3(k1) * 2.0)).normalize3M();
 	}
 
 }

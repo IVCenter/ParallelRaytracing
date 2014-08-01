@@ -70,7 +70,7 @@ public class Plane extends TerminalSurface implements Positionable {
 		
 		//Calculate texcoords
 		//TODO: This will cause NaNs at exactly when the normal faces towards the z-axis or the negative z-axis
-		Vector4 tangent = normal.cross3(Vector4.ZAXIS).normalize3();
+		Vector4 tangent = normal.cross3(Vector4.ZAXIS).normalize3M();
 		Vector4 pointRelativeToPosition = point.subtract3(position);
 		
 		double relativePointDistanceSqrd = pointRelativeToPosition.magnitude3Sqrd();

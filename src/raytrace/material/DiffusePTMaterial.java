@@ -37,7 +37,7 @@ public class DiffusePTMaterial extends Material{
 		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
 		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal().normalize3();
+		Vector4 normal = data.getIntersectionData().getNormal().normalize3M();
 		
 		double DdotN = normal.dot3(data.getRay().getDirection());
 		//If the normal is facing in the wrong direction, flip it
@@ -51,10 +51,10 @@ public class DiffusePTMaterial extends Material{
 		Vector4 vTangent;
 		
 		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(cosineWeightedSample()).normalize3();
+			uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3();
-		vTangent = uTangent.cross3(normal).normalize3();
+			uTangent = normal.cross3(positiveYAxis).normalize3M();
+		vTangent = uTangent.cross3(normal).normalize3M();
 		
 		
 		//Direct Illumination

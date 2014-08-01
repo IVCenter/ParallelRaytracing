@@ -163,8 +163,8 @@ public class ProgrammableCamera extends Camera {
 	protected void update()
 	{
 		//Update camera axes
-		cameraX = viewingDirection.cross3(up).normalize3();
-		cameraY = viewingDirection.cross3(cameraX).normalize3();
+		cameraX = viewingDirection.cross3(up).normalize3M();
+		cameraY = viewingDirection.cross3(cameraX).normalize3M();
 		
 		//Update image plane ratio
 		imagePlaneRatio = pixelWidth / pixelHeight;
@@ -489,10 +489,10 @@ public class ProgrammableCamera extends Camera {
 									   0);
 					
 					
-					subRay.setDirection(dir.normalize3());
+					subRay.setDirection(dir.normalize3M());
 					subRay.setOrigin(apertureOrigin);
 				}else{
-					subRay.setDirection(dir.normalize3());
+					subRay.setDirection(dir.normalize3M());
 				}
 				
 				//Increment the counters

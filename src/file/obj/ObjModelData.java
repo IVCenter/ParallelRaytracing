@@ -266,7 +266,7 @@ public class ObjModelData {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Normal(double x, double y, double z) { super(x, y, z, 0); super.normalize3(); }
+		public Normal(double x, double y, double z) { super(x, y, z, 0); super.normalize3M(); }
 	}
 	
 	public static class TexCoord extends Vector4 {

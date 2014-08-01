@@ -116,13 +116,19 @@ public class Vector4 implements Serializable{
 		return Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
 	}
 	
-	public Vector4 normalize3()
+	public Vector4 normalize3M()
 	{
 		double mag = magnitude3();
 		array[0] = array[0]/mag;
 		array[1] = array[1]/mag;
 		array[2] = array[2]/mag;
 		return this;
+	}
+
+	public Vector4 normalize3()
+	{
+		double mag = magnitude3();
+		return new Vector4(array[0]/mag, array[0]/mag, array[2]/mag, 0);
 	}
 	
 	public double magnitude3Sqrd()

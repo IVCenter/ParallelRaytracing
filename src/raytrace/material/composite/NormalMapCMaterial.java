@@ -44,7 +44,7 @@ public class NormalMapCMaterial extends CompositeMaterial {
 		Vector4 normal = normalMap.evaluate(data.getIntersectionData());
 		
 		//Store the old normal
-		Vector4 oldNormal = data.getIntersectionData().getNormal().normalize3();
+		Vector4 oldNormal = data.getIntersectionData().getNormal().normalize3M();
 		
 		//Set the normal to the new one
 		data.getIntersectionData().setNormal(normal);

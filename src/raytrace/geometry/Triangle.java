@@ -121,7 +121,7 @@ public class Triangle extends TerminalSurface {
 		double nz = n0[2] * alpha + n1[2] * beta + n2[2] * gamma;
 		
 		Vector4 normal = new Vector4(nx, ny, nz, 0);
-		normal.normalize3();
+		normal.normalize3M();
 		
 		
 		//Point
@@ -178,7 +178,7 @@ public class Triangle extends TerminalSurface {
 	public void generateFaceNormal()
 	{
 		Vector4 normal = vertices[0].position.subtract3(vertices[1].position).cross3(
-				vertices[2].position.subtract3(vertices[1].position)).normalize3();
+				vertices[2].position.subtract3(vertices[1].position)).normalize3M();
 		for(Vertex v : vertices)
 			v.normal = normal;
 	}
@@ -265,7 +265,7 @@ public class Triangle extends TerminalSurface {
 		subC1 = center.copy();
 		
 		subS0 = new Vertex(left.position.add3(right.position.subtract3(left.position).multiply3M(right.position.distance(left.position)/2.0)),
-				left.normal.multiply3(0.5).add3M(right.normal.multiply3(0.5)).normalize3(),
+				left.normal.multiply3(0.5).add3M(right.normal.multiply3(0.5)).normalize3M(),
 				left.texCoord.multiply3(0.5).add3M(right.texCoord.multiply3(0.5))
 				);
 		

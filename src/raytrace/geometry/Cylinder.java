@@ -171,7 +171,7 @@ public class Cylinder extends TerminalSurface {
 			//Normal
 			normal = new Vector4(point);
 			normal.set(1, 0);
-			normal.normalize3();
+			normal.normalize3M();
 			
 			//Calculate Texcoords
 			double[] pcfM = normal.getArray();

@@ -70,10 +70,10 @@ public class TextureGradientNormalMap3D extends NormalMap3D {
 		Vector4 vTangent;
 		
 		if(Math.abs(normal.dot3(Material.positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(Material.positiveXAxis).normalize3();
+			uTangent = normal.cross3(Material.positiveXAxis).normalize3M();
 		else
-			uTangent = normal.cross3(Material.positiveYAxis).normalize3();
-		vTangent = uTangent.cross3(normal).normalize3();
+			uTangent = normal.cross3(Material.positiveYAxis).normalize3M();
+		vTangent = uTangent.cross3(normal).normalize3M();
 		
 		//Setup a sample point
 		Vector4 samplePoint = new Vector4();
@@ -107,7 +107,7 @@ public class TextureGradientNormalMap3D extends NormalMap3D {
 		newNormal.addMultiRight3M(uTangent, -(negUValue - posUValue) / (samplingRadius2));
 		newNormal.addMultiRight3M(vTangent, -(negVValue - posVValue) / (samplingRadius2));
 		newNormal.addMultiRight3M(normal, strength);
-		newNormal.normalize3();
+		newNormal.normalize3M();
 		
 		return newNormal;
 	}

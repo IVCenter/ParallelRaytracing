@@ -55,7 +55,7 @@ public class PassThroughMaterial extends Material{
 		Vector4 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3();
+		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
 		
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
 		if(normal.dot3(rayDir) > 0.0)

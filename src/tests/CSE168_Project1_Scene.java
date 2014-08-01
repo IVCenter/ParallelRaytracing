@@ -38,7 +38,7 @@ public class CSE168_Project1_Scene extends Scene{
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(false);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(2.0, 2.0, 5.0, 0));
-		activeCamera.setViewingDirection(activeCamera.getPosition().multiply3(-1.0).normalize3());
+		activeCamera.setViewingDirection(activeCamera.getPosition().multiply3(-1.0).normalize3M());
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());

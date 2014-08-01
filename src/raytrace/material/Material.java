@@ -67,7 +67,7 @@ public abstract class Material {
 		double ry = dirm[1] + nm[1] * c;
 		double rz = dirm[2] + nm[2] * c;
 		
-		Vector4 reflect = (new Vector4(rx, ry, rz, 0)).normalize3();
+		Vector4 reflect = (new Vector4(rx, ry, rz, 0)).normalize3M();
 		
 		return recurse(data, point, reflect, refractiveIndex);
 	}
@@ -116,7 +116,7 @@ public abstract class Material {
 		return (new Vector4(ma[0]*maga + mb[0]*magb,
 							ma[1]*maga + mb[1]*magb,
 							ma[2]*maga + mb[2]*magb,
-							0)).normalize3();
+							0)).normalize3M();
 	}
 	
 	protected Vector4 cosineWeightedSample()
@@ -131,7 +131,7 @@ public abstract class Material {
 		double y = Math.sqrt(t);
 		double z = v * Math.sin(u);
 		
-		return (new Vector4(x, y, z, 0)).normalize3();
+		return (new Vector4(x, y, z, 0)).normalize3M();
 	}
 	
 	protected Vector4 cosineWeightedSample(Vector4 xa, Vector4 ya, Vector4 za)
@@ -149,7 +149,7 @@ public abstract class Material {
 						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
 						   0);
 		
-		return s.normalize3();
+		return s.normalize3M();
 	}
 	
 	protected Vector4 uniformHemisphereSample()
@@ -160,7 +160,7 @@ public abstract class Material {
 			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
 		} while(sample.magnitude3Sqrd() > 1.0 || sample.get(1) < 0.0);
 		
-		return sample.normalize3();
+		return sample.normalize3M();
 	}
 	
 	protected Vector4 uniformHemisphereSample(Vector4 xa, Vector4 ya, Vector4 za)
@@ -178,7 +178,7 @@ public abstract class Material {
 						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
 						   0);
 		
-		return s.normalize3();
+		return s.normalize3M();
 	}
 
 	protected Vector4 diskSample(double radius, double weight)
@@ -200,6 +200,6 @@ public abstract class Material {
 			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
 		} while(sample.magnitude3Sqrd() > 1.0);
 		
-		return sample.normalize3();
+		return sample.normalize3M();
 	}
 }
