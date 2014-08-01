@@ -25,6 +25,9 @@ public class Configuration {
 	protected static int screenWidth = 1024;
 	protected static int screenHeight = 640;
 	
+	protected static int renderWidth = 1024;
+	protected static int renderHeight = 640;
+	
 	protected static boolean drawToScreen = false;
 	protected static boolean isClock = false;
 	protected static boolean isLeaf = false;
@@ -126,6 +129,14 @@ public class Configuration {
 	//Screen Height
 	public static int getScreenHeight() { return screenHeight; }
 	public static void setScreenHeight(int screenHeight) { Configuration.screenHeight = screenHeight; }
+	
+	//Render Width
+	public static int getRenderWidth() { return renderWidth;}
+	public static void setRenderWidth(int renderWidth) { Configuration.renderWidth = renderWidth;}
+
+	//Render Height
+	public static int getRenderHeight() { return renderHeight; }
+	public static void setRenderHeight(int renderHeight) { Configuration.renderHeight = renderHeight; }
 
 	//Draw to screen
 	public static boolean isDrawingToScreen() { return drawToScreen; }
