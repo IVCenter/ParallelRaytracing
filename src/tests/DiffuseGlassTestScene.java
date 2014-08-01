@@ -45,13 +45,13 @@ import raytrace.surfaces.acceleration.AABVHSurface;
 import resource.ResourceManager;
 import system.Configuration;
 
-public class ProceduralMaterialTestScene1 extends Scene
+public class DiffuseGlassTestScene extends Scene
 {	
 
 	/*
-	 * A scene for project 3 of CSE 168
+	 * A scene for testing diffuse glass materials
 	 */
-	double elapsed = 0.0;//
+	double elapsed = 0.0;
 	
 	/* *********************************************************************************************
 	 * Initialize
@@ -61,10 +61,11 @@ public class ProceduralMaterialTestScene1 extends Scene
 	{
 		//Sky Material
 		skyMaterial = new ColorMaterial(new Color(0.8, 0.9, 1.0));
-		//skyMaterial = new ColorMaterial(new Color(0.1, 0.1, 0.1));
 
-		Configuration.setScreenWidth(800);
-		Configuration.setScreenHeight(600);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
+		Configuration.setRenderWidth(Configuration.getScreenWidth());
+		Configuration.setRenderHeight(Configuration.getScreenHeight());
 		
 		//Camera
 		activeCamera = new ProgrammableCamera();
