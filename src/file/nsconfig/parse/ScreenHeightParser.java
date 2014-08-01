@@ -37,6 +37,7 @@ public class ScreenHeightParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setScreenHeight(screenHeight);
+			Configuration.setRenderHeight(screenHeight);
 			Logger.progress(-32, "ConfigFileLoader: Setting screen height [" + screenHeight + "].");
 			
 		}catch(Exception e) {

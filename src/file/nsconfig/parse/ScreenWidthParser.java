@@ -37,6 +37,7 @@ public class ScreenWidthParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setScreenWidth(screenWidth);
+			Configuration.setRenderWidth(screenWidth);
 			Logger.progress(-32, "ConfigFileLoader: Setting screen width [" + screenWidth + "].");
 			
 		}catch(Exception e) {
