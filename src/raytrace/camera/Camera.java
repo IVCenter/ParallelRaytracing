@@ -29,6 +29,8 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
 	
+	protected boolean dirty = false;
+	
 	//protected boolean progressive = false;
 	
 
@@ -49,6 +51,8 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 		this.fieldOfView = fieldOfView;
 		this.pixelWidth = pixelWidth;
 		this.pixelHeight = pixelHeight;
+		
+		this.dirty = false;
 	}
 	
 
@@ -56,7 +60,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	 * Abstract Methods
 	 * *********************************************************************************************/
 	protected abstract void update();
-	protected abstract void wasModified();
+	protected abstract void handleModified();
 	protected abstract Ray getRay(double x, double y);
 	public abstract Collection<Camera> decompose(int count);
 	public abstract Camera duplicate();
@@ -66,6 +70,12 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	//	return getRay(x, y, new Ray());
 	//}
 	
+
+	protected void wasModified()
+	{
+		dirty = true;
+		handleModified();
+	}
 
 	/* *********************************************************************************************
 	 * Getters/Setters
@@ -138,4 +148,12 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 		this.progressive = progressive;
 	}
 	*/
+
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
 }

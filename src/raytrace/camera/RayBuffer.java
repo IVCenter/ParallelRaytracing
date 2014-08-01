@@ -54,7 +54,7 @@ public class RayBuffer extends Camera {
 	}
 	
 	@Override
-	protected void wasModified()
+	protected void handleModified()
 	{
 		//TODO: Oh?
 	}

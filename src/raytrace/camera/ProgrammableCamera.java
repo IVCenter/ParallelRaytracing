@@ -183,7 +183,7 @@ public class ProgrammableCamera extends Camera {
 	}
 	
 	@Override
-	protected void wasModified()
+	protected void handleModified()
 	{
 		update();
 	}
@@ -235,7 +235,18 @@ public class ProgrammableCamera extends Camera {
 	
 	public ProgrammableCamera duplicate()
 	{
-		ProgrammableCamera cam = new ProgrammableCamera();
+		final Camera parentCamera = this;
+		ProgrammableCamera cam = new ProgrammableCamera()
+		{
+			private static final long serialVersionUID = 145645262356L;
+
+			@Override
+			public boolean isDirty()
+			{
+				return parentCamera.isDirty();
+			}
+		};
+		
 		cam.setPosition(position);
 		cam.setViewingDirection(viewingDirection);
 		cam.setUp(up);
@@ -346,10 +357,7 @@ public class ProgrammableCamera extends Camera {
 		/*
 		 * A class that represents a set of implicit Rays in 3D space
 		 */
-	
-		/**
-		 * 
-		 */
+
 		private static final long serialVersionUID = 1L;
 		
 		
@@ -394,9 +402,6 @@ public class ProgrammableCamera extends Camera {
 		 * *********************************************************************************************/
 		private class RayIterator implements Iterator<Ray>, Serializable
 		{	
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 			
 			
