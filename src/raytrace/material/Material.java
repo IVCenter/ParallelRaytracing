@@ -104,7 +104,6 @@ public abstract class Material {
 		//If there wasn't an intersection, use the sky material
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
-		//return Color.black();
 	}
 	
 	protected Vector4 halfVector(Vector4 a, Vector4 b)
