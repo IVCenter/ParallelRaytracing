@@ -45,14 +45,7 @@ public class Color implements Texture {
 	{
 		this();
 		
-		//construct a bit mask 0xff000000
-	    int mask = 0xff000000;
-	    int u8bit = 0x000000ff;
-	    
-	    //Unpack each 8bit segment into a float, and normalize such that 255 ~= 1.0
-	    for(int i = 0; mask != 0 && i < 4; ++i, mask = mask >>> 8) {
-	        channels[i] = ((double) ((color & mask) >>> ((3-i)*8) ) ) / u8bit;
-	    }
+		set(color);
 	}
 	
 	public Color(double r, double g, double b, double a)
@@ -80,6 +73,18 @@ public class Color implements Texture {
 		channels[1] = g;
 		channels[2] = b;
 		channels[3] = a;
+	}
+	
+	public void set(int color)
+	{
+		//construct a bit mask 0xff000000
+	    int mask = 0xff000000;
+	    int u8bit = 0x000000ff;
+	    
+	    //Unpack each 8bit segment into a float, and normalize such that 255 ~= 1.0
+	    for(int i = 0; mask != 0 && i < 4; ++i, mask = mask >>> 8) {
+	        channels[i] = ((double) ((color & mask) >>> ((3-i)*8) ) ) / u8bit;
+	    }
 	}
 
 	/* *********************************************************************************************
