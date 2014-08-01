@@ -60,6 +60,11 @@ public class PixelBuffer {
 	 * *********************************************************************************************/
 	public void writeToFile(String filePath)
 	{
+		writeToFile(filePath, width, height);
+	}
+	
+	public void writeToFile(String filePath, int imageWidth, int imageHeight)
+	{
 		//Try to write this pixel buffer to a bmp formatted image at the given path
 		try {
 			
@@ -75,9 +80,9 @@ public class PixelBuffer {
 				return;
 			}
 			
-			//Create a new bufferd image to store the pixel for writing
-			BufferedImage bufimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			bufimg.setRGB(0, 0, width, height, buffer, 0, width);
+			//Create a new buffered image to store the pixel for writing
+			BufferedImage bufimg = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+			bufimg.setRGB(0, 0, imageWidth, imageHeight, buffer, 0, width);
 
 			
 			Logger.progress(-1, "Begin saving pixel buffer to file [" + filePath + "].");
