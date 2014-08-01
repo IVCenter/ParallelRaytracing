@@ -12,6 +12,7 @@ import process.logging.Logger;
 import process.utils.TimeStamp;
 import raster.PixelBuffer;
 import raytrace.AnimationRenderer;
+import raytrace.camera.ProgrammableCamera;
 import raytrace.framework.Renderer;
 import system.ApplicationDelegate;
 import system.Configuration;
@@ -128,6 +129,54 @@ public class DefaultKeyboard extends Keyboard {
 					ar.startRecording();
 			}
 		}
+		
+
+		
+		//If 1 is pressed, decrease render resolution
+		if(e.getKeyCode() == KeyEvent.VK_1)
+		{
+			Configuration.setRenderWidth((int)Math.max(Configuration.getRenderWidth() * 0.9, 2.0));
+			Configuration.setRenderHeight((int)Math.max(Configuration.getRenderHeight() * 0.9, 2.0));
+			Configuration.getMasterScene().getActiveCamera().setDirty(true);
+		}
+		
+		//If 2 is pressed, increase render resolution
+		if(e.getKeyCode() == KeyEvent.VK_2)
+		{
+			Configuration.setRenderWidth((int)Math.min(Configuration.getRenderWidth() / 0.9, Configuration.getScreenWidth()));
+			Configuration.setRenderHeight((int)Math.min(Configuration.getRenderHeight() / 0.9, Configuration.getScreenHeight()));
+			Configuration.getMasterScene().getActiveCamera().setDirty(true);
+		}
+		
+		//If 3 is pressed, reset render resolution to screen resolution
+		if(e.getKeyCode() == KeyEvent.VK_3)
+		{
+			Configuration.setRenderWidth(Configuration.getScreenWidth());
+			Configuration.setRenderHeight(Configuration.getScreenHeight());
+			Configuration.getMasterScene().getActiveCamera().setDirty(true);
+		}
+		
+		//If 4 is pressed, decrease sample count
+		if(e.getKeyCode() == KeyEvent.VK_4)
+		{
+			if(Configuration.getMasterScene().getActiveCamera() instanceof ProgrammableCamera)
+			{
+				ProgrammableCamera cam = (ProgrammableCamera)Configuration.getMasterScene().getActiveCamera();
+				cam.setSuperSamplingLevel(Math.max(cam.getSuperSamplingLevel()-1, 1));
+			}
+		}
+		
+		//If 5 is pressed, decrease sample count
+		if(e.getKeyCode() == KeyEvent.VK_5)
+		{
+			if(Configuration.getMasterScene().getActiveCamera() instanceof ProgrammableCamera)
+			{
+				ProgrammableCamera cam = (ProgrammableCamera)Configuration.getMasterScene().getActiveCamera();
+				cam.setSuperSamplingLevel(cam.getSuperSamplingLevel()+1);
+			}
+		}
+		
+		
 		
 		
 	}
