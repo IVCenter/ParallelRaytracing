@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import process.logging.Logger;
+import system.Configuration;
 
 public class ScreenDrawer extends JFrame {
 	
@@ -28,7 +29,7 @@ public class ScreenDrawer extends JFrame {
 	 * 
 	 * 		-Determine when the window size changes, and push the new width/height to the
 	 * 			rest of the system (camera, pixel buffer, etc.)
-	 * 		-
+	 * 		-Improve upscale performance (currently very slow)
 	 */
 	
 	/**
@@ -47,8 +48,9 @@ public class ScreenDrawer extends JFrame {
     
     protected long msPerFrame = 49;//About 20fps
     protected long frames = 0;
-	
+
     protected PixelBuffer pixelBuffer;
+    protected PixelBuffer drawBuffer;
 
 	protected boolean refreshScreen = true;
 	protected boolean verticalSynchronize = true;//Setting this to true fixes screen tearing...and murders the frame rate
@@ -68,6 +70,7 @@ public class ScreenDrawer extends JFrame {
 		this.width = width;
 		this.height = height;
 		this.pixelBuffer = new PixelBuffer(width, height);
+		this.drawBuffer = new PixelBuffer(width, height);
 		
 		//Launch the frame on a separate thread
 		SwingUtilities.invokeLater(new Runnable()
@@ -209,7 +212,8 @@ public class ScreenDrawer extends JFrame {
 	    	 * *********************************************************************************************/
 	        private BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	        private Graphics2D g2 = bi.createGraphics();
-
+			
+	        
 	    	/* *********************************************************************************************
 	    	 * Worker Overrides
 	    	 * *********************************************************************************************/
@@ -233,10 +237,28 @@ public class ScreenDrawer extends JFrame {
 	            long start = System.currentTimeMillis();
             	long loopStart = 0;
             	long sleepTime = 0;
+
+            	int[] drawArray = drawBuffer.getPixels();
+            	int[] pixelArray;
+
             	
 	            while (refreshScreen)
 	            {
-	            	int[] mem = pixelBuffer.getPixels();
+	            	drawArray = drawBuffer.getPixels();
+	            	pixelArray = pixelBuffer.getPixels();
+	            	
+        			
+	            	//Perform upscaling if necessary
+	            	if(Configuration.getRenderWidth() != width || Configuration.getRenderHeight() != height)
+	            	{
+	            		//TODO: Upscaling is quite slow on a single thread...
+	            		upscale(pixelArray, Configuration.getRenderWidth(), Configuration.getRenderHeight(), width,
+	            				drawArray, width, height, width);
+	            	}else{
+	            		drawArray = pixelArray;
+	            	}
+	            	
+	            	
 	            	loopStart = System.currentTimeMillis();
 	            	
 	            	//If its been about a second or so, print the current fps
@@ -248,21 +270,24 @@ public class ScreenDrawer extends JFrame {
 	            	}
 	                
 	            	//Load the pixel buffer into an image object
-	                Image img = createImage(new MemoryImageSource(width, height, mem, 0, width));
+	                Image img = createImage(new MemoryImageSource(width, height, drawArray, 0, width));
 	                
-	                //If we vertical synchronizing is on, prevent tearing by using fresh buffers
+	                //If vertical synchronizing is on, prevent tearing by using fresh buffers
 	                if(verticalSynchronize) {
 	                	g2.dispose();
 	                	bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 	                	g2 = bi.createGraphics();
 	                }
 	                
+	                //Draw the image to the graphics object
 	                g2.drawImage(img, 0, 0, null);
 	                
+	                //Go live and increment the frame count
 	                publish(bi);
 	                frames++;
 	                
 	                //Determine how much time we need to sleep to maintain the desired ms per frame
+	                //If we're behind schedule then immediately move on to the next frame
 	                sleepTime = msPerFrame - (System.currentTimeMillis() - loopStart);
 	                if(sleepTime > 0)
 	                	Thread.sleep(sleepTime);
@@ -270,6 +295,74 @@ public class ScreenDrawer extends JFrame {
 	            
 	            return null;
 	        }
+
+		    
+		    private void upscale(int[] base, int baseWidth, int baseHeight, int baseScanWidth, 
+		    				       int[] target, int targetWidth, int targetHeight, int targetScanWidth)
+		    {
+		        int u0, u1, v0, v1;
+		    	double uSubPixel;
+		    	double vSubPixel;
+		    	double uRatio = ((double)targetWidth)/((double)baseWidth);
+		    	double vRatio = ((double)targetHeight)/((double)baseHeight);
+		    	
+		    	for(int y = 0; y < targetHeight; ++y)
+	        	{
+        			//Calculate the subpixel position in the y direction
+		    		vSubPixel = (y/vRatio) % 1.0;
+
+        			//Find the previous and next pixel indices in the y direction
+	    			v0 = (int)Math.floor(y/vRatio);
+	    			v1 = v0 + 1;
+	    			
+	        		for(int x = 0; x < targetWidth; ++x)
+	        		{
+	        			//Calculate the subpixel position in the x direction
+	        			uSubPixel = (x/uRatio) % 1.0;
+	        			
+	        			//Find the previous and next pixel indices in the x direction
+	        			u0 = (int)Math.floor(x/uRatio);
+	        			u1 = u0 + 1;
+	        			
+	        			//Add an alpha mask of 1.0 to the lower 24bits of the results of interpolate()
+	   					target[x + (y * targetScanWidth)] = 0xFF000000 + (0x00FFFFFF &
+	   							interpolate(base[(u0) + (v0) * baseScanWidth],
+	   										base[(u1) + (v0) * baseScanWidth],
+	   										base[(u0) + (v1) * baseScanWidth],
+	   										base[(u1) + (v1) * baseScanWidth],
+	   										(int)(uSubPixel * 256),
+	   										(int)(vSubPixel * 256)));
+	        		}
+	        	}
+		    }
+		    
+		    /**
+		     * Sourced from web: http://www.java-gaming.org/index.php?topic=22121.0
+		     *
+		     * @param c1 value/color 1 (upper left value/RGB pixel)
+		     * @param c2 value/color 2 (upper right value/RGB pixel)
+		     * @param c3 value/color 3 (lower left value/RGB pixel)
+		     * @param c4 value/color 4 (lower right value/RGB pixel)
+		     * @param bX x interpolation factor (range 0-256)
+		     * @param bY y interpolation factor (range 0-256)
+		     *
+		     * @return interpolated value(packed RGB pixel) of c1,c2,c3,c4 for given factors bX & bY as three packed unsigned bytes
+		     *
+		     * @author Bruno Augier http://dzzd.net/
+		     */
+
+		    private int interpolate(int c1,int c2,int c3,int c4,int bX, int bY)
+		    {
+		       int f24=(bX*bY)>>8;
+		       int f23=bX-f24;
+		       int f14=bY-f24;
+		       int f13=((256-bX)*(256-bY))>>8; // this one can be computed faster
+		       
+		       return ((((c1&0xFF00FF)*f13+(c2&0xFF00FF)*f23+(c3&0xFF00FF)*f14+(c4&0xFF00FF)*f24)&0xFF00FF00)|
+		               (((c1&0x00FF00)*f13+(c2&0x00FF00)*f23+(c3&0x00FF00)*f14+(c4&0x00FF00)*f24)&0x00FF0000))>>>8;
+		    }
+		    
+		    
 	    }
 	    
 	}
