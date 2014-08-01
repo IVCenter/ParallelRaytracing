@@ -1,6 +1,6 @@
 package raytrace.data;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 
 public class IlluminationData {
@@ -12,7 +12,7 @@ public class IlluminationData {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Color color;
-	protected Vector4 direction;
+	protected Vector3 direction;
 	protected double distance;
 	
 
@@ -36,11 +36,11 @@ public class IlluminationData {
 		this.color = color;
 	}
 
-	public Vector4 getDirection() {
+	public Vector3 getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Vector4 direction) {
+	public void setDirection(Vector3 direction) {
 		this.direction = direction;
 	}
 

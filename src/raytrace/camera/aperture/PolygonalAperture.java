@@ -1,6 +1,6 @@
 package raytrace.camera.aperture;
 
-import math.Vector4;
+import math.Vector3;
 
 public class PolygonalAperture extends Aperture {
 	
@@ -36,13 +36,13 @@ public class PolygonalAperture extends Aperture {
 	 * Interface Overrides
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 sample()
+	public Vector3 sample()
 	{
-		return sample(new Vector4());
+		return sample(new Vector3());
 	}
 	
 	@Override
-	public Vector4 sample(Vector4 sample)
+	public Vector3 sample(Vector3 sample)
 	{
 		//TODO: Equations to distribute among triangles of polygon
 		int element = (int)(Math.floor(Math.random() * elements) + 0.5);
@@ -58,7 +58,6 @@ public class PolygonalAperture extends Aperture {
 		
 		sample.set((Math.sqrt(r1) * (1 - r2)) * sx + (Math.sqrt(r1) * r2) * ex, 
 				   (Math.sqrt(r1) * (1 - r2)) * sy + (Math.sqrt(r1) * r2) * ey, 
-				   0, 
 				   0);
 		
 		return sample;

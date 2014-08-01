@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import process.logging.Logger;
 import math.Matrix4;
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
@@ -48,9 +48,9 @@ public class TestScene1 extends Scene {
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(0,2,5,0));
-		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2,5));
+		activeCamera.setViewingDirection(new Vector3(0,-0.1,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -156,7 +156,7 @@ public class TestScene1 extends Scene {
 			}
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(80 * Math.random() - 40.0, 2.2 * Math.random(), 60 * Math.random() - 58.5, 0));
+			sphere.setPosition(new Vector3(80 * Math.random() - 40.0, 2.2 * Math.random(), 60 * Math.random() - 58.5));
 			sphere.setRadius(Math.pow(Math.random() * 0.8, 1.15));
 			spheres.add(sphere);
 			
@@ -173,7 +173,7 @@ public class TestScene1 extends Scene {
 			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(8 * Math.random() - 4.0, 3 * Math.random(), 6 * Math.random() - 1.0, 0));
+			sphere.setPosition(new Vector3(8 * Math.random() - 4.0, 3 * Math.random(), 6 * Math.random() - 1.0));
 			sphere.setRadius(Math.pow(Math.random() * 0.1, 1.15));
 			spheres.add(sphere);
 			
@@ -187,7 +187,7 @@ public class TestScene1 extends Scene {
 			sphere.setMaterial(new DielectricMaterial(Color.white(), 0.85));
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
-			sphere.setPosition(new Vector4(0.0, 2.0, 4.40, 0));
+			sphere.setPosition(new Vector3(0.0, 2.0, 4.40));
 			sphere.setRadius(0.5);
 			//spheres.add(sphere);
 		}
@@ -202,28 +202,28 @@ public class TestScene1 extends Scene {
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x88ffb8ff));
-			pointLight.setPosition(new Vector4(0,4,4,0));
+			pointLight.setPosition(new Vector3(0,4,4));
 			pointLight.setIntensity(12.0);
 			lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x6800ffff));
-			pointLight.setPosition(new Vector4(3,0.5,1.0,0));
+			pointLight.setPosition(new Vector3(3,0.5,1.0));
 			pointLight.setIntensity(8.0);
 			//lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0x68ff00ff));
-			pointLight.setPosition(new Vector4(-3,0.5,1.0,0));
+			pointLight.setPosition(new Vector3(-3,0.5,1.0));
 			pointLight.setIntensity(8.0);
 			//lightManager.addLight(pointLight);
 		}
 		{
 			PointLight pointLight = new PointLight();
 			pointLight.setColor(new Color(0xff6800ff));
-			pointLight.setPosition(new Vector4(0.0,6.0,1.0,0));
+			pointLight.setPosition(new Vector3(0.0,6.0,1.0));
 			pointLight.setIntensity(8.0);
 			lightManager.addLight(pointLight);
 		}
@@ -232,7 +232,7 @@ public class TestScene1 extends Scene {
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.95);
-		directionalLight.setDirection(new Vector4(1,-1,-0.2,0));
+		directionalLight.setDirection(new Vector3(1,-1,-0.2));
 		lightManager.addLight(directionalLight);
 		
 		
@@ -278,8 +278,8 @@ public class TestScene1 extends Scene {
 		elapsed = Math.PI/4.0;
 		
 		
-		Vector4 pos = sphere.getPosition();
-		pos.set(Math.cos(elapsed), 1.0 + Math.sin(elapsed), 0.0, 1);
+		Vector3 pos = sphere.getPosition();
+		pos.set(Math.cos(elapsed), 1.0 + Math.sin(elapsed), 0.0);
 		sphere.setPosition(pos);
 
 		

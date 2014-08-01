@@ -1,6 +1,6 @@
 package tests;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
@@ -39,11 +39,11 @@ public class PerformanceTest1 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
-		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		activeCamera.setPosition(new Vector3(-0.5, 0.25, -0.2));
+		activeCamera.setViewingDirection(new Vector3(0.5, -0.1, 0.05));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
 		//activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
@@ -87,7 +87,7 @@ public class PerformanceTest1 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(new Color(1.0, 1.0, 0.9));
 		directionalLight.setIntensity(1.0);
-		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
+		directionalLight.setDirection(new Vector3(2, -3, -2));
 		lightManager.addLight(directionalLight);
 		
 		

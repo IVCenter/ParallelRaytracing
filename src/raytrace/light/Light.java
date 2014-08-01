@@ -1,7 +1,7 @@
 package raytrace.light;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
@@ -28,13 +28,13 @@ public abstract class Light extends TerminalSurface implements Positionable {
 	protected Color color = Color.white();
 	protected double intensity = 1.0;
 	
-	protected Vector4 position = new Vector4();
+	protected Vector3 position = new Vector3();
 	
 
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
-	public abstract IlluminationData illuminate(ShadingData data, Vector4 point);
+	public abstract IlluminationData illuminate(ShadingData data, Vector3 point);
 
 	
 	/* *********************************************************************************************
@@ -107,11 +107,11 @@ public abstract class Light extends TerminalSurface implements Positionable {
 		this.intensity = intensity;
 	}
 
-	public Vector4 getPosition() {
+	public Vector3 getPosition() {
 		return position;
 	}
 
-	public void setPosition(Vector4 position) {
+	public void setPosition(Vector3 position) {
 		this.position = position;
 	}
 	

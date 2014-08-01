@@ -1,7 +1,7 @@
 package raytrace.light;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
@@ -16,11 +16,11 @@ public class FourPointAreaLight extends Light {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	//Winds counter-clockwise
-	protected Vector4[] points = new Vector4[4];
+	protected Vector3[] points = new Vector3[4];
 	
 	protected int sampleCount = 10;
 	
-	private Vector4 interpVect = new Vector4();
+	private Vector3 interpVect = new Vector3();
 	
 	
 	/* *********************************************************************************************
@@ -28,13 +28,13 @@ public class FourPointAreaLight extends Light {
 	 * *********************************************************************************************/
 
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector4 point)
+	public IlluminationData illuminate(ShadingData data, Vector3 point)
 	{
 		IlluminationData ildata = new IlluminationData();
-		Vector4 toPoint = point.subtract3(points[0]);
+		Vector3 toPoint = point.subtract(points[0]);
 		Color totalLight = new Color();
 		
-		double toPointMagSqrd = toPoint.magnitude3Sqrd();
+		double toPointMagSqrd = toPoint.magnitudeSqrd();
 		double distance = Math.sqrt(toPointMagSqrd);
 		double attenuation = constantAttenuation +
 				 			 linearAttenuation * distance +
@@ -46,12 +46,12 @@ public class FourPointAreaLight extends Light {
 		for(int i = 0; i < sampleCount; i++)
 		{
 			interpolate(Math.random(), Math.random());
-			toPoint = point.subtract3(interpVect);
+			toPoint = point.subtract(interpVect);
 
-			toPointMagSqrd = toPoint.magnitude3Sqrd();
+			toPointMagSqrd = toPoint.magnitudeSqrd();
 			distance = Math.sqrt(toPointMagSqrd);
 			
-			newRay.setDirection(toPoint.multiply3(-1.0));
+			newRay.setDirection(toPoint.multiply(-1.0));
 			newRay.setOrigin(point);
 			shadowData = shadowed(data.getRootScene(), newRay, distance);
 			
@@ -69,7 +69,7 @@ public class FourPointAreaLight extends Light {
 		
 		
 		ildata.setColor(totalLight.multiply3M(1.0 / (double)sampleCount));
-		ildata.setDirection(toPoint.normalize3M());
+		ildata.setDirection(toPoint.normalizeM());
 		ildata.setDistance(distance);
 		
 		return ildata;
@@ -87,29 +87,26 @@ public class FourPointAreaLight extends Light {
 		
 		double[] a0 = {v0[0] + (v3[0] - v0[0]) * x,
 					   v0[1] + (v3[1] - v0[1]) * x,
-					   v0[2] + (v3[2] - v0[2]) * x,
-					   0};
+					   v0[2] + (v3[2] - v0[2]) * x};
 		
 		double[] a1 = {v1[0] + (v2[0] - v1[0]) * x,
 				   	   v1[1] + (v2[1] - v1[1]) * x,
-				   	   v1[2] + (v2[2] - v1[2]) * x,
-				   	   0};
+				   	   v1[2] + (v2[2] - v1[2]) * x};
 		
 		interpVect.set(a0[0] + (a1[0] - a0[0]) * y,
 					   a0[1] + (a1[1] - a0[1]) * y,
-					   a0[2] + (a1[2] - a0[2]) * y,
-					   0);
+					   a0[2] + (a1[2] - a0[2]) * y);
 	}
 	
 
 	/* *********************************************************************************************
 	 * Getters/Setter
 	 * *********************************************************************************************/
-	public Vector4[] getPoints() {
+	public Vector3[] getPoints() {
 		return points;
 	}
 
-	public void setPoints(Vector4[] points) {
+	public void setPoints(Vector3[] points) {
 		this.points = points;
 	}
 

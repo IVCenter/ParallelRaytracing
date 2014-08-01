@@ -2,7 +2,7 @@ package tests;
 
 import process.logging.Logger;
 import math.Matrix4;
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
@@ -37,9 +37,9 @@ public class CSE168_Project1_Scene extends Scene{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(false);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(2.0, 2.0, 5.0, 0));
-		activeCamera.setViewingDirection(activeCamera.getPosition().multiply3(-1.0).normalize3M());
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(2.0, 2.0, 5.0));
+		activeCamera.setViewingDirection(activeCamera.getPosition().multiply(-1.0).normalizeM());
+		activeCamera.setUp(new Vector3(0, 1, 0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
@@ -80,7 +80,7 @@ public class CSE168_Project1_Scene extends Scene{
 		DirectionalLight sunlgt = new DirectionalLight();
 		sunlgt.setColor(new Color(1.0, 1.0, 0.9));
 		sunlgt.setIntensity(0.5);
-		sunlgt.setDirection(new Vector4(-0.5, -1.0, -0.5, 0));
+		sunlgt.setDirection(new Vector3(-0.5, -1.0, -0.5));
 		lightManager.addLight(sunlgt);
 		
 		//Red Light
@@ -90,7 +90,7 @@ public class CSE168_Project1_Scene extends Scene{
 		redlgt.setConstantAttenuation(0.0);
 		redlgt.setLinearAttenuation(0.0);
 		redlgt.setQuadraticAttenuation(1.0);
-		redlgt.setPosition(new Vector4(2.0, 2.0, 0.0, 0));
+		redlgt.setPosition(new Vector3(2.0, 2.0, 0.0));
 		lightManager.addLight(redlgt);
 		
 		

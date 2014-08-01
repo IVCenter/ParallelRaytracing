@@ -1,6 +1,6 @@
 package raytrace.framework;
 
-import math.Vector4;
+import math.Vector3;
 
 public interface Positionable {
 	
@@ -8,11 +8,11 @@ public interface Positionable {
 	/**
 	 * 
 	 */
-	public Vector4 getPosition();
+	public Vector3 getPosition();
 	
 	/**
 	 * 
 	 */
-	public void setPosition(Vector4 position);
+	public void setPosition(Vector3 position);
 
 }

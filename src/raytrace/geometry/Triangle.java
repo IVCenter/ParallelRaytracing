@@ -3,7 +3,7 @@ package raytrace.geometry;
 import java.util.ArrayList;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -120,12 +120,12 @@ public class Triangle extends TerminalSurface {
 		double ny = n0[1] * alpha + n1[1] * beta + n2[1] * gamma;
 		double nz = n0[2] * alpha + n1[2] * beta + n2[2] * gamma;
 		
-		Vector4 normal = new Vector4(nx, ny, nz, 0);
-		normal.normalize3M();
+		Vector3 normal = new Vector3(nx, ny, nz);
+		normal.normalizeM();
 		
 		
 		//Point
-		Vector4 point = ray.evaluateAtTime(t);
+		Vector3 point = ray.evaluateAtTime(t);
 		
 		
 		//Interpolate the TexCoords
@@ -136,7 +136,7 @@ public class Triangle extends TerminalSurface {
 		double uCoord = tex0[0] * alpha + tex1[0] * beta + tex2[0] * gamma;
 		double vCoord = tex0[1] * alpha + tex1[1] * beta + tex2[1] * gamma;
 		
-		Vector4 texcoord = new Vector4(uCoord, vCoord, 0, 0);
+		Vector3 texcoord = new Vector3(uCoord, vCoord, 0);
 		
 		
 		//Return data about the intersection
@@ -144,13 +144,13 @@ public class Triangle extends TerminalSurface {
 		idata.setTime(t);
 		idata.setRay(ray);
 		idata.setPoint(point);
-		idata.setDistance(ray.getDirection().magnitude3() * t);
+		idata.setDistance(ray.getDirection().magnitude() * t);
 		idata.setNormal(normal);
 		idata.setMaterial(material);
 
 		idata.setSurface(this);
 		idata.setTexcoord(texcoord);
-		idata.setLocalPoint(new Vector4(point));
+		idata.setLocalPoint(new Vector3(point));
 		
 		return idata;
 	}
@@ -171,14 +171,14 @@ public class Triangle extends TerminalSurface {
 	public void updateBoundingBox()
 	{
 		boundingBox.clear();
-		boundingBox.min.minimize3M(vertices[0].getPosition()).minimize3M(vertices[1].getPosition()).minimize3M(vertices[2].getPosition());
-		boundingBox.max.maximize3M(vertices[0].getPosition()).maximize3M(vertices[1].getPosition()).maximize3M(vertices[2].getPosition());
+		boundingBox.min.minimizeM(vertices[0].getPosition()).minimizeM(vertices[1].getPosition()).minimizeM(vertices[2].getPosition());
+		boundingBox.max.maximizeM(vertices[0].getPosition()).maximizeM(vertices[1].getPosition()).maximizeM(vertices[2].getPosition());
 	}
 	
 	public void generateFaceNormal()
 	{
-		Vector4 normal = vertices[0].position.subtract3(vertices[1].position).cross3(
-				vertices[2].position.subtract3(vertices[1].position)).normalize3M();
+		Vector3 normal = vertices[0].position.subtract(vertices[1].position).cross(
+				vertices[2].position.subtract(vertices[1].position)).normalizeM();
 		for(Vertex v : vertices)
 			v.normal = normal;
 	}
@@ -264,9 +264,9 @@ public class Triangle extends TerminalSurface {
 		
 		subC1 = center.copy();
 		
-		subS0 = new Vertex(left.position.add3(right.position.subtract3(left.position).multiply3M(right.position.distance(left.position)/2.0)),
-				left.normal.multiply3(0.5).add3M(right.normal.multiply3(0.5)).normalize3M(),
-				left.texCoord.multiply3(0.5).add3M(right.texCoord.multiply3(0.5))
+		subS0 = new Vertex(left.position.add(right.position.subtract(left.position).multiplyM(right.position.distance(left.position)/2.0)),
+				left.normal.multiply(0.5).addM(right.normal.multiply(0.5)).normalizeM(),
+				left.texCoord.multiply(0.5).addM(right.texCoord.multiply(0.5))
 				);
 		
 		subS1 = subS0.copy();
@@ -319,10 +319,10 @@ public class Triangle extends TerminalSurface {
 	
 	public double getArea()
 	{
-		Vector4 a = vertices[0].getPosition().subtract3(vertices[1].getPosition());
-		Vector4 b = vertices[2].getPosition().subtract3(vertices[1].getPosition());
+		Vector3 a = vertices[0].getPosition().subtract(vertices[1].getPosition());
+		Vector3 b = vertices[2].getPosition().subtract(vertices[1].getPosition());
 		
-		return a.cross3(b).magnitude3()/2.0;
+		return a.cross(b).magnitude()/2.0;
 	}
 	
 	public double getLongestSide()

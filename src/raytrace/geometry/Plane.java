@@ -1,7 +1,7 @@
 package raytrace.geometry;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -13,8 +13,8 @@ public class Plane extends TerminalSurface implements Positionable {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 normal;
-	protected Vector4 position;
+	protected Vector3 normal;
+	protected Vector3 position;
 	
 
 	/* *********************************************************************************************
@@ -22,11 +22,11 @@ public class Plane extends TerminalSurface implements Positionable {
 	 * *********************************************************************************************/
 	public Plane()
 	{
-		normal = new Vector4(0,1,0,0);
-		position = new Vector4(0,0,0,1);
+		normal = new Vector3(0, 1, 0);
+		position = new Vector3(0, 0, 0);
 	}
 	
-	public Plane(Vector4 normal, Vector4 center)
+	public Plane(Vector3 normal, Vector3 center)
 	{
 		this.normal = normal;
 		this.position = center;
@@ -45,19 +45,19 @@ public class Plane extends TerminalSurface implements Positionable {
 		double t0 = data.getTStart();
 		double t1 = data.getTEnd();
 		
-		Vector4 o = ray.getOrigin();
-		Vector4 d = ray.getDirection();
+		Vector3 o = ray.getOrigin();
+		Vector3 d = ray.getDirection();
 		
 		//Precalc quotient terms
-		double DdotN = d.dot3(normal);
+		double DdotN = d.dot(normal);
 		
 		//If D is orthogonal to N, then it is parallel to the plane and will never intersect
 		if(DdotN == 0.0)
 			return null;
 		
 		//Calclate the rest of thw quatient terms
-		double PdotN = position.dot3(normal);
-		double OdotN = o.dot3(normal);
+		double PdotN = position.dot(normal);
+		double OdotN = o.dot(normal);
 		
 		double t = (PdotN - OdotN) / DdotN;
 		
@@ -66,15 +66,15 @@ public class Plane extends TerminalSurface implements Positionable {
 			return null;
 		
 		//Point
-		Vector4 point = ray.evaluateAtTime(t);
+		Vector3 point = ray.evaluateAtTime(t);
 		
 		//Calculate texcoords
 		//TODO: This will cause NaNs at exactly when the normal faces towards the z-axis or the negative z-axis
-		Vector4 tangent = normal.cross3(Vector4.ZAXIS).normalize3M();
-		Vector4 pointRelativeToPosition = point.subtract3(position);
+		Vector3 tangent = normal.cross(Vector3.ZAXIS).normalizeM();
+		Vector3 pointRelativeToPosition = point.subtract(position);
 		
-		double relativePointDistanceSqrd = pointRelativeToPosition.magnitude3Sqrd();
-		double uCoord = tangent.dot3(pointRelativeToPosition);
+		double relativePointDistanceSqrd = pointRelativeToPosition.magnitudeSqrd();
+		double uCoord = tangent.dot(pointRelativeToPosition);
 		double vCoord = Math.sqrt(relativePointDistanceSqrd - uCoord * uCoord);
 		
 			
@@ -83,14 +83,14 @@ public class Plane extends TerminalSurface implements Positionable {
 		idata.setTime(t);
 		idata.setRay(ray);
 		idata.setPoint(point);
-		idata.setDistance(ray.getDirection().magnitude3() * t);
-		idata.setNormal(new Vector4(normal));
+		idata.setDistance(ray.getDirection().magnitude() * t);
+		idata.setNormal(new Vector3(normal));
 		idata.setTwoSided(true);
 		idata.setMaterial(material);
 
 		idata.setSurface(this);
-		idata.setTexcoord(new Vector4(uCoord, vCoord, 0, 0));
-		idata.setLocalPoint(new Vector4(point));
+		idata.setTexcoord(new Vector3(uCoord, vCoord, 0));
+		idata.setLocalPoint(new Vector3(point));
 		
 		return idata;
 	}
@@ -108,22 +108,22 @@ public class Plane extends TerminalSurface implements Positionable {
 	 * Getter/Setter Methods
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 getPosition()
+	public Vector3 getPosition()
 	{
 		return position;
 	}
 
 	@Override
-	public void setPosition(Vector4 position)
+	public void setPosition(Vector3 position)
 	{
 		this.position = position;
 	}
 
-	public Vector4 getNormal() {
+	public Vector3 getNormal() {
 		return normal;
 	}
 
-	public void setNormal(Vector4 normal) {
+	public void setNormal(Vector3 normal) {
 		this.normal = normal;
 	}
 }

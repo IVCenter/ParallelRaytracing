@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import math.Spline;
-import math.Vector4;
+import math.Vector3;
 import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
 import math.function._3D.TchebyshevDistance3D;
@@ -86,9 +86,9 @@ public class TestScene6 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(0,2.5,5,0));
-		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2.5,5));
+		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getRenderWidth());
 		activeCamera.setPixelHeight(Configuration.getRenderHeight());
@@ -102,66 +102,66 @@ public class TestScene6 extends Scene
 		//Position Spline
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 2.5, 5.0));
+			spline.add(new Vector3(-5.0, 2.5, 5.0));
+			spline.add(new Vector3(-5.0, 2.5, 0.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
+			spline.add(new Vector3(-5.0, 2.5, 0.0));
+			spline.add(new Vector3(-5.0, 2.5, -5.0));
+			spline.add(new Vector3(0.0, 2.5, -5.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 2.5, -5.0));
+			spline.add(new Vector3(5.0, 2.5, -5.0));
+			spline.add(new Vector3(5.0, 2.5, 0.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
+			spline.add(new Vector3(5.0, 2.5, 0.0));
+			spline.add(new Vector3(5.0, 2.5, 5.0));
+			spline.add(new Vector3(0.0, 2.5, 5.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		
 		//Look At
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
-			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 1.0, 0.0));
+			spline.add(new Vector3(0.0, 1.0, 0.0));
 			camController.addLookAtSpline(spline, 0.8);
 		}
 		
 		//Camera Radius
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
 			camController.addApertureRadiusSpline(spline, 0.8);
 		}
 		
 		//Focal Distance
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(8.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(1.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(4.5, 0.0, 0.0));
+			spline.add(new Vector3(8.0, 0.0, 0.0));
+			spline.add(new Vector3(1.0, 0.0, 0.0));
+			spline.add(new Vector3(4.5, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 0.8);
 		}
 		
 		//Field of View
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(Math.PI/1.2, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/1.2, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 0.8);
 		}
 		
@@ -327,7 +327,7 @@ public class TestScene6 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		

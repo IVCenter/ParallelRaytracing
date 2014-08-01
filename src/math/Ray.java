@@ -18,8 +18,8 @@ public class Ray implements Iterable<Ray>, Serializable{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 origin;
-	protected Vector4 direction;
+	protected Vector3 origin;
+	protected Vector3 direction;
 	protected int pixelX;
 	protected int pixelY;
 	
@@ -33,8 +33,8 @@ public class Ray implements Iterable<Ray>, Serializable{
 	 * *********************************************************************************************/
 	public Ray()
 	{
-		origin = new Vector4();
-		direction = new Vector4();
+		origin = new Vector3();
+		direction = new Vector3();
 		pixelX = 0;
 		pixelY = 0;
 		
@@ -42,7 +42,7 @@ public class Ray implements Iterable<Ray>, Serializable{
 	}
 	
 	//We assume that direction is normalized
-	public Ray(Vector4 origin, Vector4 direction, int pixelX, int pixelY)
+	public Ray(Vector3 origin, Vector3 direction, int pixelX, int pixelY)
 	{
 		this.origin = origin;
 		this.direction = direction;
@@ -56,9 +56,9 @@ public class Ray implements Iterable<Ray>, Serializable{
 	/* *********************************************************************************************
 	 * Calculation Methods
 	 * *********************************************************************************************/
-	public Vector4 evaluateAtTime(double t)
+	public Vector3 evaluateAtTime(double t)
 	{
-		return new Vector4(origin.addMultiRight3(direction, t));
+		return new Vector3(origin.addMultiRight(direction, t));
 	}
 	
 	
@@ -66,19 +66,19 @@ public class Ray implements Iterable<Ray>, Serializable{
 	/* *********************************************************************************************
 	 * Setters/Getters
 	 * *********************************************************************************************/
-	public Vector4 getOrigin() {
+	public Vector3 getOrigin() {
 		return origin;
 	}
 
-	public void setOrigin(Vector4 origin) {
+	public void setOrigin(Vector3 origin) {
 		this.origin = origin;
 	}
 
-	public Vector4 getDirection() {
+	public Vector3 getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Vector4 direction) {
+	public void setDirection(Vector3 direction) {
 		this.direction = direction;
 	}
 

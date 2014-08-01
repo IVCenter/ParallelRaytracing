@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-import math.Vector4;
+import math.Vector3;
 import math.function._2D.Function2D;
 import math.function._2D.SelectNthNearest2D;
 import math.function._3D.EuclideanDistance3D;
@@ -66,8 +66,8 @@ public class WorleyNoise3D implements Map3D<Double> {
 	/* *********************************************************************************************
 	 * Static Calculation Methods
 	 * *********************************************************************************************/
-	public static double noise(Vector4 input, long seed, 
-			Function3D<Vector4, Vector4, Double> distanceFuncion, 
+	public static double noise(Vector3 input, long seed, 
+			Function3D<Vector3, Vector3, Double> distanceFuncion, 
 			Function2D<Collection<Double>, Double> selectionFunction)
 	{
 		final int ARR_SIZE = 9;
@@ -83,8 +83,8 @@ public class WorleyNoise3D implements Map3D<Double> {
 
 		long lastRandom;
 		long numberFeaturePoints;
-		Vector4 randomDiff = new Vector4();
-		Vector4 featurePoint;
+		Vector3 randomDiff = new Vector3();
+		Vector3 featurePoint;
 		int cubeX;
 		int cubeY;
 		int cubeZ;
@@ -114,10 +114,9 @@ public class WorleyNoise3D implements Map3D<Double> {
 						lastRandom = lcgRandom(lastRandom);
 						randomDiff.set(2, (double)lastRandom / (double)0x100000000L);
 
-						featurePoint = new Vector4(randomDiff.get(0) + (double)cubeX, 
+						featurePoint = new Vector3(randomDiff.get(0) + (double)cubeX, 
 												   randomDiff.get(1) + (double)cubeY, 
-												   randomDiff.get(2) + (double)cubeZ, 
-												   0);
+												   randomDiff.get(2) + (double)cubeZ);
 
 						insert(distanceArray, distanceFuncion.evaluate(input, featurePoint));
 					}
@@ -173,7 +172,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected long seed;
-	protected Function3D<Vector4, Vector4, Double> distanceFunction;
+	protected Function3D<Vector3, Vector3, Double> distanceFunction;
 	protected Function2D<Collection<Double>, Double> selectionFunction;
 	
 
@@ -194,7 +193,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 		this.selectionFunction = new SelectNthNearest2D(3);
 	}
 	
-	public WorleyNoise3D(long seed, Function3D<Vector4, Vector4, Double> distanceFunction, 
+	public WorleyNoise3D(long seed, Function3D<Vector3, Vector3, Double> distanceFunction, 
 			Function2D<Collection<Double>, Double> selectionFunction)
 	{
 		this.seed = seed;
@@ -209,7 +208,7 @@ public class WorleyNoise3D implements Map3D<Double> {
 	@Override
 	public Double evaluate(Double x, Double y, Double z)
 	{
-		return noise(new Vector4(x, y, z, 0), seed, distanceFunction, selectionFunction);
+		return noise(new Vector3(x, y, z), seed, distanceFunction, selectionFunction);
 	}
 	
 	
@@ -224,12 +223,12 @@ public class WorleyNoise3D implements Map3D<Double> {
 		this.seed = seed;
 	}
 
-	public Function3D<Vector4, Vector4, Double> getDistanceFunction() {
+	public Function3D<Vector3, Vector3, Double> getDistanceFunction() {
 		return distanceFunction;
 	}
 
 	public void setDistanceFunction(
-			Function3D<Vector4, Vector4, Double> distanceFunction) {
+			Function3D<Vector3, Vector3, Double> distanceFunction) {
 		this.distanceFunction = distanceFunction;
 	}
 

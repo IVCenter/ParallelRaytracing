@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -38,8 +38,8 @@ public class ReflectiveMaterial  extends Material{
 		//Get the material color from the texture
 		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
-		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 point = data.getIntersectionData().getPoint();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		IlluminationData ildata;
 		
 		//Diffuse lighting and shadows

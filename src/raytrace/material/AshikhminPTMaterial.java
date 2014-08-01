@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -48,39 +48,39 @@ public class AshikhminPTMaterial extends Material {
 		
 		Color shade = new Color(0x000000ff);
 		
-		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal().normalize3M();
-		Vector4 rayDir = data.getRay().getDirection().multiply3(-1.0).normalize3M();
+		Vector3 point = data.getIntersectionData().getPoint();
+		Vector3 normal = data.getIntersectionData().getNormal().normalizeM();
+		Vector3 rayDir = data.getRay().getDirection().multiply(-1.0).normalizeM();
 		
-		double DdotN = normal.dot3(rayDir);
+		double DdotN = normal.dot(rayDir);
 		//If the normal is facing the wrong direction, flip it
 		if(DdotN < 0.0) {
-			normal = normal.multiply3(-1.0);
-			DdotN = normal.dot3(rayDir);
+			normal = normal.multiply(-1.0);
+			DdotN = normal.dot(rayDir);
 		}
 		
 		
 		//Basis
-		Vector4 uTangent;
-		Vector4 vTangent;
+		Vector3 uTangent;
+		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
+		if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
+			uTangent = normal.cross(cosineWeightedSample()).normalizeM();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3M();
-		vTangent = uTangent.cross3(normal).normalize3M();
+			uTangent = normal.cross(positiveYAxis).normalizeM();
+		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
 		//Direct Illumination
 		IlluminationData ildata;
-		Vector4 lightDir;
-		Vector4 half;
+		Vector3 lightDir;
+		Vector3 half;
 		for(Light light : data.getRootScene().getLightManager())
 		{
 			//Get illumination data for the current light
 			ildata = light.illuminate(data, point);
 			
-			lightDir = ildata.getDirection().multiply3(-1.0).normalize3M();
+			lightDir = ildata.getDirection().multiply(-1.0).normalizeM();
 			half = halfVector(rayDir, lightDir);
 
 			shade.add3M(ashikminSpecular(ildata.getColor(), specularTint, rayDir, lightDir, normal, uTangent, vTangent, half));
@@ -91,8 +91,8 @@ public class AshikhminPTMaterial extends Material {
 		//Sampling
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			Vector4 halfSample;
-			Vector4 sample;
+			Vector3 halfSample;
+			Vector3 sample;
 			//Roll a random to trace either specular reflections or diffuse reflections
 			if(Math.random() < specularReflectance)
 			{
@@ -101,7 +101,7 @@ public class AshikhminPTMaterial extends Material {
 				halfSample = createHalfSample(normal, uTangent, vTangent);
 				sample = createSample(halfSample, rayDir);
 				
-				if(sample.dot3(normal) > 0.0)
+				if(sample.dot(normal) > 0.0)
 				{
 					shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), specularTint);	
 				}
@@ -118,31 +118,31 @@ public class AshikhminPTMaterial extends Material {
 		return shade;
 	}
 	
-	private Color ashikminDiffuse(Color light, Color diffuseTint, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
+	private Color ashikminDiffuse(Color light, Color diffuseTint, Vector3 k1/*rayDir*/, Vector3 k2/*lightDir*/, Vector3 n, Vector3 u, Vector3 v, Vector3 h)
 	{	
 		//Diffuse component
 		double leadingCoeffDiff = ((28.0 * diffuseReflectance) / (23.0 * Math.PI)) * (1.0 - specularReflectance);
 		
 		double diffuseCoeff = leadingCoeffDiff * 
-				(1.0 - Math.pow( (1.0 - 0.5 * Math.abs(n.dot3(k1))) , 5.0 )) * 
-				(1.0 - Math.pow( (1.0 - 0.5 * Math.abs(n.dot3(k2))) , 5.0 ));
+				(1.0 - Math.pow( (1.0 - 0.5 * Math.abs(n.dot(k1))) , 5.0 )) * 
+				(1.0 - Math.pow( (1.0 - 0.5 * Math.abs(n.dot(k2))) , 5.0 ));
 		
 		return diffuseTint.multiply3(light).multiply3M(diffuseCoeff);
 	}
 	
-	private Color ashikminSpecular(Color light, Color specularTint, Vector4 k1/*rayDir*/, Vector4 k2/*lightDir*/, Vector4 n, Vector4 u, Vector4 v, Vector4 h)
+	private Color ashikminSpecular(Color light, Color specularTint, Vector3 k1/*rayDir*/, Vector3 k2/*lightDir*/, Vector3 n, Vector3 u, Vector3 v, Vector3 h)
 	{	
 		//Specular component
 		double leadingCoeffSpec = (1.0 / (8.0 * Math.PI)) * Math.sqrt( (uExponent+ 1.0) * (vExponent + 1.0) );
 
 		//Fresnel component
-		double fspec = specularReflectance + (1.0 - specularReflectance) * Math.pow(1.0 - h.dot3(k2), 5.0);
+		double fspec = specularReflectance + (1.0 - specularReflectance) * Math.pow(1.0 - h.dot(k2), 5.0);
 		
-		double topSpec = Math.pow( h.dot3(n) , ( 
-				(uExponent * Math.pow(h.dot3(u), 2.0) + vExponent * Math.pow(h.dot3(v), 2.0)) / (1.0 - Math.pow(h.dot3(n), 2.0)) 
+		double topSpec = Math.pow( h.dot(n) , ( 
+				(uExponent * Math.pow(h.dot(u), 2.0) + vExponent * Math.pow(h.dot(v), 2.0)) / (1.0 - Math.pow(h.dot(n), 2.0)) 
 				) );
 		
-		double bottomSpec = Math.abs(h.dot3(k2)) * Math.max(Math.abs(n.dot3(k1)), Math.abs(n.dot3(k2)));
+		double bottomSpec = Math.abs(h.dot(k2)) * Math.max(Math.abs(n.dot(k1)), Math.abs(n.dot(k2)));
 		
 		double middleSpec = topSpec / bottomSpec;
 		
@@ -160,7 +160,7 @@ public class AshikhminPTMaterial extends Material {
 		return spec;
 	}
 	
-	private Vector4 createHalfSample(Vector4 normal, Vector4 uTangent, Vector4 vTangent)
+	private Vector3 createHalfSample(Vector3 normal, Vector3 uTangent, Vector3 vTangent)
 	{
 		double epsilon1 = Math.random();
 		double epsilon2 = Math.random();
@@ -178,20 +178,20 @@ public class AshikhminPTMaterial extends Material {
 		double yCoeff = sinTheta * sinPhi;
 		double zCoeff = Math.cos(theta);
 		
-		Vector4 half = new Vector4();
+		Vector3 half = new Vector3();
 		
 		double quad = Math.random();
 		double quad2 = quad < 0.5 ? -1.0 : 1.0;
 		double quad1 = quad < 0.25 || quad >= 0.75 ? 1.0 : -1.0;
 		
-		half = half.addMultiRight3M(normal, zCoeff).addMultiRight3M(vTangent, yCoeff * quad2).addMultiRight3M(uTangent, xCoeff * quad1);
+		half = half.addMultiRightM(normal, zCoeff).addMultiRightM(vTangent, yCoeff * quad2).addMultiRightM(uTangent, xCoeff * quad1);
 		
-		return half.normalize3M();
+		return half.normalizeM();
 	}
 	
-	private Vector4 createSample(Vector4 half, Vector4 k1/*rayDir*/)
+	private Vector3 createSample(Vector3 half, Vector3 k1/*rayDir*/)
 	{
-		return k1.multiply3(-1.0).add3M(half.multiply3(half.dot3(k1) * 2.0)).normalize3M();
+		return k1.multiply(-1.0).addM(half.multiply(half.dot(k1) * 2.0)).normalizeM();
 	}
 
 }

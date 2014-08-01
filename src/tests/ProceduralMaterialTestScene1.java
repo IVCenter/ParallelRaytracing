@@ -1,7 +1,7 @@
 package tests;
 
 import process.logging.Logger;
-import math.Vector4;
+import math.Vector3;
 import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
 import math.function._3D.ManhattanDistance3D;
@@ -45,7 +45,7 @@ import raytrace.surfaces.acceleration.AABVHSurface;
 import resource.ResourceManager;
 import system.Configuration;
 
-public class CSE168_Project3_Scene extends Scene
+public class ProceduralMaterialTestScene1 extends Scene
 {	
 
 	/*
@@ -70,11 +70,11 @@ public class CSE168_Project3_Scene extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(6);
-		activeCamera.setPosition(new Vector4(-0.5, 0.25, -0.2, 0));
-		activeCamera.setViewingDirection(new Vector4(0.5, -0.1, 0.05, 0));
+		activeCamera.setPosition(new Vector3(-0.5, 0.25, -0.2));
+		activeCamera.setViewingDirection(new Vector3(0.5, -0.1, 0.05));
 		//activeCamera.setPosition(new Vector4(-0.2, 0.077, 0.1, 0));
 		//activeCamera.setViewingDirection(new Vector4(0.65, 0.3, -1.0, 0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
@@ -285,7 +285,7 @@ public class CSE168_Project3_Scene extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(new Color(1.0, 1.0, 0.9));
 		directionalLight.setIntensity(1.0);
-		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
+		directionalLight.setDirection(new Vector3(2, -3, -2));
 		lightManager.addLight(directionalLight);
 		
 		//Yellow Light
@@ -293,7 +293,7 @@ public class CSE168_Project3_Scene extends Scene
 			PointLight plight = new PointLight();
 			plight.setColor(new Color(0xffbb66ff));
 			plight.setIntensity(8.0);
-			plight.setPosition(new Vector4(0.1, 0.1, -0.4, 0));
+			plight.setPosition(new Vector3(0.1, 0.1, -0.4));
 			//lightManager.addLight(plight);
 		}
 		
@@ -302,13 +302,13 @@ public class CSE168_Project3_Scene extends Scene
 			PointLight plight = new PointLight();
 			plight.setColor(new Color(0xff0000ff));
 			plight.setIntensity(4.0);
-			plight.setPosition(new Vector4(0.0, 0.2, -0.3, 0));
+			plight.setPosition(new Vector3(0.0, 0.2, -0.3));
 			//lightManager.addLight(plight);
 		}
 		
 		//Sphere Light
 		{
-			Sphere sphere = new Sphere(1.0, new Vector4(1.5, 1.5, 1.5, 1));
+			Sphere sphere = new Sphere(1.0, new Vector3(1.5, 1.5, 1.5));
 			sphere.setMaterial(new ColorMaterial(new Color(2.0, 2.0, 2.0)));
 			//this.addChild(sphere);
 		}

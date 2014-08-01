@@ -1,6 +1,6 @@
 package tests;
 
-import math.Vector4;
+import math.Vector3;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
@@ -38,9 +38,9 @@ public class TestScene2 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(3);
-		activeCamera.setPosition(new Vector4(0,2,5,0));
-		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2,5));
+		activeCamera.setViewingDirection(new Vector3(0,-0.1,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -53,7 +53,7 @@ public class TestScene2 extends Scene
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new DiffuseMaterial(new Color(0.9, 0.3, 0.3)));
 			sphere.setMaterial(new FresnelDiffusePTMaterial(new Color(0.5, 0.2, 0.2), 0.9, 1.5));
-			sphere.setPosition(new Vector4(-3.5, 1, -1, 0));
+			sphere.setPosition(new Vector3(-3.5, 1, -1));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
 		}
@@ -62,7 +62,7 @@ public class TestScene2 extends Scene
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricMaterial(new Color(1.0, 0.9, 1.0), 1.30));
-			sphere.setPosition(new Vector4(0, 1, -1, 0));
+			sphere.setPosition(new Vector3(0, 1, -1));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
 		}
@@ -73,7 +73,7 @@ public class TestScene2 extends Scene
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
 			sphere.setMaterial(new FresnelMetalMaterial(copper.multiply3M(copper), 0.917, 2.63));
-			sphere.setPosition(new Vector4(3.5, 1, -1, 0));
+			sphere.setPosition(new Vector3(3.5, 1, -1));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
 		}
@@ -84,7 +84,7 @@ public class TestScene2 extends Scene
 			Sphere sphere = new Sphere();
 			//sphere.setMaterial(new ReflectiveMaterial(new Color(1.0, 0.8, 0.7), 0.74));
 			sphere.setMaterial(new ColorMaterial(new Color(1.0, 1.0, 1.0)));
-			sphere.setPosition(new Vector4(0, 4, -10, 0));
+			sphere.setPosition(new Vector3(0, 4, -10));
 			sphere.setRadius(1.0);
 			//this.addChild(sphere);
 		}
@@ -94,7 +94,7 @@ public class TestScene2 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.95);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		

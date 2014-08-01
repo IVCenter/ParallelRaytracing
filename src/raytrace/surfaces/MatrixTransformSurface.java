@@ -2,7 +2,7 @@ package raytrace.surfaces;
 
 import math.Matrix4;
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -52,8 +52,8 @@ public class MatrixTransformSurface extends CompositeSurface {
 		
 		Ray ray = data.getRay();
 		
-		Vector4 oldOrigin = ray.getOrigin();
-		Vector4 oldDirection = ray.getDirection();
+		Vector3 oldOrigin = ray.getOrigin();
+		Vector3 oldDirection = ray.getDirection();
 		
 		ray.setOrigin(inverseTransform.multiplyPt(oldOrigin));
 		ray.setDirection(inverseTransform.multiply3(oldDirection));
@@ -85,9 +85,9 @@ public class MatrixTransformSurface extends CompositeSurface {
 		if(closest != null)
 		{
 			closest.setRay(ray);
-			closest.setNormal(transform.multiply3(closest.getNormal()).normalize3M());
+			closest.setNormal(transform.multiply3(closest.getNormal()).normalizeM());
 			closest.setPoint(transform.multiplyPt(closest.getPoint()));
-			closest.setDistance(closest.getPoint().subtract3(ray.getOrigin()).magnitude3());
+			closest.setDistance(closest.getPoint().subtract(ray.getOrigin()).magnitude());
 			closest.setTime(closest.getDistance());
 		}
 		
@@ -117,14 +117,13 @@ public class MatrixTransformSurface extends CompositeSurface {
 		super.updateBoundingBox();
 		
 		//Create a vector for each corner, and transform it
-		Vector4[] corners = new Vector4[8];
+		Vector3[] corners = new Vector3[8];
 		for(int mask = 0x0; mask < 0x8; ++mask)
 		{
-			corners[mask] = transform.multiplyPt(new Vector4(
+			corners[mask] = transform.multiplyPt(new Vector3(
 					(mask & 0x1) == 0 ? boundingBox.min.get(0) : boundingBox.max.get(0),
 					(mask & 0x2) == 0 ? boundingBox.min.get(1) : boundingBox.max.get(1),
-					(mask & 0x4) == 0 ? boundingBox.min.get(2) : boundingBox.max.get(2),
-					1));
+					(mask & 0x4) == 0 ? boundingBox.min.get(2) : boundingBox.max.get(2)));
 		}
 
 		
@@ -132,8 +131,8 @@ public class MatrixTransformSurface extends CompositeSurface {
 		boundingBox.clear();
 		for(int i = 0; i < 8; ++i)
 		{
-			boundingBox.min.minimize3M(corners[i]);
-			boundingBox.max.maximize3M(corners[i]);
+			boundingBox.min.minimizeM(corners[i]);
+			boundingBox.max.maximizeM(corners[i]);
 		}
 	}
 

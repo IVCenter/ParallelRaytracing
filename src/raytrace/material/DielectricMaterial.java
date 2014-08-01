@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
 import raytrace.map.texture.Texture;
@@ -34,13 +34,13 @@ public class DielectricMaterial extends Material{
 		Color tint = beerTexture.evaluate(data.getIntersectionData());
 		
 		//Setup the point of intersection
-		Vector4 point = data.getIntersectionData().getPoint();
+		Vector3 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		
-		double DdotN = normal.dot3(data.getRay().getDirection());
+		double DdotN = normal.dot(data.getRay().getDirection());
 		double thisRefractiveIndex = refractiveIndex;
 		boolean exiting = false;
 		
@@ -48,7 +48,7 @@ public class DielectricMaterial extends Material{
 		if(DdotN > 0.0) {
 			//TODO: Would it be better to use a refractiveIndex stack?
 			thisRefractiveIndex = AIR_REFRACTIVE_INDEX;//TODO: Is this the right test, and right place to assume we are exiting the material?
-			normal = normal.multiply3(-1.0);
+			normal = normal.multiply(-1.0);
 			DdotN *= -1.0;
 			
 			exiting = true;
@@ -85,10 +85,10 @@ public class DielectricMaterial extends Material{
 		Color refractColor = new Color();
 		if(phiDiscrim > 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			Vector4 rayDir = data.getRay().getDirection();
-			Vector4 thetaSide = rayDir.subtract3(normal.multiply3(DdotN)).multiply3(refractiveRatio);
-			Vector4 phiSide = normal.multiply3(Math.sqrt(phiDiscrim));
-			Vector4 refracDir = thetaSide.subtract3(phiSide);
+			Vector3 rayDir = data.getRay().getDirection();
+			Vector3 thetaSide = rayDir.subtract(normal.multiply(DdotN)).multiply(refractiveRatio);
+			Vector3 phiSide = normal.multiply(Math.sqrt(phiDiscrim));
+			Vector3 refracDir = thetaSide.subtract(phiSide);
 			
 			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
 		}

@@ -1,6 +1,6 @@
 package raytrace.camera.aperture;
 
-import math.Vector4;
+import math.Vector3;
 
 public class CircularAperture extends Aperture {
 	
@@ -35,17 +35,17 @@ public class CircularAperture extends Aperture {
 	 * Interface Overrides
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 sample()
+	public Vector3 sample()
 	{
-		return sample(new Vector4());
+		return sample(new Vector3());
 	}
 	
 	@Override
-	public Vector4 sample(Vector4 sample)
+	public Vector3 sample(Vector3 sample)
 	{
 		double theta = Math.random() * Math.PI * 2.0;
 		double distance = Math.pow(Math.random(), distributionExponent) * radius;
-		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0, 0);
+		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0);
 		return sample;
 	}
 	

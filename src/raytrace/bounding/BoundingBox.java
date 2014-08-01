@@ -2,7 +2,7 @@ package raytrace.bounding;
 
 import raytrace.data.RayData;
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 
 public class BoundingBox {
 	
@@ -13,8 +13,8 @@ public class BoundingBox {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	public Vector4 min;
-	public Vector4 max;
+	public Vector3 min;
+	public Vector3 max;
 	
 
 	/* *********************************************************************************************
@@ -22,13 +22,13 @@ public class BoundingBox {
 	 * *********************************************************************************************/
 	public BoundingBox()
 	{
-		min = new Vector4();
-		max = new Vector4();
+		min = new Vector3();
+		max = new Vector3();
 		
 		clear();
 	}
 	
-	public BoundingBox(Vector4 min, Vector4 max)
+	public BoundingBox(Vector3 min, Vector3 max)
 	{
 		this.min = min;
 		this.max = max;
@@ -86,9 +86,9 @@ public class BoundingBox {
 		//return Double.MAX_VALUE;
 	}
 	
-	public Vector4 getMidpoint()
+	public Vector3 getMidpoint()
 	{
-		Vector4 mp = min.add3(max).multiply3(0.5);
+		Vector3 mp = min.add(max).multiply(0.5);
 		return mp;
 	}
 	
@@ -109,8 +109,8 @@ public class BoundingBox {
 	 * *********************************************************************************************/
 	public void clear()
 	{
-		min.set(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, 0);
-		max.set(-1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), 0);
+		min.set(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+		max.set(-1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0));
 		//max.set((-9999999.0), (-9999999.0), (-9999999.0), 0);
 	}
 	

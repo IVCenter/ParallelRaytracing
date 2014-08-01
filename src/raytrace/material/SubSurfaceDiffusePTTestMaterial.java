@@ -1,7 +1,7 @@
 package raytrace.material;
 
 import process.logging.Logger;
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -47,10 +47,10 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 	public Color shade(ShadingData data)
 	{	
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
+		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 		
 		
 		
@@ -81,7 +81,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		 * 
 		 */
 		
-		double DdotN = normal.dot3(rayDir);
+		double DdotN = normal.dot(rayDir);
 		
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
 		Color recursionColor = null;
@@ -118,16 +118,16 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 			}else{
 				//If scatter, get recursing
 				//Setup the point of intersection
-				Vector4 point = data.getIntersectionData().getPoint();
+				Vector3 point = data.getIntersectionData().getPoint();
 				
 				//Setup the normal
-				Vector4 normal = data.getIntersectionData().getNormal();
+				Vector3 normal = data.getIntersectionData().getNormal();
 				
 				//Ray Direction
-				Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
+				Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 				
 				
-				double DdotN = normal.dot3(rayDir);
+				double DdotN = normal.dot(rayDir);
 				double thisRefractiveIndex = refractiveIndex;
 				
 				
@@ -142,23 +142,23 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				if(phiDiscrim >= 0)
 				{
 				
-					Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-					Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3M();
+					Vector3 thetaSide = rayDir.addMultiRightM(normal, -DdotN).multiplyM(refractiveRatio);
+					Vector3 refracDir = thetaSide.addMultiRightM(normal, -Math.sqrt(phiDiscrim)).normalizeM();
 					
 					//0.0 is no roughness, 1.0 is lots of roughness
 					//TODO: Use something better here......
-					if(roughness > 0.0 && refracDir.dot3(normal) < 0.0)
+					if(roughness > 0.0 && refracDir.dot(normal) < 0.0)
 					{
-						Vector4 roughDir = new Vector4();
-						Vector4 offset = new Vector4();
+						Vector3 roughDir = new Vector3();
+						Vector3 offset = new Vector3();
 						do
 						{
-							offset = uniformSphereSample().multiply3M(roughness);
+							offset = uniformSphereSample().multiplyM(roughness);
 							roughDir.set(refracDir);
-							roughDir.add3M(offset);
-						} while(roughDir.dot3(normal) > 0.0);
+							roughDir.addM(offset);
+						} while(roughDir.dot(normal) > 0.0);
 						
-						refracDir = roughDir.normalize3M();
+						refracDir = roughDir.normalizeM();
 					}
 					
 					recursionColor = recurse(data, point, refracDir, refractiveIndex);
@@ -182,10 +182,10 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 	{
 
 		//Setup the point of intersection
-		Vector4 point = data.getIntersectionData().getPoint();
+		Vector3 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		
 		Color recursionColor = null;
@@ -219,18 +219,18 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 				{
 					//Basis
-					Vector4 uTangent;
-					Vector4 vTangent;
+					Vector3 uTangent;
+					Vector3 vTangent;
 					
-					if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-						uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
+					if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
+						uTangent = normal.cross(cosineWeightedSample()).normalizeM();
 					else
-						uTangent = normal.cross3(positiveYAxis).normalize3M();
-					vTangent = uTangent.cross3(normal).normalize3M();
+						uTangent = normal.cross(positiveYAxis).normalizeM();
+					vTangent = uTangent.cross(normal).normalizeM();
 					
 					//Sample a random point
 					//Vector4 sampleDir = uniformHemisphereSample(uTangent, normal, vTangent);
-					Vector4 sampleDir = uniformSphereSample();
+					Vector3 sampleDir = uniformSphereSample();
 					
 					//Add the direct shading and samples shading together
 					shade.add3M(recurse(data, point, sampleDir, 1.0));
@@ -238,16 +238,16 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 				
 				
 				double segmentLength = data.getIntersectionData().getDistance() / (double)scatterSampleCount;
-				Vector4 origin = data.getRay().getOrigin();
-				Vector4 path = point.subtract3(origin);
+				Vector3 origin = data.getRay().getOrigin();
+				Vector3 path = point.subtract(origin);
 				
-				Vector4 samplePoint = new Vector4();
+				Vector3 samplePoint = new Vector3();
 				Color beerColor = new Color();
 				for(int i = 0; i < scatterSampleCount; i++)
 				{
 					//Get an internal sample point along the path
 					samplePoint.set(origin);
-					samplePoint.addMultiRight3M(path, ((double)(scatterSampleCount-i)) / (double) scatterSampleCount);
+					samplePoint.addMultiRightM(path, ((double)(scatterSampleCount-i)) / (double) scatterSampleCount);
 					double[] a = volumeTexture.evaluate(samplePoint.get(0), samplePoint.get(0), samplePoint.get(0)).getChannels();
 					
 					//Brew up some beer color

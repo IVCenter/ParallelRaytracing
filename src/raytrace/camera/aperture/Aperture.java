@@ -2,7 +2,7 @@ package raytrace.camera.aperture;
 
 import java.io.Serializable;
 
-import math.Vector4;
+import math.Vector3;
 
 public abstract class Aperture implements Serializable {
 	
@@ -25,8 +25,8 @@ public abstract class Aperture implements Serializable {
 	/* *********************************************************************************************
 	 * Interface Methods
 	 * *********************************************************************************************/
-	public abstract Vector4 sample();
-	public abstract Vector4 sample(Vector4 sample);
+	public abstract Vector3 sample();
+	public abstract Vector3 sample(Vector3 sample);
 	
 
 	/* *********************************************************************************************

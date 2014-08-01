@@ -2,13 +2,11 @@ package math;
 
 import java.util.ArrayList;
 
-import process.logging.Logger;
-
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
 import raytrace.material.Material;
 
-public class Spline extends ArrayList<Vector4> {
+public class Spline extends ArrayList<Vector3> {
 	
 	/*
 	 * A spline implementation
@@ -45,7 +43,7 @@ public class Spline extends ArrayList<Vector4> {
 		super();
 	}
 	
-	public Spline(ArrayList<Vector4> points)
+	public Spline(ArrayList<Vector3> points)
 	{
 		super(points);
 	}
@@ -54,9 +52,9 @@ public class Spline extends ArrayList<Vector4> {
 	/* *********************************************************************************************
 	 * Calculation Methods
 	 * *********************************************************************************************/
-	public ArrayList<Vector4> points(int resolution)
+	public ArrayList<Vector3> points(int resolution)
 	{
-	    ArrayList<Vector4> points = new ArrayList<Vector4>();
+	    ArrayList<Vector3> points = new ArrayList<Vector3>();
 	    double interval = (1.0 / (double)resolution);
 	    for(double t = 0.0; t <= 1.0; t += interval)
 	    {
@@ -66,7 +64,7 @@ public class Spline extends ArrayList<Vector4> {
 	    return points;
 	}
 	
-	public Vector4 point(double t)
+	public Vector3 point(double t)
 	{
 	    double[] coords = new double[3];
 	    coords[0] = 0.0;
@@ -77,7 +75,7 @@ public class Spline extends ArrayList<Vector4> {
 	    
 	    long n = this.size()-1;
 	    long i = 0;
-	    for(Vector4 point : this)
+	    for(Vector3 point : this)
 	    {
 	        coords[0] += bezier(n, i, t, point.get(0));
 	        coords[1] += bezier(n, i, t, point.get(1));
@@ -85,19 +83,19 @@ public class Spline extends ArrayList<Vector4> {
 	        i++;
 	    }
 	    
-	    return new Vector4(coords);
+	    return new Vector3(coords);
 	}
 	
-	public Vector4 tangent(double t)
+	public Vector3 tangent(double t)
 	{
 	    t = Math.min(1.0 - approxTangentDelta, Math.max(0.0, t));
 	    
-	    Vector4 pre = point(t);
-	    Vector4 post = point(t+approxTangentDelta);
+	    Vector3 pre = point(t);
+	    Vector3 post = point(t+approxTangentDelta);
 	    
-	    post.subtract3M(pre);
+	    post.subtractM(pre);
 	    
-	    return post.normalize3M();
+	    return post.normalizeM();
 	}
 	
 	public ArrayList<Triangle> tessellate(int segments, int slices, double radiusStart, double radiusEnd)
@@ -106,33 +104,32 @@ public class Spline extends ArrayList<Vector4> {
 		
 		double segmentDelta = 1.0 / (double)segments;
 		
-		Vector4 thisPoint;
-		Vector4 nextPoint = this.get(0);
+		Vector3 thisPoint;
+		Vector3 nextPoint = this.get(0);
 		
 		//Vector4 thisNormal;
-		Vector4 nextNormal = tangent(0);
+		Vector3 nextNormal = tangent(0);
 		
 		double thisRadius;
 		double nextRadius = radiusStart;
 		
 		//This Basis
-		Vector4 thisUTangent;
-		Vector4 thisVTangent;
+		Vector3 thisUTangent;
+		Vector3 thisVTangent;
 
 		//Next Basis
-		Vector4 nextUTangent;
-		Vector4 nextVTangent;
+		Vector3 nextUTangent;
+		Vector3 nextVTangent;
 		
-		if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
-			nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3M();
+		if(Math.abs(nextNormal.dot(Material.positiveYAxis)) == 1.0)
+			nextUTangent = nextNormal.cross(Material.positiveXAxis).normalizeM();
 		else
-			nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3M();
-		nextVTangent = nextUTangent.cross3(nextNormal).normalize3M();
+			nextUTangent = nextNormal.cross(Material.positiveYAxis).normalizeM();
+		nextVTangent = nextUTangent.cross(nextNormal).normalizeM();
 		
 		
 		for(double t = 0.0; t < 1.0; t += segmentDelta)
 		{	
-			Logger.progress(-79, "T as of now: " + t);
 			thisPoint = nextPoint;
 			nextPoint = point(t + segmentDelta);
 			
@@ -145,15 +142,15 @@ public class Spline extends ArrayList<Vector4> {
 			thisUTangent = nextUTangent;
 			thisVTangent = nextVTangent;
 			
-			if(Math.abs(nextNormal.dot3(Material.positiveYAxis)) == 1.0)
-				nextUTangent = nextNormal.cross3(Material.positiveXAxis).normalize3M();
+			if(Math.abs(nextNormal.dot(Material.positiveYAxis)) == 1.0)
+				nextUTangent = nextNormal.cross(Material.positiveXAxis).normalizeM();
 			else
-				nextUTangent = nextNormal.cross3(Material.positiveYAxis).normalize3M();
+				nextUTangent = nextNormal.cross(Material.positiveYAxis).normalizeM();
 			
-			if(nextUTangent.dot3(thisUTangent) < 0.0)
-				nextUTangent.multiply3M(-1.0);
+			if(nextUTangent.dot(thisUTangent) < 0.0)
+				nextUTangent.multiplyM(-1.0);
 			
-			nextVTangent = nextUTangent.cross3(nextNormal).normalize3M();
+			nextVTangent = nextUTangent.cross(nextNormal).normalizeM();
 			
 			
 			/*
@@ -163,49 +160,49 @@ public class Spline extends ArrayList<Vector4> {
 			 * 		Generate triangles between sample points
 			 */
 			double angleDelta = (Math.PI * 2.0) / (double) slices;
-			Vector4 v0, v1, v2, v3;
+			Vector3 v0, v1, v2, v3;
 			Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
 			Triangle tri1, tri2;
 			
 			for(double theta = 0; theta < (Math.PI * 2.0); theta += angleDelta)
 			{
 				//Get the four points
-				v1 = thisUTangent.multiply3(Math.cos(theta) * thisRadius).add3M(thisVTangent.multiply3(Math.sin(theta) * thisRadius));
-				v0 = nextUTangent.multiply3(Math.cos(theta) * nextRadius).add3M(nextVTangent.multiply3(Math.sin(theta) * nextRadius));
-				v2 = thisUTangent.multiply3(Math.cos(theta + angleDelta) * thisRadius).add3M(thisVTangent.multiply3(Math.sin(theta + angleDelta) * thisRadius));
-				v3 = nextUTangent.multiply3(Math.cos(theta + angleDelta) * nextRadius).add3M(nextVTangent.multiply3(Math.sin(theta + angleDelta) * nextRadius));
+				v1 = thisUTangent.multiply(Math.cos(theta) * thisRadius).addM(thisVTangent.multiply(Math.sin(theta) * thisRadius));
+				v0 = nextUTangent.multiply(Math.cos(theta) * nextRadius).addM(nextVTangent.multiply(Math.sin(theta) * nextRadius));
+				v2 = thisUTangent.multiply(Math.cos(theta + angleDelta) * thisRadius).addM(thisVTangent.multiply(Math.sin(theta + angleDelta) * thisRadius));
+				v3 = nextUTangent.multiply(Math.cos(theta + angleDelta) * nextRadius).addM(nextVTangent.multiply(Math.sin(theta + angleDelta) * nextRadius));
 				
 				//Make vertices
 				//Generate for sub vertices
 				subV0 = new Vertex(
-						v0.add3(nextPoint), 
-						v0.add3(0.0).normalize3M(), 
-						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
+						v0.add(nextPoint), 
+						v0.add(0.0).normalizeM(), 
+						new Vector3(theta / (Math.PI*2.0), t + segmentDelta, 0));
 				
 				subV0_2 = new Vertex(
-						v0.add3(nextPoint), 
-						v0.add3(0.0).normalize3M(), 
-						new Vector4(theta / (Math.PI*2.0), t + segmentDelta, 0, 0));
+						v0.add(nextPoint), 
+						v0.add(0.0).normalizeM(), 
+						new Vector3(theta / (Math.PI*2.0), t + segmentDelta, 0));
 				
 				subV1 = new Vertex(
-						v1.add3(thisPoint), 
-						v1.add3(0.0).normalize3M(), 
-						new Vector4(theta / (Math.PI*2.0), t, 0, 0));
+						v1.add(thisPoint), 
+						v1.add(0.0).normalizeM(), 
+						new Vector3(theta / (Math.PI*2.0), t, 0));
 				
 				subV2 = new Vertex(
-						v2.add3(thisPoint), 
-						v2.add3(0.0).normalize3M(), 
-						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
+						v2.add(thisPoint), 
+						v2.add(0.0).normalizeM(), 
+						new Vector3((theta + angleDelta) / (Math.PI*2.0), t, 0));
 				
 				subV2_2 = new Vertex(
-						v2.add3(thisPoint), 
-						v2.add3(0.0).normalize3M(),
-						new Vector4((theta + angleDelta) / (Math.PI*2.0), t, 0, 0));
+						v2.add(thisPoint), 
+						v2.add(0.0).normalizeM(),
+						new Vector3((theta + angleDelta) / (Math.PI*2.0), t, 0));
 				
 				subV3 = new Vertex(
-						v3.add3(nextPoint), 
-						v3.add3(0.0).normalize3M(), 
-						new Vector4((theta + angleDelta) / (Math.PI*2.0), t + segmentDelta, 0, 0));
+						v3.add(nextPoint), 
+						v3.add(0.0).normalizeM(), 
+						new Vector3((theta + angleDelta) / (Math.PI*2.0), t + segmentDelta, 0));
 				
 				tri1 = new Triangle(subV0, subV1, subV2);
 				tri2 = new Triangle(subV0_2, subV2_2, subV3);
@@ -213,8 +210,6 @@ public class Spline extends ArrayList<Vector4> {
 				tri2.generateFaceNormal();
 				triangles.add(tri1);
 				triangles.add(tri2);
-				
-				Logger.progress(-79, "Triangles: " + triangles.size());
 			}
 			
 		}

@@ -3,7 +3,7 @@ package tests;
 import java.util.ArrayList;
 
 import process.logging.Logger;
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
@@ -44,9 +44,9 @@ public class TestScene4 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(7);
-		activeCamera.setPosition(new Vector4(0,2,5,0));
-		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2,5));
+		activeCamera.setViewingDirection(new Vector3(0,-0.1,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -58,7 +58,7 @@ public class TestScene4 extends Scene
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
-			sphere.setPosition(new Vector4(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0, 0));
+			sphere.setPosition(new Vector3(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0));
 			sphere.setRadius(Math.pow(Math.random() * 0.1, 1.15));
 			spheres.add(sphere);
 		}
@@ -104,7 +104,7 @@ public class TestScene4 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.65);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		
@@ -128,11 +128,11 @@ public class TestScene4 extends Scene
 	{
 		elapsed += data.getDt();
 		
-		Vector4 position = activeCamera.getPosition();
-		position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8 + Math.PI/2.0) * 5, 0);
+		Vector3 position = activeCamera.getPosition();
+		position.set(Math.cos(elapsed * 8) * 5, 3, Math.sin(elapsed * 8 + Math.PI/2.0) * 5);
 		activeCamera.setPosition(position);
 		
-		activeCamera.setViewingDirection(position.multiply3(-1.0));
+		activeCamera.setViewingDirection(position.multiply(-1.0));
 		
 		//Update the children
 		super.update(data);

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import math.Vector4;
+import math.Vector3;
 
 import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
@@ -110,10 +110,10 @@ public class MeshSurface extends TerminalSurface {
 		//This is useful for procedural geometry where it is expensive to keep track of 
 		//	vertices on shared edges
 		
-		HashMap<String, Vector4> seenVectors = new HashMap<String, Vector4>();
+		HashMap<String, Vector3> seenVectors = new HashMap<String, Vector3>();
 		
 		String encoding;
-		Vector4 existing;
+		Vector3 existing;
 		for(Triangle tri : triangles)
 		{
 			for(Vertex vert : tri.getVertices())
@@ -158,21 +158,21 @@ public class MeshSurface extends TerminalSurface {
 		}
 		
 		//For each group generate an average and set them
-		Vector4 averageNormal = new Vector4();
-		Vector4 tempNormal;
+		Vector3 averageNormal = new Vector3();
+		Vector3 tempNormal;
 		for(Map.Entry<String, LinkedList<Vertex>> entry : groups.entrySet())
 		{
 			group = entry.getValue();
-			averageNormal.set(0,0,0,0);
+			averageNormal.set(0, 0, 0);
 			
 			for(Vertex vert : group)
 			{
-				averageNormal.add3M(vert.getNormal());
+				averageNormal.addM(vert.getNormal());
 			}
 			
-			averageNormal.normalize3M();
+			averageNormal.normalizeM();
 			
-			tempNormal = averageNormal.add3(0);
+			tempNormal = averageNormal.add(0);
 			
 			for(Vertex vert : group)
 			{
@@ -230,7 +230,7 @@ public class MeshSurface extends TerminalSurface {
 		triangles = newTriangles;
 	}
 	
-	private String encodeVector(Vector4 v)
+	private String encodeVector(Vector3 v)
 	{
 		StringBuilder sb = new StringBuilder();
 		
@@ -266,8 +266,8 @@ public class MeshSurface extends TerminalSurface {
 		boundingBox.clear();
 		
 		//Temp Storage
-		Vector4 min;
-		Vector4 max;
+		Vector3 min;
+		Vector3 max;
 		BoundingBox bb;
 		
 		//Loop through all children bounding boxes and set this to bound them
@@ -279,8 +279,8 @@ public class MeshSurface extends TerminalSurface {
 			min = bb.min;
 			max = bb.max;
 
-			boundingBox.min.minimize3M(min);
-			boundingBox.max.maximize3M(max);
+			boundingBox.min.minimizeM(min);
+			boundingBox.max.maximizeM(max);
 		}
 	}
 	

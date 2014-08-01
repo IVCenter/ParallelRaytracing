@@ -3,7 +3,7 @@ package raytrace.data;
 import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 
 public class IntersectionData {
 	
@@ -13,18 +13,18 @@ public class IntersectionData {
 	//Since API v1.0
 	protected double time;
 	protected double distance;
-	protected Vector4 point;
-	protected Vector4 normal;
+	protected Vector3 point;
+	protected Vector3 normal;
 	protected boolean twoSided;
 	protected Ray ray;
 	protected Material material;
 	
 	//Since API v2.0
 	protected CompositeSurface surface;
-	protected Vector4 texcoord;
+	protected Vector3 texcoord;
 	//protected Vector4 uTangent; //Calculated in material on demand
 	//protected Vector4 vTangent; //Calculated in material on demand
-	protected Vector4 localPoint;
+	protected Vector3 localPoint;
 	protected int meshID;
 
 
@@ -70,20 +70,20 @@ public class IntersectionData {
 	}
 
 	//Point
-	public Vector4 getPoint() {
+	public Vector3 getPoint() {
 		return point;
 	}
 
-	public void setPoint(Vector4 point) {
+	public void setPoint(Vector3 point) {
 		this.point = point;
 	}
 
 	//Normal
-	public Vector4 getNormal() {
+	public Vector3 getNormal() {
 		return normal;
 	}
 
-	public void setNormal(Vector4 normal) {
+	public void setNormal(Vector3 normal) {
 		this.normal = normal;
 	}
 
@@ -124,20 +124,20 @@ public class IntersectionData {
 	}
 
 	//Texcoord
-	public Vector4 getTexcoord() {
+	public Vector3 getTexcoord() {
 		return texcoord;
 	}
 
-	public void setTexcoord(Vector4 texcoord) {
+	public void setTexcoord(Vector3 texcoord) {
 		this.texcoord = texcoord;
 	}
 
 	//Local Point
-	public Vector4 getLocalPoint() {
+	public Vector3 getLocalPoint() {
 		return localPoint;
 	}
 
-	public void setLocalPoint(Vector4 localPoint) {
+	public void setLocalPoint(Vector3 localPoint) {
 		this.localPoint = localPoint;
 	}
 

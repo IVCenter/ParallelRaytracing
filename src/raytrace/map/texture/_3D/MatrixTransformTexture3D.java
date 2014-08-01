@@ -1,7 +1,7 @@
 package raytrace.map.texture._3D;
 
 import math.Matrix4;
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 
 public class MatrixTransformTexture3D extends Texture3D {
@@ -46,7 +46,7 @@ public class MatrixTransformTexture3D extends Texture3D {
 	@Override
 	public Color evaluate(Double x, Double y, Double z)
 	{
-		Vector4 transformed = transform.multiplyPt(new Vector4(x, y, z, 1));
+		Vector3 transformed = transform.multiplyPt(new Vector3(x, y, z));
 		double[] coords = transformed.getArray();
 		return texture.evaluate(coords[0], coords[1], coords[2]);
 	}

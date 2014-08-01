@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import process.logging.Logger;
 
-import math.Vector4;
+import math.Vector3;
 
 public class ObjModelData {
 	
@@ -164,7 +164,7 @@ public class ObjModelData {
 			return vertices;
 		}
 		
-		public Vector4 getVertex(int index)
+		public Vector3 getVertex(int index)
 		{
 			if(index < 0)
 				index = -1 * index;
@@ -182,7 +182,7 @@ public class ObjModelData {
 			return normals;
 		}
 		
-		public Vector4 getNormal(int index)
+		public Vector3 getNormal(int index)
 		{
 			if(index < 0)
 				index = -1 * index;
@@ -200,7 +200,7 @@ public class ObjModelData {
 			return texCoords;
 		}
 		
-		public Vector4 getTexCoord(int index)
+		public Vector3 getTexCoord(int index)
 		{
 			if(index >= texCoords.size())
 				index = index % texCoords.size();
@@ -249,34 +249,34 @@ public class ObjModelData {
 		}
 	}
 	
-	public static class Vertex extends Vector4{
+	public static class Vertex extends Vector3{
 		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Vertex(double x, double y, double z) { super(x, y, z, 0); }
+		public Vertex(double x, double y, double z) { super(x, y, z); }
 	}
 	
-	public static class Normal extends Vector4 {
+	public static class Normal extends Vector3 {
 		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Normal(double x, double y, double z) { super(x, y, z, 0); super.normalize3M(); }
+		public Normal(double x, double y, double z) { super(x, y, z); super.normalizeM(); }
 	}
 	
-	public static class TexCoord extends Vector4 {
+	public static class TexCoord extends Vector3 {
 		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public TexCoord(double x, double y, double z) { super(x, y, z, 0); }
+		public TexCoord(double x, double y, double z) { super(x, y, z); }
 	}
 	
 	public static class Face

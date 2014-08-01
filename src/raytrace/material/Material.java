@@ -1,7 +1,7 @@
 package raytrace.material;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -23,9 +23,9 @@ public abstract class Material {
 
 	protected static final double oneOverPi = 1.0 / Math.PI;
 
-	public static final Vector4 positiveXAxis = new Vector4(1,0,0,0);
-	public static final Vector4 positiveYAxis = new Vector4(0,1,0,0);
-	public static final Vector4 positiveZAxis = new Vector4(0,0,1,0);
+	public static final Vector3 positiveXAxis = new Vector3(1,0,0);
+	public static final Vector3 positiveYAxis = new Vector3(0,1,0);
+	public static final Vector3 positiveZAxis = new Vector3(0,0,1);
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -45,20 +45,20 @@ public abstract class Material {
 	/**
 	 * 
 	 */
-	protected Color diffuse(Color light, Vector4 normal, Vector4 fromLight)
+	protected Color diffuse(Color light, Vector3 normal, Vector3 fromLight)
 	{
-		double dot = normal.dot3(fromLight);
+		double dot = normal.dot(fromLight);
 		if(dot >= 0.0)
 			return Color.black();
 		return light.multiply3( dot * -1.0 * oneOverPi );
 	}
 	
-	protected Color reflect(ShadingData data, Vector4 point, Vector4 normal, double refractiveIndex)
+	protected Color reflect(ShadingData data, Vector3 point, Vector3 normal, double refractiveIndex)
 	{	
-		Vector4 dir = data.getIntersectionData().getRay().getDirection();
+		Vector3 dir = data.getIntersectionData().getRay().getDirection();
 		//Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
 		
-		double c = -2.0 * dir.dot3(normal);
+		double c = -2.0 * dir.dot(normal);
 		
 		double[] dirm = dir.getArray();
 		double[] nm = normal.getArray();
@@ -67,12 +67,12 @@ public abstract class Material {
 		double ry = dirm[1] + nm[1] * c;
 		double rz = dirm[2] + nm[2] * c;
 		
-		Vector4 reflect = (new Vector4(rx, ry, rz, 0)).normalize3M();
+		Vector3 reflect = (new Vector3(rx, ry, rz)).normalizeM();
 		
 		return recurse(data, point, reflect, refractiveIndex);
 	}
 
-	protected Color recurse(ShadingData data, Vector4 point, Vector4 direction, double refractiveIndex)
+	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
 		if(data.getRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
@@ -106,20 +106,19 @@ public abstract class Material {
 		return data.getRootScene().getSkyMaterial().shade(sdata);
 	}
 	
-	protected Vector4 halfVector(Vector4 a, Vector4 b)
+	protected Vector3 halfVector(Vector3 a, Vector3 b)
 	{
 		double[] ma = a.getArray();
 		double[] mb = b.getArray();
-		double maga = 1.0/a.magnitude3();
-		double magb = 1.0/b.magnitude3();
+		double maga = 1.0/a.magnitude();
+		double magb = 1.0/b.magnitude();
 		
-		return (new Vector4(ma[0]*maga + mb[0]*magb,
+		return (new Vector3(ma[0]*maga + mb[0]*magb,
 							ma[1]*maga + mb[1]*magb,
-							ma[2]*maga + mb[2]*magb,
-							0)).normalize3M();
+							ma[2]*maga + mb[2]*magb)).normalizeM();
 	}
 	
-	protected Vector4 cosineWeightedSample()
+	protected Vector3 cosineWeightedSample()
 	{
 		double s = Math.random();
 		double t = Math.random();
@@ -131,12 +130,12 @@ public abstract class Material {
 		double y = Math.sqrt(t);
 		double z = v * Math.sin(u);
 		
-		return (new Vector4(x, y, z, 0)).normalize3M();
+		return (new Vector3(x, y, z)).normalizeM();
 	}
 	
-	protected Vector4 cosineWeightedSample(Vector4 xa, Vector4 ya, Vector4 za)
+	protected Vector3 cosineWeightedSample(Vector3 xa, Vector3 ya, Vector3 za)
 	{
-		Vector4 s = cosineWeightedSample();
+		Vector3 s = cosineWeightedSample();
 		
 		double[] sm = s.getArray();
 
@@ -146,26 +145,25 @@ public abstract class Material {
 		
 		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
 						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
-						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
-						   0);
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2]);
 		
-		return s.normalize3M();
+		return s.normalizeM();
 	}
 	
-	protected Vector4 uniformHemisphereSample()
+	protected Vector3 uniformHemisphereSample()
 	{
-		Vector4 sample = new Vector4();
+		Vector3 sample = new Vector3();
 		
 		do {
-			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
-		} while(sample.magnitude3Sqrd() > 1.0 || sample.get(1) < 0.0);
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0);
+		} while(sample.magnitudeSqrd() > 1.0 || sample.get(1) < 0.0);
 		
-		return sample.normalize3M();
+		return sample.normalizeM();
 	}
 	
-	protected Vector4 uniformHemisphereSample(Vector4 xa, Vector4 ya, Vector4 za)
+	protected Vector3 uniformHemisphereSample(Vector3 xa, Vector3 ya, Vector3 za)
 	{
-		Vector4 s = uniformHemisphereSample();
+		Vector3 s = uniformHemisphereSample();
 		
 		double[] sm = s.getArray();
 
@@ -175,31 +173,30 @@ public abstract class Material {
 		
 		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
 						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
-						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2],
-						   0);
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2]);
 		
-		return s.normalize3M();
+		return s.normalizeM();
 	}
 
-	protected Vector4 diskSample(double radius, double weight)
+	protected Vector3 diskSample(double radius, double weight)
 	{
-		Vector4 sample = new Vector4();
+		Vector3 sample = new Vector3();
 		
 		double theta = Math.random() * Math.PI * 2.0;
 		double distance = Math.pow(Math.random(), weight) * radius;
-		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0, 0);
+		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0);
 		
 		return sample;
 	}
 	
-	protected Vector4 uniformSphereSample()
+	protected Vector3 uniformSphereSample()
 	{
-		Vector4 sample = new Vector4();
+		Vector3 sample = new Vector3();
 		
 		do {
-			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 0);
-		} while(sample.magnitude3Sqrd() > 1.0);
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0);
+		} while(sample.magnitudeSqrd() > 1.0);
 		
-		return sample.normalize3M();
+		return sample.normalizeM();
 	}
 }

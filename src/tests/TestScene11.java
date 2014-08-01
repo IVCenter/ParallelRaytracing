@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import math.Spline;
-import math.Vector4;
+import math.Vector3;
 import math.function._2D.SelectDifferenceNthMthNearest2D;
 import math.function._2D.SelectNthNearest2D;
 import math.function._3D.TchebyshevDistance3D;
@@ -156,7 +156,7 @@ public class TestScene11 extends Scene
 		System.gc();
 		
 
-		BoundingBox bb = new BoundingBox(new Vector4(-10, -0, -10, 0), new Vector4(10, 10, 10, 0));
+		BoundingBox bb = new BoundingBox(new Vector3(-10, -0, -10), new Vector3(10, 10, 10));
 		setupSnowParticles(bb, 1, 0.02, 0.01);
 		
 		System.gc();
@@ -248,9 +248,9 @@ public class TestScene11 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
-		activeCamera.setPosition(new Vector4(0,2.8,5.5,0));
-		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2.8,5.5));
+		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -263,65 +263,65 @@ public class TestScene11 extends Scene
 		//Position Spline
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 2.5, 5.0));
+			spline.add(new Vector3(-5.0, 2.5, 5.0));
+			spline.add(new Vector3(-5.0, 2.5, 0.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(-5.0, 2.5, 0.0, 0.0));
-			spline.add(new Vector4(-5.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
+			spline.add(new Vector3(-5.0, 2.5, 0.0));
+			spline.add(new Vector3(-5.0, 2.5, -5.0));
+			spline.add(new Vector3(0.0, 2.5, -5.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 2.5, -5.0));
+			spline.add(new Vector3(5.0, 2.5, -5.0));
+			spline.add(new Vector3(5.0, 2.5, 0.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(5.0, 2.5, 0.0, 0.0));
-			spline.add(new Vector4(5.0, 2.5, 5.0, 0.0));
-			spline.add(new Vector4(0.0, 2.5, 5.0, 0.0));
+			spline.add(new Vector3(5.0, 2.5, 0.0));
+			spline.add(new Vector3(5.0, 2.5, 5.0));
+			spline.add(new Vector3(0.0, 2.5, 5.0));
 			camController.addPositionSpline(spline, 0.2);
 		}
 		
 		//Look At
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
-			spline.add(new Vector4(0.0, 1.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 1.0, 0.0));
+			spline.add(new Vector3(0.0, 1.0, 0.0));
 			camController.addLookAtSpline(spline, 0.8);
 		}
 		
 		//Camera Radius
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
 			camController.addApertureRadiusSpline(spline, 0.8);
 		}
 		
 		//Focal Distance
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(8.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(1.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(4.5, 0.0, 0.0));
+			spline.add(new Vector3(8.0, 0.0, 0.0));
+			spline.add(new Vector3(1.0, 0.0, 0.0));
+			spline.add(new Vector3(4.5, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 0.8);
 		}
 		
 		//Field of View
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 0.8);
 		}
 	}
@@ -339,7 +339,7 @@ public class TestScene11 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		//Light 
@@ -393,15 +393,15 @@ public class TestScene11 extends Scene
 			
 			
 			//Shift Y
-			Vector4 multi = new Vector4();
+			Vector3 multi = new Vector3();
 			for(Triangle tri : mesh.getTriangles())
 			{
 				for(Vertex vert : tri.getVertices())
 				{
-					Vector4 pos = vert.getPosition();
+					Vector3 pos = vert.getPosition();
 					Color noise = add3.evaluate(pos.get(0), pos.get(1), pos.get(2));
-					multi.set(0, noise.intensity3(), 0, 0);
-					vert.setPosition(pos.add3(multi));
+					multi.set(0, noise.intensity3(), 0);
+					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
 				tri.setDynamic(true);
@@ -501,15 +501,15 @@ public class TestScene11 extends Scene
 			
 			
 			//Shift Y
-			Vector4 multi = new Vector4();
+			Vector3 multi = new Vector3();
 			for(Triangle tri : mesh.getTriangles())
 			{
 				for(Vertex vert : tri.getVertices())
 				{
-					Vector4 pos = vert.getPosition();
+					Vector3 pos = vert.getPosition();
 					Color noise = add1.evaluate(pos.get(0), pos.get(1), pos.get(2));
-					multi.set(0, noise.intensity3(), 0, 0);
-					vert.setPosition(pos.add3(multi));
+					multi.set(0, noise.intensity3(), 0);
+					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
 				tri.setDynamic(true);
@@ -720,15 +720,15 @@ public class TestScene11 extends Scene
 			
 			
 			//Shift Y
-			Vector4 multi = new Vector4();
+			Vector3 multi = new Vector3();
 			for(Triangle tri : mesh.getTriangles())
 			{
 				for(Vertex vert : tri.getVertices())
 				{
-					Vector4 pos = vert.getPosition();
+					Vector3 pos = vert.getPosition();
 					Color noise = multiHills.evaluate(pos.get(0), pos.get(1), pos.get(2));
-					multi.set(0, noise.intensity3() + 2.0 * (pos.distance(new Vector4())/100.0), 0, 0);
-					vert.setPosition(pos.add3(multi));
+					multi.set(0, noise.intensity3() + 2.0 * (pos.distance(new Vector3())/100.0), 0);
+					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
 				tri.setDynamic(true);
@@ -837,15 +837,15 @@ public class TestScene11 extends Scene
 		//mesh.synchronizeVertices();
 		//ArrayList<Triangle> triangles =;
 		
-		Vector4 multi = new Vector4();
+		Vector3 multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = worleyTex1Trans.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.2 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				vert.setPosition(pos.multiply3(multi));
+				multi.set(1.0 + noise.intensity3(), 1.2 + noise.intensity3(), 1.0 + noise.intensity3());
+				vert.setPosition(pos.multiply(multi));
 			}
 			tri.generateFaceNormal();
 			tri.setDynamic(true);
@@ -857,14 +857,14 @@ public class TestScene11 extends Scene
 		mesh.synchronizeVertices();
 		
 		//Add mode noise!
-		multi = new Vector4();
+		multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans2.evaluate(pos.get(0) * 2.0, pos.get(1) * 2.0, pos.get(2) * 2.0);
-				vert.setPosition(pos.add3M(vert.getNormal().multiply3(noise.intensity3())));
+				vert.setPosition(pos.addM(vert.getNormal().multiply(noise.intensity3())));
 				//vert.getPosition().print();
 			}
 			//tri.generateFaceNormal();
@@ -942,15 +942,15 @@ public class TestScene11 extends Scene
 		//mesh.synchronizeVertices();
 		//ArrayList<Triangle> triangles =;
 		
-		Vector4 multi = new Vector4();
+		Vector3 multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3() * 0.2, 1.0 + noise.intensity3(), 0);
-				vert.setPosition(pos.multiply3(multi));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3() * 0.2, 1.0 + noise.intensity3());
+				vert.setPosition(pos.multiply(multi));
 			}
 			tri.generateFaceNormal();
 			tri.setDynamic(true);
@@ -962,14 +962,14 @@ public class TestScene11 extends Scene
 		mesh.synchronizeVertices();
 		
 		//Add mode noise!
-		multi = new Vector4();
+		multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans2.evaluate(pos.get(0) * 2.0, pos.get(1) * 2.0, pos.get(2) * 2.0);
-				vert.setPosition(pos.add3M(vert.getNormal().multiply3(noise.intensity3())));
+				vert.setPosition(pos.addM(vert.getNormal().multiply(noise.intensity3())));
 				//vert.getPosition().print();
 			}
 			//tri.generateFaceNormal();
@@ -1148,7 +1148,7 @@ public class TestScene11 extends Scene
 	
 	private void setupGroundFruit()
 	{
-		MeshSurface mesh = (new Sphere(0.5, new Vector4())).tessellate(150);
+		MeshSurface mesh = (new Sphere(0.5, new Vector3())).tessellate(150);
 		
 		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.8), Color.gray(1.0));
 		MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
@@ -1160,17 +1160,17 @@ public class TestScene11 extends Scene
 		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
 		simplexTrans2.getTransform().nonUniformScale(64.0, 64.0, 64.0);
 		
-		Vector4 multi = new Vector4();
+		Vector3 multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				Vector4 newPos = pos.multiply3(multi);
-				vert.setPosition(newPos.add3M(
-						new Vector4(0, Math.pow((newPos.get(0) * newPos.get(0) + newPos.get(2) * newPos.get(2)), 2.0) * 0.5, 0, 0))
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				Vector3 newPos = pos.multiply(multi);
+				vert.setPosition(newPos.addM(
+						new Vector3(0, Math.pow((newPos.get(0) * newPos.get(0) + newPos.get(2) * newPos.get(2)), 2.0) * 0.5, 0))
 						);
 			}
 			tri.generateFaceNormal();
@@ -1180,15 +1180,15 @@ public class TestScene11 extends Scene
 		}
 		
 		//Add mode noise!
-		multi = new Vector4();
+		multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans2.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				vert.setPosition(pos.multiply3(multi));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				vert.setPosition(pos.multiply(multi));
 			}
 		}
 		for(Triangle tri : mesh.getTriangles())
@@ -1261,7 +1261,7 @@ public class TestScene11 extends Scene
 				PointLight plight = new PointLight();
 				plight.setColor(new Color(0xffeeddff));
 				plight.setIntensity(3.0);
-				plight.setPosition(new Vector4(3, 0.8, -1, 0));
+				plight.setPosition(new Vector3(3, 0.8, -1));
 				//lightManager.addLight(plight);
 			}
 		}
@@ -1405,15 +1405,15 @@ public class TestScene11 extends Scene
 		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
 		simplexTrans2.getTransform().nonUniformScale(1.2, 1.2, 1.2);
 		
-		Vector4 multi = new Vector4();
+		Vector3 multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				Vector4 newPos = pos.multiply3(multi);
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				Vector3 newPos = pos.multiply(multi);
 				vert.setPosition(newPos);
 			}
 			tri.generateFaceNormal();
@@ -1423,15 +1423,15 @@ public class TestScene11 extends Scene
 		}
 		
 		//Add mode noise!
-		multi = new Vector4();
+		multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans2.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				vert.setPosition(pos.multiply3(multi));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				vert.setPosition(pos.multiply(multi));
 			}
 		}
 		
@@ -1509,7 +1509,7 @@ public class TestScene11 extends Scene
 			{
 				for(double z = volume.min.get(2); z < volume.max.get(2); z+=volumeDelta)
 				{
-					Vector4 position = stratifiedVector(x, y, z, volumeDelta);
+					Vector3 position = stratifiedVector(x, y, z, volumeDelta);
 					
 					
 					Sphere particle = new Sphere(random.nextDouble() * particleSizeVariation + particleSize, position);
@@ -1521,13 +1521,12 @@ public class TestScene11 extends Scene
 		
 	}
 	
-	private Vector4 stratifiedVector(double xmin, double ymin, double zmin, double range)
+	private Vector3 stratifiedVector(double xmin, double ymin, double zmin, double range)
 	{
-		return new Vector4(
+		return new Vector3(
 				xmin + random.nextDouble() * range,
 				ymin + random.nextDouble() * range,
-				zmin + random.nextDouble() * range,
-				0);
+				zmin + random.nextDouble() * range);
 	}
 	
 	
@@ -1539,7 +1538,7 @@ public class TestScene11 extends Scene
 				6.0, 1.0, 
 				0.18, 1.2,
 				300, 
-				new Vector4(3.0, 0.2, 0, 0), 
+				new Vector3(3.0, 0.2, 0), 
 				0.5, 1.9, 1.5, 
 				0.001)
 			);
@@ -1551,7 +1550,7 @@ public class TestScene11 extends Scene
 				0.2, 1.5, 
 				0.2, 1.2,
 				30, 
-				new Vector4(5.8, 0, -0.4, 0), 
+				new Vector3(5.8, 0, -0.4), 
 				1.0, 1.9, 1.0, 
 				0.001)
 			);
@@ -1568,7 +1567,7 @@ public class TestScene11 extends Scene
 		double topDistPower,
 		
 		int count,
-		Vector4 basePos,
+		Vector3 basePos,
 		
 		double bladeHeightMin,
 		double bladeHeightVariation,
@@ -1578,7 +1577,7 @@ public class TestScene11 extends Scene
 		)
 	{
 
-		Vector4 thisBase;
+		Vector3 thisBase;
 		double distFromBase;
 		double bladeHeight = 0.0;
 		
@@ -1587,11 +1586,10 @@ public class TestScene11 extends Scene
 		
 		for(int i = 0; i < count; ++i)
 		{
-			thisBase = basePos.add3(new Vector4(
+			thisBase = basePos.add(new Vector3(
 					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
 					0, 
-					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5), 
-					0));
+					Math.pow(random.nextDouble(), baseDistPower) * baseDistRad * randSign(0.5)));
 			
 			//TEMP to remove grass in water
 			if(thisBase.get(0) < 0.0)
@@ -1604,17 +1602,15 @@ public class TestScene11 extends Scene
 			Spline spline = new Spline();
 			spline.add(thisBase);
 			
-			spline.add(thisBase.add3(new Vector4(
+			spline.add(thisBase.add(new Vector3(
 					randInRange(-middleOffset, middleOffset),
 					bladeHeight/2.0,
-					randInRange(-middleOffset, middleOffset),
-					0)));
+					randInRange(-middleOffset, middleOffset))));
 			
-			spline.add(thisBase.add3(new Vector4(
+			spline.add(thisBase.add(new Vector3(
 					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
 					bladeHeight, 
-					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5), 
-					0)));
+					Math.pow(random.nextDouble(), topDistPower) * topDistRad * randSign(0.5))));
 			
 			
 			tempMesh.setTriangles(spline.tessellate(8, 3, 0.008, 0.002));

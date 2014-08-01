@@ -3,7 +3,7 @@ package raytrace.geometry;
 import java.util.ArrayList;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -21,7 +21,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected double radius;
-	protected Vector4 center;
+	protected Vector3 center;
 	
 
 	/* *********************************************************************************************
@@ -30,10 +30,10 @@ public class Sphere extends TerminalSurface implements Positionable {
 	public Sphere()
 	{
 		radius = 1.0;
-		center = new Vector4(0,0,0,1);
+		center = new Vector3(0, 0, 0);
 	}
 	
-	public Sphere(double radius, Vector4 center)
+	public Sphere(double radius, Vector3 center)
 	{
 		this.radius = radius;
 		this.center = center;
@@ -52,15 +52,15 @@ public class Sphere extends TerminalSurface implements Positionable {
 	{
 		Ray ray = data.getRay();
 		
-		Vector4 e = ray.getOrigin();
-		Vector4 d = ray.getDirection();
+		Vector3 e = ray.getOrigin();
+		Vector3 d = ray.getDirection();
 		
 		//Precalc frequently used values/vectors
-		Vector4 EminusC = e.subtract3(center);
-		double DdotD = d.dot3(d);
-		double DdotEminusC = d.dot3(EminusC);
+		Vector3 EminusC = e.subtract(center);
+		double DdotD = d.dot(d);
+		double DdotEminusC = d.dot(EminusC);
 		
-		double discrim = (DdotEminusC * DdotEminusC) - DdotD * (EminusC.magnitude3Sqrd() - (radius * radius));
+		double discrim = (DdotEminusC * DdotEminusC) - DdotD * (EminusC.magnitudeSqrd() - (radius * radius));
 		
 		//If the discriminant is negative then the ray doesn't intersect in real space
 		if(discrim < 0.0) {
@@ -71,8 +71,8 @@ public class Sphere extends TerminalSurface implements Positionable {
 		discrim = Math.sqrt(discrim);
 		
 		//Get the negation of d
-		Vector4 negD = d.multiply3(-1);
-		double negDdotEminusC = negD.dot3(EminusC);
+		Vector3 negD = d.multiply(-1);
+		double negDdotEminusC = negD.dot(EminusC);
 		
 		//Get the time of intersection
 		double t = (negDdotEminusC - discrim) / DdotD;
@@ -88,8 +88,8 @@ public class Sphere extends TerminalSurface implements Positionable {
 		
 		
 		//Point
-		Vector4 point = ray.evaluateAtTime(t);
-		Vector4 pointFromCenter = point.subtract3(center).normalize3M();
+		Vector3 point = ray.evaluateAtTime(t);
+		Vector3 pointFromCenter = point.subtract(center).normalizeM();
 		
 		
 		//Calculate Texcoords
@@ -97,7 +97,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		
 		double uCoord = (Math.atan2(pcfM[2], pcfM[0]) + Math.PI) / (2.0 * Math.PI);
 		double vCoord = Math.acos(pcfM[1]) / Math.PI;
-		Vector4 texcoord = new Vector4(uCoord, vCoord, 0, 0);
+		Vector3 texcoord = new Vector3(uCoord, vCoord, 0);
 		
 		
 		//Return data about the intersection
@@ -105,13 +105,13 @@ public class Sphere extends TerminalSurface implements Positionable {
 		idata.setTime(t);
 		idata.setRay(ray);
 		idata.setPoint(point);
-		idata.setDistance(ray.getDirection().magnitude3() * t);
+		idata.setDistance(ray.getDirection().magnitude() * t);
 		idata.setNormal(pointFromCenter);
 		idata.setMaterial(material);
 
 		idata.setSurface(this);
 		idata.setTexcoord(texcoord);
-		idata.setLocalPoint(new Vector4(point));
+		idata.setLocalPoint(new Vector3(point));
 		
 		return idata;
 	}
@@ -131,8 +131,8 @@ public class Sphere extends TerminalSurface implements Positionable {
 	public void updateBoundingBox()
 	{
 		boundingBox.clear();
-		boundingBox.min.set(center.subtract3(radius));
-		boundingBox.max.set(center.add3(radius));
+		boundingBox.min.set(center.subtract(radius));
+		boundingBox.max.set(center.add(radius));
 	}
 	
 	
@@ -153,10 +153,10 @@ public class Sphere extends TerminalSurface implements Positionable {
 		double theta = 0.0;
 		double thetaDelta = (Math.PI) * (1.0 / (double)verticalResolution);
 
-		Vector4 v0 = new Vector4();
-		Vector4 v1 = new Vector4();
-		Vector4 v2 = new Vector4();
-		Vector4 v3 = new Vector4();
+		Vector3 v0 = new Vector3();
+		Vector3 v1 = new Vector3();
+		Vector3 v2 = new Vector3();
+		Vector3 v3 = new Vector3();
 
 		Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
 
@@ -172,47 +172,47 @@ public class Sphere extends TerminalSurface implements Positionable {
 				
 				v0.set(radius * Math.sin(theta) * Math.cos(phi), 
 					   radius * Math.cos(theta),
-					   radius * Math.sin(theta) * Math.sin(phi),  0);
+					   radius * Math.sin(theta) * Math.sin(phi));
 				v1.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi), 
 					   radius * Math.cos(theta+thetaDelta),
-					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi),  0);
+					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi));
 				v2.set(radius * Math.sin(theta+thetaDelta) * Math.cos(phi+phiDelta), 
 					   radius * Math.cos(theta+thetaDelta),
-					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi+phiDelta),  0);
+					   radius * Math.sin(theta+thetaDelta) * Math.sin(phi+phiDelta));
 				v3.set(radius * Math.sin(theta) * Math.cos(phi+phiDelta), 
 					   radius * Math.cos(theta),
-					   radius * Math.sin(theta) * Math.sin(phi+phiDelta),  0);
+					   radius * Math.sin(theta) * Math.sin(phi+phiDelta));
 				
 				//Generate for sub vertices
 				subV0 = new Vertex(
-						v0.add3(center), 
-						v0.add3(0.0).normalize3M(), 
-						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
+						v0.add(center), 
+						v0.add(0.0).normalizeM(), 
+						new Vector3((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0));
 				
 				subV0_2 = new Vertex(
-						v0.add3(center), 
-						v0.add3(0.0).normalize3M(), 
-						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
+						v0.add(center), 
+						v0.add(0.0).normalizeM(), 
+						new Vector3((double)(x + 0) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0));
 				
 				subV1 = new Vertex(
-						v1.add3(center), 
-						v1.add3(0.0).normalize3M(), 
-						new Vector4((double)(x + 0) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
+						v1.add(center), 
+						v1.add(0.0).normalizeM(), 
+						new Vector3((double)(x + 0) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0));
 				
 				subV2 = new Vertex(
-						v2.add3(center), 
-						v2.add3(0.0).normalize3M(), 
-						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
+						v2.add(center), 
+						v2.add(0.0).normalizeM(), 
+						new Vector3((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0));
 				
 				subV2_2 = new Vertex(
-						v2.add3(center), 
-						v2.add3(0.0).normalize3M(),
-						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0, 0));
+						v2.add(center), 
+						v2.add(0.0).normalizeM(),
+						new Vector3((double)(x + 1) / (double)(horizontalResolution), (double)(y + 1) / (double)verticalResolution, 0));
 				
 				subV3 = new Vertex(
-						v3.add3(center), 
-						v3.add3(0.0).normalize3M(), 
-						new Vector4((double)(x + 1) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0, 0));
+						v3.add(center), 
+						v3.add(0.0).normalizeM(), 
+						new Vector3((double)(x + 1) / (double)(horizontalResolution), (double)(y + 0) / (double)verticalResolution, 0));
 				
 				if(y != verticalResolution-1)
 					triangles.add(new Triangle(subV0, subV1, subV2));
@@ -232,13 +232,13 @@ public class Sphere extends TerminalSurface implements Positionable {
 	 * Getter/Setter Methods
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 getPosition()
+	public Vector3 getPosition()
 	{
 		return center;
 	}
 
 	@Override
-	public void setPosition(Vector4 position)
+	public void setPosition(Vector3 position)
 	{
 		center = position;
 	}

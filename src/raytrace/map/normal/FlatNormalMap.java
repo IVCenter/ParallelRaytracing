@@ -1,6 +1,6 @@
 package raytrace.map.normal;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.IntersectionData;
 
 public class FlatNormalMap implements NormalMap {
@@ -13,7 +13,7 @@ public class FlatNormalMap implements NormalMap {
 	 * Concrete Methods
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 evaluate(IntersectionData data)
+	public Vector3 evaluate(IntersectionData data)
 	{
 		return data.getNormal();
 	}

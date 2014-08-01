@@ -1,8 +1,8 @@
 package math.function._3D;
 
-import math.Vector4;
+import math.Vector3;
 
-public class TchebyshevDistance3D implements Function3D<Vector4, Vector4, Double> {
+public class TchebyshevDistance3D implements Function3D<Vector3, Vector3, Double> {
 	
 	/*
 	 * A function for calculating the tchebyshev distance between two points in 3D space.
@@ -12,7 +12,7 @@ public class TchebyshevDistance3D implements Function3D<Vector4, Vector4, Double
 	 * Function Override
 	 * *********************************************************************************************/
 	@Override
-	public Double evaluate(Vector4 x, Vector4 y)
+	public Double evaluate(Vector3 x, Vector3 y)
 	{
 		return x.tchebyshevDistance(y);
 	}

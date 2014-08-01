@@ -3,7 +3,7 @@ package raytrace.camera;
 import java.util.LinkedList;
 
 import math.Spline;
-import math.Vector4;
+import math.Vector3;
 
 public class ProgrammableCameraController {
 	
@@ -61,17 +61,17 @@ public class ProgrammableCameraController {
 		if(paused)
 			return;
 		
-		Vector4 position = point(positionSplines, elapsedTime);
-		Vector4 lookAt = point(lookAtSplines, elapsedTime);
-		Vector4 fieldOfView = point(fieldOfViewSplines, elapsedTime);
-		Vector4 focalDistance = point(focalDistanceSplines, elapsedTime);
-		Vector4 apertureRadius = point(apertureRadiusSplines, elapsedTime);
+		Vector3 position = point(positionSplines, elapsedTime);
+		Vector3 lookAt = point(lookAtSplines, elapsedTime);
+		Vector3 fieldOfView = point(fieldOfViewSplines, elapsedTime);
+		Vector3 focalDistance = point(focalDistanceSplines, elapsedTime);
+		Vector3 apertureRadius = point(apertureRadiusSplines, elapsedTime);
 		
 		//Update camera properties
 		if(position != null)
 			camera.setPosition(position);
 		if(lookAt != null && position != null)
-			camera.setViewingDirection(lookAt.subtract3M(position));
+			camera.setViewingDirection(lookAt.subtractM(position));
 		if(fieldOfView != null)
 			camera.setFieldOfView(fieldOfView.get(0));
 		if(focalDistance != null)
@@ -87,9 +87,9 @@ public class ProgrammableCameraController {
 		elapsedTime += dt;
 	}
 	
-	protected Vector4 point(LinkedList<CameraSpline> splines, double time)
+	protected Vector3 point(LinkedList<CameraSpline> splines, double time)
 	{
-		Vector4 p = null;
+		Vector3 p = null;
 	    double summedTime = 0.0;
 	    
 	    //Prevent negative time

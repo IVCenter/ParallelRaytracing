@@ -1,6 +1,6 @@
 package raytrace.camera.aperture;
 
-import math.Vector4;
+import math.Vector3;
 
 public class PinholeAperture extends Aperture {
 	
@@ -23,15 +23,15 @@ public class PinholeAperture extends Aperture {
 	 * Interface Overrides
 	 * *********************************************************************************************/
 	@Override
-	public Vector4 sample()
+	public Vector3 sample()
 	{
-		return sample(new Vector4());
+		return sample(new Vector3());
 	}
 	
 	@Override
-	public Vector4 sample(Vector4 sample)
+	public Vector3 sample(Vector3 sample)
 	{
-		sample.set(0, 0, 0, 0);
+		sample.set(0, 0, 0);
 		return sample;
 	}
 

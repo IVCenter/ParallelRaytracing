@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -50,16 +50,16 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		Color tint = texture.evaluate(data.getIntersectionData());
 		
 		//Setup the point of intersection
-		Vector4 point = data.getIntersectionData().getPoint();
+		Vector3 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
+		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 		
 		
-		double DdotN = normal.dot3(rayDir);
+		double DdotN = normal.dot(rayDir);
 		double thisRefractiveIndex = refractiveIndex;
 		boolean exiting = false;
 		
@@ -77,14 +77,14 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		
 		
 		//Basis, used for sampling
-		Vector4 uTangent;
-		Vector4 vTangent;
+		Vector3 uTangent;
+		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot3(positiveYAxis)) == 1.0)
-			uTangent = normal.cross3(positiveXAxis).normalize3M();
+		if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
+			uTangent = normal.cross(positiveXAxis).normalizeM();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3M();
-		vTangent = uTangent.cross3(normal).normalize3M();
+			uTangent = normal.cross(positiveYAxis).normalizeM();
+		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
 		
@@ -117,14 +117,14 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		
 		
 		//The disk sample
-		Vector4 diskSample = diskSample(radius, 1.0);
-		Vector4 orientedDiskSample = point.add3(uTangent.multiply3(diskSample.get(0))).add3(vTangent.multiply3(diskSample.get(1)));
+		Vector3 diskSample = diskSample(radius, 1.0);
+		Vector3 orientedDiskSample = point.add(uTangent.multiply(diskSample.get(0))).add(vTangent.multiply(diskSample.get(1)));
 		
 		//orientedDiskSample = point.add3(uniformSphereSample().multiply3M(radius));
 		
 		//The X sources
-		Vector4 xr = orientedDiskSample.subtract3(normal.multiply3(zr));
-		Vector4 xv = orientedDiskSample.add3(normal.multiply3(zv));
+		Vector3 xr = orientedDiskSample.subtract(normal.multiply(zr));
+		Vector3 xv = orientedDiskSample.add(normal.multiply(zv));
 		
 		
 		//The S distances
@@ -189,7 +189,7 @@ public class SubsurfaceScatterPTMaterial extends Material{
 	}
 	*/
 	
-	private Color lightForPoint(ShadingData data, Vector4 point, double z, double sigma, double s)
+	private Color lightForPoint(ShadingData data, Vector3 point, double z, double sigma, double s)
 	{
 		//The Shade
 		Color shade = new Color();

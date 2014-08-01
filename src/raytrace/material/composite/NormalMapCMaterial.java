@@ -1,6 +1,6 @@
 package raytrace.material.composite;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
 import raytrace.map.normal.FlatNormalMap;
@@ -41,10 +41,10 @@ public class NormalMapCMaterial extends CompositeMaterial {
 	@Override
 	public Color shade(ShadingData data)
 	{
-		Vector4 normal = normalMap.evaluate(data.getIntersectionData());
+		Vector3 normal = normalMap.evaluate(data.getIntersectionData());
 		
 		//Store the old normal
-		Vector4 oldNormal = data.getIntersectionData().getNormal().normalize3M();
+		Vector3 oldNormal = data.getIntersectionData().getNormal().normalizeM();
 		
 		//Set the normal to the new one
 		data.getIntersectionData().setNormal(normal);

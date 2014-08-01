@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -40,27 +40,27 @@ public class FresnelDiffusePTMaterial extends Material{
 		//Get the material color from the texture
 		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
-		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal().normalize3M();
-		Vector4 rayDir = data.getRay().getDirection().multiply3(-1.0).normalize3M();
+		Vector3 point = data.getIntersectionData().getPoint();
+		Vector3 normal = data.getIntersectionData().getNormal().normalizeM();
+		Vector3 rayDir = data.getRay().getDirection().multiply(-1.0).normalizeM();
 		
-		double DdotN = normal.dot3(rayDir);
+		double DdotN = normal.dot(rayDir);
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
 		if(DdotN < 0.0) {
-			normal = normal.multiply3(-1.0);
-			DdotN = normal.dot3(rayDir);
+			normal = normal.multiply(-1.0);
+			DdotN = normal.dot(rayDir);
 		}
 
 		
 		//Basis
-		Vector4 uTangent;
-		Vector4 vTangent;
+		Vector3 uTangent;
+		Vector3 vTangent;
 		
-		if(normal.dot3(positiveYAxis) == 1.0)
-			uTangent = normal.cross3(cosineWeightedSample()).normalize3M();
+		if(normal.dot(positiveYAxis) == 1.0)
+			uTangent = normal.cross(cosineWeightedSample()).normalizeM();
 		else
-			uTangent = normal.cross3(positiveYAxis).normalize3M();
-		vTangent = uTangent.cross3(normal).normalize3M();
+			uTangent = normal.cross(positiveYAxis).normalizeM();
+		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
 		//Direct Illumination
@@ -79,7 +79,7 @@ public class FresnelDiffusePTMaterial extends Material{
 		{
 			//Sample random points
 			Color rflectColor = new Color();
-			Vector4 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
+			Vector3 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
 			double reflectiveCoeff = Math.pow((reflectiveRadius - DdotN) / (reflectiveRadius), schlickExponent);;
 			
 			//if reflecting

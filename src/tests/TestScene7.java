@@ -1,6 +1,6 @@
 package tests;
 
-import math.Vector4;
+import math.Vector3;
 import process.logging.Logger;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
@@ -43,9 +43,9 @@ public class TestScene7 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(100);
-		activeCamera.setPosition(new Vector4(0,2,3,0));
-		activeCamera.setViewingDirection(new Vector4(0,-0.1,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2,3));
+		activeCamera.setViewingDirection(new Vector3(0,-0.1,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -57,7 +57,7 @@ public class TestScene7 extends Scene
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricPTMaterial(new Color(1.0, 0.9, 1.0), 1.30));
-			sphere.setPosition(new Vector4(-1, 1, -1, 0));
+			sphere.setPosition(new Vector3(-1, 1, -1));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
 		}

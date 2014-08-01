@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
 import raytrace.map.texture.Texture;
@@ -49,18 +49,18 @@ public class PassThroughMaterial extends Material{
 		Color tint = texture.evaluate(data.getIntersectionData());
 		
 		//Setup the point of intersection
-		Vector4 point = data.getIntersectionData().getPoint();
+		Vector3 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
+		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 		
 		//If the ray direction and the normal have an angle of less than Pi/2, then the ray is exiting the material
-		if(normal.dot3(rayDir) > 0.0)
+		if(normal.dot(rayDir) > 0.0)
 		{
-			normal = normal.multiply3(-1.0);
+			normal = normal.multiply(-1.0);
 		}
 		
 		

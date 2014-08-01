@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import process.logging.Logger;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
@@ -46,9 +46,9 @@ public class TestScene5 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
-		activeCamera.setPosition(new Vector4(0,2.5,5,0));
-		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2.5,5));
+		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
@@ -138,7 +138,7 @@ public class TestScene5 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		

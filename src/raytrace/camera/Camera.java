@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import raytrace.framework.Positionable;
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 
 public abstract class Camera implements Iterable<Ray>, Positionable, Serializable {
 	
@@ -22,9 +22,9 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 position = new Vector4();
-	protected Vector4 viewingDirection = new Vector4(0,0,-1,0);
-	protected Vector4 up = new Vector4(0,1,0,0);
+	protected Vector3 position = new Vector3();
+	protected Vector3 viewingDirection = new Vector3(0, 0, -1);
+	protected Vector3 up = new Vector3(0, 1, 0);
 	protected double fieldOfView = Math.PI/2.0;
 	protected double pixelWidth = 512;
 	protected double pixelHeight = 512;
@@ -42,7 +42,7 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 		//
 	}
 	
-	public Camera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
+	public Camera(Vector3 position, Vector3 viewingDirection, Vector3 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		this.position = position;
 		this.viewingDirection = viewingDirection;
@@ -64,51 +64,50 @@ public abstract class Camera implements Iterable<Ray>, Positionable, Serializabl
 	protected abstract Ray getRay(double x, double y);
 	public abstract Collection<Camera> decompose(int count);
 	public abstract Camera duplicate();
-	//protected abstract Ray getRay(double x, double y, Ray ray);
-	//protected Ray getRay(double x, double y)
-	//{
-	//	return getRay(x, y, new Ray());
-	//}
 	
 
+	/* *********************************************************************************************
+	 * Mutation Methods
+	 * *********************************************************************************************/
 	protected void wasModified()
 	{
 		dirty = true;
 		handleModified();
 	}
+	
 
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
 	//Position
 	@Override
-	public Vector4 getPosition() {
+	public Vector3 getPosition() {
 		return position;
 	}
 
 	@Override
-	public void setPosition(Vector4 position) {
+	public void setPosition(Vector3 position) {
 		this.position = position;
 		wasModified();
 	}
 	
 	//LookAt
-	public Vector4 getViewingDirection() {
+	public Vector3 getViewingDirection() {
 		return viewingDirection;
 	}
 
-	public void setViewingDirection(Vector4 viewingDirection) {
+	public void setViewingDirection(Vector3 viewingDirection) {
 		this.viewingDirection = viewingDirection;
-		this.viewingDirection.normalize3M();
+		this.viewingDirection.normalizeM();
 		wasModified();
 	}
 	
 	//Up
-	public Vector4 getUp() {
+	public Vector3 getUp() {
 		return up;
 	}
 
-	public void setUp(Vector4 up) {
+	public void setUp(Vector3 up) {
 		this.up = up;
 		wasModified();
 	}

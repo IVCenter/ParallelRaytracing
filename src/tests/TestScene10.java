@@ -3,7 +3,7 @@ package tests;
 import java.util.Random;
 
 import math.Spline;
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.ProgrammableCameraController;
 import raytrace.camera.aperture.CircularAperture;
@@ -65,9 +65,9 @@ public class TestScene10 extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
-		activeCamera.setPosition(new Vector4(0,2.5,5,0));
-		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(0,2.5,5));
+		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		//activeCamera.setPixelWidth(Configuration.getRenderWidth());
 		//activeCamera.setPixelHeight(Configuration.getRenderHeight());
@@ -81,64 +81,64 @@ public class TestScene10 extends Scene
 		//Position Spline
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 0.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 0.5, 5.0, 0.0));
-			spline.add(new Vector4(-5.0, 0.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.5, 5.0));
+			spline.add(new Vector3(-5.0, 0.5, 5.0));
+			spline.add(new Vector3(-5.0, 0.5, 0.0));
 			camController.addPositionSpline(spline, 2.5);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(-5.0, 0.5, 0.0, 0.0));
-			spline.add(new Vector4(-5.0, 0.5, -5.0, 0.0));
-			spline.add(new Vector4(0.0, 0.5, -5.0, 0.0));
+			spline.add(new Vector3(-5.0, 0.5, 0.0));
+			spline.add(new Vector3(-5.0, 0.5, -5.0));
+			spline.add(new Vector3(0.0, 0.5, -5.0));
 			camController.addPositionSpline(spline, 2.5);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 0.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 0.5, -5.0, 0.0));
-			spline.add(new Vector4(5.0, 0.5, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.5, -5.0));
+			spline.add(new Vector3(5.0, 0.5, -5.0));
+			spline.add(new Vector3(5.0, 0.5, 0.0));
 			camController.addPositionSpline(spline, 2.5);
 		}
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(5.0, 0.5, 0.0, 0.0));
-			spline.add(new Vector4(5.0, 0.5, 5.0, 0.0));
-			spline.add(new Vector4(0.0, 0.5, 5.0, 0.0));
+			spline.add(new Vector3(5.0, 0.5, 0.0));
+			spline.add(new Vector3(5.0, 0.5, 5.0));
+			spline.add(new Vector3(0.0, 0.5, 5.0));
 			camController.addPositionSpline(spline, 2.5);
 		}
 		
 		//Look At
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.0, 0.0, 0.0));
 			camController.addLookAtSpline(spline, 10.0);
 		}
 		
 		//Camera Radius
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(0.2, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(0.2, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(0.2, 0.0, 0.0));
+			spline.add(new Vector3(0.2, 0.0, 0.0));
 			camController.addApertureRadiusSpline(spline, 10.0);
 		}
 		
 		//Focal Distance
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(5.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(5.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(4.5, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(5.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(5.0, 0.0, 0.0));
+			spline.add(new Vector3(5.5, 0.0, 0.0));
+			spline.add(new Vector3(4.5, 0.0, 0.0));
+			spline.add(new Vector3(5.0, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 10.0);
 		}
 		
 		//Field of View
 		{
 			Spline spline = new Spline();
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
-			spline.add(new Vector4(Math.PI/2.0, 0.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
+			spline.add(new Vector3(Math.PI/2.0, 0.0, 0.0));
 			camController.addFocalDistanceSpline(spline, 10.0);
 		}
 		
@@ -165,18 +165,17 @@ public class TestScene10 extends Scene
 		MatrixTransformTexture3D simplexTrans2 = new MatrixTransformTexture3D(simplex2);
 		simplexTrans2.getTransform().nonUniformScale(64.0, 64.0, 64.0);
 		
-		Vector4 multi = new Vector4();
+		Vector3 multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				Vector4 newPos = pos.multiply3(multi);
-				vert.setPosition(newPos.add3M(
-						new Vector4(0, Math.pow((newPos.get(0) * newPos.get(0) + newPos.get(2) * newPos.get(2)), 2.0) * 0.5, 0, 0))
-						);
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				Vector3 newPos = pos.multiply(multi);
+				vert.setPosition(newPos.addM(
+						new Vector3(0, Math.pow((newPos.get(0) * newPos.get(0) + newPos.get(2) * newPos.get(2)), 2.0) * 0.5, 0)));
 			}
 			tri.generateFaceNormal();
 			tri.setDynamic(true);
@@ -185,15 +184,15 @@ public class TestScene10 extends Scene
 		}
 		
 		//Add more noise!
-		multi = new Vector4();
+		multi = new Vector3();
 		for(Triangle tri : mesh.getTriangles())
 		{
 			for(Vertex vert : tri.getVertices())
 			{
-				Vector4 pos = vert.getPosition();
+				Vector3 pos = vert.getPosition();
 				Color noise = simplexTrans2.evaluate(pos.get(0), pos.get(1), pos.get(2));
-				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 0);
-				vert.setPosition(pos.multiply3(multi));
+				multi.set(1.0 + noise.intensity3(), 1.0 + noise.intensity3(), 1.0 + noise.intensity3());
+				vert.setPosition(pos.multiply(multi));
 			}
 		}
 		for(Triangle tri : mesh.getTriangles())
@@ -239,7 +238,7 @@ public class TestScene10 extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);
-		directionalLight.setDirection(new Vector4(1,-1,-1,0));
+		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
 		
 		

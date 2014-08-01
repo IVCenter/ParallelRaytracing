@@ -1,7 +1,7 @@
 package raytrace.light;
 
 import process.logging.Logger;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 
@@ -11,7 +11,7 @@ public class SpotLight extends Light {
 	 * A simple Spot Light class
 	 */
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector4 point)
+	public IlluminationData illuminate(ShadingData data, Vector3 point)
 	{
 		//TODO: Implement spot light
 		

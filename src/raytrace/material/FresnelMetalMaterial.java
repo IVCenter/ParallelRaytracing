@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
@@ -40,8 +40,8 @@ public class FresnelMetalMaterial extends Material {
 		//Get the material color from the texture
 		Color tint = tintTexture.evaluate(data.getIntersectionData());
 		
-		Vector4 point = data.getIntersectionData().getPoint();
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 point = data.getIntersectionData().getPoint();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		IlluminationData ildata;
 		
 		//Diffuse lighting and shadows
@@ -54,7 +54,7 @@ public class FresnelMetalMaterial extends Material {
 		}
 		
 		//Calculate percent reflective
-		double NdotD = normal.dot3(data.getRay().getDirection());
+		double NdotD = normal.dot(data.getRay().getDirection());
 		double NdotD2 = NdotD * NdotD;
 		double riReal2 = refractiveReal * refractiveReal;
 		double riImag2 = refractiveImaginary * refractiveImaginary;

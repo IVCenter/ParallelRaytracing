@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import math.Vector4;
+import math.Vector3;
 
 import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
@@ -104,8 +104,8 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		boundingBox.clear();
 		
 		//Temp Storage
-		Vector4 min;
-		Vector4 max;
+		Vector3 min;
+		Vector3 max;
 		BoundingBox bb;
 		
 		//Loop through all children bounding boxes and set this to bound them
@@ -117,8 +117,8 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			min = bb.min;
 			max = bb.max;
 
-			boundingBox.min.minimize3M(min);
-			boundingBox.max.maximize3M(max);
+			boundingBox.min.minimizeM(min);
+			boundingBox.max.maximizeM(max);
 		}
 	}
 	

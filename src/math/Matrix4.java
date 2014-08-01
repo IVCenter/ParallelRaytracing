@@ -148,35 +148,42 @@ public class Matrix4 {
 	    return temp;
 	}
 
-	public Vector4 multiply(Vector4 a)
+	public Vector3 multiply3(Vector3 a)
 	{
-		double[] v = new double[4];
+		double[] v = new double[3];
 		double[] am = a.getArray();
 		
 		double sum = 0.0;
-		for(int row = 0; row < 4; ++row)
+		for(int row = 0; row < 3; ++row)
 		{
 			sum = 0.0;
-			for(int element = 0; element < 4; ++element)
+			for(int element = 0; element < 3; ++element)
 			{
 				sum += array[element][row] * am[element];
 			}
 			v[row] = sum;
 		}
 		
-		return new Vector4(v);
-	}
-
-	public Vector4 multiply3(Vector4 a)
-	{
-		a.set(3, 0);
-		return multiply(a);
+		return new Vector3(v);
 	}
 	
-	public Vector4 multiplyPt(Vector4 a)
+	public Vector3 multiplyPt(Vector3 a)
 	{
-		a.set(3, 1);
-		return multiply(a);
+		double[] v = new double[3];
+		double[] am = a.getArray();
+		
+		double sum = 0.0;
+		for(int row = 0; row < 3; ++row)
+		{
+			sum = 0.0;
+			for(int element = 0; element < 3; ++element)
+			{
+				sum += array[element][row] * am[element];
+			}
+			v[row] = sum + array[3][row];
+		}
+		
+		return new Vector3(v);
 	}
 
 	public Matrix4 rotateX(double angle)
@@ -216,7 +223,7 @@ public class Matrix4 {
 	}
 
 	/* base on lecture slide 44 */
-	public Matrix4 rotateArbitrary(Vector4 v, double angle)
+	public Matrix4 rotateArbitrary(Vector3 v, double angle)
 	{
 	    Matrix4 temp = new Matrix4();
 	    temp.identity();
@@ -273,7 +280,7 @@ public class Matrix4 {
 	    return multiply(scale);
 	}
 
-	public Matrix4 translate(Vector4 a)
+	public Matrix4 translate(Vector3 a)
 	{
 		array[3][0] += a.array[0];
 		array[3][1] += a.array[1];
@@ -291,9 +298,9 @@ public class Matrix4 {
 		return this;
 	}
 
-	public Vector4 getTranslation()
+	public Vector3 getTranslation()
 	{
-	    return new Vector4(array[3][0], array[3][1], array[3][2], 1);
+	    return new Vector3(array[3][0], array[3][1], array[3][2]);
 	}
 
 	public void detranslate()
@@ -417,8 +424,8 @@ public class Matrix4 {
 	{
 	    final double TRACKBALL_SIZE = 1.3;              // virtual trackball size (empirical value)
 	    Matrix4 mInv;                                   // inverse of ObjectView matrix
-	    Vector4 v1 = new Vector4();                     // mouse drag positions in normalized 3D space
-	    Vector4 v2 = new Vector4();
+	    Vector3 v1 = new Vector3();                     // mouse drag positions in normalized 3D space
+	    Vector3 v2 = new Vector3();
 	    double smallSize;                               // smaller window size between width and height
 	    double halfWidth, halfHeight;                   // half window sizes
 	    double angle;                                   // rotational angle
@@ -441,10 +448,10 @@ public class Matrix4 {
 	    v2.array[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
 	    
 	    // Compute rotational angle:
-	    angle = v1.angle3(v2);                             // angle = angle between v1 and v2
+	    angle = v1.angle(v2);                             // angle = angle between v1 and v2
 	    
 	    // Compute rotational axis:
-	    v2 = v2.cross3(v1);                                // v2 = v2 x v1 (cross product)
+	    v2 = v2.cross(v1);                                // v2 = v2 x v1 (cross product)
 	    
 	    // Convert axis coordinates (v2) from WCS to OCS:
 	    mInv = new Matrix4();
@@ -452,7 +459,7 @@ public class Matrix4 {
 	    mInv.copyRotation(this);                           // copy rotational part of mv to mInv
 	    mInv.transpose();                                  // invert orthogonal matrix mInv
 	    v2 = mInv.multiply3(v2);                           // v2 = v2 x mInv (matrix multiplication)
-	    v2.normalize3M();                                   // normalize v2 before rotation
+	    v2.normalizeM();                                   // normalize v2 before rotation
 	    
 	    // Perform acutal model view matrix modification:
 	    rotateArbitrary(v2,-angle);      // rotate model view matrix

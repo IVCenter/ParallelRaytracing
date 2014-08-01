@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import process.utils.StringUtils;
 
-public class Vector4 implements Serializable{
+public class Vector3 implements Serializable{
 	
 	/*
 	 * An extension of the Vector4d class to allow for additional features
@@ -19,9 +19,9 @@ public class Vector4 implements Serializable{
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	public static final Vector4 XAXIS = new Vector4(1.0, 0.0, 0.0, 0.0);
-	public static final Vector4 YAXIS = new Vector4(0.0, 1.0, 0.0, 0.0);
-	public static final Vector4 ZAXIS = new Vector4(0.0, 0.0, 1.0, 0.0);
+	public static final Vector3 XAXIS = new Vector3(1.0, 0.0, 0.0);
+	public static final Vector3 YAXIS = new Vector3(0.0, 1.0, 0.0);
+	public static final Vector3 ZAXIS = new Vector3(0.0, 0.0, 1.0);
 
 	
 	/* *********************************************************************************************
@@ -33,25 +33,25 @@ public class Vector4 implements Serializable{
 	/* *********************************************************************************************
 	 * Cosntructors
 	 * *********************************************************************************************/
-	public Vector4()
+	public Vector3()
 	{
-		array = new double[4];
+		array = new double[3];
 	}
 	
-	public Vector4(double x, double y, double z, double w)
+	public Vector3(double x, double y, double z)
 	{
 		this();
-		set(x,y,z,w);
+		set(x,y,z);
 	}
 	
-	public Vector4(Vector4 v)
+	public Vector3(Vector3 v)
 	{
 		this();
 		double[] vm = v.getArray();
 		set(vm);
 	}
 	
-	public Vector4(double[] v)
+	public Vector3(double[] v)
 	{
 		this();
 		set(v);
@@ -67,12 +67,11 @@ public class Vector4 implements Serializable{
 		return array[element];
 	}
 	
-	public void set(double x, double y, double z, double w)
+	public void set(double x, double y, double z)
 	{
 		array[0] = x;
 		array[1] = y;
 		array[2] = z;
-		array[3] = w;
 	}
 	
 	public void set(int element, double value)
@@ -82,11 +81,11 @@ public class Vector4 implements Serializable{
 	
 	public void set(double[] v)
 	{
-		for(int i = 0; i < v.length && i < 4; ++i)
+		for(int i = 0; i < v.length && i < 3; ++i)
 			array[i] = v[i];
 	}
 	
-	public void set(Vector4 v)
+	public void set(Vector3 v)
 	{
 		set(v.getArray());
 	}
@@ -95,63 +94,62 @@ public class Vector4 implements Serializable{
 	/* *********************************************************************************************
 	 * Calculation Methods
 	 * *********************************************************************************************/
-	public Vector4 cross3(Vector4 that)
+	public Vector3 cross(Vector3 that)
 	{
 		double[] vm = that.getArray();
-		Vector4 res = new Vector4(array[1]*vm[2] - array[2]*vm[1],
+		Vector3 res = new Vector3(array[1]*vm[2] - array[2]*vm[1],
 								  array[2]*vm[0] - array[0]*vm[2],
-								  array[0]*vm[1] - array[1]*vm[0],
-								  0);
+								  array[0]*vm[1] - array[1]*vm[0]);
 		return res;
 	}
 	
-	public double dot3(Vector4 that)
+	public double dot(Vector3 that)
 	{
 		double[] vm = that.getArray();
 		return array[0]*vm[0] + array[1]*vm[1] + array[2]*vm[2];
 	}
 	
-	public double angle3(Vector4 that)
+	public double angle(Vector3 that)
 	{
-		return Math.acos(this.dot3(that) / (this.magnitude3() * that.magnitude3()));
+		return Math.acos(this.dot(that) / (this.magnitude() * that.magnitude()));
 	}
 	
-	public Vector4 normalize3M()
+	public Vector3 normalizeM()
 	{
-		double mag = magnitude3();
+		double mag = magnitude();
 		array[0] = array[0]/mag;
 		array[1] = array[1]/mag;
 		array[2] = array[2]/mag;
 		return this;
 	}
 
-	public Vector4 normalize3()
+	public Vector3 normalize()
 	{
-		double mag = magnitude3();
-		return new Vector4(array[0]/mag, array[0]/mag, array[2]/mag, 0);
+		double mag = magnitude();
+		return new Vector3(array[0]/mag, array[0]/mag, array[2]/mag);
 	}
 	
-	public double magnitude3Sqrd()
+	public double magnitudeSqrd()
 	{
 		return array[0] * array[0] + array[1] * array[1] + array[2] * array[2];
 	}
 	
-	public double magnitude3()
+	public double magnitude()
 	{
 		return Math.sqrt(array[0] * array[0] + array[1] * array[1] + array[2] * array[2]);
 	}
 	
-	public Vector4 multiply3(double d)
+	public Vector3 multiply(double d)
 	{
-		return new Vector4(array[0]*d, array[1]*d, array[2]*d, array[3]);
+		return new Vector3(array[0]*d, array[1]*d, array[2]*d);
 	}
 
-	public Vector4 multiply3(Vector4 that)
+	public Vector3 multiply(Vector3 that)
 	{
-		return new Vector4(array[0]*that.array[0], array[1]*that.array[1], array[2]*that.array[2], array[3]);
+		return new Vector3(array[0]*that.array[0], array[1]*that.array[1], array[2]*that.array[2]);
 	}
 	
-	public Vector4 multiply3M(double d)
+	public Vector3 multiplyM(double d)
 	{
 		array[0] *= d;
 		array[1] *= d;
@@ -159,7 +157,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 multiply3M(Vector4 that)
+	public Vector3 multiplyM(Vector3 that)
 	{
 		array[0] *= that.array[0];
 		array[1] *= that.array[1];
@@ -167,18 +165,18 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 add3(Vector4 that)
+	public Vector3 add(Vector3 that)
 	{
 		double[] vm = that.getArray();
-		return new Vector4(array[0]+vm[0], array[1]+vm[1], array[2]+vm[2], array[3]);
+		return new Vector3(array[0]+vm[0], array[1]+vm[1], array[2]+vm[2]);
 	}
 	
-	public Vector4 add3(double d)
+	public Vector3 add(double d)
 	{
-		return new Vector4(array[0]+d, array[1]+d, array[2]+d, array[3]);
+		return new Vector3(array[0]+d, array[1]+d, array[2]+d);
 	}
 	
-	public Vector4 add3M(Vector4 that)
+	public Vector3 addM(Vector3 that)
 	{
 		double[] vm = that.getArray();
 		array[0] += vm[0];
@@ -187,7 +185,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 add3M(double d)
+	public Vector3 addM(double d)
 	{
 		array[0] += d;
 		array[1] += d;
@@ -195,13 +193,13 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 addMultiRight3(Vector4 that, double c)
+	public Vector3 addMultiRight(Vector3 that, double c)
 	{
 		double[] vm = that.getArray();
-		return new Vector4(array[0]+vm[0]*c, array[1]+vm[1]*c, array[2]+vm[2]*c, array[3]);
+		return new Vector3(array[0]+vm[0]*c, array[1]+vm[1]*c, array[2]+vm[2]*c);
 	}
 	
-	public Vector4 addMultiRight3M(Vector4 that, double c)
+	public Vector3 addMultiRightM(Vector3 that, double c)
 	{
 		double[] vm = that.getArray();
 		array[0] += vm[0]*c;
@@ -210,18 +208,18 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 subtract3(Vector4 that)
+	public Vector3 subtract(Vector3 that)
 	{
 		double[] vm = that.getArray();
-		return new Vector4(array[0]-vm[0], array[1]-vm[1], array[2]-vm[2], array[3]);
+		return new Vector3(array[0]-vm[0], array[1]-vm[1], array[2]-vm[2]);
 	}
 	
-	public Vector4 subtract3(double d)
+	public Vector3 subtract(double d)
 	{
-		return new Vector4(array[0]-d, array[1]-d, array[2]-d, array[3]);
+		return new Vector3(array[0]-d, array[1]-d, array[2]-d);
 	}
 	
-	public Vector4 subtract3M(Vector4 that)
+	public Vector3 subtractM(Vector3 that)
 	{
 		double[] vm = that.getArray();
 		array[0] -= vm[0];
@@ -230,7 +228,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 subtract3M(double d)
+	public Vector3 subtractM(double d)
 	{
 		array[0] -= d;
 		array[1] -= d;
@@ -238,7 +236,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 minimize3M(Vector4 that)
+	public Vector3 minimizeM(Vector3 that)
 	{
 		double[] vm = that.getArray();
 		array[0] = array[0] < vm[0] ? array[0] : vm[0];
@@ -247,7 +245,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 	
-	public Vector4 maximize3M(Vector4 that)
+	public Vector3 maximizeM(Vector3 that)
 	{
 		double[] vm = that.getArray();
 		array[0] = array[0] > vm[0] ? array[0] : vm[0];
@@ -256,7 +254,7 @@ public class Vector4 implements Serializable{
 		return this;
 	}
 
-	public double distance(Vector4 that)
+	public double distance(Vector3 that)
 	{
 		double x = array[0] - that.array[0];
 		double y = array[1] - that.array[1];
@@ -264,7 +262,7 @@ public class Vector4 implements Serializable{
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
-	public double manhattanDistance(Vector4 that)
+	public double manhattanDistance(Vector3 that)
 	{
 		double x = array[0] - that.array[0];
 		double y = array[1] - that.array[1];
@@ -272,7 +270,7 @@ public class Vector4 implements Serializable{
 		return Math.abs(x) + Math.abs(y) + Math.abs(z);
 	}
 
-	public double tchebyshevDistance(Vector4 that)
+	public double tchebyshevDistance(Vector3 that)
 	{
 		double x = array[0] - that.array[0];
 		double y = array[1] - that.array[1];
@@ -288,8 +286,7 @@ public class Vector4 implements Serializable{
 	{
 		System.out.println("[" + StringUtils.column(""+array[0], 24) + ", " + 
 								 StringUtils.column(""+array[1], 24) + ", " +
-								 StringUtils.column(""+array[2], 24) + ", " +
-								 StringUtils.column(""+array[3], 24) + "]");
+								 StringUtils.column(""+array[2], 24) + "]");
 	}
 	
 }

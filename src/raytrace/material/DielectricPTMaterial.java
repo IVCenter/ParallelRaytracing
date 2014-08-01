@@ -1,6 +1,6 @@
 package raytrace.material;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.ShadingData;
 import raytrace.map.texture.Texture;
@@ -45,16 +45,16 @@ public class DielectricPTMaterial extends Material{
 		Color tint = beerTexture.evaluate(data.getIntersectionData());
 		
 		//Setup the point of intersection
-		Vector4 point = data.getIntersectionData().getPoint();
+		Vector3 point = data.getIntersectionData().getPoint();
 		
 		//Setup the normal
-		Vector4 normal = data.getIntersectionData().getNormal();
+		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		//Ray Direction
-		Vector4 rayDir = (new Vector4(data.getRay().getDirection())).normalize3M();
+		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 		
 		
-		double DdotN = normal.dot3(rayDir);
+		double DdotN = normal.dot(rayDir);
 		double thisRefractiveIndex = refractiveIndex;
 		boolean exiting = false;
 		
@@ -62,7 +62,7 @@ public class DielectricPTMaterial extends Material{
 		if(DdotN > 0.0) {
 			//TODO: Would it be better to use a refractiveIndex stack?
 			thisRefractiveIndex = AIR_REFRACTIVE_INDEX;//TODO: Is this the right test, and right place to assume we are exiting the material?
-			normal = normal.multiply3(-1.0);
+			normal = normal.multiply(-1.0);
 			DdotN *= -1.0;
 			
 			exiting = true;
@@ -108,23 +108,23 @@ public class DielectricPTMaterial extends Material{
 					
 			}else{
 				
-				Vector4 thetaSide = rayDir.addMultiRight3M(normal, -DdotN).multiply3M(refractiveRatio);
-				Vector4 refracDir = thetaSide.addMultiRight3M(normal, -Math.sqrt(phiDiscrim)).normalize3M();
+				Vector3 thetaSide = rayDir.addMultiRightM(normal, -DdotN).multiplyM(refractiveRatio);
+				Vector3 refracDir = thetaSide.addMultiRightM(normal, -Math.sqrt(phiDiscrim)).normalizeM();
 				
 				//0.0 is no roughness, 1.0 is lots of roughness
 				//TODO: Use something better here......
 				if(roughness > 0.0)
 				{
-					Vector4 roughDir = new Vector4();
-					Vector4 offset = new Vector4();
+					Vector3 roughDir = new Vector3();
+					Vector3 offset = new Vector3();
 					do
 					{
-						offset.set(Math.random() * roughness, Math.random() * roughness, Math.random() * roughness, 0);
+						offset.set(Math.random() * roughness, Math.random() * roughness, Math.random() * roughness);
 						roughDir.set(refracDir);
-						roughDir.add3M(offset);
-					} while(roughDir.dot3(refracDir) <= 0.0);
+						roughDir.addM(offset);
+					} while(roughDir.dot(refracDir) <= 0.0);
 					
-					refracDir = roughDir.normalize3M();
+					refracDir = roughDir.normalizeM();
 				}
 				
 				recursionColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);

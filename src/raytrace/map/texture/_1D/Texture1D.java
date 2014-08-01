@@ -25,7 +25,7 @@ public abstract class Texture1D implements Map1D<Color>, Texture {
 	public Color evaluate(IntersectionData data)
 	{
 		//TODO: Do something a little more clever here.....
-		return evaluate(data.getLocalPoint().magnitude3());
+		return evaluate(data.getLocalPoint().magnitude());
 	}
 
 }

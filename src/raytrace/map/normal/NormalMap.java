@@ -1,6 +1,6 @@
 package raytrace.map.normal;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.IntersectionData;
 
 public interface NormalMap {
@@ -12,6 +12,6 @@ public interface NormalMap {
 	/* *********************************************************************************************
 	 * Interface Methods
 	 * *********************************************************************************************/
-	public abstract Vector4 evaluate(IntersectionData data);
+	public abstract Vector3 evaluate(IntersectionData data);
 
 }

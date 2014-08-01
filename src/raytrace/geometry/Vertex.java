@@ -1,6 +1,6 @@
 package raytrace.geometry;
 
-import math.Vector4;
+import math.Vector3;
 
 public class Vertex {
 
@@ -10,9 +10,9 @@ public class Vertex {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 position;
-	protected Vector4 normal;
-	protected Vector4 texCoord;
+	protected Vector3 position;
+	protected Vector3 normal;
+	protected Vector3 texCoord;
 	
 
 	/* *********************************************************************************************
@@ -20,12 +20,12 @@ public class Vertex {
 	 * *********************************************************************************************/
 	public Vertex()
 	{
-		position = new Vector4();
-		normal = new Vector4();
-		texCoord = new Vector4();
+		position = new Vector3();
+		normal = new Vector3();
+		texCoord = new Vector3();
 	}
 	
-	public Vertex(Vector4 position, Vector4 normal, Vector4 texCoord)
+	public Vertex(Vector3 position, Vector3 normal, Vector3 texCoord)
 	{
 		this.position = position;
 		this.normal = normal;
@@ -34,7 +34,7 @@ public class Vertex {
 	
 	public Vertex copy()
 	{
-		Vertex v = new Vertex(position.add3(0), normal.add3(0), texCoord.add3(0));
+		Vertex v = new Vertex(position.add(0), normal.add(0), texCoord.add(0));
 		return v;
 	}
 	
@@ -42,44 +42,44 @@ public class Vertex {
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public Vector4 getPosition() {
+	public Vector3 getPosition() {
 		return position;
 	}
 
-	public void setPosition(Vector4 position) {
+	public void setPosition(Vector3 position) {
 		this.position = position;
 	}
 
 	public void setPosition(double x, double y, double z) {
-		position.set(x, y, z, position.get(3));
+		position.set(x, y, z);
 	}
 
-	public Vector4 getNormal() {
+	public Vector3 getNormal() {
 		return normal;
 	}
 
-	public void setNormal(Vector4 normal) {
+	public void setNormal(Vector3 normal) {
 		this.normal = normal;
 	}
 
 	public void setNormal(double x, double y, double z) {
-		normal.set(x, y, z, normal.get(3));
+		normal.set(x, y, z);
 	}
 
-	public Vector4 getTexCoord() {
+	public Vector3 getTexCoord() {
 		return texCoord;
 	}
 
-	public void setTexCoord(Vector4 texCoord) {
+	public void setTexCoord(Vector3 texCoord) {
 		this.texCoord = texCoord;
 	}
 
 	public void setTexCoord(double u, double v, double w) {
-		texCoord.set(u, v, w, texCoord.get(3));
+		texCoord.set(u, v, w);
 	}
 
 	public void setTexCoord(double u, double v) {
-		texCoord.set(u, v, texCoord.get(2), texCoord.get(3));
+		texCoord.set(u, v, texCoord.get(2));
 	}
 	
 }

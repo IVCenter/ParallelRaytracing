@@ -2,7 +2,7 @@ package raytrace.geometry.meshes;
 
 import java.util.ArrayList;
 
-import math.Vector4;
+import math.Vector3;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
 import raytrace.material.Material;
@@ -56,14 +56,14 @@ public class Grid extends MeshSurface {
 		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 		
 		//Vertices
-		Vector4 p010 = new Vector4(-width, 0, -height, 0);
-		Vector4 p011 = new Vector4(-width, 0, height, 0);
-		Vector4 p110 = new Vector4(width, 0, -height, 0);
-		Vector4 p111 = new Vector4(width, 0, height, 0);
+		Vector3 p010 = new Vector3(-width, 0, -height);
+		Vector3 p011 = new Vector3(-width, 0, height);
+		Vector3 p110 = new Vector3(width, 0, -height);
+		Vector3 p111 = new Vector3(width, 0, height);
 
 		
 		//Normals
-		Vector4 YAxis = new Vector4(0,1,0,0);
+		Vector3 YAxis = new Vector3(0, 1, 0);
 
 		//Top
 		{
@@ -74,56 +74,56 @@ public class Grid extends MeshSurface {
 	}
 	
 	protected void generateFaceTriangle(ArrayList<Triangle> tris, 
-			Vector4 v0, Vector4 v1, Vector4 v2, Vector4 v3, Vector4 normal,
+			Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, Vector3 normal,
 			double resolution)
 	{
-		Vector4 xOffset;
-		Vector4 yOffset;
-		Vector4 xSide = v3.subtract3(v0);
-		Vector4 ySide = v1.subtract3(v0);
-		Vector4 xSideDelta = v3.subtract3(v0).multiply3M(1.0/(double)resolution);
-		Vector4 ySideDelta = v1.subtract3(v0).multiply3M(1.0/(double)resolution);
+		Vector3 xOffset;
+		Vector3 yOffset;
+		Vector3 xSide = v3.subtract(v0);
+		Vector3 ySide = v1.subtract(v0);
+		Vector3 xSideDelta = v3.subtract(v0).multiplyM(1.0/(double)resolution);
+		Vector3 ySideDelta = v1.subtract(v0).multiplyM(1.0/(double)resolution);
 		
 		Vertex subV0, subV0_2, subV1, subV2, subV2_2, subV3;
 		
 		//Interpolate the 4 corners
 		for(int x = 0; x < resolution; x++)
 		{
-			xOffset = xSide.multiply3((double)x / (double)resolution);
+			xOffset = xSide.multiply((double)x / (double)resolution);
 			for(int y = 0; y < resolution; y++)
 			{
-				yOffset = ySide.multiply3((double)y / (double)resolution);
+				yOffset = ySide.multiply((double)y / (double)resolution);
 				
 				//Generate for sub vertices
 				subV0 = new Vertex(
-						v0.add3(xOffset).add3M(yOffset), 
+						v0.add(xOffset).addM(yOffset), 
 						normal, 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0));
 				
 				subV0_2 = new Vertex(
-						v0.add3(xOffset).add3M(yOffset), 
+						v0.add(xOffset).addM(yOffset), 
 						normal, 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 0) / (double)resolution, (double)(y + 0) / (double)resolution, 0));
 				
 				subV1 = new Vertex(
-						v0.add3(xOffset).add3M(yOffset).add3M(ySideDelta), 
+						v0.add(xOffset).addM(yOffset).addM(ySideDelta), 
 						normal, 
-						new Vector4((double)(x + 0) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 0) / (double)resolution, (double)(y + 1) / (double)resolution, 0));
 				
 				subV2 = new Vertex(
-						v0.add3(xOffset).add3M(xSideDelta).add3M(yOffset).add3M(ySideDelta), 
+						v0.add(xOffset).addM(xSideDelta).addM(yOffset).addM(ySideDelta), 
 						normal, 
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0));
 				
 				subV2_2 = new Vertex(
-						v0.add3(xOffset).add3M(xSideDelta).add3M(yOffset).add3M(ySideDelta), 
+						v0.add(xOffset).addM(xSideDelta).addM(yOffset).addM(ySideDelta), 
 						normal, 
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 1) / (double)resolution, (double)(y + 1) / (double)resolution, 0));
 				
 				subV3 = new Vertex(
-						v0.add3(xOffset).add3M(xSideDelta).add3M(yOffset), 
+						v0.add(xOffset).addM(xSideDelta).addM(yOffset), 
 						normal, 
-						new Vector4((double)(x + 1) / (double)resolution, (double)(y + 0) / (double)resolution, 0, 0));
+						new Vector3((double)(x + 1) / (double)resolution, (double)(y + 0) / (double)resolution, 0));
 				
 
 				tris.add(new Triangle(subV0, subV1, subV2));

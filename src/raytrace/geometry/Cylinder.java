@@ -1,7 +1,7 @@
 package raytrace.geometry;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -146,13 +146,13 @@ public class Cylinder extends TerminalSurface {
 		
 		
 		//Evaluate point of intersection
-		Vector4 point = ray.evaluateAtTime(t);
+		Vector3 point = ray.evaluateAtTime(t);
 		
 		//Normal
-		Vector4 normal;
+		Vector3 normal;
 		
 		//Texcoord
-		Vector4 texcoord;
+		Vector3 texcoord;
 		
 		//Allocate a new idata
 		IntersectionData idata = new IntersectionData();
@@ -161,17 +161,17 @@ public class Cylinder extends TerminalSurface {
 		if(capIntersection != 0)
 		{
 			//Normal
-			normal = new Vector4(0, capIntersection, 0, 0);
+			normal = new Vector3(0, capIntersection, 0);
 			
 			//Texcoord
-			texcoord = new Vector4(point.get(0), point.get(2), 0, 0);
+			texcoord = new Vector3(point.get(0), point.get(2), 0);
 			
 		}else{
 			
 			//Normal
-			normal = new Vector4(point);
+			normal = new Vector3(point);
 			normal.set(1, 0);
-			normal.normalize3M();
+			normal.normalizeM();
 			
 			//Calculate Texcoords
 			double[] pcfM = normal.getArray();
@@ -187,7 +187,7 @@ public class Cylinder extends TerminalSurface {
 				vCoord = yinter / (ymax-ymin);
 			}
 			
-			texcoord = new Vector4(uCoord, vCoord, 0, 0);
+			texcoord = new Vector3(uCoord, vCoord, 0);
 		}
 		
 
@@ -195,13 +195,13 @@ public class Cylinder extends TerminalSurface {
 		idata.setTime(t);
 		idata.setRay(ray);
 		idata.setPoint(point);
-		idata.setDistance(ray.getDirection().magnitude3() * t);
+		idata.setDistance(ray.getDirection().magnitude() * t);
 		idata.setNormal(normal);
 		idata.setMaterial(material);
 
 		idata.setSurface(this);
 		idata.setTexcoord(texcoord);
-		idata.setLocalPoint(new Vector4(point));
+		idata.setLocalPoint(new Vector3(point));
 		
 		return idata;
 	}
@@ -221,8 +221,8 @@ public class Cylinder extends TerminalSurface {
 	public void updateBoundingBox()
 	{
 		boundingBox.clear();
-		boundingBox.min.set(-radius, 0, -radius, 0);
-		boundingBox.max.set(radius, height, radius, 0);
+		boundingBox.min.set(-radius, 0, -radius);
+		boundingBox.max.set(radius, height, radius);
 	}
 	
 

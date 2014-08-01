@@ -3,7 +3,7 @@ package raytrace.surfaces.acceleration;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import math.Vector4;
+import math.Vector3;
 
 import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
@@ -164,7 +164,7 @@ public class AABVHSurface extends CompositeSurface {
 							   topBB.max.get(2) - topBB.min.get(2)};
 		
 		//Center point might be better...
-		Vector4 center = centerPoint(surfaces);
+		Vector3 center = centerPoint(surfaces);
 		
 		//Get axis data
 		double[] axisValues = center.getArray();
@@ -282,8 +282,8 @@ public class AABVHSurface extends CompositeSurface {
 		boundingBox.clear();
 		
 		//Temp Storage
-		Vector4 min;
-		Vector4 max;
+		Vector3 min;
+		Vector3 max;
 		BoundingBox bb;
 		
 		//Loop through all children bounding boxes and set this to bound them
@@ -295,22 +295,22 @@ public class AABVHSurface extends CompositeSurface {
 			min = bb.min;
 			max = bb.max;
 
-			boundingBox.min.minimize3M(min);
-			boundingBox.max.maximize3M(max);
+			boundingBox.min.minimizeM(min);
+			boundingBox.max.maximizeM(max);
 		}
 		
 		return boundingBox;
 	}
 	
-	private static <SURFACE extends CompositeSurface> Vector4 centerPoint(Collection<SURFACE> surfaces)
+	private static <SURFACE extends CompositeSurface> Vector3 centerPoint(Collection<SURFACE> surfaces)
 	{
-		Vector4 center = new Vector4();
+		Vector3 center = new Vector3();
 		double[] m = center.getArray();
 
 		double count = 0;
 		
 		BoundingBox bb;
-		Vector4 mp;
+		Vector3 mp;
 		double[] mpm;
 		for(SURFACE cs : surfaces)
 		{
@@ -323,7 +323,7 @@ public class AABVHSurface extends CompositeSurface {
 			count += 1.0;
 		}
 		
-		center.set(m[0]/count, m[1]/count, m[2]/count, 0);
+		center.set(m[0]/count, m[1]/count, m[2]/count);
 		
 		return center;
 	}

@@ -1,7 +1,7 @@
 package tests;
 
 import process.logging.Logger;
-import math.Vector4;
+import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
@@ -40,9 +40,9 @@ public class CSE168_Project2_Scene extends Scene
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(false);
 		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
-		activeCamera.setPosition(new Vector4(-0.1, 0.1, 0.2, 0));
-		activeCamera.setViewingDirection(new Vector4(0.05, 0.02, -0.2, 0));
-		activeCamera.setUp(new Vector4(0,1,0,0));
+		activeCamera.setPosition(new Vector3(-0.1, 0.1, 0.2));
+		activeCamera.setViewingDirection(new Vector3(0.05, 0.02, -0.2));
+		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setPixelWidth(Configuration.getScreenWidth());
 		activeCamera.setPixelHeight(Configuration.getScreenHeight());
 		((ProgrammableCamera)activeCamera).setVerticalFieldOfView(Math.PI * (40.0 / 180.0));
@@ -85,7 +85,7 @@ public class CSE168_Project2_Scene extends Scene
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(new Color(1.0, 1.0, 0.9));
 		directionalLight.setIntensity(1.0);
-		directionalLight.setDirection(new Vector4(2, -3, -2, 0));
+		directionalLight.setDirection(new Vector3(2, -3, -2));
 		lightManager.addLight(directionalLight);
 		
 
@@ -96,7 +96,7 @@ public class CSE168_Project2_Scene extends Scene
 		redlgt.setConstantAttenuation(0.0);
 		redlgt.setLinearAttenuation(0.0);
 		redlgt.setQuadraticAttenuation(1.0);
-		redlgt.setPosition(new Vector4(-0.2, 0.2, 0.2, 0));
+		redlgt.setPosition(new Vector3(-0.2, 0.2, 0.2));
 		lightManager.addLight(redlgt);
 		
 
@@ -107,7 +107,7 @@ public class CSE168_Project2_Scene extends Scene
 		bluelgt.setConstantAttenuation(0.0);
 		bluelgt.setLinearAttenuation(0.0);
 		bluelgt.setQuadraticAttenuation(1.0);
-		bluelgt.setPosition(new Vector4(0.1, 0.1, 0.3, 0));
+		bluelgt.setPosition(new Vector3(0.1, 0.1, 0.3));
 		lightManager.addLight(bluelgt);
 		
 		

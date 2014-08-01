@@ -10,7 +10,7 @@ import raytrace.camera.aperture.CircularAperture;
 
 //import math.CompositeRay;
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 
 public class ProgrammableCamera extends Camera {
 
@@ -24,8 +24,8 @@ public class ProgrammableCamera extends Camera {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 cameraX;
-	protected Vector4 cameraY;
+	protected Vector3 cameraX;
+	protected Vector3 cameraY;
 	
 	protected double imagePlaneWidth;
 	protected double imagePlaneHeight;
@@ -55,7 +55,7 @@ public class ProgrammableCamera extends Camera {
 	private double[] camY;
 	
 	//Used for sub ray calculations
-	protected Vector4 dir = new Vector4(0,0,-1,0);	
+	protected Vector3 dir = new Vector3(0, 0, -1);	
 	protected double pw;
 	protected double ph;
 	protected double woffset, hoffset;
@@ -69,13 +69,13 @@ public class ProgrammableCamera extends Camera {
 		super();
 	}
 	
-	public ProgrammableCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight)
+	public ProgrammableCamera(Vector3 position, Vector3 viewingDirection, Vector3 up, double fieldOfView, double pixelWidth, double pixelHeight)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		update();
 	}
 	
-	public ProgrammableCamera(Vector4 position, Vector4 viewingDirection, Vector4 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
+	public ProgrammableCamera(Vector3 position, Vector3 viewingDirection, Vector3 up, double fieldOfView, double pixelWidth, double pixelHeight, int superSamplingLevel)
 	{
 		super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		this.superSamplingLevel = superSamplingLevel;
@@ -163,8 +163,8 @@ public class ProgrammableCamera extends Camera {
 	protected void update()
 	{
 		//Update camera axes
-		cameraX = viewingDirection.cross3(up).normalize3M();
-		cameraY = viewingDirection.cross3(cameraX).normalize3M();
+		cameraX = viewingDirection.cross(up).normalizeM();
+		cameraY = viewingDirection.cross(cameraX).normalizeM();
 		
 		//Update image plane ratio
 		imagePlaneRatio = pixelWidth / pixelHeight;
@@ -294,7 +294,7 @@ public class ProgrammableCamera extends Camera {
 		private PinholeRay ray;
 		private Ray subRay;
 
-		private Vector4 orig;
+		private Vector3 orig;
 		
 
 		/* *********************************************************************************************
@@ -345,7 +345,7 @@ public class ProgrammableCamera extends Camera {
 			currentPixelX = startPixelX;
 			currentPixelY = startPixelY;
 			
-			orig = new Vector4(position);
+			orig = new Vector3(position);
 			subRay.setOrigin(orig);
 			ray.setOrigin(orig);
 		}
@@ -412,8 +412,8 @@ public class ProgrammableCamera extends Camera {
 			private double subPixelV;
 			private Ray ray;
 			
-			private Vector4 apertureSample;
-			private Vector4 apertureOrigin;
+			private Vector3 apertureSample;
+			private Vector3 apertureOrigin;
 			private double[] sampleM;
 			private double[] origM;
 			private double[] dirM;
@@ -427,8 +427,8 @@ public class ProgrammableCamera extends Camera {
 				subPixelU = 0;
 				subPixelV = 0;
 				this.ray = ray;
-				apertureSample = new Vector4();
-				apertureOrigin = new Vector4();
+				apertureSample = new Vector3();
+				apertureOrigin = new Vector3();
 			}
 			
 	
@@ -457,8 +457,7 @@ public class ProgrammableCamera extends Camera {
 				//Create the direction vector
 				dir.set(focalPlaneDistance * (vdir[0] + camX[0] * pw + camY[0] * ph), 
 						focalPlaneDistance * (vdir[1] + camX[1] * pw + camY[1] * ph), 
-						focalPlaneDistance * (vdir[2] + camX[2] * pw + camY[2] * ph), 
-						0);
+						focalPlaneDistance * (vdir[2] + camX[2] * pw + camY[2] * ph));
 				
 				if(superSamplingLevel > 1)
 				{
@@ -469,30 +468,27 @@ public class ProgrammableCamera extends Camera {
 					
 					apertureOrigin.set(camX[0] * sampleM[0] + camY[0] * sampleM[1],
 									   camX[1] * sampleM[0] + camY[1] * sampleM[1],
-									   camX[2] * sampleM[0] + camY[2] * sampleM[1],
-									   0);
+									   camX[2] * sampleM[0] + camY[2] * sampleM[1]);
 					
 					
 					//Finalize Direction
 					origM = apertureOrigin.getArray();
 					dir.set(dirM[0] - origM[0],
 							dirM[1] - origM[1],
-							dirM[2] - origM[2],
-							0);
+							dirM[2] - origM[2]);
 					
 	
 					//Finalize Origin
 					origM = position.getArray();
 					apertureOrigin.set(origM[0] + camX[0] * sampleM[0] + camY[0] * sampleM[1],
 									   origM[1] + camX[1] * sampleM[0] + camY[1] * sampleM[1],
-								   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1],
-									   0);
+								   	   origM[2] + camX[2] * sampleM[0] + camY[2] * sampleM[1]);
 					
 					
-					subRay.setDirection(dir.normalize3M());
+					subRay.setDirection(dir.normalizeM());
 					subRay.setOrigin(apertureOrigin);
 				}else{
-					subRay.setDirection(dir.normalize3M());
+					subRay.setDirection(dir.normalizeM());
 				}
 				
 				//Increment the counters

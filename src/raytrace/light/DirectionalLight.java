@@ -1,7 +1,7 @@
 package raytrace.light;
 
 import math.Ray;
-import math.Vector4;
+import math.Vector3;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
 import raytrace.data.ShadingData;
@@ -14,7 +14,7 @@ public class DirectionalLight extends Light {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected Vector4 direction;
+	protected Vector3 direction;
 	
 
 	/* *********************************************************************************************
@@ -22,7 +22,7 @@ public class DirectionalLight extends Light {
 	 * *********************************************************************************************/
 	public DirectionalLight()
 	{
-		direction = new Vector4();
+		direction = new Vector3();
 	}
 	
 	
@@ -30,12 +30,12 @@ public class DirectionalLight extends Light {
 	 * Overrides
 	 * *********************************************************************************************/
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector4 point)
+	public IlluminationData illuminate(ShadingData data, Vector3 point)
 	{
 		double distance = Double.MAX_VALUE;
 		
 		IntersectionData shadowData = shadowed(data.getRootScene(), 
-				new Ray(point, direction.multiply3(-1.0), 0, 0), distance);
+				new Ray(point, direction.multiply(-1.0), 0, 0), distance);
 		
 		double blocked = shadowData == null ? 1.0 : 0.0;
 
@@ -52,12 +52,12 @@ public class DirectionalLight extends Light {
 	/* *********************************************************************************************
 	 * Gettrs/Setter
 	 * *********************************************************************************************/
-	public Vector4 getDirection() {
+	public Vector3 getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Vector4 direction) {
-		this.direction = direction.normalize3M();
+	public void setDirection(Vector3 direction) {
+		this.direction = direction.normalizeM();
 	}
 
 }
