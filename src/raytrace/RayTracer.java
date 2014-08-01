@@ -1,5 +1,6 @@
 package raytrace;
 
+import process.logging.Logger;
 import math.Ray;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
@@ -75,6 +76,12 @@ public class RayTracer implements Tracer {
 					//Shade the pixel using the sky material
 					color.add3M(skyMaterial.shade(sdata));
 				}
+			}
+			
+			//IF the camera is dirty stop rendering
+			if(camera.isDirty()) {
+				Logger.progress(-1, "RayTracer: Detected a dirty camera, cancelling rendering.");
+				break;
 			}
 			
 			//Set the final color

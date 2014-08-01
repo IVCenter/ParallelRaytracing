@@ -6,6 +6,7 @@ import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
 import raytrace.framework.Tracer;
+import system.Configuration;
 
 public class ConfigurableRayTracingRenderer implements Renderer {
 
@@ -56,8 +57,18 @@ public class ConfigurableRayTracingRenderer implements Renderer {
 	public void render(RenderData data)
 	{
 		Logger.progress(-1, "Rendering...");
-		if(tracer != null && data.getScene() != null)
+		if(tracer != null && data.getScene() != null && data.getScene().getActiveCamera() != null)
+		{
+			//Update the active camera to use the render dimensions
+			data.getScene().getActiveCamera().setPixelWidth(Configuration.getRenderWidth());
+			data.getScene().getActiveCamera().setPixelHeight(Configuration.getRenderHeight());
+			
+			//Set the camera to clean
+			data.getScene().getActiveCamera().setDirty(false);
+			
+			//And trace
 			tracer.trace(data.getPixelBuffer(), data.getScene().getActiveCamera(), data.getScene());
+		}
 	}
 
 	
