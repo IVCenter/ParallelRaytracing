@@ -129,7 +129,7 @@ public class TestScene12 extends Scene
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
 	
-	int startFrame = 40;
+	int startFrame = 102;
 	int frame = 0;
 	
 	@Override

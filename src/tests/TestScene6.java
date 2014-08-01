@@ -76,20 +76,22 @@ public class TestScene6 extends Scene
 	@Override
 	protected void initialize()
 	{
-		//Configuration.setScreenWidth(800);
-		//Configuration.setScreenHeight(600);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
+		Configuration.setRenderWidth(1280);
+		Configuration.setRenderHeight(720);
 
 		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(2);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(1);
 		activeCamera.setPosition(new Vector4(0,2.5,5,0));
 		activeCamera.setViewingDirection(new Vector4(0.1,-0.15,-1,0));
 		activeCamera.setUp(new Vector4(0,1,0,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
-		activeCamera.setPixelWidth(Configuration.getScreenWidth());
-		activeCamera.setPixelHeight(Configuration.getScreenHeight());
+		activeCamera.setPixelWidth(Configuration.getRenderWidth());
+		activeCamera.setPixelHeight(Configuration.getRenderHeight());
 		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.02, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(4.5);
 		
@@ -167,8 +169,8 @@ public class TestScene6 extends Scene
 		
 		//Make a cylinder
 		{
-			SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
-				new Color(1.4, 1.0, 0.95), new Color(1.3, 0.95, 1.3));
+			//SimplexInterpolationT3DBlend sit3d = new SimplexInterpolationT3DBlend(
+			//	new Color(1.4, 1.0, 0.95), new Color(1.3, 0.95, 1.3));
 			
 			SimplexNoiseTexture3D sntex1 = new SimplexNoiseTexture3D();
 			sntex1.setFirstColor(new Color(0.0, 0.0, 0.0));
@@ -244,7 +246,7 @@ public class TestScene6 extends Scene
 			TextureGradientNormalMap3D normalMap = new TextureGradientNormalMap3D(posterBlend);
 			normalMap.setSamplingRadius(0.01);
 			normalMap.setStrength(100.01);
-			NormalMapCMaterial normMat = new NormalMapCMaterial(goldAndFrostMat, normalMap);
+			//NormalMapCMaterial normMat = new NormalMapCMaterial(goldAndFrostMat, normalMap);
 			//NormalMapCMaterial normMat = new NormalMapCMaterial(new DielectricPTMaterial(new Color(1.1, 1.1, 1.0), 1.31), normalMap);
 			
 			
@@ -384,8 +386,8 @@ public class TestScene6 extends Scene
 		return min + Math.random() * (max-min);
 	}
 	
-	private double lvlMulti = 1.0;
-	private double level = 0.0;
+	//private double lvlMulti = 1.0;
+	//private double level = 0.0;
 	
 	@Override
 	public void update(UpdateData data)
