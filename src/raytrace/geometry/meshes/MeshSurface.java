@@ -24,39 +24,36 @@ public class MeshSurface extends TerminalSurface {
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	private static int nextMeshID = 0;
-	private static HashMap<Integer, MeshSurface> meshes;
+//	private static AtomicInteger nextMeshID = new AtomicInteger(-1);
+//	private static HashMap<Integer, MeshSurface> meshes;
 	
 
 	/* *********************************************************************************************
 	 * Static Constructor
 	 * *********************************************************************************************/
-	static
-	{
-		meshes = new HashMap<Integer, MeshSurface>();
-	}
+//	static
+//	{
+//		meshes = new HashMap<Integer, MeshSurface>();
+//	}
 	
 	
 	/* *********************************************************************************************
 	 * Static Helper Methods
 	 * *********************************************************************************************/
-	private synchronized static int nextMeshID()
-	{
-		return nextMeshID++;
-	}
-	
-	@Deprecated
-	public static void removeMeshReference(int meshID)
-	{
-		meshes.put(meshID, null);
-	}
+//	private synchronized static int nextMeshID() { return nextMeshID.getAndDecrement(); }
+//	
+//	@Deprecated
+//	public static void removeMeshReference(int meshID)
+//	{
+//		meshes.put(meshID, null);
+//	}
 	
 	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected ArrayList<Triangle> triangles;
-	protected int meshID = nextMeshID();
+//	protected int meshID = nextMeshID();
 	
 
 	/* *********************************************************************************************
@@ -99,7 +96,7 @@ public class MeshSurface extends TerminalSurface {
 		}
 		
 		if(closest != null)
-			closest.setMeshID(meshID);
+			closest.setSurfaceID(surfaceID);
 		
 		return closest;
 	}
@@ -230,6 +227,15 @@ public class MeshSurface extends TerminalSurface {
 		triangles = newTriangles;
 	}
 	
+	public void pushSurfaceIDToChildren()
+	{
+
+		for(Triangle tri : triangles)
+		{
+			tri.setSurfaceID(surfaceID);
+		}
+	}
+	
 	private String encodeVector(Vector3 v)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -241,8 +247,6 @@ public class MeshSurface extends TerminalSurface {
 		sb.append(Double.toString((float)v.get(1)));
 		sb.append(", ");
 		sb.append(Double.toString((float)v.get(2)));
-		sb.append(", ");
-		sb.append(Double.toString((float)v.get(3)));
 		sb.append(">");
 		
 		return sb.toString();
@@ -296,13 +300,13 @@ public class MeshSurface extends TerminalSurface {
 		this.triangles = triangles;
 	}
 
-	public int getMeshID() {
-		return meshID;
-	}
-
-	public void setMeshID(int meshID) {
-		this.meshID = meshID;
-	}
+//	public int getMeshID() {
+//		return meshID;
+//	}
+//
+//	public void setMeshID(int meshID) {
+//		this.meshID = meshID;
+//	}
 
 	public void setMaterial(Material material)
 	{
