@@ -74,6 +74,9 @@ public class ObjectSurface extends MeshSurface {
 			triangles.add(triangle);
 		}
 		
+		//Push the surface id to all children before accelerating
+		this.pushSurfaceIDToChildren();
+		
 		//Create and profile aabvh
 		long startTime = System.currentTimeMillis();
 		Logger.progress(-1, "Starting creating a BVH for root surface... [" + triangles.size() + " subsurfaces].");
@@ -92,6 +95,10 @@ public class ObjectSurface extends MeshSurface {
 		if(idata != null) {
 			idata.setMaterial(this.material);
 		}
+		
+		if(idata != null)
+			idata.setSurfaceID(surfaceID);
+		
 		return idata;
 		//return aabvh.intersects(data);
 	}
