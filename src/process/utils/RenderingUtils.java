@@ -2,7 +2,7 @@ package process.utils;
 
 import java.util.ArrayList;
 
-import math.Ray;
+import math.ray.Ray;
 import process.logging.Logger;
 import raytrace.camera.Camera;
 
