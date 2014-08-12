@@ -3,6 +3,7 @@ package raytrace.surfaces;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import math.Vector3;
 
@@ -21,6 +22,18 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	/*
 	 * A base class for nodes of a surface graph
 	 */
+	
+	/* *********************************************************************************************
+	 * Static Vars
+	 * *********************************************************************************************/
+	private static AtomicInteger nextSurfaceID = new AtomicInteger(1);
+	
+	
+	/* *********************************************************************************************
+	 * Static Methods
+	 * *********************************************************************************************/
+	private static int nextSurfaceID() { return nextSurfaceID.getAndIncrement(); }
+	
 
 	/* *********************************************************************************************
 	 * Instance Vars
@@ -29,6 +42,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	protected Material material;
 	protected BoundingBox boundingBox = new BoundingBox();
 	protected boolean dynamic = true;
+	protected int surfaceID = nextSurfaceID();
 	
 
 	/* *********************************************************************************************
@@ -203,5 +217,13 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 
 	public void setDynamic(boolean dynamic) {
 		this.dynamic = dynamic;
+	}
+
+	public int getSurfaceID() {
+		return surfaceID;
+	}
+
+	public void setSurfaceID(int surfaceID) {
+		this.surfaceID = surfaceID;
 	}
 }
