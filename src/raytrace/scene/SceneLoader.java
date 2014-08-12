@@ -6,6 +6,7 @@ import system.Constants;
 import tests.CSE168_Project1_Scene;
 import tests.CSE168_Project2_Scene;
 import tests.CSE168_Project3_Scene;
+import tests.DiffuseGlassTestScene;
 import tests.PerformanceTest1;
 import tests.TestScene1;
 import tests.TestScene10;
@@ -197,6 +198,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new TestScene13();
 				scene.setSceneKey(Constants.SceneKeys.TEST13);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.Diffuse_Glass_TEST, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new DiffuseGlassTestScene();
+				scene.setSceneKey(Constants.SceneKeys.Diffuse_Glass_TEST);
 				return scene;
 			}
 		});
