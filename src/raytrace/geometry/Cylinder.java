@@ -1,7 +1,7 @@
 package raytrace.geometry;
 
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -202,6 +202,7 @@ public class Cylinder extends TerminalSurface {
 		idata.setSurface(this);
 		idata.setTexcoord(texcoord);
 		idata.setLocalPoint(new Vector3(point));
+		idata.setSurfaceID(surfaceID);
 		
 		return idata;
 	}

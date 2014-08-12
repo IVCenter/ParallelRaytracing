@@ -1,7 +1,7 @@
 package raytrace.light;
 
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;

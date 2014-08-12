@@ -1,7 +1,7 @@
 package raytrace.geometry;
 
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -70,7 +70,7 @@ public class Plane extends TerminalSurface implements Positionable {
 		
 		//Calculate texcoords
 		//TODO: This will cause NaNs at exactly when the normal faces towards the z-axis or the negative z-axis
-		Vector3 tangent = normal.cross(Vector3.ZAXIS).normalizeM();
+		Vector3 tangent = normal.cross(Vector3.positiveZAxis).normalizeM();
 		Vector3 pointRelativeToPosition = point.subtract(position);
 		
 		double relativePointDistanceSqrd = pointRelativeToPosition.magnitudeSqrd();
@@ -91,6 +91,7 @@ public class Plane extends TerminalSurface implements Positionable {
 		idata.setSurface(this);
 		idata.setTexcoord(new Vector3(uCoord, vCoord, 0));
 		idata.setLocalPoint(new Vector3(point));
+		idata.setSurfaceID(surfaceID);
 		
 		return idata;
 	}

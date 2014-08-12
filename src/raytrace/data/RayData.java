@@ -1,7 +1,7 @@
 package raytrace.data;
 
 import raytrace.surfaces.CompositeSurface;
-import math.Ray;
+import math.ray.Ray;
 
 public class RayData {
 	

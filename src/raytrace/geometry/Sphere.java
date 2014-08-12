@@ -2,8 +2,8 @@ package raytrace.geometry;
 
 import java.util.ArrayList;
 
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -112,6 +112,7 @@ public class Sphere extends TerminalSurface implements Positionable {
 		idata.setSurface(this);
 		idata.setTexcoord(texcoord);
 		idata.setLocalPoint(new Vector3(point));
+		idata.setSurfaceID(surfaceID);
 		
 		return idata;
 	}

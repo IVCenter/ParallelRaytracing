@@ -1,8 +1,8 @@
 package raytrace.bounding;
 
 import raytrace.data.RayData;
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 
 public class BoundingBox {
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import math.Ray;
+import math.ray.Ray;
 
 public class RayBuffer extends Camera {
 	

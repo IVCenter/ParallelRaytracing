@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import raytrace.framework.Positionable;
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 
 public abstract class Camera implements Iterable<Ray>, Positionable, Serializable {
 	

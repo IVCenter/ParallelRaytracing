@@ -1,6 +1,6 @@
 package raytrace.data;
 
-import math.Ray;
+import math.ray.Ray;
 import raytrace.material.Material;
 import raytrace.scene.Scene;
 
