@@ -1,4 +1,4 @@
-package math;
+package math.ray;
 
 import java.util.ArrayList;
 import java.util.Iterator;
