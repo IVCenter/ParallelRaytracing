@@ -80,10 +80,10 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		Vector3 uTangent;
 		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
-			uTangent = normal.cross(positiveXAxis).normalizeM();
+		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
+			uTangent = normal.cross(Vector3.positiveXAxis).normalizeM();
 		else
-			uTangent = normal.cross(positiveYAxis).normalizeM();
+			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
 		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
@@ -117,7 +117,7 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		
 		
 		//The disk sample
-		Vector3 diskSample = diskSample(radius, 1.0);
+		Vector3 diskSample = Vector3.diskSample(radius, 1.0);
 		Vector3 orientedDiskSample = point.add(uTangent.multiply(diskSample.get(0))).add(vTangent.multiply(diskSample.get(1)));
 		
 		//orientedDiskSample = point.add3(uniformSphereSample().multiply3M(radius));
@@ -155,8 +155,8 @@ public class SubsurfaceScatterPTMaterial extends Material{
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
 			//TODO; Make this PT
-			Color rcr = attenuate(recurse(data, xr, uniformSphereSample(), thisRefractiveIndex), zr, sigma, sr);
-			Color rcv = attenuate(recurse(data, xv, uniformSphereSample(), thisRefractiveIndex), zv, sigma, sv);
+			Color rcr = attenuate(recurse(data, xr, Vector3.uniformSphereSample(), thisRefractiveIndex), zr, sigma, sr);
+			Color rcv = attenuate(recurse(data, xv, Vector3.uniformSphereSample(), thisRefractiveIndex), zv, sigma, sv);
 			
 			recursionColor = (rcr).add3(rcv).multiply3M(leadingCoeff);
 			//recursionColor = Color.black();

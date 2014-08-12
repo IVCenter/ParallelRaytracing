@@ -50,10 +50,10 @@ public class DiffusePTMaterial extends Material{
 		Vector3 uTangent;
 		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
-			uTangent = normal.cross(cosineWeightedSample()).normalizeM();
+		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
+			uTangent = normal.cross(Vector3.cosineWeightedSample()).normalizeM();
 		else
-			uTangent = normal.cross(positiveYAxis).normalizeM();
+			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
 		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
@@ -72,7 +72,7 @@ public class DiffusePTMaterial extends Material{
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
 			//Sample a random point
-			Vector3 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
+			Vector3 sampleDir = Vector3.cosineWeightedSample(uTangent, normal, vTangent);
 			
 			//Add the direct shading and samples shading together
 			shade.add3M(recurse(data, point, sampleDir, 1.0));

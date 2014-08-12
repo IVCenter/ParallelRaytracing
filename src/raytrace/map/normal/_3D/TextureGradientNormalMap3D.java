@@ -3,7 +3,6 @@ package raytrace.map.normal._3D;
 import math.Vector3;
 import raytrace.data.IntersectionData;
 import raytrace.map.texture._3D.Texture3D;
-import raytrace.material.Material;
 
 public class TextureGradientNormalMap3D extends NormalMap3D {
 	
@@ -69,10 +68,10 @@ public class TextureGradientNormalMap3D extends NormalMap3D {
 		Vector3 uTangent;
 		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot(Material.positiveYAxis)) == 1.0)
-			uTangent = normal.cross(Material.positiveXAxis).normalizeM();
+		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
+			uTangent = normal.cross(Vector3.positiveXAxis).normalizeM();
 		else
-			uTangent = normal.cross(Material.positiveYAxis).normalizeM();
+			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
 		vTangent = uTangent.cross(normal).normalizeM();
 		
 		//Setup a sample point

@@ -64,10 +64,10 @@ public class AshikhminPTMaterial extends Material {
 		Vector3 uTangent;
 		Vector3 vTangent;
 		
-		if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
-			uTangent = normal.cross(cosineWeightedSample()).normalizeM();
+		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
+			uTangent = normal.cross(Vector3.cosineWeightedSample()).normalizeM();
 		else
-			uTangent = normal.cross(positiveYAxis).normalizeM();
+			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
 		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
@@ -81,7 +81,7 @@ public class AshikhminPTMaterial extends Material {
 			ildata = light.illuminate(data, point);
 			
 			lightDir = ildata.getDirection().multiply(-1.0).normalizeM();
-			half = halfVector(rayDir, lightDir);
+			half = Vector3.halfVector(rayDir, lightDir);
 
 			shade.add3M(ashikminSpecular(ildata.getColor(), specularTint, rayDir, lightDir, normal, uTangent, vTangent, half));
 			shade.add3M(ashikminDiffuse(ildata.getColor(), diffuseTint, rayDir, lightDir, normal, uTangent, vTangent, half));
@@ -109,7 +109,7 @@ public class AshikhminPTMaterial extends Material {
 			}else{
 				
 				//Diffuse Sample
-				sample = cosineWeightedSample(uTangent, normal, vTangent);
+				sample = Vector3.cosineWeightedSample(uTangent, normal, vTangent);
 
 				shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), diffuseTint);	
 			}

@@ -56,10 +56,10 @@ public class FresnelDiffusePTMaterial extends Material{
 		Vector3 uTangent;
 		Vector3 vTangent;
 		
-		if(normal.dot(positiveYAxis) == 1.0)
-			uTangent = normal.cross(cosineWeightedSample()).normalizeM();
+		if(normal.dot(Vector3.positiveYAxis) == 1.0)
+			uTangent = normal.cross(Vector3.cosineWeightedSample()).normalizeM();
 		else
-			uTangent = normal.cross(positiveYAxis).normalizeM();
+			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
 		vTangent = uTangent.cross(normal).normalizeM();
 		
 		
@@ -79,7 +79,7 @@ public class FresnelDiffusePTMaterial extends Material{
 		{
 			//Sample random points
 			Color rflectColor = new Color();
-			Vector3 sampleDir = cosineWeightedSample(uTangent, normal, vTangent);
+			Vector3 sampleDir = Vector3.cosineWeightedSample(uTangent, normal, vTangent);
 			double reflectiveCoeff = Math.pow((reflectiveRadius - DdotN) / (reflectiveRadius), schlickExponent);;
 			
 			//if reflecting

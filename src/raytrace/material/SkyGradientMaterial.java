@@ -38,7 +38,7 @@ public class SkyGradientMaterial extends Material {
 					new Vector3(data.getRay().getDirection().multiplyM(1.0/data.getRay().getDirection().magnitude()).add(new Vector3(0, -0.5, 0))));
 			idata.setTexcoord(new Vector3(
 					0, 
-					0.5 * (Math.cos(data.getRay().getDirection().dot(positiveYAxis) / data.getRay().getDirection().magnitude()) + 1.0), 
+					0.5 * (Math.cos(data.getRay().getDirection().dot(Vector3.positiveYAxis) / data.getRay().getDirection().magnitude()) + 1.0), 
 					0));
 		}
 		
