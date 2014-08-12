@@ -2,8 +2,8 @@ package raytrace.data;
 
 import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 
 public class IntersectionData {
 	
@@ -25,7 +25,7 @@ public class IntersectionData {
 	//protected Vector4 uTangent; //Calculated in material on demand
 	//protected Vector4 vTangent; //Calculated in material on demand
 	protected Vector3 localPoint;
-	protected int meshID;
+	protected int surfaceID;
 
 
 	/* *********************************************************************************************
@@ -44,7 +44,7 @@ public class IntersectionData {
 		surface = null;
 		texcoord = null;
 		localPoint = null;
-		meshID = -1;
+		surfaceID = 0;
 	}
 
 
@@ -142,11 +142,11 @@ public class IntersectionData {
 	}
 
 	//MeshID
-	public int getMeshID() {
-		return meshID;
+	public int getSurfaceID() {
+		return surfaceID;
 	}
 
-	public void setMeshID(int meshID) {
-		this.meshID = meshID;
+	public void setSurfaceID(int surfaceID) {
+		this.surfaceID = surfaceID;
 	}
 }
