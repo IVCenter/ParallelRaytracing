@@ -1,7 +1,9 @@
-package math;
+package math.ray;
 
 import java.io.Serializable;
 import java.util.Iterator;
+
+import math.Vector3;
 
 public class Ray implements Iterable<Ray>, Serializable{
 	
