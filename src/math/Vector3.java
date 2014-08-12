@@ -7,7 +7,7 @@ import process.utils.StringUtils;
 public class Vector3 implements Serializable{
 	
 	/*
-	 * An extension of the Vector4d class to allow for additional features
+	 * An implementation of a 3D vector.
 	 */
 	
 	/**
@@ -19,9 +19,13 @@ public class Vector3 implements Serializable{
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	public static final Vector3 XAXIS = new Vector3(1.0, 0.0, 0.0);
-	public static final Vector3 YAXIS = new Vector3(0.0, 1.0, 0.0);
-	public static final Vector3 ZAXIS = new Vector3(0.0, 0.0, 1.0);
+	public static final Vector3 positiveXAxis = new Vector3(1,0,0);
+	public static final Vector3 positiveYAxis = new Vector3(0,1,0);
+	public static final Vector3 positiveZAxis = new Vector3(0,0,1);
+	
+	public static final Vector3 negativeXAxis = new Vector3(-1,0,0);
+	public static final Vector3 negativeYAxis = new Vector3(0,-1,0);
+	public static final Vector3 negativeZAxis = new Vector3(0,0,-1);
 
 	
 	/* *********************************************************************************************
@@ -116,17 +120,17 @@ public class Vector3 implements Serializable{
 	
 	public Vector3 normalizeM()
 	{
-		double mag = magnitude();
-		array[0] = array[0]/mag;
-		array[1] = array[1]/mag;
-		array[2] = array[2]/mag;
+		double invmag = 1.0 / magnitude();
+		array[0] = array[0]*invmag;
+		array[1] = array[1]*invmag;
+		array[2] = array[2]*invmag;
 		return this;
 	}
 
 	public Vector3 normalize()
 	{
-		double mag = magnitude();
-		return new Vector3(array[0]/mag, array[0]/mag, array[2]/mag);
+		double invmag = 1.0 / magnitude();
+		return new Vector3(array[0]*invmag, array[0]*invmag, array[2]*invmag);
 	}
 	
 	public double magnitudeSqrd()
@@ -287,6 +291,105 @@ public class Vector3 implements Serializable{
 		System.out.println("[" + StringUtils.column(""+array[0], 24) + ", " + 
 								 StringUtils.column(""+array[1], 24) + ", " +
 								 StringUtils.column(""+array[2], 24) + "]");
+	}
+	
+
+	/* *********************************************************************************************
+	 * Sample Methods
+	 * *********************************************************************************************/
+
+	public static Vector3 halfVector(Vector3 a, Vector3 b)
+	{
+		double[] ma = a.getArray();
+		double[] mb = b.getArray();
+		double maga = 1.0/a.magnitude();
+		double magb = 1.0/b.magnitude();
+		
+		return (new Vector3(ma[0]*maga + mb[0]*magb,
+							ma[1]*maga + mb[1]*magb,
+							ma[2]*maga + mb[2]*magb)).normalizeM();
+	}
+
+	public static Vector3 cosineWeightedSample(Vector3 xa, Vector3 ya, Vector3 za)
+	{
+		Vector3 s = cosineWeightedSample();
+		
+		double[] sm = s.getArray();
+	
+		double[] xam = xa.getArray();
+		double[] yam = ya.getArray();
+		double[] zam = za.getArray();
+		
+		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
+						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2]);
+		
+		return s.normalizeM();
+	}
+
+	public static Vector3 cosineWeightedSample()
+	{
+		double s = Math.random();
+		double t = Math.random();
+		
+		double u = 2.0 * Math.PI * s;
+		double v = Math.sqrt(1.0 - t);
+		
+		double x = v * Math.cos(u);
+		double y = Math.sqrt(t);
+		double z = v * Math.sin(u);
+		
+		return (new Vector3(x, y, z)).normalizeM();
+	}
+
+	public static Vector3 uniformHemisphereSample(Vector3 xa, Vector3 ya, Vector3 za)
+	{
+		Vector3 s = uniformHemisphereSample();
+		
+		double[] sm = s.getArray();
+	
+		double[] xam = xa.getArray();
+		double[] yam = ya.getArray();
+		double[] zam = za.getArray();
+		
+		s.set(sm[0] * xam[0] + sm[1] * yam[0] + sm[2] * zam[0],
+						   sm[0] * xam[1] + sm[1] * yam[1] + sm[2] * zam[1],
+						   sm[0] * xam[2] + sm[1] * yam[2] + sm[2] * zam[2]);
+		
+		return s.normalizeM();
+	}
+
+	public static Vector3 uniformHemisphereSample()
+	{
+		Vector3 sample = new Vector3();
+		
+		do {
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0);
+		} while(sample.magnitudeSqrd() > 1.0 || sample.get(1) < 0.0);
+		
+		return sample.normalizeM();
+	}
+
+	public static Vector3 diskSample(double radius, double weight)
+	{
+		Vector3 sample = new Vector3();
+		
+		double theta = Math.random() * Math.PI * 2.0;
+		double distance = Math.pow(Math.random(), weight) * radius;
+		sample.set(distance * Math.cos(theta), distance * Math.sin(theta), 0);
+		
+		return sample;
+	}
+
+	public static Vector3 uniformSphereSample()
+	{
+		Vector3 sample = new Vector3();
+		
+		do {
+			sample.set(2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0, 2.0 * Math.random() - 1.0);
+		} while(sample.magnitudeSqrd() > 1.0);
+		
+		return sample.normalizeM();
 	}
 	
 }
