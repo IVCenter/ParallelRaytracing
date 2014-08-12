@@ -1,7 +1,7 @@
-package raytrace;
+package raytrace.trace;
 
 import process.logging.Logger;
-import math.Ray;
+import math.ray.Ray;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
@@ -78,7 +78,7 @@ public class RayTracer implements Tracer {
 				}
 			}
 			
-			//IF the camera is dirty stop rendering
+			//If the camera is dirty stop rendering
 			if(camera.isDirty()) {
 				Logger.progress(-1, "RayTracer: Detected a dirty camera, cancelling rendering.");
 				break;
@@ -87,7 +87,9 @@ public class RayTracer implements Tracer {
 			//Set the final color
 			color.multiply3M(1.0 / rayCount);
 			pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.rgb32();
+			//TODO: Write to Render Buffer (depth, normal, color, etc.)
 		}
+		
 	}
 
 }
