@@ -9,8 +9,8 @@ import raytrace.camera.aperture.Aperture;
 import raytrace.camera.aperture.CircularAperture;
 
 //import math.CompositeRay;
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 
 public class ProgrammableCamera extends Camera {
 
@@ -324,6 +324,17 @@ public class ProgrammableCamera extends Camera {
 			ray.setPixelX((int)currentPixelX);
 			ray.setPixelY((int)currentPixelY);
 			
+			//Pre-calculate the axis weights
+			pw = (((currentPixelX+0.5)/pixelWidth) - 0.5) * imagePlaneWidth;
+			ph = (((currentPixelY+0.5)/pixelHeight) - 0.5) * imagePlaneHeight;
+			
+			//Create the direction vector
+			ray.getDirection().set(focalPlaneDistance * (vdir[0] + camX[0] * pw + camY[0] * ph), 
+					focalPlaneDistance * (vdir[1] + camX[1] * pw + camY[1] * ph), 
+					focalPlaneDistance * (vdir[2] + camX[2] * pw + camY[2] * ph));
+			
+			ray.getDirection().normalizeM();
+			
 			//Increment the counters
 			currentPixelX+=pixelStepSize;
 			if(currentPixelX >= pixelWidth) {
@@ -383,7 +394,6 @@ public class ProgrammableCamera extends Camera {
 		/* *********************************************************************************************
 		 * Getters/Setters
 		 * *********************************************************************************************/
-		
 		
 		/* *********************************************************************************************
 		 * Iteration Overrides
