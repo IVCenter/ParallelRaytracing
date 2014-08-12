@@ -1,12 +1,10 @@
 package raytrace.material;
 
-import process.logging.Logger;
 import math.Vector3;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.ShadingData;
 import raytrace.light.Light;
-import raytrace.map.texture.Texture;
 import raytrace.map.texture._3D.Texture3D;
 
 public class SubSurfaceDiffusePTTestMaterial extends Material{
@@ -51,8 +49,6 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		
 		//Ray Direction
 		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
-		
-		
 		
 		
 		/*
@@ -153,7 +149,7 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 						Vector3 offset = new Vector3();
 						do
 						{
-							offset = uniformSphereSample().multiplyM(roughness);
+							offset = Vector3.uniformSphereSample().multiplyM(roughness);
 							roughDir.set(refracDir);
 							roughDir.addM(offset);
 						} while(roughDir.dot(normal) > 0.0);
@@ -188,79 +184,57 @@ public class SubSurfaceDiffusePTTestMaterial extends Material{
 		Vector3 normal = data.getIntersectionData().getNormal();
 		
 		
+		//Direct Illumination (diffuse)
+		IlluminationData ildata;
+		Color shade = new Color();
+		Color white = Color.white();
+		for(Light light : data.getRootScene().getLightManager())
+		{
+			//Get illumination data for the current light
+			ildata = light.illuminate(data, point);
+			
+			shade.add3M(diffuse(white, normal, ildata.getDirection()));
+		}
+		
+		
 		Color recursionColor = null;
 		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
 		{
-			double recursionDirection = Math.random();
+			//Indirect Illumination
+			//Sampling
+			if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
+			{
+				//Sample a random point
+				Vector3 sampleDir = Vector3.uniformSphereSample();
+				
+				//Add the direct shading and samples shading together
+				shade.add3M(recurse(data, point, sampleDir, 1.0));
+			}
 			
-			//If direction < refrectance, go reflectin
-			//if(recursionDirection > scatterCoeff)
-			//{
-				//If no scatter, Sample surface material
-			//	recursionColor = new Color();
-					
-			//}else{
+			
+			double segmentLength = data.getIntersectionData().getDistance() / (double)scatterSampleCount;
+			Vector3 origin = data.getRay().getOrigin();
+			Vector3 path = point.subtract(origin);
+			
+			Vector3 samplePoint = new Vector3();
+			Color beerColor = new Color();
+			for(int i = 0; i < scatterSampleCount; i++)
+			{
+				//Get an internal sample point along the path
+				samplePoint.set(origin);
+				samplePoint.addMultiRightM(path, ((double)(scatterSampleCount-i)) / (double) scatterSampleCount);
+				double[] a = volumeTexture.evaluate(samplePoint.get(0), samplePoint.get(0), samplePoint.get(0)).getChannels();
 				
-				//Direct Illumination (diffuse)
-				IlluminationData ildata;
-				Color shade = new Color();
-				Color white = Color.white();
-				for(Light light : data.getRootScene().getLightManager())
-				{
-					//Get illumination data for the current light
-					ildata = light.illuminate(data, point);
-					
-					shade.add3M(diffuse(white, normal, ildata.getDirection()));
-				}
+				//Brew up some beer color
+				beerColor.set(Math.exp(-1.0 * Math.log(a[0]) * segmentLength), 
+											Math.exp(-1.0 * Math.log(a[1]) * segmentLength), 
+											Math.exp(-1.0 * Math.log(a[2]) * segmentLength));
 				
-				
-				//Indirect Illumination
-				//Sampling
-				if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
-				{
-					//Basis
-					Vector3 uTangent;
-					Vector3 vTangent;
-					
-					if(Math.abs(normal.dot(positiveYAxis)) == 1.0)
-						uTangent = normal.cross(cosineWeightedSample()).normalizeM();
-					else
-						uTangent = normal.cross(positiveYAxis).normalizeM();
-					vTangent = uTangent.cross(normal).normalizeM();
-					
-					//Sample a random point
-					//Vector4 sampleDir = uniformHemisphereSample(uTangent, normal, vTangent);
-					Vector3 sampleDir = uniformSphereSample();
-					
-					//Add the direct shading and samples shading together
-					shade.add3M(recurse(data, point, sampleDir, 1.0));
-				}
-				
-				
-				double segmentLength = data.getIntersectionData().getDistance() / (double)scatterSampleCount;
-				Vector3 origin = data.getRay().getOrigin();
-				Vector3 path = point.subtract(origin);
-				
-				Vector3 samplePoint = new Vector3();
-				Color beerColor = new Color();
-				for(int i = 0; i < scatterSampleCount; i++)
-				{
-					//Get an internal sample point along the path
-					samplePoint.set(origin);
-					samplePoint.addMultiRightM(path, ((double)(scatterSampleCount-i)) / (double) scatterSampleCount);
-					double[] a = volumeTexture.evaluate(samplePoint.get(0), samplePoint.get(0), samplePoint.get(0)).getChannels();
-					
-					//Brew up some beer color
-					beerColor.set(Math.exp(-1.0 * Math.log(a[0]) * segmentLength), 
-												Math.exp(-1.0 * Math.log(a[1]) * segmentLength), 
-												Math.exp(-1.0 * Math.log(a[2]) * segmentLength));
-					
-					//Get faded
-					shade = shade.multiply3M(beerColor);
-				}
-				
-				recursionColor = shade;
-			//}
+				//Get faded
+				shade = shade.multiply3M(beerColor);
+			}
+			
+			recursionColor = shade;
 			
 		}else{
 			recursionColor = new Color();
