@@ -52,10 +52,14 @@ public class Constants {
 		public static final String TEST11 = KEYS.addKey("Test11");
 		public static final String TEST12 = KEYS.addKey("Test12");
 		public static final String TEST13 = KEYS.addKey("Test13");
+		
 		public static final String CSE168_Project1 = KEYS.addKey("CSE168_Project1");
 		public static final String CSE168_Project2 = KEYS.addKey("CSE168_Project2");
 		public static final String CSE168_Project3 = KEYS.addKey("CSE168_Project3");
+		
 		public static final String Performance_TEST1 = KEYS.addKey("Performance_Test1");
+		
+		public static final String Diffuse_Glass_TEST = KEYS.addKey("Diffuse_Glass_Test");
 	}
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

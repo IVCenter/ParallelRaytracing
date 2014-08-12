@@ -83,6 +83,11 @@ public class Launcher {
 	 * 
 	 * 		#An entry that starts with (LP) is considered Low Priority
 	 * 
+	 * 		-Documentation
+	 * 			-Code clean up
+	 * 			-Javadoc comments
+	 * 			-Wiki
+	 * 
 	 * 		-Network
 	 * 			-Pixel Buffer compression
 	 * 			-Clock edge prediction (pre-predict when the next clock edge (render call) will come 
@@ -90,25 +95,22 @@ public class Launcher {
 	 * 			-Open message streams (open them once and use a thread to keep them live)
 	 * 			-
 	 * 
-	 * 		-User Interface
+	 * 		-(LP)User Interface
 	 * 			-Web-based (Polymer?)
 	 * 			-System control, Node statistics, scheudle rendering jobs, etc.
 	 * 
 	 * 		-Camera
 	 * 			-Lens API
 	 * 
-	 * 		-Post Processing
-	 * 			-Post processing pass
-	 * 			-Exposure
-	 * 			-HDR
-	 * 			-Shading API
-	 * 				-Painting style, line drawing, etc.
-	 * 
 	 * 		-Geometry
-	 * 			-Support for Quads (two triangle? or direct coplanar?)
+	 * 			-Support for Quads (two triangle? or direct coplanar? or interpolated?)
 	 * 			-Cylinder does not render correctly (cap, and under transforms)
-	 * 			-AABVH does not handle cylinders correctly (bounding box? transfomr issue?)
+	 * 			-AABVH does not handle cylinders correctly (bounding box? transform issue?)
 	 * 			-Cylinder tessellation
+	 * 			-3D lowpass filter for smoothing vertices (gaussian?)
+	 * 			-Geometry IDs for all pieces of geometry
+	 * 				-Returned as part of intersection data
+	 * 				-Composite surfaces like meshes, etc. overwrite the id returned by their children o intersect
 	 * 		
 	 * 		-Volume Rendering
 	 * 			-Marching cubes
@@ -149,8 +151,16 @@ public class Launcher {
 	 * 				-or 
 	 * 
 	 * 
-	 * 		-Post Processing Pass
-	 * 		-Tone Mapping
+	 * 		-Per-pixel Post Processing Pass
+	 * 			-For line/edge rendering, etc.
+	 * 		-Image Post Processing Pass
+	 * 			-Tone Mapping
+	 * 			-Bloom
+	 * 			-HDR
+	 * 			-Exposure
+	 * 			-Shading API
+	 * 				-Painting style, line drawing, etc.
+	 * 			-Etc.
 	 * 
 	 * 		-Camera Lens API
 	 * 

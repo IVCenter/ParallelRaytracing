@@ -26,10 +26,10 @@ import raster.PixelBuffer;
 import raster.ScreenDrawer;
 import raytrace.AnimationRenderer;
 import raytrace.ConfigurableRayTracingRenderer;
-import raytrace.ParallelRayTracer;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
+import raytrace.trace.ParallelRayTracer;
 
 public class ApplicationDelegate extends Job{
 	
