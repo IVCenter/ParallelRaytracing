@@ -1,8 +1,8 @@
 package raytrace.surfaces;
 
 import math.Matrix4;
-import math.Ray;
 import math.Vector3;
+import math.ray.Ray;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -56,7 +56,7 @@ public class MatrixTransformSurface extends CompositeSurface {
 		Vector3 oldDirection = ray.getDirection();
 		
 		ray.setOrigin(inverseTransform.multiplyPt(oldOrigin));
-		ray.setDirection(inverseTransform.multiply3(oldDirection));
+		ray.setDirection(inverseTransform.multiply3(oldDirection).normalizeM());
 		//Vector4 transOrigin = inverseTransform.multiplyPt(oldOrigin);
 		//Vector4 transDirection = inverseTransform.multiply3(oldDirection);//.normalize3();
 		
