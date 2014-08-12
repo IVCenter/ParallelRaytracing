@@ -86,6 +86,11 @@ public class Color implements Texture {
 	        channels[i] = ((double) ((color & mask) >>> ((3-i)*8) ) ) / u8bit;
 	    }
 	}
+	
+	public void setARGB(int color)
+	{
+		set((color << 8) + (color >>> 24));
+	}
 
 	/* *********************************************************************************************
 	 * Calculation Methods
