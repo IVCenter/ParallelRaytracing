@@ -436,16 +436,16 @@ public class Matrix4 {
 	    halfWidth   = (float)width  / 2.0f;
 	    halfHeight  = (float)height / 2.0f;
 	    smallSize   = (halfWidth < halfHeight) ? halfWidth : halfHeight;
-	    v1.array[0]     = ((float)fromX - halfWidth)  / smallSize;
-	    v1.array[1]     = ((float)(height-fromY) - halfHeight) / smallSize;
-	    v2.array[0]     = ((float)toX   - halfWidth)  / smallSize;
-	    v2.array[1]     = ((float)(height-toY)   - halfHeight) / smallSize;
+	    v1.array[0] = ((float)fromX - halfWidth)  / smallSize;
+	    v1.array[1] = ((float)(height-fromY) - halfHeight) / smallSize;
+	    v2.array[0] = ((float)toX   - halfWidth)  / smallSize;
+	    v2.array[1] = ((float)(height-toY)   - halfHeight) / smallSize;
 	    
 	    // Compute z-coordinates on Gaussian trackball:
-	    d       = Math.sqrt(v1.array[0] * v1.array[0] + v1.array[1] * v1.array[1]);
-	    v1.array[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
-	    d       = Math.sqrt(v2.array[0] * v2.array[0] + v2.array[1] * v2.array[1]);
-	    v2.array[2]   = Math.exp(-TRACKBALL_SIZE * d * d);
+	    d       	= Math.sqrt(v1.array[0] * v1.array[0] + v1.array[1] * v1.array[1]);
+	    v1.array[2] = Math.exp(-TRACKBALL_SIZE * d * d);
+	    d       	= Math.sqrt(v2.array[0] * v2.array[0] + v2.array[1] * v2.array[1]);
+	    v2.array[2] = Math.exp(-TRACKBALL_SIZE * d * d);
 	    
 	    // Compute rotational angle:
 	    angle = v1.angle(v2);                             // angle = angle between v1 and v2
