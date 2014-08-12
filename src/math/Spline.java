@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
-import raytrace.material.Material;
 
 public class Spline extends ArrayList<Vector3> {
 	
@@ -121,10 +120,10 @@ public class Spline extends ArrayList<Vector3> {
 		Vector3 nextUTangent;
 		Vector3 nextVTangent;
 		
-		if(Math.abs(nextNormal.dot(Material.positiveYAxis)) == 1.0)
-			nextUTangent = nextNormal.cross(Material.positiveXAxis).normalizeM();
+		if(Math.abs(nextNormal.dot(Vector3.positiveYAxis)) == 1.0)
+			nextUTangent = nextNormal.cross(Vector3.positiveXAxis).normalizeM();
 		else
-			nextUTangent = nextNormal.cross(Material.positiveYAxis).normalizeM();
+			nextUTangent = nextNormal.cross(Vector3.positiveYAxis).normalizeM();
 		nextVTangent = nextUTangent.cross(nextNormal).normalizeM();
 		
 		
@@ -142,10 +141,10 @@ public class Spline extends ArrayList<Vector3> {
 			thisUTangent = nextUTangent;
 			thisVTangent = nextVTangent;
 			
-			if(Math.abs(nextNormal.dot(Material.positiveYAxis)) == 1.0)
-				nextUTangent = nextNormal.cross(Material.positiveXAxis).normalizeM();
+			if(Math.abs(nextNormal.dot(Vector3.positiveYAxis)) == 1.0)
+				nextUTangent = nextNormal.cross(Vector3.positiveXAxis).normalizeM();
 			else
-				nextUTangent = nextNormal.cross(Material.positiveYAxis).normalizeM();
+				nextUTangent = nextNormal.cross(Vector3.positiveYAxis).normalizeM();
 			
 			if(nextUTangent.dot(thisUTangent) < 0.0)
 				nextUTangent.multiplyM(-1.0);
