@@ -1,4 +1,4 @@
-package raytrace;
+package raytrace.trace;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -149,7 +149,6 @@ public class ParallelRayTracer implements Tracer {
 		}
 	}
 	
-	
 	//@SuppressWarnings("unchecked")
 	private void distributeRays(Camera camera)
 	{
@@ -159,10 +158,8 @@ public class ParallelRayTracer implements Tracer {
 		
 		for(Camera cam : cams)
 			rayBuffers.add(cam);
-	
 	}
 	
-
 
 	/* *********************************************************************************************
 	 * Private Classes
@@ -177,7 +174,7 @@ public class ParallelRayTracer implements Tracer {
 		 * *********************************************************************************************/
 		public final int id;
 		private int currentCallID = 0;
-		private RayTracer tracer;
+		
 
 		/* *********************************************************************************************
 		 * Constructor
@@ -185,7 +182,6 @@ public class ParallelRayTracer implements Tracer {
 		public SynchronizingWorker(int id)
 		{
 			this.id = id;
-			tracer = new RayTracer();
 		}
 		
 
@@ -215,15 +211,14 @@ public class ParallelRayTracer implements Tracer {
 				//Update the call ID
 				currentCallID = callID;
 
-				
-				//Do tracing here
-				//Logger.progress(-1, "Starting RayTracerWorker ID:[" + id + "]...");
-				
+				//Get the ray buffer
 				Camera buffer = rayBuffers.get(id);
-				tracer.trace(activePixelBuffer, buffer, activeScene);
-				
-				
-				//Logger.progress(-1, "Ending RayTracerWorker ID:[" + id + "]...");
+
+				//Iterate the tracers for this scene
+				for(Tracer tracer : activeScene.getTracers())
+				{
+					tracer.trace(activePixelBuffer, buffer, activeScene);
+				}
 				
 				//Increment the completed counter
 				incrementCompletedCount();
