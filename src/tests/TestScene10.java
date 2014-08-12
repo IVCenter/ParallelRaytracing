@@ -1,19 +1,27 @@
 package tests;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import process.logging.Logger;
 
 import math.Spline;
 import math.Vector3;
+import math.ray.CircularRayStencil;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.ProgrammableCameraController;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
+import raytrace.framework.Tracer;
+import raytrace.geometry.Sphere;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.meshes.MeshSurface;
+import raytrace.light.AmbientLight;
 import raytrace.light.DirectionalLight;
 import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.map.texture._3D.MatrixTransformTexture3D;
@@ -28,6 +36,8 @@ import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
+import raytrace.trace.OutlineTracer;
+import raytrace.trace.RayTracer;
 import system.Configuration;
 
 public class TestScene10 extends Scene
@@ -39,39 +49,52 @@ public class TestScene10 extends Scene
 	Random seedGen;
 	
 	double elapsed = 0.0;
-	Instance model;
-	PosterMaskBBlend goldAndFrostMat;
 	ProgrammableCameraController camController;
 	
 	/* *********************************************************************************************
 	 * Initialize
 	 * *********************************************************************************************/
 	@Override
+	protected List<Tracer> configureTracers()
+	{
+		ArrayList<Tracer> tracers = new ArrayList<Tracer>(1);
+		
+		//Standard ray tracer
+		tracers.add(new RayTracer());
+		
+		//Outline Tracer
+		OutlineTracer outliner = new OutlineTracer();
+		outliner.setStencil(new CircularRayStencil(0.01, 2, 16));
+		tracers.add(outliner);
+		
+		return tracers;
+	}
+	
+	@Override
 	protected void initialize()
 	{
 		seedGen = new Random(0x07b56c7168a2dL);
-		Configuration.setScreenWidth(1368);
-		Configuration.setScreenHeight(752);
-		Configuration.setRenderWidth(1368);
-		Configuration.setRenderHeight(752);
-		//Configuration.setRenderWidth((int)(1280/1.2));
-		//Configuration.setRenderHeight((int)(720/1.2));
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
+		Configuration.setRenderWidth(1280);
+		Configuration.setRenderHeight(720);
 
-		skyMaterial = new RecursionMinimumCMaterial(new ColorMaterial(new Color(0xddeeffff)), 1);
 		skyMaterial = new RecursionMinimumCMaterial(
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xffddeeff), new Color(0xddeeffff))), 1
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xffddeeff), new Color(0xddeeffff))),
+				new ColorMaterial(Color.white()),
+				1
 				);
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector3(0,2.5,5));
 		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
 		activeCamera.setUp(new Vector3(0,1,0));
 		activeCamera.setFieldOfView(Math.PI/2.0);
 		//activeCamera.setPixelWidth(Configuration.getRenderWidth());
 		//activeCamera.setPixelHeight(Configuration.getRenderHeight());
-		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.005, 0.5));
+		((ProgrammableCamera)activeCamera).setAperture(new CircularAperture(0.005 * 0, 0.5));
 		((ProgrammableCamera)activeCamera).setFocalPlaneDistance(4.5);
 		
 		
@@ -121,7 +144,7 @@ public class TestScene10 extends Scene
 			Spline spline = new Spline();
 			spline.add(new Vector3(0.2, 0.0, 0.0));
 			spline.add(new Vector3(0.2, 0.0, 0.0));
-			camController.addApertureRadiusSpline(spline, 10.0);
+			//camController.addApertureRadiusSpline(spline, 10.0);
 		}
 		
 		//Focal Distance
@@ -154,7 +177,8 @@ public class TestScene10 extends Scene
 		
 		
 		//Setup scene geometry
-		MeshSurface mesh = (new Cube(1, 1, 1)).tessellate(100);
+		MeshSurface mesh = (new Cube(1, 1, 1)).tessellate(150);
+		//MeshSurface mesh = (new Sphere(0.5, new Vector3())).tessellate(300);
 		
 		SimplexNoiseTexture3D simplex = new SimplexNoiseTexture3D(seedGen.nextLong(), Color.gray(-0.8), Color.gray(1.0));
 		MatrixTransformTexture3D simplexTrans = new MatrixTransformTexture3D(simplex);
@@ -202,6 +226,13 @@ public class TestScene10 extends Scene
 			tri.updateBoundingBox();
 			tri.setDynamic(false);
 		}
+		
+		//Logger.progress(-1, "Tris before [" + mesh.getTriangles().size() + "]");
+		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
+		//Logger.progress(-1, "Tris after [" + mesh.getTriangles().size() + "]");
+		
+		//Push the IDs
+		mesh.pushSurfaceIDToChildren();
 
 		
 		//Accelerate the mesh
@@ -210,10 +241,15 @@ public class TestScene10 extends Scene
 		accelerated.setDynamic(false);
 		
 		
+//		SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
+//				(new Color(0xff0068ff)).multiply3M(0.9), 
+//				(new Color(0xf8f840ff)).multiply3M(0.94), 
+//				0.5
+//				);
 		SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
-				(new Color(0xff0068ff)).multiply3M(0.9), 
-				(new Color(0xf8f840ff)).multiply3M(0.94), 
-				0.5
+				(new Color(0xff0068ff)), 
+				Color.gray(0.9), 
+				0.6
 				);
 		MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(gradient);
 		gradientTrans.getTransform().scale(1.0);
@@ -240,6 +276,11 @@ public class TestScene10 extends Scene
 		directionalLight.setIntensity(0.70);
 		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
+		
+		AmbientLight ambientLight = new AmbientLight();
+		ambientLight.setColor(new Color(0xffffffff));
+		ambientLight.setIntensity(1.0);
+		//lightManager.addLight(ambientLight);
 		
 		
 		//Refresh

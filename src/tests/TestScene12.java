@@ -27,8 +27,10 @@ import raytrace.map.texture._3D.blend.AdditiveT3DBlend;
 import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DielectricMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.Material;
+import raytrace.material.PassThroughMaterial;
 import raytrace.material.SubSurfaceDiffusePTTestMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.Instance;
@@ -63,7 +65,7 @@ public class TestScene12 extends Scene
 		//Camera
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(32);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
 		activeCamera.setPosition(new Vector3(-0.5, 0.25, -0.2));
 		activeCamera.setViewingDirection(new Vector3(0.5, -0.1, 0.05));
 		activeCamera.setUp(new Vector3(0,1,0));
@@ -86,12 +88,13 @@ public class TestScene12 extends Scene
 		if(dragon != null)
 		{
 			sslevel = 0.0;
-			ssmat = new SubSurfaceDiffusePTTestMaterial(new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)), 
+			ssmat = new SubSurfaceDiffusePTTestMaterial(//new DielectricMaterial(new Color(1.0, 1000.0, 10.0), 1.31)
+					new DiffusePTMaterial(new Color(0.9, 0.9, 0.9)), 
 					new ColorTexture3D(new Color(1000.0, 1000.0, 1.0)), 
 					0.95, //scatter coeff 
 					1.0, //refractive index
 					1.0, //roughness
-					10);
+					2);
 			
 			dragon.getTransform().scale(0.18);//was 0.1
 			dragon.getTransform().translate(0.0, 0.055, -0.2);//was -0.3 in z

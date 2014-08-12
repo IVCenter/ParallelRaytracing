@@ -10,8 +10,11 @@ import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
 import raytrace.geometry.Sphere;
 import raytrace.light.DirectionalLight;
+import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
+import raytrace.material.SkyGradientMaterial;
+import raytrace.material.composite.RecursionMinimumCMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
@@ -33,7 +36,11 @@ public class TestScene3 extends Scene
 	protected void initialize()
 	{
 
-		skyMaterial = new ColorMaterial(new Color(0xddeeffff));
+		skyMaterial = new RecursionMinimumCMaterial(
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0x8c96eeff), 5.0)),
+				1
+				);
 		
 		//super(position, viewingDirection, up, fieldOfView, pixelWidth, pixelHeight);
 		activeCamera = new ProgrammableCamera();

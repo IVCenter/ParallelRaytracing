@@ -474,7 +474,7 @@ public class TestScene11 extends Scene
 				//	globalTriangles.add(tri);
 				//}
 				
-				MeshSurface.removeMeshReference(mesh.getMeshID());
+				//MeshSurface.removeMeshReference(mesh.getSurfaceID());
 			}
 		}
 		
@@ -546,7 +546,7 @@ public class TestScene11 extends Scene
 				inst.setDynamic(false);
 				this.addChild(inst);
 				
-				MeshSurface.removeMeshReference(mesh.getMeshID());
+				//MeshSurface.removeMeshReference(mesh.getSurfaceID());
 			}
 		}
 	}

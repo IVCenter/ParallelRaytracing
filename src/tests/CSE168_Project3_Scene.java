@@ -23,7 +23,7 @@ public class CSE168_Project3_Scene extends Scene
 {	
 
 	/*
-	 * A scene for project 3 of CSE 168
+	 * A scene for project 3 of CSE 168.
 	 */
 	double elapsed = 0.0;
 	
