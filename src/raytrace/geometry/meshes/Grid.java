@@ -24,7 +24,7 @@ public class Grid extends MeshSurface {
 	 * *********************************************************************************************/
 	public Grid()
 	{
-		//Unit cube centered at the origin
+		//Unit square centered at the origin
 		super();
 		initialize(1,1);
 	}
