@@ -79,8 +79,6 @@ public class ProgrammableCameraController {
 		if(apertureRadius != null)
 			camera.getAperture().setRadius(apertureRadius.get(0));
 		
-		position.print();
-		
 		//Update the camera
 		camera.update();
 		
