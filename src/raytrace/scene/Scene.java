@@ -51,7 +51,7 @@ public abstract class Scene extends CompositeSurface{
 	{
 		this.tracers = configureTracers();
 		this.activeCamera = configureCamera();
-		configureSkyMaterial();
+		skyMaterial = configureSkyMaterial();
 		configureWorld();
 	}
 	
