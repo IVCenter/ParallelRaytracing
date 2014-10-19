@@ -4,9 +4,12 @@ import java.util.HashMap;
 
 import file.obj.ObjFileLoader;
 import file.obj.ObjModelData;
+import file.xyz.XyzFileLoader;
+import file.xyz.XyzPointCloudData;
 
 import raytrace.geometry.meshes.CompositeObjectSurface;
 import raytrace.geometry.meshes.Cube;
+import raytrace.geometry.pointclouds.PointCloudSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import system.Configuration;
@@ -95,6 +98,22 @@ public class ResourceManager {
 				return;
 			
 			CompositeSurface model = new CompositeObjectSurface(data);
+			model.updateBoundingBox();
+			model.setDynamic(false);
+			
+			surfaces.put(keyOrFilePath, model);
+			
+			return;
+		}
+		else if(keyOrFilePath.endsWith(".xyz"))
+		{
+			XyzPointCloudData data = XyzFileLoader.load(
+					Configuration.getWorkingDirectory() + Configuration.getModelsSubDirectory() + keyOrFilePath);
+			
+			if(data == null)
+				return;
+			
+			CompositeSurface model = new PointCloudSurface(data);
 			model.updateBoundingBox();
 			model.setDynamic(false);
 			
