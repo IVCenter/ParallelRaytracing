@@ -3,6 +3,7 @@ package raytrace.scene;
 import java.util.HashMap;
 
 import system.Constants;
+import tests.CSE167_2014_Project2;
 import tests.CSE168_Project1_Scene;
 import tests.CSE168_Project2_Scene;
 import tests.CSE168_Project3_Scene;
@@ -207,6 +208,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new DiffuseGlassTestScene();
 				scene.setSceneKey(Constants.SceneKeys.Diffuse_Glass_TEST);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.CSE167_2014_Project2, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new CSE167_2014_Project2();
+				scene.setSceneKey(Constants.SceneKeys.CSE167_2014_Project2);
 				return scene;
 			}
 		});
