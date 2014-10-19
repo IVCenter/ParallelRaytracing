@@ -235,20 +235,9 @@ public class OutlineTracer implements Tracer {
 			
 			textureQueryIData.setTexcoord(texcoord);
 			
-			//Set the final color as the previous color interped with a random color (for testing)
-			//color.multiply3M(0.5);
-			//color.add3AfterMultiply3M(new Color(0.5 + rays.getDirection().get(0), 0.5, 0.5 + rays.getDirection().get(1)), 0.5);
-			
-			//Creates an outer glow multiplier
-			//double darkness = (2.0 * (Math.abs(0.5 - (samplesWithDifferentSurfaceID/sampleCount))));
-
-			//Creates an inner glow multiplier
-			//double darkness = (2.0 * (Math.abs(0.5 - (1.0 - samplesWithDifferentSurfaceID/sampleCount))));
-			
-			//Even softer outer glow
-			//double darkness = 1.0 - samplesWithDifferentSurfaceID/sampleCount;
 
 			//From paper
+			//Determine the darkness value of the silhouette, self-occlusion, and crease edge types
 			double silhouetteDarkness = 
 					Math.pow(Math.abs(samplesWithDifferentSurfaceID - 0.5*sampleCount) / (0.5*sampleCount), silhouetteExponent);
 			
@@ -259,11 +248,13 @@ public class OutlineTracer implements Tracer {
 					Math.pow(Math.abs(samplesWithSufficientlNormalDifference - 0.5*sampleCount) / (0.5*sampleCount), creaseExponent);
 
 			
+			//Weight the individual line darkness values with their opacity multiplier
 			silhouetteDarkness = (1.0 - silhouetteDarkness) * silhouetteOpacity;
 			occlusionDarkness = (1.0 - occlusionDarkness) * occlusionOpacity;
 			creaseDarkness = (1.0 - creaseDarkness) * creaseOpacity;
 			
-
+			
+			//Sum the three line darkness values
 			double darknessSum = silhouetteDarkness + occlusionDarkness + creaseDarkness;
 			
 			//If the darkness is 0.0, then the original color is left unchanged
@@ -271,18 +262,22 @@ public class OutlineTracer implements Tracer {
 			if(darknessSum == 0.0)
 				continue;
 			
+			//Based on individual darkness values, interpolate the line color
 			Color lineColor = silhouetteTexture.evaluate(textureQueryIData).multiply3(silhouetteDarkness);
 			lineColor.add3AfterMultiply3M(occlusionTexture.evaluate(textureQueryIData), occlusionDarkness);
 			lineColor.add3AfterMultiply3M(creaseTexture.evaluate(textureQueryIData), creaseDarkness);
 			lineColor.multiply3M(1.0 / darknessSum);
 			
 
+			//Invert dakrness value for use in interpolation with the existing pixel color
 			silhouetteDarkness = 1.0 - silhouetteDarkness;
 			occlusionDarkness = 1.0 - occlusionDarkness;
 			creaseDarkness = 1.0 - creaseDarkness;
-				
+			
+			//Use the darkest line dakrness value as the one for interpolation with the existing pixel color
 			double darkness = Math.min(Math.min(silhouetteDarkness, occlusionDarkness), creaseDarkness);
 			
+			//Interpolate the line and pixel colors
 			color.multiply3M(darkness).add3AfterMultiply3M(lineColor, 1.0 - darkness);
 			pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.rgb32();
 		}
