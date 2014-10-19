@@ -6,6 +6,8 @@ import java.util.List;
 import process.logging.Logger;
 import math.Vector3;
 import math.ray.CircularRayStencil;
+import raster.pixel.ColorInversionPT;
+import raytrace.camera.Camera;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
@@ -34,6 +36,7 @@ import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import raytrace.trace.OutlineTracer;
+import raytrace.trace.ProgrammablePixelTracer;
 import raytrace.trace.RayTracer;
 import resource.ResourceManager;
 import system.Configuration;
@@ -56,6 +59,13 @@ public class TestScene4 extends Scene
 		
 		//Standard ray tracer
 		tracers.add(new RayTracer());
+		
+		
+		//Pixel Transform Tracer
+		ProgrammablePixelTracer pixeler = new ProgrammablePixelTracer();
+		pixeler.addTransform(new ColorInversionPT());
+		tracers.add(pixeler);
+		
 		
 		//Outline Tracer
 		OutlineTracer outliner = new OutlineTracer();
@@ -93,7 +103,7 @@ public class TestScene4 extends Scene
 		
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(20);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		//activeCamera.setPosition(new Vector3(0,2,5));
 		activeCamera.setPosition(new Vector3(0,2.85,3));
 		activeCamera.setViewingDirection(new Vector3(0,-0.1,-1));
@@ -112,7 +122,7 @@ public class TestScene4 extends Scene
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			sphere.setPosition(new Vector3(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0));
-			sphere.setRadius(Math.pow(Math.random() * 0.1, 1.15));
+			sphere.setRadius(Math.pow(Math.random() * 0.3, 1.15));
 			spheres.add(sphere);
 		}
 		
@@ -141,14 +151,14 @@ public class TestScene4 extends Scene
 							new Color(0xffffffff), 
 							0.5
 							) ;
-			Material softMids = 
-					new TwoToneNPRUBlend(
-							//new DiffuseMaterial(new Color(0xffffffff)), 
-							new DiffusePTMaterial(new Color(0xffffffff)), 
-							new Color(0xccccccff), 
-							new Color(0xffffffff), 
-							0.9
-							) ;
+//			Material softMids = 
+//					new TwoToneNPRUBlend(
+//							//new DiffuseMaterial(new Color(0xffffffff)), 
+//							new DiffusePTMaterial(new Color(0xffffffff)), 
+//							new Color(0xccccccff), 
+//							new Color(0xffffffff), 
+//							0.9
+//							) ;
 			Material hardShadows = 
 					new TwoToneNPRUBlend(
 							new DiffuseMaterial(new Color(0xffffffff)), 
@@ -157,7 +167,7 @@ public class TestScene4 extends Scene
 							0.01
 							);
 			Material shadowSelect = new SelectDarkestBBlend(softShadows, hardShadows);
-			Material midOrShadowSelect = new SelectDarkestBBlend(softMids, shadowSelect);
+			//Material midOrShadowSelect = new SelectDarkestBBlend(softMids, shadowSelect);
 			model.setMaterial(shadowSelect);
 			//model.setMaterial(new DielectricMaterial(new Color(1.9, 1.9, 1.2), 1.45));
 			this.addChild(model);
@@ -245,3 +255,7 @@ public class TestScene4 extends Scene
 		super.bake(data);
 	}
 }
+
+
+
+
