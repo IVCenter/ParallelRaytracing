@@ -120,7 +120,12 @@ public class Vector3 implements Serializable{
 	
 	public Vector3 normalizeM()
 	{
-		double invmag = 1.0 / magnitude();
+		double mag = magnitude();
+		
+		if(mag == 0)
+			return this;
+		
+		double invmag = 1.0 / mag;
 		array[0] = array[0]*invmag;
 		array[1] = array[1]*invmag;
 		array[2] = array[2]*invmag;
@@ -130,7 +135,7 @@ public class Vector3 implements Serializable{
 	public Vector3 normalize()
 	{
 		double invmag = 1.0 / magnitude();
-		return new Vector3(array[0]*invmag, array[0]*invmag, array[2]*invmag);
+		return new Vector3(array[0]*invmag, array[1]*invmag, array[2]*invmag);
 	}
 	
 	public double magnitudeSqrd()
