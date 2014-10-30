@@ -62,6 +62,9 @@ public class Constants {
 		public static final String Performance_TEST1 = KEYS.addKey("Performance_Test1");
 		
 		public static final String Diffuse_Glass_TEST = KEYS.addKey("Diffuse_Glass_Test");
+		
+		
+		public static final String VoxelTest1 = KEYS.addKey("VoxelTest1");
 	}
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

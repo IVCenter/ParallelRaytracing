@@ -185,6 +185,11 @@ public class Vector3 implements Serializable{
 		return new Vector3(array[0]+d, array[1]+d, array[2]+d);
 	}
 	
+	public Vector3 add(double u, double v, double w)
+	{
+		return new Vector3(array[0]+u, array[1]+v, array[2]+w);
+	}
+	
 	public Vector3 addM(Vector3 that)
 	{
 		double[] vm = that.getArray();
@@ -199,6 +204,14 @@ public class Vector3 implements Serializable{
 		array[0] += d;
 		array[1] += d;
 		array[2] += d;
+		return this;
+	}
+	
+	public Vector3 addM(double u, double v, double w)
+	{
+		array[0] += u;
+		array[1] += v;
+		array[2] += w;
 		return this;
 	}
 	

@@ -114,7 +114,7 @@ public class CSE167_2014_Project2 extends Scene
 		
 		camera = new ProgrammableCamera();
 		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(16);
+		camera.setSuperSamplingLevel(4);
 		camera.setPosition(new Vector3(0,2.85,3));
 		camera.setViewingDirection(new Vector3(0,-0.1,-1));
 		camera.setUp(new Vector3(0,1,0));
@@ -137,8 +137,8 @@ public class CSE167_2014_Project2 extends Scene
 		Material skyMaterial = new RecursionMinimumCMaterial(
 				//new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
 				new SkyGradientMaterial(new GradientTexture3D(new Color(0xfbfbfbff), new Color(0xeeeeeeff), 5.0)),
-				//new ColorMaterial(Color.black()),
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xffffffff), new Color(0x999999ff), 5.0)),
+				new ColorMaterial(Color.black()),
+				//new SkyGradientMaterial(new GradientTexture3D(new Color(0xffffffff), new Color(0x999999ff), 5.0)),
 				1
 				);
 		return skyMaterial;
@@ -152,7 +152,7 @@ public class CSE167_2014_Project2 extends Scene
 	protected void configureWorld()
 	{
 		//Point Cloud
-		Instance cloud = ResourceManager.create("dragon.xyz");
+		Instance cloud = ResourceManager.create("bunny.xyz");
 		
 		if(cloud != null) {
 			cloud.getTransform().scale(30.0);//ia
@@ -174,8 +174,8 @@ public class CSE167_2014_Project2 extends Scene
 			ArrayList<PointSurface> points = ((PointCloudSurface)cloud.getChildren().get(0)).getPointSurfaces();
 			for(PointSurface point : points)
 			{
-				//Vector3 norm = new Vector3(point.getPoint().getNormal());
-				Vector3 norm = new Vector3(point.getPoint().getPosition());
+				Vector3 norm = new Vector3(point.getPoint().getNormal());
+				//Vector3 norm = new Vector3(point.getPoint().getPosition());
 				norm.normalizeM();
 				if(norm.magnitude() == 0.0)
 				{
@@ -183,12 +183,13 @@ public class CSE167_2014_Project2 extends Scene
 				}
 				else
 				{
-					point.setMaterial(new DiffusePTMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
+					//point.setMaterial(new DiffusePTMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
+					point.setMaterial(new ColorMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
 				}
 			}
 			
 			//cloud.setMaterial(new DiffusePTMaterial(new Color(0xf8f8f8ff)));
-			//cloud.setMaterial(new ColorMaterial(new Color(0xf8f8f8ff)));
+			cloud.setMaterial(new ColorMaterial(new Color(0xf8f8f8ff)));
 			
 			this.addChild(cloud);
 		}else{
@@ -232,7 +233,7 @@ public class CSE167_2014_Project2 extends Scene
 		//Vector3 cloudMid = cloud.getBoundingBox().getMidpoint();
 		//plane.getTransform().translate(cloudMid.get(0), 0, cloudMid.get(2));
 		
-		this.addChild(plane);
+		//this.addChild(plane);
 	}
 	
 	

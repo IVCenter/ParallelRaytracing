@@ -27,45 +27,51 @@ public class Cube extends MeshSurface {
 	{
 		//Unit cube centered at the origin
 		super();
-		initialize(1,1,1);
+		initialize(1,1,1, new Vector3());
 	}
 	
 	public Cube(double xLength, double yLength, double zLength)
 	{
 		super();
-		initialize(xLength, yLength, zLength);
+		initialize(xLength, yLength, zLength, new Vector3());
+	}
+	
+	public Cube(double length, Vector3 offset)
+	{
+		super();
+		initialize(length, length, length, offset);
 	}
 
 	
 	/* *********************************************************************************************
 	 * Init Triangles
 	 * *********************************************************************************************/
-	public void initialize(double xLength, double yLength, double zLength)
+	public void initialize(double xLength, double yLength, double zLength, Vector3 offset)
 	{
 		x = xLength * 0.5;
 		y = yLength * 0.5;
 		z = zLength * 0.5;
 
-		ArrayList<Triangle> tris = generateTriangles(x, y, z, 1);
+		ArrayList<Triangle> tris = generateTriangles(x, y, z, offset, 1);
 		this.triangles = tris;
 
 		updateBoundingBox();
 		dynamic = false;
 	}
 	
-	protected ArrayList<Triangle> generateTriangles(double x, double y, double z, double resolution)
+	protected ArrayList<Triangle> generateTriangles(double x, double y, double z, Vector3 offset, double resolution)
 	{
 		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 		
 		//Vertices
-		Vector3 p000 = new Vector3(-x,-y,-z);
-		Vector3 p001 = new Vector3(-x,-y,z);
-		Vector3 p010 = new Vector3(-x,y,-z);
-		Vector3 p011 = new Vector3(-x,y,z);
-		Vector3 p100 = new Vector3(x,-y,-z);
-		Vector3 p101 = new Vector3(x,-y,z);
-		Vector3 p110 = new Vector3(x,y,-z);
-		Vector3 p111 = new Vector3(x,y,z);
+		Vector3 p000 = offset.add(-x,-y,-z);
+		Vector3 p001 = offset.add(-x,-y,z);
+		Vector3 p010 = offset.add(-x,y,-z);
+		Vector3 p011 = offset.add(-x,y,z);
+		Vector3 p100 = offset.add(x,-y,-z);
+		Vector3 p101 = offset.add(x,-y,z);
+		Vector3 p110 = offset.add(x,y,-z);
+		Vector3 p111 = offset.add(x,y,z);
 
 		//TexCoords
 		/*
@@ -235,7 +241,7 @@ public class Cube extends MeshSurface {
 	 * *********************************************************************************************/
 	public MeshSurface tessellate(double resolution)
 	{
-		ArrayList<Triangle> triangles = generateTriangles(x, y, z, resolution);
+		ArrayList<Triangle> triangles = generateTriangles(x, y, z, new Vector3(), resolution);
 		MeshSurface mesh = new MeshSurface();
 		mesh.setTriangles(triangles);
 		return mesh;

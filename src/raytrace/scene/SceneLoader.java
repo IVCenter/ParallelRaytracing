@@ -22,6 +22,7 @@ import tests.TestScene6;
 import tests.TestScene7;
 import tests.TestScene8;
 import tests.TestScene9;
+import tests.VoxelTest1;
 
 public class SceneLoader {
 	
@@ -217,6 +218,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new CSE167_2014_Project2();
 				scene.setSceneKey(Constants.SceneKeys.CSE167_2014_Project2);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.VoxelTest1, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new VoxelTest1();
+				scene.setSceneKey(Constants.SceneKeys.VoxelTest1);
 				return scene;
 			}
 		});
