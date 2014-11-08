@@ -104,7 +104,7 @@ public class DielectricPTMaterial extends Material{
 			if(recursionDirection < reflectiveCoeff)
 			{
 				
-				recursionColor = reflect(data, point, normal, exiting ? refractiveIndex : AIR_REFRACTIVE_INDEX);
+				recursionColor = reflect(data, point, normal, exiting ? refractiveIndex : AIR_REFRACTIVE_INDEX, false);
 					
 			}else{
 				
@@ -127,7 +127,7 @@ public class DielectricPTMaterial extends Material{
 					refracDir = roughDir.normalizeM();
 				}
 				
-				recursionColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
+				recursionColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex, false);
 				
 			}
 		}else{
