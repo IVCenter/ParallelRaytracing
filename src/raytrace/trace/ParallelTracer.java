@@ -10,10 +10,10 @@ import raytrace.camera.Camera;
 import raytrace.framework.Tracer;
 import raytrace.scene.Scene;
 
-public class ParallelRayTracer implements Tracer {
+public abstract class ParallelTracer implements Tracer {
 	
 	/*
-	 * A parallel ray tracers that spawns workers based on available resources
+	 * A parallel tracer that spawns workers based on available resources
 	 */
 	/* *********************************************************************************************
 	 * Local Constants
@@ -47,17 +47,17 @@ public class ParallelRayTracer implements Tracer {
 	
 	//TODO: Find a better way to get this data to the tracers
 	//NOTE: These change every call to trace
-	private PixelBuffer activePixelBuffer;
-	@SuppressWarnings("unused")
-	private Camera activeCamera;
-	private Scene activeScene;
+	protected PixelBuffer activePixelBuffer;
+	//@SuppressWarnings("unused")
+	protected Camera activeCamera;
+	protected Scene activeScene;
 	
 	
 
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
-	public ParallelRayTracer()
+	public ParallelTracer()
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
 		//cores = 1;
@@ -71,7 +71,7 @@ public class ParallelRayTracer implements Tracer {
 		SynchronizingWorker worker;
 		for(int i = 0; i < cores; ++i)
 		{
-			worker = new SynchronizingWorker(i);
+			worker = createWorker(i);
 			workers.add(worker);
 			threadPool.add(new Thread(worker));
 			//rayBuffers.add(new RayBuffer());
@@ -135,7 +135,7 @@ public class ParallelRayTracer implements Tracer {
 		
 	}
 	
-	private void incrementCompletedCount()
+	protected void incrementCompletedCount()
 	{
 		int cc = completedCount.incrementAndGet();
 		
@@ -150,7 +150,7 @@ public class ParallelRayTracer implements Tracer {
 	}
 	
 	//@SuppressWarnings("unchecked")
-	private void distributeRays(Camera camera)
+	protected void distributeRays(Camera camera)
 	{
 		rayBuffers.clear();
 		
@@ -160,14 +160,16 @@ public class ParallelRayTracer implements Tracer {
 			rayBuffers.add(cam);
 	}
 	
+	protected abstract SynchronizingWorker createWorker(int i);
+	
 
 	/* *********************************************************************************************
 	 * Private Classes
 	 * *********************************************************************************************/
-	private class SynchronizingWorker implements Runnable {
+	protected abstract class SynchronizingWorker implements Runnable {
 		
 		/*
-		 * A ray tracing worker
+		 * A synchronizing worker
 		 */
 		/* *********************************************************************************************
 		 * Instance Vars
@@ -175,7 +177,7 @@ public class ParallelRayTracer implements Tracer {
 		public final int id;
 		private int currentCallID = 0;
 		
-
+		
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
@@ -183,8 +185,8 @@ public class ParallelRayTracer implements Tracer {
 		{
 			this.id = id;
 		}
-		
 
+		
 		/* *********************************************************************************************
 		 * Run Methods
 		 * *********************************************************************************************/
@@ -193,38 +195,55 @@ public class ParallelRayTracer implements Tracer {
 		{
 			for(;;)//While the spider face holds true
 			{
-				//Spin Lock
-				synchronized(traceLock)
+				try
 				{
-					while(!wasNotified || callID == currentCallID)
+					//Spin Lock
+					synchronized(traceLock)
 					{
-						try {
-							
-							traceLock.wait();
+						while(!wasNotified || callID == currentCallID)
+						{
+							try {
 								
-						} catch (InterruptedException e) {
-							e.printStackTrace();
+								traceLock.wait();
+									
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 					}
+					
+					//Update the call ID
+					currentCallID = callID;
+	
+					//Perform a unit operation
+					work();
+					
+					//Increment the completed counter
+					incrementCompletedCount();
 				}
-				
-				//Update the call ID
-				currentCallID = callID;
-
-				//Get the ray buffer
-				Camera buffer = rayBuffers.get(id);
-
-				//Iterate the tracers for this scene
-				for(Tracer tracer : activeScene.getTracers())
+				catch(Throwable t)
 				{
-					tracer.trace(activePixelBuffer, buffer, activeScene);
+					//Print a stack trace
+					t.printStackTrace();
+					
+					//Boot a new worker to replace the crashed one
+					//SynchronizingWorker worker = createWorker(id);
+					//workers.set(id, worker);
+					//threadPool.set(id, new Thread(worker));
+					
+					//Increment the completed counter
+					incrementCompletedCount();
 				}
-				
-				//Increment the completed counter
-				incrementCompletedCount();
 			}
 			
 		}
+
+		
+		/* *********************************************************************************************
+		 * Abstract Methods
+		 * *********************************************************************************************/
+		protected abstract void work();
 		
 	}
+	
 }
