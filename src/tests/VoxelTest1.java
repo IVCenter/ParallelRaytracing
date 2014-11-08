@@ -38,6 +38,7 @@ import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.MatrixTransformSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
+import raytrace.trace.MedianTracer;
 import raytrace.trace.OutlineTracer;
 import raytrace.trace.ProgrammablePixelTracer;
 import raytrace.trace.RayTracer;
@@ -74,9 +75,14 @@ public class VoxelTest1 extends Scene
 		//tracers.add(pixeler);
 		
 		
+		//Median Tracer (does the average as a test)
+		MedianTracer medianer = new MedianTracer(10, 10);
+		//tracers.add(medianer);
+		
+		
 		//Outline Tracer
 		OutlineTracer outliner = new OutlineTracer();
-		outliner.setStencil(new CircularRayStencil(0.0015, 1, 8));
+		outliner.setStencil(new CircularRayStencil(0.0015, 1, 4));
 		outliner.setCreaseTexture(new Color(0x111111ff));
 		outliner.setOcclusionTexture(new Color(0x111111ff));
 		outliner.setSilhouetteTexture(new Color(0x111111ff));
@@ -102,13 +108,13 @@ public class VoxelTest1 extends Scene
 		ProgrammableCamera camera = new ProgrammableCamera();
 		
 		camera = new ProgrammableCamera();
-		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(32);
+		camera.setStratifiedSampling(false);
+		camera.setSuperSamplingLevel(1);
 		camera.setPosition(new Vector3(0,3,0));
 		camera.setViewingDirection(new Vector3(0,-1,-1));
 		camera.setUp(new Vector3(0,1,0));
-		//camera.setFieldOfView(Math.PI/2.0);
-		camera.setFieldOfView(Math.PI/1.6);
+		camera.setFieldOfView(Math.PI/2.0);
+		//camera.setFieldOfView(Math.PI/1.6);
 		camera.setPixelWidth(Configuration.getScreenWidth());
 		camera.setPixelHeight(Configuration.getScreenHeight());
 		camera.setAperture(new PinholeAperture());
@@ -131,6 +137,7 @@ public class VoxelTest1 extends Scene
 				new SkyGradientMaterial(new GradientTexture3D(new Color(0xffffffff), new Color(0x999999ff), 5.0)),
 				1
 				);
+		
 		return skyMaterial;
 	}
 	
@@ -141,7 +148,7 @@ public class VoxelTest1 extends Scene
 	@Override
 	protected void configureWorld()
 	{
-		double voxelSize = 0.2;
+		double voxelSize = 0.15;
 		int gridWidth = 64;
 		int gridHeight = 64;
 		
@@ -163,6 +170,7 @@ public class VoxelTest1 extends Scene
 			{
 				vox = new Cube(voxelSize * 0.98, (new Vector3(i * voxelSize, 0, -j * voxelSize)).addM(posOffset));
 				vox.setMaterial(new DiffusePTMaterial(Color.gray(0.8 + Math.random() * 0.1)));
+				//vox.setMaterial(new ColorMaterial(Color.gray(0.8 + Math.random() * 0.1)));
 				//voxels.addAll(vox.getTriangles());
 				voxels.add(vox);
 				
@@ -194,6 +202,7 @@ public class VoxelTest1 extends Scene
 			
 			vox = new Cube(voxelSize * 0.98, (new Vector3(x * voxelSize, height * voxelSize, -z * voxelSize)).addM(posOffset));
 			vox.setMaterial(new DiffusePTMaterial(Color.gray(0.8 + Math.random() * 0.1).add3M(new Color(0, - 0.1 * height,  - 0.1 * height))));
+			//vox.setMaterial(new ColorMaterial(Color.gray(0.8 + Math.random() * 0.1).add3M(new Color(0, - 0.1 * height,  - 0.1 * height))));
 			//voxels.addAll(vox.getTriangles());
 			voxels.add(vox);
 			
@@ -218,9 +227,14 @@ public class VoxelTest1 extends Scene
 		//Directional Light
 		DirectionalLight directionalLight = new DirectionalLight();
 		directionalLight.setColor(Color.white());
-		directionalLight.setIntensity(0.70);
+		directionalLight.setIntensity(0.70);//.7 for global illum
 		directionalLight.setDirection(new Vector3(1,-1,-1));
 		lightManager.addLight(directionalLight);
+		
+		AmbientLight ambientLight = new AmbientLight();
+		ambientLight.setColor(Color.white());
+		ambientLight.setIntensity(0.1);
+		//lightManager.addLight(ambientLight);
 		
 		
 		//Update bounding boxes
