@@ -17,8 +17,8 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.00001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
-	protected static final int SYSTEM_RESURSION_LIMIT = 2000;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 3;
+	protected static final int SYSTEM_RESURSION_LIMIT = 100;
 	
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 
@@ -46,14 +46,22 @@ public abstract class Material {
 	protected Color diffuse(Color light, Vector3 normal, Vector3 fromLight)
 	{
 		double dot = normal.dot(fromLight);
+		
 		if(fromLight.magnitudeSqrd() == 0.0)
 			return light.multiply3(1.0);
+		
 		if(dot >= 0.0)
 			return Color.black();
+		
 		return light.multiply3( dot * -1.0 * oneOverPi );
 	}
 	
 	protected Color reflect(ShadingData data, Vector3 point, Vector3 normal, double refractiveIndex)
+	{
+		return reflect(data, point, normal, refractiveIndex, true);
+	}
+	
+	protected Color reflect(ShadingData data, Vector3 point, Vector3 normal, double refractiveIndex, boolean increaseRecurDepth)
 	{	
 		Vector3 dir = data.getIntersectionData().getRay().getDirection();
 		//Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
@@ -69,13 +77,18 @@ public abstract class Material {
 		
 		Vector3 reflect = (new Vector3(rx, ry, rz)).normalizeM();
 		
-		return recurse(data, point, reflect, refractiveIndex);
+		return recurse(data, point, reflect, refractiveIndex, increaseRecurDepth);
 	}
 
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex)
+	{
+		return recurse(data, point, direction, refractiveIndex, true);
+	}
+	
+	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
-		if(data.getRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
+		if(data.getActualRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
 			return Color.black();
 		}
 		
@@ -89,7 +102,8 @@ public abstract class Material {
 		ShadingData sdata = new ShadingData();
 		sdata.setRay(rdata.getRay());
 		sdata.setRootScene(data.getRootScene());
-		sdata.setRecursionDepth(data.getRecursionDepth() + 1);
+		sdata.setActualRecursionDepth(data.getActualRecursionDepth() + 1);
+		sdata.setRecursionDepth(data.getRecursionDepth() + (increaseRecurDepth ? 1 : 0) );
 		sdata.setRefractiveIndex(refractiveIndex);
 		
 		
