@@ -62,6 +62,11 @@ public class Color implements Texture {
 		this(r, g, b, 1);;
 	}
 	
+	public void set(Color c)
+	{
+		this.set(c.channels[0], c.channels[1], c.channels[2], 1.0);
+	}
+	
 	public void set(double r, double g, double b)
 	{
 		this.set(r, g, b, 1.0);
