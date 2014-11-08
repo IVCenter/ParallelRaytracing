@@ -29,5 +29,10 @@ public class ColorMaterial extends Material {
 	{
 		return colorTexture.evaluate(data.getIntersectionData());
 	}
+	
+	public void setTexture(Texture colorTexture)
+	{
+		this.colorTexture = colorTexture;
+	}
 
 }
