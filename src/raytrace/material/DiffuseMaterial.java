@@ -31,7 +31,7 @@ public class DiffuseMaterial extends Material{
 	public Color shade(ShadingData data)
 	{
 		//Storage for resulting color
-		Color shade = new Color(0x000000ff);
+		Color shade = new Color();
 		
 		//Get color from texture
 		Color tint = tintTexture.evaluate(data.getIntersectionData());
