@@ -14,7 +14,7 @@ public class ShadingData{
 	 * *********************************************************************************************/
 	protected Scene rootScene;
 	protected IntersectionData intersectionData;
-	protected Ray ray;
+	protected RayData rayData;
 
 	protected int shadingRecursionDepth;
 	protected int actualRecursionDepth;
@@ -29,6 +29,17 @@ public class ShadingData{
 	{
 		shadingRecursionDepth = 0;
 		actualRecursionDepth = 0;
+		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
+	}
+	
+
+	/* *********************************************************************************************
+	 * Clear Methods
+	 * *********************************************************************************************/
+	public void clear()
+	{
+		shadingRecursionDepth = 0;
+		actualRecursionDepth = 0;	
 		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
 	}
 
@@ -52,12 +63,20 @@ public class ShadingData{
 		this.intersectionData = intersectionData;
 	}
 
+	public RayData getRayData() {
+		return rayData;
+	}
+
+	public void setRayData(RayData rayData) {
+		this.rayData = rayData;
+	}
+
 	public Ray getRay() {
-		return ray;
+		return rayData.getRay();
 	}
 
 	public void setRay(Ray ray) {
-		this.ray = ray;
+		this.rayData.setRay(ray);
 	}
 
 	public int getRecursionDepth() {

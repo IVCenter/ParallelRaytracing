@@ -9,6 +9,7 @@ import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 
 public class AABVHSurface extends CompositeSurface {
@@ -20,6 +21,7 @@ public class AABVHSurface extends CompositeSurface {
 	 * Instnace Vars
 	 * *********************************************************************************************/
 	//
+	protected BoundingBox boundingBox;
 	
 
 	/* *********************************************************************************************
@@ -28,12 +30,14 @@ public class AABVHSurface extends CompositeSurface {
 	private AABVHSurface()
 	{
 		//
+		boundingBox = null;//new BoundingBox(min, max);
 	}
 	
 
 	/* *********************************************************************************************
 	 * Surface Methods
 	 * *********************************************************************************************/
+	/*
 	@Override
 	public IntersectionData intersects(RayData data)
 	{
@@ -41,22 +45,22 @@ public class AABVHSurface extends CompositeSurface {
 			return null;
 		
 		
-		int childCount = getChildren().size();
+		int childCount = children.size();
 		
 		//If we have too many, or too few, children to heuristically perform an intersection test, 
 		//use the default test.
 		if(childCount > 2)
 			return super.intersects(data);
 		else if(childCount == 1)
-			return this.getChildren().get(0).intersects(data);
+			return children.get(0).intersects(data);
 		
 		
 		//Get the bounding boxes and intersection times
-		CompositeSurface[] surfaces = new CompositeSurface[childCount];
+		AbstractSurface[] surfaces = new AbstractSurface[childCount];
 		double[] intersections = new double[surfaces.length];
 
-		surfaces[0] = this.getChildren().get(0);
-		surfaces[1] = this.getChildren().get(1);
+		surfaces[0] = children.get(0);
+		surfaces[1] = children.get(1);
 		intersections[0] = surfaces[0].getBoundingBox().intersects(data);
 		intersections[1] = surfaces[1].getBoundingBox().intersects(data);
 		
@@ -107,6 +111,85 @@ public class AABVHSurface extends CompositeSurface {
 		}
 		
 		return closest;
+	}*/
+	
+	
+	@Override
+	public IntersectionData intersects(RayData data)
+	{
+		if(children == null)
+			return null;
+		
+		
+		int childCount = children.size();
+		
+		//If we have too many, or too few, children to heuristically perform an intersection test, 
+		//use the default test.
+		if(childCount > 2)
+			return super.intersects(data);
+		else if(childCount == 1)
+			return children.get(0).intersects(data);
+		
+		
+		//Get the bounding boxes and intersection times
+		AbstractSurface surfaces_0 = children.get(0);
+		AbstractSurface surfaces_1 = children.get(1);
+		double intersections_0 = surfaces_0.getBoundingBox().intersects(data);
+		double intersections_1 = surfaces_1.getBoundingBox().intersects(data);
+		
+		
+		//If there are no intersections then bail out.
+		if(intersections_1 == Double.MAX_VALUE && intersections_0 == Double.MAX_VALUE)
+		{
+			return null;
+		}
+		
+		//If the intersections are sorted in reverse, flip them
+		AbstractSurface tempAS;
+		double tempDbl;
+		if(intersections_1 < intersections_0)
+		{
+			tempAS = surfaces_0;
+			surfaces_0 = surfaces_1;
+			surfaces_1 = tempAS;
+			
+			tempDbl = intersections_0;
+			intersections_0 = intersections_1;
+			intersections_1 = tempDbl;
+		}
+		
+		//First means 0, second means 1
+
+		IntersectionData idata = null;
+		IntersectionData closest = null;
+		
+		//Test the closest bounding box first
+		if(intersections_0 != Double.MAX_VALUE)
+		{
+			idata = surfaces_0.intersects(data);
+			if(idata != null)
+			{
+				closest = idata;
+				//If idata isn't null, idata is closer than second bounding box
+				if(closest.getTime() < intersections_1)
+				{
+					return closest;
+				}
+			}
+		}
+		
+		//If necessary, test the second bounding box
+		if(intersections_1 != Double.MAX_VALUE)
+		{
+			idata = surfaces_1.intersects(data);
+			//If idata isn't null, and either closest is null, or idata is closer than closest
+			if(idata != null && (closest == null || idata.getTime() < closest.getTime()))
+			{
+				closest = idata;
+			}
+		}
+		
+		return closest;
 	}
 	
 
@@ -115,13 +198,16 @@ public class AABVHSurface extends CompositeSurface {
 	public void bake(BakeData data)
 	{
 		super.bake(data);
+		boundingBox = super.getBoundingBox();
 	}
-
+	
+	
 	@Override
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		super.updateBoundingBox();
+		return boundingBox;
 	}
+	
 
 
 	/* *********************************************************************************************
@@ -133,14 +219,14 @@ public class AABVHSurface extends CompositeSurface {
 	/* *********************************************************************************************
 	 * Static Creation Methods
 	 * *********************************************************************************************/
-	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces)
+	public static <SURFACE extends AbstractSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces)
 	{
 		int slices = 5;
 		int maxSurfacesPerLeaf = 8;
 		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
 	}
 	
-	public static <SURFACE extends CompositeSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces, int slices, int maxSurfacesPerLeaf)
+	public static <SURFACE extends AbstractSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces, int slices, int maxSurfacesPerLeaf)
 	{
 		/*
 		 * Steps:
@@ -216,7 +302,7 @@ public class AABVHSurface extends CompositeSurface {
 		
 		//If we encounter a set that is smaller than the per leaf max, add the surfaces and return;
 		if(surfaces.size() <= maxSurfacesPerLeaf) {
-			for(CompositeSurface cs : surfaces)
+			for(AbstractSurface cs : surfaces)
 				rootSurface.addChild(cs);
 			return rootSurface;
 		}
@@ -233,20 +319,23 @@ public class AABVHSurface extends CompositeSurface {
 			//If we've tried all of the axes, just add them to the rootSurface
 			//There is a good chance that all objects are nearly ontop of each other
 			if(++loopCount >= 3) {
-				for(CompositeSurface cs : surfaces)
+				for(AbstractSurface cs : surfaces)
 					rootSurface.addChild(cs);
 				return rootSurface;
 			}
 		}
 		
 		//Recurse on the negative and positive sets, adding their result to this
-		rootSurface.addChild(AABVHSurface.makeAABVH(negative, slices, maxSurfacesPerLeaf));
-		rootSurface.addChild(AABVHSurface.makeAABVH(positive, slices, maxSurfacesPerLeaf));
+		AABVHSurface left = AABVHSurface.makeAABVH(negative, slices, maxSurfacesPerLeaf);
+		AABVHSurface right = AABVHSurface.makeAABVH(positive, slices, maxSurfacesPerLeaf);
+		
+		rootSurface.addChild(left);
+		rootSurface.addChild(right);
 		
 		return rootSurface;
 	}
 	
-	private static <SURFACE extends CompositeSurface> void split(Collection<SURFACE> surfaces, 
+	private static <SURFACE extends AbstractSurface> void split(Collection<SURFACE> surfaces, 
 			ArrayList<SURFACE> negative, ArrayList<SURFACE> positive,
 			int axis, double axisValue)
 	{
@@ -275,7 +364,7 @@ public class AABVHSurface extends CompositeSurface {
 		}
 	}
 	
-	private static <SURFACE extends CompositeSurface> BoundingBox makeBoundingBox(Collection<SURFACE> surfaces)
+	private static <SURFACE extends AbstractSurface> BoundingBox makeBoundingBox(Collection<SURFACE> surfaces)
 	{
 		//Clear the current bounding box
 		BoundingBox boundingBox = new BoundingBox();
@@ -287,9 +376,9 @@ public class AABVHSurface extends CompositeSurface {
 		BoundingBox bb;
 		
 		//Loop through all children bounding boxes and set this to bound them
-		for(CompositeSurface cs : surfaces)
+		for(AbstractSurface cs : surfaces)
 		{
-			cs.updateBoundingBox();
+			//cs.updateBoundingBox();
 			bb = cs.getBoundingBox();
 			
 			min = bb.min;
@@ -302,7 +391,7 @@ public class AABVHSurface extends CompositeSurface {
 		return boundingBox;
 	}
 	
-	private static <SURFACE extends CompositeSurface> Vector3 centerPoint(Collection<SURFACE> surfaces)
+	private static <SURFACE extends AbstractSurface> Vector3 centerPoint(Collection<SURFACE> surfaces)
 	{
 		Vector3 center = new Vector3();
 		double[] m = center.getArray();
@@ -328,7 +417,7 @@ public class AABVHSurface extends CompositeSurface {
 		return center;
 	}
 	
-	private static <SURFACE extends CompositeSurface> double calculateSAH(
+	private static <SURFACE extends AbstractSurface> double calculateSAH(
 			ArrayList<SURFACE> negative, ArrayList<SURFACE> positive)
 	{
 		BoundingBox negativeBB = makeBoundingBox(negative);
