@@ -31,6 +31,7 @@ public class RayTracer implements Tracer {
 		//Build a shading data object
 		ShadingData sdata = new ShadingData();
 		sdata.setRootScene(scene);
+		sdata.setRayData(rdata);
 		
 		Material skyMaterial = scene.getSkyMaterial();
 		if(skyMaterial == null)
@@ -56,7 +57,9 @@ public class RayTracer implements Tracer {
 				//Set the current ray
 				ray.setRandomValue(Math.random());
 				rdata.setRay(ray);
-				sdata.setRay(ray);
+				rdata.clear();
+				sdata.clear();
+				//sdata.setRay(ray); //Removed: RayData now handles the ray object for ShadingData
 				
 				//Get the ray-scene intersection data
 				idata = scene.intersects(rdata);
