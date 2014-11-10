@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import process.logging.Logger;
 
 import file.obj.ObjModelData;
-import raytrace.material.Material;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
 
@@ -52,24 +52,13 @@ public class CompositeObjectSurface extends CompositeSurface {
 			AABVHSurface aabvh = AABVHSurface.makeAABVH(objectSurfaces);
 			this.addChild(aabvh);
 		}else{
-			for(CompositeSurface cs : objectSurfaces)
+			for(AbstractSurface cs : objectSurfaces)
 				this.addChild(cs);
 		}
 		
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending creating a Composite OBject Surface.");
-	}
-	
-
-	/* *********************************************************************************************
-	 * Overrides
-	 * *********************************************************************************************/
-	@Override
-	public void setMaterial(Material material)
-	{
-		for(CompositeSurface cs : objectSurfaces)
-			cs.setMaterial(material);
 	}
 
 }

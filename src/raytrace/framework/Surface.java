@@ -37,7 +37,7 @@ public interface Surface {
 	/**
 	 * 
 	 */
-	public void updateBoundingBox();
+	//public void updateBoundingBox();
 	
 	/**
 	 * 

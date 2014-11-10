@@ -2,16 +2,19 @@ package raytrace.light;
 
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.color.Color;
+import raytrace.data.BakeData;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.ShadingData;
+import raytrace.data.UpdateData;
 import raytrace.framework.Positionable;
 import raytrace.scene.Scene;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.AbstractSurface;
 
-public abstract class Light extends TerminalSurface implements Positionable {
+public abstract class Light extends AbstractSurface implements Positionable {
 
 	/*
 	 * A base class for lights
@@ -60,6 +63,32 @@ public abstract class Light extends TerminalSurface implements Positionable {
 		if(idata.getDistance() < distanceToLight)
 			return idata;
 		
+		return null;
+	}
+	
+
+	/* *********************************************************************************************
+	 * Override Methods
+	 * *********************************************************************************************/
+	@Override
+	public IntersectionData intersects(RayData data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void bake(BakeData data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void update(UpdateData data) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public BoundingBox getBoundingBox() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

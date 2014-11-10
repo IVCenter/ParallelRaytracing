@@ -92,12 +92,11 @@ public class ObjectSurface extends MeshSurface {
 	public IntersectionData intersects(RayData data)
 	{
 		IntersectionData idata = aabvh.intersects(data);
-		if(idata != null) {
-			idata.setMaterial(this.material);
-		}
-		
 		if(idata != null)
+		{
+			idata.setMaterial(this.material);
 			idata.setSurfaceID(surfaceID);
+		}
 		
 		return idata;
 		//return aabvh.intersects(data);
@@ -107,12 +106,6 @@ public class ObjectSurface extends MeshSurface {
 	public void bake(BakeData data)
 	{
 		aabvh.bake(data);
-	}
-	
-	@Override
-	public void updateBoundingBox()
-	{
-		aabvh.updateBoundingBox();
 	}
 	
 	@Override

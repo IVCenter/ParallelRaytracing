@@ -4,11 +4,16 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.material.Material;
 
-public class Instance extends MatrixTransformSurface {
+public class Instance extends MatrixTransformSurface implements MaterialSurface {
 	
 	/*
 	 * A convenient renaming ;)
 	 */
+	/* *********************************************************************************************
+	 * Constructor
+	 * *********************************************************************************************/
+	protected Material material;
+	
 
 	/* *********************************************************************************************
 	 * Constructor
@@ -23,11 +28,15 @@ public class Instance extends MatrixTransformSurface {
 	 * Overrides
 	 * *********************************************************************************************/
 	@Override
+	public Material getMaterial()
+	{
+		return material;
+	}
+	
+	@Override
 	public void setMaterial(Material material)
 	{
 		this.material = material;
-		//for(CompositeSurface cs : this)
-		//	cs.setMaterial(material);
 	}
 	
 	@Override

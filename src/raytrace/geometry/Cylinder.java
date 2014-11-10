@@ -2,12 +2,13 @@ package raytrace.geometry;
 
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.GeometrySurface;
 
-public class Cylinder extends TerminalSurface {
+public class Cylinder extends GeometrySurface {
 	
 	/*
 	 * A simple sphere class
@@ -33,8 +34,6 @@ public class Cylinder extends TerminalSurface {
 	{
 		this.height = height;
 		this.radius = radius;
-		updateBoundingBox();
-		//dynamic = false;
 	}
 	
 
@@ -219,11 +218,12 @@ public class Cylinder extends TerminalSurface {
 	/**
 	 * 
 	 */
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		boundingBox.clear();
+		BoundingBox boundingBox = new BoundingBox();
 		boundingBox.min.set(-radius, 0, -radius);
 		boundingBox.max.set(radius, height, radius);
+		return boundingBox;
 	}
 	
 

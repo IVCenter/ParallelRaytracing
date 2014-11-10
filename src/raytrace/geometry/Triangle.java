@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.GeometrySurface;
 
-public class Triangle extends TerminalSurface {
+public class Triangle extends GeometrySurface {
 
 	/*
 	 * A simple triangle surface
@@ -35,8 +36,6 @@ public class Triangle extends TerminalSurface {
 		vertices[0] = v0;
 		vertices[1] = v1;
 		vertices[2] = v2;
-		updateBoundingBox();
-		dynamic = false;
 	}
 	
 
@@ -166,14 +165,12 @@ public class Triangle extends TerminalSurface {
 	}
 	
 	@Override
-	/**
-	 * 
-	 */
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		boundingBox.clear();
+		BoundingBox boundingBox = new BoundingBox();
 		boundingBox.min.minimizeM(vertices[0].getPosition()).minimizeM(vertices[1].getPosition()).minimizeM(vertices[2].getPosition());
 		boundingBox.max.maximizeM(vertices[0].getPosition()).maximizeM(vertices[1].getPosition()).maximizeM(vertices[2].getPosition());
+		return boundingBox;
 	}
 	
 	public void generateFaceNormal()

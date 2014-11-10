@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import process.logging.Logger;
 import raytrace.geometry.Vertex;
-import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import file.xyz.XyzPointCloudData;
@@ -48,7 +47,7 @@ public class PointCloudSurface extends CompositeSurface {
 		aabvh = AABVHSurface.makeAABVH(pointSurfaces);
 		this.addChild(aabvh);
 		
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending creating a Point Cloud Surface.");
 	}
@@ -69,11 +68,13 @@ public class PointCloudSurface extends CompositeSurface {
 	/* *********************************************************************************************
 	 * Overrides
 	 * *********************************************************************************************/
+	/*
 	@Override
 	public void setMaterial(Material material)
 	{
 		for(CompositeSurface cs : pointSurfaces)
 			cs.setMaterial(material);
 	}
+	*/
 
 }

@@ -100,8 +100,7 @@ public abstract class Scene extends CompositeSurface{
 	 * *********************************************************************************************/
 	@Override
 	public void bake(BakeData data) {
-		// TODO Auto-generated method stub
-		
+		super.bake(null);
 	}
 	
 

@@ -4,14 +4,15 @@ import java.util.ArrayList;
 
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.framework.Positionable;
 import raytrace.geometry.meshes.MeshSurface;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.GeometrySurface;
 
-public class Sphere extends TerminalSurface implements Positionable {
+public class Sphere extends GeometrySurface implements Positionable {
 	
 	/*
 	 * A simple sphere class
@@ -37,8 +38,6 @@ public class Sphere extends TerminalSurface implements Positionable {
 	{
 		this.radius = radius;
 		this.center = center;
-		updateBoundingBox();
-		dynamic = false;
 	}
 	
 
@@ -126,14 +125,12 @@ public class Sphere extends TerminalSurface implements Positionable {
 	}
 	
 	@Override
-	/**
-	 * 
-	 */
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		boundingBox.clear();
+		BoundingBox boundingBox = new BoundingBox();
 		boundingBox.min.set(center.subtract(radius));
 		boundingBox.max.set(center.add(radius));
+		return boundingBox;
 	}
 	
 	

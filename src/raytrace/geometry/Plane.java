@@ -2,13 +2,14 @@ package raytrace.geometry;
 
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.framework.Positionable;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.GeometrySurface;
 
-public class Plane extends TerminalSurface implements Positionable {
+public class Plane extends GeometrySurface implements Positionable {
 	
 	/* *********************************************************************************************
 	 * Instance Vars
@@ -102,6 +103,12 @@ public class Plane extends TerminalSurface implements Positionable {
 	public void bake(BakeData data)
 	{
 		//TODO: Bake
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox()
+	{
+		return new BoundingBox();
 	}
 	
 

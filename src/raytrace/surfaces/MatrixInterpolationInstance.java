@@ -40,7 +40,7 @@ public class MatrixInterpolationInstance extends Instance {
 	@Override
 	public void setMaterial(Material material)
 	{
-		this.material = material;
+		//this.material = material;
 	}
 	
 	@Override

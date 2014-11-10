@@ -46,9 +46,6 @@ public class Grid extends MeshSurface {
 
 		ArrayList<Triangle> tris = generateTriangles(w, h, 1);
 		this.triangles = tris;
-
-		updateBoundingBox();
-		dynamic = false;
 	}
 	
 	protected ArrayList<Triangle> generateTriangles(double width, double height, double resolution)

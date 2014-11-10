@@ -54,9 +54,6 @@ public class Cube extends MeshSurface {
 
 		ArrayList<Triangle> tris = generateTriangles(x, y, z, offset, 1);
 		this.triangles = tris;
-
-		updateBoundingBox();
-		dynamic = false;
 	}
 	
 	protected ArrayList<Triangle> generateTriangles(double x, double y, double z, Vector3 offset, double resolution)
@@ -90,88 +87,22 @@ public class Cube extends MeshSurface {
 		Vector3 negZAxis = new Vector3(0,0,-1);
 
 		//Right
-		{
-			/*
-			Vertex v0 = new Vertex(p101, XAxis, t00);
-			Vertex v1 = new Vertex(p100, XAxis, t10);
-			Vertex v2 = new Vertex(p110, XAxis, t11);
-			Vertex v3 = new Vertex(p111, XAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p101, p100, p110, p111, XAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p101, p100, p110, p111, XAxis, resolution);
 
 		//Left
-		{
-			/*
-			Vertex v0 = new Vertex(p000, negXAxis, t00);
-			Vertex v1 = new Vertex(p001, negXAxis, t10);
-			Vertex v2 = new Vertex(p011, negXAxis, t11);
-			Vertex v3 = new Vertex(p010, negXAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p000, p001, p011, p010, negXAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p000, p001, p011, p010, negXAxis, resolution);
 
 		//Top
-		{
-			/*
-			Vertex v0 = new Vertex(p011, YAxis, t00);
-			Vertex v1 = new Vertex(p111, YAxis, t10);
-			Vertex v2 = new Vertex(p110, YAxis, t11);
-			Vertex v3 = new Vertex(p010, YAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p011, p111, p110, p010, YAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p011, p111, p110, p010, YAxis, resolution);
 
 		//Bottom
-		{
-			/*
-			Vertex v0 = new Vertex(p000, negYAxis, t00);
-			Vertex v1 = new Vertex(p100, negYAxis, t10);
-			Vertex v2 = new Vertex(p101, negYAxis, t11);
-			Vertex v3 = new Vertex(p001, negYAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p000, p100, p101, p001, negYAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p000, p100, p101, p001, negYAxis, resolution);
 
 		//Front
-		{
-			/*
-			Vertex v0 = new Vertex(p001, ZAxis, t00);
-			Vertex v1 = new Vertex(p101, ZAxis, t10);
-			Vertex v2 = new Vertex(p111, ZAxis, t11);
-			Vertex v3 = new Vertex(p011, ZAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p001, p101, p111, p011, ZAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p001, p101, p111, p011, ZAxis, resolution);
 
 		//Back
-		{
-			/*
-			Vertex v0 = new Vertex(p100, negZAxis, t00);
-			Vertex v1 = new Vertex(p000, negZAxis, t10);
-			Vertex v2 = new Vertex(p010, negZAxis, t11);
-			Vertex v3 = new Vertex(p110, negZAxis, t01);
-			triangles.add(new Triangle(v0, v1, v2));
-			triangles.add(new Triangle(v0, v2, v3));
-			*/
-
-			generateFaceTriangle(triangles, p100, p000, p010, p110, negZAxis, resolution);
-		}
+		generateFaceTriangle(triangles, p100, p000, p010, p110, negZAxis, resolution);
 				
 		return triangles;
 	}

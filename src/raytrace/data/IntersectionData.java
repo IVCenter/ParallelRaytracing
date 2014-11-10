@@ -1,7 +1,7 @@
 package raytrace.data;
 
 import raytrace.material.Material;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.surfaces.AbstractSurface;
 import math.Vector3;
 import math.ray.Ray;
 
@@ -20,7 +20,7 @@ public class IntersectionData {
 	protected Material material;
 	
 	//Since API v2.0
-	protected CompositeSurface surface;
+	protected AbstractSurface surface;
 	protected Vector3 texcoord;
 	//protected Vector4 uTangent; //Calculated in material on demand
 	//protected Vector4 vTangent; //Calculated in material on demand
@@ -115,11 +115,11 @@ public class IntersectionData {
 	}
 
 	//Surface
-	public CompositeSurface getSurface() {
+	public AbstractSurface getSurface() {
 		return surface;
 	}
 
-	public void setSurface(CompositeSurface surface) {
+	public void setSurface(AbstractSurface surface) {
 		this.surface = surface;
 	}
 

@@ -14,9 +14,9 @@ import raytrace.data.RayData;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
 import raytrace.material.Material;
-import raytrace.surfaces.TerminalSurface;
+import raytrace.surfaces.GeometrySurface;
 
-public class MeshSurface extends TerminalSurface {
+public class MeshSurface extends GeometrySurface {
 	
 	/*
 	 * A simple mesh class
@@ -264,10 +264,9 @@ public class MeshSurface extends TerminalSurface {
 	/**
 	 * 
 	 */
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		//Clear the current bounding box
-		boundingBox.clear();
+		BoundingBox boundingBox = new BoundingBox();
 		
 		//Temp Storage
 		Vector3 min;
@@ -277,7 +276,7 @@ public class MeshSurface extends TerminalSurface {
 		//Loop through all children bounding boxes and set this to bound them
 		for(Triangle tri : triangles)
 		{
-			tri.updateBoundingBox();
+			//tri.updateBoundingBox();
 			bb = tri.getBoundingBox();
 			
 			min = bb.min;
@@ -286,6 +285,8 @@ public class MeshSurface extends TerminalSurface {
 			boundingBox.min.minimizeM(min);
 			boundingBox.max.maximizeM(max);
 		}
+		
+		return boundingBox;
 	}
 	
 
@@ -300,16 +301,9 @@ public class MeshSurface extends TerminalSurface {
 		this.triangles = triangles;
 	}
 
-//	public int getMeshID() {
-//		return meshID;
-//	}
-//
-//	public void setMeshID(int meshID) {
-//		this.meshID = meshID;
-//	}
-
 	public void setMaterial(Material material)
 	{
+		this.material = material;
 		for(Triangle cs : triangles)
 			cs.setMaterial(material);
 	}

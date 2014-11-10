@@ -3,6 +3,7 @@ package raytrace.surfaces;
 import math.Matrix4;
 import math.Vector3;
 import math.ray.Ray;
+import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
@@ -47,8 +48,6 @@ public class MatrixTransformSurface extends CompositeSurface {
 		if(children == null)
 			return null;
 		
-		//TODO: Make sure this actually works...
-		//TODO: Check against bounding box first
 		
 		Ray ray = data.getRay();
 		
@@ -57,16 +56,10 @@ public class MatrixTransformSurface extends CompositeSurface {
 		
 		ray.setOrigin(inverseTransform.multiplyPt(oldOrigin));
 		ray.setDirection(inverseTransform.multiply3(oldDirection).normalizeM());
-		//Vector4 transOrigin = inverseTransform.multiplyPt(oldOrigin);
-		//Vector4 transDirection = inverseTransform.multiply3(oldDirection);//.normalize3();
-		
-		//Ray newRay = new Ray(transOrigin, transDirection, oldRay.getPixelX(), oldRay.getPixelY());
-		
-		//data.setRay(newRay);
 		
 		IntersectionData idata;
 		IntersectionData closest = null;
-		for(CompositeSurface cs : this)
+		for(AbstractSurface cs : this)
 		{
 			idata = cs.intersects(data);
 			//If idata isn't null, and either closest is null, or idata is closer than closest
@@ -75,8 +68,6 @@ public class MatrixTransformSurface extends CompositeSurface {
 				closest = idata;
 			}
 		}
-		
-		//data.setRay(oldRay);
 
 		ray.setOrigin(oldOrigin);
 		ray.setDirection(oldDirection);
@@ -102,21 +93,13 @@ public class MatrixTransformSurface extends CompositeSurface {
 		
 		super.bake(data);
 	}
-
+	
 	@Override
-	public void updateBoundingBox()
+	public BoundingBox getBoundingBox()
 	{
-		if(!dynamic)
-			return;
-		
-		// TODO Auto-generated method stub
-		//Push child bounding boxes back into parent space
-		//And then calculate a bounding box much like composite surface does
-		
-		//Or do the opposite (call super.updateBound, then transform the min/max)
-		super.updateBoundingBox();
-		
 		//Create a vector for each corner, and transform it
+		BoundingBox boundingBox = super.getBoundingBox();
+		
 		Vector3[] corners = new Vector3[8];
 		for(int mask = 0x0; mask < 0x8; ++mask)
 		{
@@ -134,6 +117,8 @@ public class MatrixTransformSurface extends CompositeSurface {
 			boundingBox.min.minimizeM(corners[i]);
 			boundingBox.max.maximizeM(corners[i]);
 		}
+		
+		return boundingBox;
 	}
 
 

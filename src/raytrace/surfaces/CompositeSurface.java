@@ -3,7 +3,8 @@ package raytrace.surfaces;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.LinkedList;
+import java.util.List;
 
 import math.Vector3;
 
@@ -13,36 +14,18 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Composite;
-import raytrace.framework.Node;
-import raytrace.framework.Surface;
-import raytrace.material.Material;
 
-public abstract class CompositeSurface implements Node, Composite<CompositeSurface>, Surface
+public abstract class CompositeSurface extends AbstractSurface implements Composite<AbstractSurface>
 {
 	/*
-	 * A base class for nodes of a surface graph
+	 * A base class for composite nodes of a surface graph
 	 */
-	
-	/* *********************************************************************************************
-	 * Static Vars
-	 * *********************************************************************************************/
-	private static AtomicInteger nextSurfaceID = new AtomicInteger(1);
-	
-	
-	/* *********************************************************************************************
-	 * Static Methods
-	 * *********************************************************************************************/
-	private static int nextSurfaceID() { return nextSurfaceID.getAndIncrement(); }
 	
 
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected ArrayList<CompositeSurface> children;
-	protected Material material;
-	protected BoundingBox boundingBox = new BoundingBox();
-	protected boolean dynamic = true;
-	protected int surfaceID = nextSurfaceID();
+	protected ArrayList<AbstractSurface> children;
 	
 
 	/* *********************************************************************************************
@@ -66,7 +49,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		IntersectionData idata;
 		IntersectionData closest = null;
 		
-		for(CompositeSurface cs : this)
+		for(AbstractSurface cs : this)
 		{
 			idata = cs.intersects(data);
 			//If idata isn't null, and either closest is null, or idata is closer than closest
@@ -87,7 +70,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			return;
 		
 		//Update all children
-		for(CompositeSurface cs : this)
+		for(AbstractSurface cs : this)
 		{
 			cs.update(data);
 		}
@@ -101,21 +84,26 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			return;
 		
 		//Update all children
-		for(CompositeSurface cs : this)
+		for(AbstractSurface cs : this)
 		{
 			cs.bake(data);
 		}
 	}
 	
-	@Override
+	/*
 	public void updateBoundingBox()
 	{
-		//If no children or this is a static surface, then return
-		if(children == null || !dynamic)
-			return;
 		
-		//Clear the current bounding box
-		boundingBox.clear();
+	}
+	*/
+	
+	public BoundingBox getBoundingBox()
+	{
+		BoundingBox boundingBox = new BoundingBox();
+		
+		//If no children or this is a static surface, then return
+		if(children == null)
+			return null;
 		
 		//Temp Storage
 		Vector3 min;
@@ -123,9 +111,8 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		BoundingBox bb;
 		
 		//Loop through all children bounding boxes and set this to bound them
-		for(CompositeSurface cs : this)
+		for(AbstractSurface cs : this)
 		{
-			cs.updateBoundingBox();
 			bb = cs.getBoundingBox();
 			
 			min = bb.min;
@@ -134,10 +121,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			boundingBox.min.minimizeM(min);
 			boundingBox.max.maximizeM(max);
 		}
-	}
-	
-	public BoundingBox getBoundingBox()
-	{
+		
 		return boundingBox;
 	}
 
@@ -145,18 +129,18 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	 * Composite-related Methods
 	 * *********************************************************************************************/
 	@Override
-	public Iterator<CompositeSurface> iterator()
+	public Iterator<AbstractSurface> iterator()
 	{
 		if(children == null)
 			return null;
 		return children.iterator();
 	}
 	
-	public void addChild(CompositeSurface cs)
+	public void addChild(AbstractSurface cs)
 	{
 		//By default children is not initialized so that leaf nodes don't incur the memory penalty of empty structures
 		if(children == null)
-			children = new ArrayList<CompositeSurface>();
+			children = new ArrayList<AbstractSurface>(2);
 		
 		//Having the same surface added twice uses unnecessary resources.
 		//This contains method is slow
@@ -164,27 +148,27 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 			children.add(cs);
 	}
 	
-	public void addChildren(Collection<CompositeSurface> set)
+	public void addChildren(Collection<AbstractSurface> set)
 	{	
 		//Add each child, one by one
-		for(CompositeSurface cs : set)
+		for(AbstractSurface cs : set)
 			addChild(cs);
 	}
 	
-	public void addChildrenUnsafe(Collection<CompositeSurface> set)
+	public void addChildrenUnsafe(Collection<AbstractSurface> set)
 	{	
 		//Add all children at once
 		//This does not check for null or duplicate surfaces
 		if(children == null)
-			children = new ArrayList<CompositeSurface>();
+			children = new ArrayList<AbstractSurface>(set.size());
 		children.addAll(set);
 	}
 	
-	public CompositeSurface removeChild(CompositeSurface cs)
+	public AbstractSurface removeChild(AbstractSurface cs)
 	{
 		//By default children is not initialized so that leaf nodes don't incur the memory penalty of empty structures
 		if(children == null) {
-			children = new ArrayList<CompositeSurface>();
+			children = new ArrayList<AbstractSurface>(2);
 			return null;
 		}
 		
@@ -194,7 +178,7 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 		return null;
 	}
 	
-	public ArrayList<CompositeSurface> getChildren()
+	public List<AbstractSurface> getChildren()
 	{
 		return children;
 	}
@@ -203,27 +187,5 @@ public abstract class CompositeSurface implements Node, Composite<CompositeSurfa
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public Material getMaterial() {
-		return material;
-	}
 
-	public void setMaterial(Material material) {
-		this.material = material;
-	}
-
-	public boolean isDynamic() {
-		return dynamic;
-	}
-
-	public void setDynamic(boolean dynamic) {
-		this.dynamic = dynamic;
-	}
-
-	public int getSurfaceID() {
-		return surfaceID;
-	}
-
-	public void setSurfaceID(int surfaceID) {
-		this.surfaceID = surfaceID;
-	}
 }

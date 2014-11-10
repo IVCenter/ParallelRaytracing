@@ -10,7 +10,7 @@ import file.xyz.XyzPointCloudData;
 import raytrace.geometry.meshes.CompositeObjectSurface;
 import raytrace.geometry.meshes.Cube;
 import raytrace.geometry.pointclouds.PointCloudSurface;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.Instance;
 import system.Configuration;
 
@@ -23,7 +23,7 @@ public class ResourceManager {
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	protected static HashMap<String, CompositeSurface> surfaces;
+	protected static HashMap<String, AbstractSurface> surfaces;
 	
 
 	/* *********************************************************************************************
@@ -31,9 +31,9 @@ public class ResourceManager {
 	 * *********************************************************************************************/
 	static
 	{
-		surfaces = new HashMap<String, CompositeSurface>();
+		surfaces = new HashMap<String, AbstractSurface>();
 		
-		CompositeSurface cube = new Cube();
+		AbstractSurface cube = new Cube();
 		surfaces.put("cube", cube);
 		surfaces.put("Cube", cube);
 		surfaces.put("CUBE", cube);
@@ -72,7 +72,7 @@ public class ResourceManager {
 	 * *********************************************************************************************/
 	private static Instance getInstance(String keyOrFilePath)
 	{
-		CompositeSurface cs = surfaces.get(keyOrFilePath);
+		AbstractSurface cs = surfaces.get(keyOrFilePath);
 		
 		//Create a new wrapping instance for the current surface
 		if(cs != null)
@@ -97,9 +97,7 @@ public class ResourceManager {
 			if(data == null)
 				return;
 			
-			CompositeSurface model = new CompositeObjectSurface(data);
-			model.updateBoundingBox();
-			model.setDynamic(false);
+			AbstractSurface model = new CompositeObjectSurface(data);
 			
 			surfaces.put(keyOrFilePath, model);
 			
@@ -113,9 +111,7 @@ public class ResourceManager {
 			if(data == null)
 				return;
 			
-			CompositeSurface model = new PointCloudSurface(data);
-			model.updateBoundingBox();
-			model.setDynamic(false);
+			AbstractSurface model = new PointCloudSurface(data);
 			
 			surfaces.put(keyOrFilePath, model);
 			
