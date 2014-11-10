@@ -119,16 +119,16 @@ public class CSE167_2014_Project2 extends Scene
 		ProgrammableCamera camera = new ProgrammableCamera();
 		
 		camera = new ProgrammableCamera();
-		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(6);
+		camera.setStratifiedSampling(false);
+		camera.setSuperSamplingLevel(1);
 		camera.setPosition(new Vector3(0,2.85,3));
 		camera.setViewingDirection(new Vector3(0,-0.1,-1));
 		camera.setUp(new Vector3(0,1,0));
 		camera.setFieldOfView(Math.PI/2.3);
 		camera.setPixelWidth(Configuration.getScreenWidth());
 		camera.setPixelHeight(Configuration.getScreenHeight());
-		camera.setAperture(new CircularAperture(0.01, 0.4));
-		camera.setFocalPlaneDistance(6.2);
+		camera.setAperture(new CircularAperture(0.02, 0.4));
+		camera.setFocalPlaneDistance(7.2);
 		
 		return camera;
 	}
@@ -139,24 +139,8 @@ public class CSE167_2014_Project2 extends Scene
 	 * *********************************************************************************************/
 	@Override
 	protected Material configureSkyMaterial()
-	{
-		
-		Material skyMaterial = new RecursionMinimumCMaterial(
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
-				//new SkyGradientMaterial(new GradientTexture3D(new Color(0xfbfbfbff), new Color(0x999999ff), 4.0)),
-				//new SkyGradientMaterial(new GradientTexture3D(new Color(0x7b8b9bff), new Color(0x445474ff), 5.0)),
-				//new ColorMaterial(Color.black()),
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xffffffff), new Color(0x999999ff), 5.0)),
-				1
-				);
-		
-		skyMaterial = new RecursionMinimumCMaterial(
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0x8c96eeff), 3.0)),
-				1
-				);
-				
-		//skyMaterial = new ColorMaterial(Color.black());
+	{				
+		Material skyMaterial = new ColorMaterial(Color.black());
 		return skyMaterial;
 	}
 	
@@ -171,45 +155,28 @@ public class CSE167_2014_Project2 extends Scene
 	@Override
 	protected void configureWorld()
 	{
-
-		//Directional Light
-		DirectionalLight directionalLight = new DirectionalLight();
-		directionalLight.setColor(Color.white());
-		directionalLight.setIntensity(0.70);
-		directionalLight.setDirection(new Vector3(1,-1,-1));
-		//lightManager.addLight(directionalLight);
-
+		//Point light
 		pointLight = new PointLight();
 		pointLight.setColor(Color.white());
 		pointLight.setIntensity(36.14159);//was 36
 		pointLight.setQuadraticAttenuation(1.0);
 		pointLight.setConstantAttenuation(0.0);
-		pointLight.setPosition(new Vector3(-2.0, 6.0, -0.5));
+		pointLight.setPosition(new Vector3(-2.0, 6.0, -2.5));
 		lightManager.addLight(pointLight);
 		lightColor = pointLight.getColor().multiply3(pointLight.getIntensity());
-
-		AmbientLight ambientLight = new AmbientLight();
-		ambientLight.setColor(new Color(0xddeeffff));
-		ambientLight.setIntensity(0.1);
-		//lightManager.addLight(ambientLight);
-		
 		
 		
 		//Point Cloud
-		cloud = ResourceManager.create("hex_stand_2.obj");
+		cloud = ResourceManager.create("dragon.xyz");
 		
 		if(cloud != null) {
-			//cloud.getTransform().scale(30.0);//ia
-			//cloud.getTransform().scale(2.0);//tris
-			//cloud.getTransform().scale(0.2);//abs
-			cloud.getTransform().scale(0.6);//abs
+			cloud.getTransform().scale(30.0);//ia
 
 			cloud.getTransform().translate(0, 0, -4.2);
-			cloud.getTransform().rotateY(-0.45);
+			cloud.getTransform().rotateY(0.45);
 			cloud.bake(null);
 
 			//Place the cloud on the ground
-			//cloud.updateBoundingBox();
 			BoundingBox bb = cloud.getBoundingBox();
 			cloud.getTransform().translate(-1.0 * bb.getMidpoint().get(0), -1.0 * bb.min.get(1), 0);
 			cloud.bake(null);
@@ -217,18 +184,18 @@ public class CSE167_2014_Project2 extends Scene
 			
 			Color flatColor = Color.gray(0.9);
 			Matrix4 inv = cloud.getTransform();//.inverse();
-/*
-			//Texture3D tex = new SimplexNoiseTexture3D(new Color(0xe8e8e8ff), new Color(0xcc8844ff));
-			Texture3D tex = new SimplexNoiseTexture3D(new Color(0xe8e8e8ff), (new Color(0xcc8844ff)).multiply3M(0.5));
-			//SineWaveTexture3D sinTex = new SineWaveTexture3D(Color.gray(1), Color.gray(0));
 			
-			MatrixTransformTexture3D matTex = new MatrixTransformTexture3D(tex);
-			matTex.getTransform().nonUniformScale(200, 50, 1);
-			matTex.getTransform().rotateZ(0.3);
-			*/
+			SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
+					(new Color(0xff0068ff)).multiply3M(0.95), 
+					(new Color(0.99, 0.66, 0.2)).multiply3M(0.95), 
+					0.6
+					);
+			MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(gradient);
+			gradientTrans.getTransform().scale(3.13);
+			gradientTrans.getTransform().translate(0, 0, 0);
+
 			
 			//Set normal colors
-			/*
 			points = ((PointCloudSurface)cloud.getChildren().get(0)).getPointSurfaces();
 			for(PointSurface point : points)
 			{
@@ -244,77 +211,23 @@ public class CSE167_2014_Project2 extends Scene
 					//point.setMaterial(new DiffusePTMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
 					//point.setMaterial(new ColorMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
 				}
-				/*
+				
 				point.setMaterial(new ColorMaterial(diffuseLighting(
 						pointLight.getPosition(), 
 						inv.multiplyPt(point.getPosition()), 
 						inv.multiply3(norm).normalizeM(), 
 						lightColor, 
-						flatColor)));
-						*
-			}*/
+						gradientTrans.evaluate(point.getPosition().get(0), point.getPosition().get(1), point.getPosition().get(2)))));
+				
+			}
 
-			//cloud.setMaterial(new DiffuseMaterial(Color.gray(0.9)));
-			//cloud.setMaterial(new DiffusePTMaterial(Color.gray(0.9)));
-			SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
-					(new Color(0xff0068ff)), 
-					(new Color(0.99, 0.66, 0.2)), 
-					0.6
-					);
-			MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(gradient);
-			gradientTrans.getTransform().scale(0.09);
-			gradientTrans.getTransform().translate(0, 0, 0);
-			cloud.setMaterial(new FresnelDiffusePTMaterial(gradientTrans/*new Color(0.99, 0.66, 0.2)*/, 1.0, 2.0));
-			//cloud.setMaterial(new DiffusePTMaterial(matTex));
-			//cloud.setMaterial(new ColorMaterial(new Color(0xf8f8f8ff)));
-			//cloud.setMaterial(new DielectricPTMaterial(new Color(3.0, 1.1, 1.0),  1.31, 0.05));
+			//cloud.setMaterial(new DiffusePTMaterial(gradientTrans));
 			
 			this.addChild(cloud);
 		}else{
 			Logger.error(-13, "CSE167_2014_Project2: Cloud was null!");
 		}
 		
-		/*
-		ArrayList<Triangle> splines = new ArrayList<Triangle>();
-	
-		Spline s = new Spline();
-		s.add(new Vector3(2.0, -1.0, -4.2));
-		s.add(new Vector3(5.0, 1.0, -4.2));
-		s.add(new Vector3(5.0, 3.0, -7.2));
-		s.add(new Vector3(2.0, 5.0, -7.2));
-		
-		splines.addAll(s.tessellate(32, 16, 0.5, 0.0001));
-		
-		
-		AABVHSurface splineAccel = AABVHSurface.makeAABVH(splines);
-		
-		
-		Instance wrapper = new Instance();
-		wrapper.addChild(splineAccel);
-		wrapper.setMaterial(new DiffusePTMaterial(Color.gray(0.9)));
-		this.addChild(wrapper);
-		*/
-		
-		
-		
-		
-		
-		//Update bounding boxes
-		//this.updateBoundingBox();
-		
-		
-		//Add a plane to the scene
-		//Grid plane = new Grid(100, 100);
-		Plane plane = new Plane();
-		//plane.setMaterial(new ReflectiveMaterial(new Color(30.0,30.0,30.0), 0.10));
-		plane.setMaterial(new DiffusePTMaterial(Color.gray(0.95)));
-		//plane.setMaterial(new DiffuseMaterial(Color.gray(0.9)));
-		//plane.setMaterial(new FresnelDiffusePTMaterial(Color.gray(0.1), 0.9, 2.5));
-		
-		//Vector3 cloudMid = cloud.getBoundingBox().getMidpoint();
-		//plane.getTransform().translate(cloudMid.get(0), 0, cloudMid.get(2));
-		
-		//this.addChild(plane);
 	}
 	
 	private Color diffuseLighting(Vector3 lightPos, Vector3 objPos, Vector3 normal, Color lightColor, Color objColor)
@@ -355,23 +268,25 @@ public class CSE167_2014_Project2 extends Scene
 	public void update(UpdateData data)
 	{
 		elapsed += data.getDt();
-		
-		//Vector3 position = activeCamera.getPosition();
-		//position.set(Math.cos(elapsed * 1 + Math.PI/2) * 1.8, 2.85, Math.sin(elapsed * 1 + Math.PI/2) * 1.8);
-		//activeCamera.setPosition(position);
-		
-		//activeCamera.setViewingDirection(position.multiply(-1.0));
-		//activeCamera.getViewingDirection().set(1, -0.1);
-		
-		//activeCamera.getPosition().set(2, activeCamera.getPosition().get(2) + 1.2);
-		
 
 		cloud.getTransform().rotateY(data.getDt());
-		//cloud.bake(null);
 		
-		/*
+		
 		Color flatColor = Color.gray(0.9);
-		Matrix4 inv = cloud.getTransform();
+		Matrix4 inv = cloud.getTransform();//.inverse();
+		
+		SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
+				(new Color(0xff0068ff)).multiply3M(0.95), 
+				(new Color(0.99, 0.66, 0.2)).multiply3M(0.95), 
+				0.6
+				);
+		MatrixTransformTexture3D gradientTrans = new MatrixTransformTexture3D(gradient);
+		gradientTrans.getTransform().scale(3.13);
+		gradientTrans.getTransform().translate(0, 0, 0);
+
+		
+		//Set normal colors
+		points = ((PointCloudSurface)cloud.getChildren().get(0)).getPointSurfaces();
 		for(PointSurface point : points)
 		{
 			Vector3 norm = new Vector3(point.getPoint().getNormal());
@@ -387,15 +302,14 @@ public class CSE167_2014_Project2 extends Scene
 				//point.setMaterial(new ColorMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
 			}
 			
-			
-			((ColorMaterial)point.getMaterial()).setTexture(diffuseLighting(
+			point.setMaterial(new ColorMaterial(diffuseLighting(
 					pointLight.getPosition(), 
 					inv.multiplyPt(point.getPosition()), 
 					inv.multiply3(norm).normalizeM(), 
 					lightColor, 
-					flatColor));
+					gradientTrans.evaluate(point.getPosition().get(0), point.getPosition().get(1), point.getPosition().get(2)))));
 		}
-		*/
+		
 		
 		//Update the children
 		super.update(data);
@@ -405,7 +319,6 @@ public class CSE167_2014_Project2 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		//this.updateBoundingBox();
 		super.bake(data);
 	}
 }

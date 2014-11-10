@@ -17,7 +17,7 @@ public abstract class Material {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.00001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 3;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
 	protected static final int SYSTEM_RESURSION_LIMIT = 100;
 	
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
@@ -85,7 +85,7 @@ public abstract class Material {
 		return recurse(data, point, direction, refractiveIndex, true);
 	}
 	
-	/*
+	
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
@@ -121,9 +121,9 @@ public abstract class Material {
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
 	}
-	*/
 	
 	
+	/*
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
@@ -160,7 +160,7 @@ public abstract class Material {
 		data.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(data);
 	}
-	
+	*/
 	
 	protected Vector3 halfVector(Vector3 a, Vector3 b)
 	{

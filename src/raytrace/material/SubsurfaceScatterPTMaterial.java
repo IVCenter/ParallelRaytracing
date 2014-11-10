@@ -7,6 +7,7 @@ import raytrace.data.ShadingData;
 import raytrace.light.Light;
 import raytrace.map.texture.Texture;
 
+@Deprecated
 public class SubsurfaceScatterPTMaterial extends Material{
 	
 	/*
