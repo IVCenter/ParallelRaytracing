@@ -34,6 +34,7 @@ import raytrace.material.Material;
 import raytrace.material.SkyGradientMaterial;
 import raytrace.material.composite.RecursionMinimumCMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.MatrixTransformSurface;
@@ -159,7 +160,7 @@ public class VoxelTest1 extends Scene
 		
 		MatrixTransformSurface inst;
 		
-		ArrayList<CompositeSurface> voxels = new ArrayList<CompositeSurface>();
+		ArrayList<AbstractSurface> voxels = new ArrayList<AbstractSurface>();
 		
 		//Material voxMat = new DiffusePTMaterial(Color.gray(0.7 + Math.random() * 0.2));
 		
@@ -221,6 +222,7 @@ public class VoxelTest1 extends Scene
 
 		AABVHSurface accel = AABVHSurface.makeAABVH(voxels, 10, 1);//voxels
 		//AABVHSurface accel = AABVHSurface.makeAABVH(voxels, 10, 8);//tris
+		//accel.bake(null);
 		this.addChild(accel);
 		
 		
@@ -238,7 +240,7 @@ public class VoxelTest1 extends Scene
 		
 		
 		//Update bounding boxes
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		
 		//Add a plane to the scene
@@ -262,7 +264,7 @@ public class VoxelTest1 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		//his.updateBoundingBox();
 		super.bake(data);
 	}
 }

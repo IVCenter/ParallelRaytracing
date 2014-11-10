@@ -127,7 +127,7 @@ public class CSE167_2014_Project2 extends Scene
 		camera.setFieldOfView(Math.PI/2.3);
 		camera.setPixelWidth(Configuration.getScreenWidth());
 		camera.setPixelHeight(Configuration.getScreenHeight());
-		camera.setAperture(new CircularAperture(0.06 * 0, 0.4));
+		camera.setAperture(new CircularAperture(0.01, 0.4));
 		camera.setFocalPlaneDistance(6.2);
 		
 		return camera;
@@ -152,7 +152,7 @@ public class CSE167_2014_Project2 extends Scene
 		
 		skyMaterial = new RecursionMinimumCMaterial(
 				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0x8c96eeff), 5.0)),
+				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0x8c96eeff), 3.0)),
 				1
 				);
 				
@@ -205,11 +205,11 @@ public class CSE167_2014_Project2 extends Scene
 			cloud.getTransform().scale(0.6);//abs
 
 			cloud.getTransform().translate(0, 0, -4.2);
-			cloud.getTransform().rotateY(0.45);
+			cloud.getTransform().rotateY(-0.45);
 			cloud.bake(null);
 
 			//Place the cloud on the ground
-			cloud.updateBoundingBox();
+			//cloud.updateBoundingBox();
 			BoundingBox bb = cloud.getBoundingBox();
 			cloud.getTransform().translate(-1.0 * bb.getMidpoint().get(0), -1.0 * bb.min.get(1), 0);
 			cloud.bake(null);
@@ -300,20 +300,21 @@ public class CSE167_2014_Project2 extends Scene
 		
 		
 		//Update bounding boxes
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		
 		//Add a plane to the scene
-		Grid plane = new Grid(100, 100);
+		//Grid plane = new Grid(100, 100);
+		Plane plane = new Plane();
 		//plane.setMaterial(new ReflectiveMaterial(new Color(30.0,30.0,30.0), 0.10));
-		plane.setMaterial(new DiffusePTMaterial(Color.gray(1.0)));
+		plane.setMaterial(new DiffusePTMaterial(Color.gray(0.95)));
 		//plane.setMaterial(new DiffuseMaterial(Color.gray(0.9)));
 		//plane.setMaterial(new FresnelDiffusePTMaterial(Color.gray(0.1), 0.9, 2.5));
 		
 		//Vector3 cloudMid = cloud.getBoundingBox().getMidpoint();
 		//plane.getTransform().translate(cloudMid.get(0), 0, cloudMid.get(2));
 		
-		this.addChild(plane);
+		//this.addChild(plane);
 	}
 	
 	private Color diffuseLighting(Vector3 lightPos, Vector3 objPos, Vector3 normal, Color lightColor, Color objColor)
@@ -366,7 +367,7 @@ public class CSE167_2014_Project2 extends Scene
 		
 
 		cloud.getTransform().rotateY(data.getDt());
-		cloud.bake(null);
+		//cloud.bake(null);
 		
 		/*
 		Color flatColor = Color.gray(0.9);
@@ -404,7 +405,7 @@ public class CSE167_2014_Project2 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		super.bake(data);
 	}
 }
