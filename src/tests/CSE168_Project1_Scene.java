@@ -1,6 +1,5 @@
 package tests;
 
-import process.logging.Logger;
 import math.Matrix4;
 import math.Vector3;
 import raytrace.camera.ProgrammableCamera;
@@ -15,7 +14,6 @@ import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.scene.Scene;
 import raytrace.surfaces.MatrixTransformSurface;
-import raytrace.surfaces.acceleration.AABVHSurface;
 import system.Configuration;
 
 public class CSE168_Project1_Scene extends Scene{
@@ -94,26 +92,6 @@ public class CSE168_Project1_Scene extends Scene{
 		lightManager.addLight(redlgt);
 		
 		
-		
-		
-
-		//Update bounding boxes
-		this.updateBoundingBox();
-		
-		//BVH TESTS
-		Logger.progress(-1, "Starting creating a BVH for root surface...");
-		long startTime = System.currentTimeMillis();
-		
-		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren());
-		this.getChildren().clear();
-		this.addChild(aabvh);
-		
-		//Refresh
-		this.updateBoundingBox();
-		
-		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
-		
-		
 	}
 	
 	@Override
@@ -127,7 +105,7 @@ public class CSE168_Project1_Scene extends Scene{
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		super.bake(data);
 	}
 
 }

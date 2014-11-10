@@ -270,9 +270,6 @@ public class TestScene13 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
-		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
 		
@@ -280,8 +277,6 @@ public class TestScene13 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh2);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 	}
 
@@ -324,9 +319,6 @@ public class TestScene13 extends Scene
 				vert.setPosition(newPos);
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Add mode noise!
@@ -345,9 +337,6 @@ public class TestScene13 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 
 		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
@@ -355,7 +344,6 @@ public class TestScene13 extends Scene
 		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles());
 		
 		
-		accelerated.updateBoundingBox();
 		//accelerated.setDynamic(false);
 		
 		
@@ -378,10 +366,7 @@ public class TestScene13 extends Scene
 		instance.getTransform().nonUniformScale(2.0, 1.0, 1.0);
 		instance.getTransform().scale(1.0);
 		
-		instance.setDynamic(true);
-		instance.updateBoundingBox();
 		instance.bake(null);
-		instance.setDynamic(false);
 		
 		this.addChild(instance);
 	}

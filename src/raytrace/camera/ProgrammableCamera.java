@@ -499,6 +499,7 @@ public class ProgrammableCamera extends Camera {
 					subRay.setOrigin(apertureOrigin);
 				}else{
 					subRay.setDirection(dir.normalizeM());
+					subRay.setOrigin(position);
 				}
 				
 				//Increment the counters

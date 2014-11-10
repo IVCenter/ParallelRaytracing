@@ -92,8 +92,6 @@ public class PerformanceTest1 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		/*
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -129,7 +127,6 @@ public class PerformanceTest1 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

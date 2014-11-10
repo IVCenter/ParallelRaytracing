@@ -6,7 +6,6 @@ import raytrace.color.Color;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.ShadingData;
-import raytrace.surfaces.CompositeSurface;
 
 public abstract class Material {
 	
@@ -121,13 +120,14 @@ public abstract class Material {
 		//If there wasn't an intersection, use the sky material
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
-	}*/
+	}
+	*/
 	
 	
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
-		if(data.getActualRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
+		if(data.getRecursionDepth() > DO_NOT_EXCEED_RECURSION_LEVEL || data.getActualRecursionDepth() >= SYSTEM_RESURSION_LIMIT) {
 			return Color.black();
 		}
 		
@@ -135,10 +135,6 @@ public abstract class Material {
 		//Store the old values locally
 		RayData rdata = data.getRayData();
 		Ray ray = rdata.getRay();
-	 	//Vector3 oldPoint = ray.getOrigin();
-	 	//Vector3 oldDirection = ray.getDirection();
-		//double oldT0 = rdata.getTStart();
-		//double oldT1 = rdata.getTEnd();
 		
 		//Replace the RayDatas values with the current recursion values
 		ray.setOrigin(point);
@@ -146,10 +142,7 @@ public abstract class Material {
 		rdata.setTStart(RECURSIVE_EPSILON);
 		rdata.setTEnd(Double.MAX_VALUE);
 		
-		//int oldActualRecursionDepth = data.getActualRecursionDepth();
-		//int oldRecursionDepth = data.getRecursionDepth();
-		//double oldRefractiveIndex = data.getRefractiveIndex();
-		
+		//
 		data.setActualRecursionDepth(data.getActualRecursionDepth() + 1);
 		data.setRecursionDepth(data.getRecursionDepth() + (increaseRecurDepth ? 1 : 0) );
 		data.setRefractiveIndex(refractiveIndex);
@@ -158,33 +151,14 @@ public abstract class Material {
 		IntersectionData idata = data.getRootScene().intersects(rdata);
 		
 		
-		
-		//Color resultColor = null;
-		
 		if(idata != null) {
 			data.setIntersectionData(idata);
-			//resultColor = idata.getMaterial().shade(data);
 			return idata.getMaterial().shade(data);
-		}//else{
-			//If there wasn't an intersection, use the sky material
-			data.setIntersectionData(null);
-			//resultColor = data.getRootScene().getSkyMaterial().shade(data);
-			return data.getRootScene().getSkyMaterial().shade(data);
-		//}
+		}
 		
-		
-		//Undo the changes we made to rdata and sdata
-		//data.setActualRecursionDepth(oldActualRecursionDepth);
-		//data.setRecursionDepth(oldRecursionDepth);
-		//data.setRefractiveIndex(oldRefractiveIndex);
-		
-		//ray.setOrigin(oldPoint);
-		//ray.setDirection(oldDirection);
-		//rdata.setTStart(oldT0);
-		//rdata.setTEnd(oldT1);
-		
-		
-		//return resultColor;
+		//If there wasn't an intersection, use the sky material
+		data.setIntersectionData(null);
+		return data.getRootScene().getSkyMaterial().shade(data);
 	}
 	
 	

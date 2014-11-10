@@ -11,7 +11,7 @@ import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
 import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DielectricMaterial;
+import raytrace.material.DielectricPTMaterial;
 import raytrace.material.FresnelDiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
@@ -61,7 +61,7 @@ public class TestScene2 extends Scene
 		//Dielectric Sphere
 		{
 			Sphere sphere = new Sphere();
-			sphere.setMaterial(new DielectricMaterial(new Color(1.0, 0.9, 1.0), 1.30));
+			sphere.setMaterial(new DielectricPTMaterial(new Color(1.0, 0.9, 1.0), 1.30));
 			sphere.setPosition(new Vector3(0, 1, -1));
 			sphere.setRadius(1.0);
 			this.addChild(sphere);
@@ -100,7 +100,7 @@ public class TestScene2 extends Scene
 		
 		
 		//Update bounding boxes
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -111,7 +111,7 @@ public class TestScene2 extends Scene
 		this.addChild(aabvh);
 		
 		//Refresh
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
@@ -146,6 +146,7 @@ public class TestScene2 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
+		super.bake(null);
 	}
 }

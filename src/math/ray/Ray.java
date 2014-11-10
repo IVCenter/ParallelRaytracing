@@ -60,7 +60,7 @@ public class Ray implements Iterable<Ray>, Serializable{
 	 * *********************************************************************************************/
 	public Vector3 evaluateAtTime(double t)
 	{
-		return new Vector3(origin.addMultiRight(direction, t));
+		return origin.addMultiRight(direction, t);
 	}
 	
 	

@@ -124,9 +124,6 @@ public class CSE168_Project3_Scene extends Scene
 		lightManager.addLight(directionalLight);
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
-		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
 		long startTime = System.currentTimeMillis();
@@ -135,8 +132,6 @@ public class CSE168_Project3_Scene extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
@@ -154,7 +149,6 @@ public class CSE168_Project3_Scene extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

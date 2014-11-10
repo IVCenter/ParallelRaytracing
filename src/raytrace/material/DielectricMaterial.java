@@ -2,9 +2,11 @@ package raytrace.material;
 
 import math.Vector3;
 import raytrace.color.Color;
+import raytrace.data.IntersectionData;
 import raytrace.data.ShadingData;
 import raytrace.map.texture.Texture;
 
+@Deprecated
 public class DielectricMaterial extends Material{
 	
 	/*
@@ -39,6 +41,8 @@ public class DielectricMaterial extends Material{
 		//Setup the normal
 		Vector3 normal = data.getIntersectionData().getNormal();
 		
+		//Distance
+		double distance = data.getIntersectionData().getDistance();
 		
 		double DdotN = normal.dot(data.getRay().getDirection());
 		double thisRefractiveIndex = refractiveIndex;
@@ -81,24 +85,28 @@ public class DielectricMaterial extends Material{
 		}
 		
 		
+		
+		IntersectionData idata = data.getIntersectionData();
+		
 		//Get the refractive color
 		Color refractColor = new Color();
-		if(phiDiscrim > 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
+		if(phiDiscrim > 0.0)
 		{
 			Vector3 rayDir = data.getRay().getDirection();
 			Vector3 thetaSide = rayDir.subtract(normal.multiply(DdotN)).multiply(refractiveRatio);
 			Vector3 phiSide = normal.multiply(Math.sqrt(phiDiscrim));
 			Vector3 refracDir = thetaSide.subtract(phiSide);
 			
-			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex);
+			refractColor = recurse(data, point, refracDir, exiting ? AIR_REFRACTIVE_INDEX : refractiveIndex, false);
 		}
 		
 
 		//If reflective, go divin'
 		Color rflectColor = new Color();
-		if(reflectiveCoeff != 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
+		if(reflectiveCoeff != 0.0)
 		{
-			rflectColor = reflect(data, point, normal, exiting ? refractiveIndex : AIR_REFRACTIVE_INDEX);
+			data.setIntersectionData(idata);
+			rflectColor = reflect(data, point, normal, exiting ? refractiveIndex : AIR_REFRACTIVE_INDEX, false);
 		}
 		
 		
@@ -112,11 +120,10 @@ public class DielectricMaterial extends Material{
 		//If the ray is exiting the surface, then apply beers law to all light that was collected recursively
 		if(exiting)
 		{
-			double d = data.getIntersectionData().getDistance();
 			double[] a = tint.getChannels();
-			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * d), 
-										Math.exp(-1.0 * Math.log(a[1]) * d), 
-										Math.exp(-1.0 * Math.log(a[2]) * d));
+			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * distance), 
+										Math.exp(-1.0 * Math.log(a[1]) * distance), 
+										Math.exp(-1.0 * Math.log(a[2]) * distance));
 
 			totalColor = totalColor.multiply3(beerColor);
 		}

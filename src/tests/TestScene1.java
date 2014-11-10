@@ -15,13 +15,13 @@ import raytrace.geometry.meshes.Cube;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DielectricMaterial;
+import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.scene.Scene;
-import raytrace.surfaces.CompositeSurface;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.acceleration.AABVHSurface;
 import system.Configuration;
 
@@ -134,7 +134,7 @@ public class TestScene1 extends Scene {
 		
 		
 		//For big loads, allocate the size we'l need ahead of time
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(11600);
+		ArrayList<AbstractSurface> spheres = new ArrayList<AbstractSurface>(11600);
 		
 		for(int i = 0; i < 10012; i++)
 		{
@@ -148,7 +148,7 @@ public class TestScene1 extends Scene {
 			}else if(rand < 0.0){
 				sphere.setMaterial(new DiffusePTMaterial(Color.gray(0.7 + (Math.random()/2.0 - 0.25))));
 			}else if(rand < 0.0){
-				sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+				sphere.setMaterial(new DielectricPTMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			}else if(rand < 1.0){
 				sphere.setMaterial(new FresnelMetalMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(0.51, 2.0), randInRange(2.01, 5.0)));
 			}else{
@@ -170,7 +170,7 @@ public class TestScene1 extends Scene {
 			
 			//double rand = Math.random();
 			//sphere.setMaterial(new ReflectiveMaterial(Color.random(0.0), Math.random()/2.0 + 0.5));
-			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+			sphere.setMaterial(new DielectricPTMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
 			sphere.setPosition(new Vector3(8 * Math.random() - 4.0, 3 * Math.random(), 6 * Math.random() - 1.0));
@@ -184,7 +184,7 @@ public class TestScene1 extends Scene {
 		//Place a sphere infront of the camera
 		{
 			Sphere sphere = new Sphere();
-			sphere.setMaterial(new DielectricMaterial(Color.white(), 0.85));
+			sphere.setMaterial(new DielectricPTMaterial(Color.white(), 0.85));
 
 			//sphere.setPosition(new Vector4(10 * Math.random() - 5.0, 6 * Math.random(), 10 * Math.random() - 8.0, 0));
 			sphere.setPosition(new Vector3(0.0, 2.0, 4.40));
@@ -238,7 +238,7 @@ public class TestScene1 extends Scene {
 		
 		
 		//Update bounding boxes
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -249,7 +249,7 @@ public class TestScene1 extends Scene {
 		this.addChild(aabvh);
 		
 		//Refresh
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
@@ -292,7 +292,8 @@ public class TestScene1 extends Scene {
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		//this.updateBoundingBox();
+		super.bake(null);
 	}
 
 }

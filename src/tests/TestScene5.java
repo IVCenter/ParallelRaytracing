@@ -17,6 +17,7 @@ import raytrace.light.DirectionalLight;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -61,7 +62,6 @@ public class TestScene5 extends Scene
 			model.getTransform().scale(6.1);
 			model.getTransform().translate(0, 0.5, 2);
 			model.bake(null);
-			model.updateBoundingBox();
 			model.setMaterial(new DiffusePTMaterial(new Color(0xcc1111ff)));
 			this.addChild(model);
 		}else{
@@ -100,7 +100,6 @@ public class TestScene5 extends Scene
 				inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
 			}
 
-			inst.updateBoundingBox();
 			inst.bake(null);
 			cubes.add(inst);
 		}
@@ -112,7 +111,7 @@ public class TestScene5 extends Scene
 		
 		Sphere sphere = new Sphere();
 		int sphereCount = 256;
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(sphereCount + 1);
+		ArrayList<AbstractSurface> spheres = new ArrayList<AbstractSurface>(sphereCount + 1);
 		
 		for(int x = 0; x < sphereCount; ++x)
 		{
@@ -124,7 +123,6 @@ public class TestScene5 extends Scene
 			inst.getTransform().scale(randInRange(3.0, 8.0));
 			double greyBase = 0.70;
 			inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
-			inst.updateBoundingBox();
 			inst.bake(null);
 			spheres.add(inst);
 		}
@@ -142,8 +140,6 @@ public class TestScene5 extends Scene
 		lightManager.addLight(directionalLight);
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -152,8 +148,6 @@ public class TestScene5 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh2);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 
 		//Make a plane
@@ -204,7 +198,6 @@ public class TestScene5 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

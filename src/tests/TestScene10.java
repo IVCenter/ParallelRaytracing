@@ -202,9 +202,6 @@ public class TestScene10 extends Scene
 						new Vector3(0, Math.pow((newPos.get(0) * newPos.get(0) + newPos.get(2) * newPos.get(2)), 2.0) * 0.5, 0)));
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Add more noise!
@@ -222,9 +219,6 @@ public class TestScene10 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Logger.progress(-1, "Tris before [" + mesh.getTriangles().size() + "]");
@@ -237,8 +231,6 @@ public class TestScene10 extends Scene
 		
 		//Accelerate the mesh
 		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles(), 5, 8);
-		accelerated.updateBoundingBox();
-		accelerated.setDynamic(false);
 		
 		
 //		SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
@@ -263,7 +255,6 @@ public class TestScene10 extends Scene
 		instance.getTransform().rotateY(Math.PI/4.0);
 		instance.getTransform().scale(3.0);
 		instance.bake(null);
-		instance.updateBoundingBox();
 		
 		this.addChild(instance);
 		
@@ -283,8 +274,6 @@ public class TestScene10 extends Scene
 		//lightManager.addLight(ambientLight);
 		
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 	}
 	
@@ -305,7 +294,6 @@ public class TestScene10 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

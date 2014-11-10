@@ -171,8 +171,6 @@ public class TestScene11 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -180,9 +178,6 @@ public class TestScene11 extends Scene
 		AABVHSurface aabvh2 = AABVHSurface.makeAABVH(this.getChildren(), 1, 2);
 		this.getChildren().clear();
 		this.addChild(aabvh2);
-		
-		//Refresh
-		this.updateBoundingBox();
 		
 
 		//Make a plane
@@ -211,7 +206,6 @@ public class TestScene11 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 	
@@ -247,7 +241,7 @@ public class TestScene11 extends Scene
 	{
 		activeCamera = new ProgrammableCamera();
 		((ProgrammableCamera)activeCamera).setStratifiedSampling(true);
-		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(10);
+		((ProgrammableCamera)activeCamera).setSuperSamplingLevel(4);
 		activeCamera.setPosition(new Vector3(0,2.8,5.5));
 		activeCamera.setViewingDirection(new Vector3(0.1,-0.15,-1));
 		activeCamera.setUp(new Vector3(0,1,0));
@@ -404,9 +398,6 @@ public class TestScene11 extends Scene
 					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
-				tri.setDynamic(true);
-				tri.updateBoundingBox();
-				tri.setDynamic(false);
 			}
 			
 
@@ -418,9 +409,6 @@ public class TestScene11 extends Scene
 			
 			
 			
-			
-			cube.updateBoundingBox();
-			cube.setDynamic(false);
 			
 			{
 				GradientTexture3D gradient = new GradientTexture3D(Color.black(), Color.white(), 1.0);
@@ -463,9 +451,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(addFrost(new FresnelDiffusePTMaterial(mask1, 0.86, 2.0), 0.5, 1.0));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 				//Material groundMat = addFrost(new FresnelDiffusePTMaterial(mask1, 0.86, 2.0), 0.5, 1.0);
 				//for(Triangle tri : mesh.getTriangles())
@@ -512,9 +498,6 @@ public class TestScene11 extends Scene
 					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
-				tri.setDynamic(true);
-				tri.updateBoundingBox();
-				tri.setDynamic(false);
 			}
 			
 			
@@ -524,9 +507,6 @@ public class TestScene11 extends Scene
 			
 			
 			
-			
-			cube.updateBoundingBox();
-			cube.setDynamic(false);
 			
 			{
 				//GradientTexture3D gradient = new GradientTexture3D(, Color.white(), 1.0);
@@ -541,9 +521,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(new DielectricPTMaterial(new Color(1.02, 1.018, 1.015), 1.91, 0.1));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 				
 				//MeshSurface.removeMeshReference(mesh.getSurfaceID());
@@ -627,10 +605,7 @@ public class TestScene11 extends Scene
 					rock.getTransform().translate(0, -0.8, 0);
 				}
 				
-				rock.setDynamic(true);
-				rock.updateBoundingBox();
 				rock.bake(null);
-				rock.setDynamic(false);
 				this.addChild(rock);
 			}
 		}
@@ -731,9 +706,6 @@ public class TestScene11 extends Scene
 					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
-				tri.setDynamic(true);
-				tri.updateBoundingBox();
-				tri.setDynamic(false);
 			}
 			
 
@@ -742,9 +714,6 @@ public class TestScene11 extends Scene
 			
 			
 			
-			
-			cube.updateBoundingBox();
-			cube.setDynamic(false);
 			
 			{
 				GradientTexture3D gradient = new GradientTexture3D(Color.black(), Color.white(), 1.0);
@@ -809,9 +778,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(frostline);
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 		}
@@ -848,9 +815,6 @@ public class TestScene11 extends Scene
 				vert.setPosition(pos.multiply(multi));
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Synchronize vertices
@@ -875,9 +839,6 @@ public class TestScene11 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		if(smooth)
@@ -885,9 +846,6 @@ public class TestScene11 extends Scene
 		
 		CompositeSurface cube = AABVHSurface.makeAABVH(mesh.getTriangles());
 		
-		
-		cube.updateBoundingBox();
-		cube.setDynamic(false);
 	
 	
 		/*
@@ -917,9 +875,7 @@ public class TestScene11 extends Scene
 		//inst.setMaterial(new DiffuseMaterial(Color.white()));
 		inst.setMaterial(material);
 
-		inst.updateBoundingBox();
 		inst.bake(null);
-		inst.setDynamic(false);
 	
 		return inst;
 	}
@@ -953,9 +909,6 @@ public class TestScene11 extends Scene
 				vert.setPosition(pos.multiply(multi));
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Synchronize vertices
@@ -980,9 +933,6 @@ public class TestScene11 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//double maxLength = 0.15;
@@ -1010,8 +960,6 @@ public class TestScene11 extends Scene
 		
 		
 		
-		cube.updateBoundingBox();
-		cube.setDynamic(false);
 		
 		{
 			/*
@@ -1072,9 +1020,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(new DiffusePTMaterial(gradientTrans));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 			
@@ -1103,9 +1049,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(new DiffusePTMaterial(gradientTrans));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 			
@@ -1134,9 +1078,7 @@ public class TestScene11 extends Scene
 				inst.setMaterial(new DiffusePTMaterial(gradientTrans));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 		}
@@ -1174,9 +1116,6 @@ public class TestScene11 extends Scene
 						);
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Add mode noise!
@@ -1194,9 +1133,6 @@ public class TestScene11 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 
 		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
@@ -1206,8 +1142,6 @@ public class TestScene11 extends Scene
 		
 		
 		
-		accelerated.updateBoundingBox();
-		accelerated.setDynamic(false);
 		
 		/*
 		SphericalGradientTexture3D gradient = new SphericalGradientTexture3D(
@@ -1252,7 +1186,6 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(2.0);
 			instance.getTransform().translate(4.8, 0, -1);
 			instance.bake(null);
-			instance.updateBoundingBox();
 			
 			//Add fruit
 			this.addChild(instance);
@@ -1276,7 +1209,6 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(0.9);
 			instance.getTransform().translate(2.9, 0.4, 2.2);
 			instance.bake(null);
-			instance.updateBoundingBox();
 			
 			//Add fruit
 			this.addChild(instance);
@@ -1293,7 +1225,6 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(0.4);
 			instance.getTransform().translate(1.5, 0.4, 2.1);
 			instance.bake(null);
-			instance.updateBoundingBox();
 			
 			//Add fruit
 			this.addChild(instance);
@@ -1315,9 +1246,7 @@ public class TestScene11 extends Scene
 				trans.addChild(cyl);
 				trans.getTransform().translate(x*2, 0, z*2);
 
-				trans.updateBoundingBox();
 				trans.bake(null);
-				trans.setDynamic(false);
 				this.addChild(trans);
 			}
 		}
@@ -1336,10 +1265,7 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(0.18);
 			instance.getTransform().translate(-2.0, -0.34, 0.8);
 			
-			instance.setDynamic(true);
-			instance.updateBoundingBox();
 			instance.bake(null);
-			instance.setDynamic(false);
 			
 			this.addChild(instance);
 		}
@@ -1351,10 +1277,7 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(0.15);
 			instance.getTransform().translate(-2.4, -0.28, 0.35);
 			
-			instance.setDynamic(true);
-			instance.updateBoundingBox();
 			instance.bake(null);
-			instance.setDynamic(false);
 			
 			this.addChild(instance);
 		}
@@ -1366,10 +1289,7 @@ public class TestScene11 extends Scene
 			instance.getTransform().scale(0.12);
 			instance.getTransform().translate(-2.0, -0.20, 0.05);
 			
-			instance.setDynamic(true);
-			instance.updateBoundingBox();
 			instance.bake(null);
-			instance.setDynamic(false);
 			
 			this.addChild(instance);
 		}
@@ -1382,10 +1302,7 @@ public class TestScene11 extends Scene
 			instance.getTransform().translate(-2.5, -0.30, -1.8);
 			instance.getTransform().rotateY(Math.PI/2.0);
 			
-			instance.setDynamic(true);
-			instance.updateBoundingBox();
 			instance.bake(null);
-			instance.setDynamic(false);
 			
 			this.addChild(instance);
 		}
@@ -1417,9 +1334,6 @@ public class TestScene11 extends Scene
 				vert.setPosition(newPos);
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Add mode noise!
@@ -1438,9 +1352,6 @@ public class TestScene11 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 
 		//mesh.tessellateMeshByTriangleLongestSideConstraint(0.05);
@@ -1448,7 +1359,6 @@ public class TestScene11 extends Scene
 		CompositeSurface accelerated = AABVHSurface.makeAABVH(mesh.getTriangles());
 		
 		
-		accelerated.updateBoundingBox();
 		//accelerated.setDynamic(false);
 		
 		
@@ -1471,10 +1381,7 @@ public class TestScene11 extends Scene
 		instance.getTransform().nonUniformScale(2.0, 1.0, 1.0);
 		instance.getTransform().scale(1.0);
 		
-		instance.setDynamic(true);
-		instance.updateBoundingBox();
 		instance.bake(null);
-		instance.setDynamic(false);
 		
 		return instance;
 	}

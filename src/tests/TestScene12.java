@@ -98,10 +98,7 @@ public class TestScene12 extends Scene
 			
 			dragon.getTransform().scale(0.18);//was 0.1
 			dragon.getTransform().translate(0.0, 0.055, -0.2);//was -0.3 in z
-			dragon.setDynamic(true);
-			dragon.updateBoundingBox();
 			dragon.bake(null);
-			dragon.setDynamic(false);
 			dragon.setMaterial(ssmat);
 			this.addChild(dragon);
 		}
@@ -115,8 +112,6 @@ public class TestScene12 extends Scene
 		lightManager.addLight(directionalLight);
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -126,8 +121,6 @@ public class TestScene12 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
@@ -140,10 +133,7 @@ public class TestScene12 extends Scene
 	{
 		do{
 			dragon.getTransform().rotateY(data.getDt() * Math.PI);
-			dragon.setDynamic(true);
-			dragon.updateBoundingBox();
 			dragon.bake(null);
-			dragon.setDynamic(false);
 			
 			ssmat.setScatterCoeff(sslevel);
 			
@@ -165,7 +155,6 @@ public class TestScene12 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

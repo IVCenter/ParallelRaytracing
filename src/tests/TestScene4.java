@@ -22,6 +22,7 @@ import raytrace.light.PointLight;
 import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
+import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
 import raytrace.material.FresnelMetalMaterial;
@@ -32,6 +33,7 @@ import raytrace.material.blend.binary.SelectDarkestBBlend;
 import raytrace.material.blend.unary.TwoToneNPRUBlend;
 import raytrace.material.composite.RecursionMinimumCMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -116,11 +118,11 @@ public class TestScene4 extends Scene
 	
 		
 
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(64);
+		ArrayList<AbstractSurface> spheres = new ArrayList<AbstractSurface>(64);
 		for(int i = 0; i < 64; i++)
 		{
 			Sphere sphere = new Sphere();
-			sphere.setMaterial(new DielectricMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+			sphere.setMaterial(new DielectricPTMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
 			sphere.setPosition(new Vector3(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0));
 			sphere.setRadius(Math.pow(Math.random() * 0.3, 1.15));
 			spheres.add(sphere);
@@ -213,8 +215,6 @@ public class TestScene4 extends Scene
 		//lightManager.addLight(ambientLight);
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		
 		//Add a plane to the scene
@@ -251,7 +251,6 @@ public class TestScene4 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

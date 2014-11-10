@@ -16,6 +16,7 @@ import raytrace.material.DiffuseMaterial;
 import raytrace.material.SkyGradientMaterial;
 import raytrace.material.composite.RecursionMinimumCMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -58,7 +59,7 @@ public class TestScene3 extends Scene
 		
 		//Color Spheres
 		int size = 10;
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(size * size * size + 1);
+		ArrayList<AbstractSurface> spheres = new ArrayList<AbstractSurface>(size * size * size + 1);
 		
 		for(int x = -size/2; x < size/2; ++x)
 			for(int y = -size/2; y < size/2; ++y)
@@ -68,18 +69,14 @@ public class TestScene3 extends Scene
 					sphere.setMaterial(new DiffuseMaterial(Color.random()));
 					sphere.setPosition(new Vector3(x, y, z));
 					sphere.setRadius(0.50);
-					sphere.updateBoundingBox();
-					sphere.setDynamic(false);
 					spheres.add(sphere);
 				}
 		
 		CompositeSurface sphereAABVH = AABVHSurface.makeAABVH(spheres);
-		sphereAABVH.updateBoundingBox();
-		sphereAABVH.setDynamic(false);
 		
 		
 		int blockSize = 10;
-		ArrayList<CompositeSurface> blocks = new ArrayList<CompositeSurface>(blockSize * blockSize * blockSize + 1);
+		ArrayList<AbstractSurface> blocks = new ArrayList<AbstractSurface>(blockSize * blockSize * blockSize + 1);
 		
 		for(int x = -blockSize/2; x < blockSize/2; ++x)
 			for(int y = -blockSize/2; y < blockSize/2; ++y)
@@ -88,7 +85,6 @@ public class TestScene3 extends Scene
 					Instance inst = new Instance();
 					inst.addChild(sphereAABVH);
 					inst.getTransform().translate(x * size * (Math.random()+1), y * size * (Math.random()+1), z * size * (Math.random()+1));
-					inst.updateBoundingBox();
 					inst.bake(null);
 					//inst.setDynamic(false);
 					blocks.add(inst);
@@ -108,8 +104,6 @@ public class TestScene3 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -119,8 +113,6 @@ public class TestScene3 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
@@ -140,7 +132,6 @@ public class TestScene3 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

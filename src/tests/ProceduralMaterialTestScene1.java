@@ -315,9 +315,6 @@ public class ProceduralMaterialTestScene1 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
-		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
 		long startTime = System.currentTimeMillis();
@@ -325,9 +322,6 @@ public class ProceduralMaterialTestScene1 extends Scene
 		AABVHSurface aabvh = AABVHSurface.makeAABVH(this.getChildren(), 1, 2);
 		this.getChildren().clear();
 		this.addChild(aabvh);
-		
-		//Refresh
-		this.updateBoundingBox();
 		
 		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
@@ -345,7 +339,6 @@ public class ProceduralMaterialTestScene1 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

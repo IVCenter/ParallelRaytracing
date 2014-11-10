@@ -77,7 +77,6 @@ public class TestScene7 extends Scene
 			inst.getTransform().scale(0.35);
 			inst.getTransform().translate(0, 4, -1);
 			inst.bake(null);
-			inst.updateBoundingBox();
 			this.addChild(inst);
 		}
 		
@@ -90,7 +89,6 @@ public class TestScene7 extends Scene
 			inst.getTransform().translate(0.0, 2.0, 0.0);
 			inst.setMaterial(new DiffusePTMaterial(Color.gray(0.9)));
 			inst.bake(null);
-			inst.updateBoundingBox();
 			this.addChild(inst);
 		}
 		
@@ -127,6 +125,6 @@ public class TestScene7 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
+		super.bake(data);
 	}
 }

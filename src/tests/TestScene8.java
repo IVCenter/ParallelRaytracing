@@ -104,8 +104,6 @@ public class TestScene8 extends Scene
 		
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -114,8 +112,6 @@ public class TestScene8 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh2);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 
 		//Make a plane
@@ -146,7 +142,6 @@ public class TestScene8 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 	
@@ -314,9 +309,6 @@ public class TestScene8 extends Scene
 					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
-				tri.setDynamic(true);
-				tri.updateBoundingBox();
-				tri.setDynamic(false);
 			}
 			
 			
@@ -325,8 +317,6 @@ public class TestScene8 extends Scene
 			
 			
 			
-			cube.updateBoundingBox();
-			cube.setDynamic(false);
 			
 			{
 				GradientTexture3D gradient = new GradientTexture3D(Color.black(), Color.white(), 1.0);
@@ -367,9 +357,7 @@ public class TestScene8 extends Scene
 				inst.setMaterial(addFrost(new FresnelDiffusePTMaterial(mask1, 0.5, 2.0), 0.6));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 	
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 		}
@@ -408,9 +396,6 @@ public class TestScene8 extends Scene
 					vert.setPosition(pos.add(multi));
 				}
 				tri.generateFaceNormal();
-				tri.setDynamic(true);
-				tri.updateBoundingBox();
-				tri.setDynamic(false);
 			}
 			
 			
@@ -419,8 +404,6 @@ public class TestScene8 extends Scene
 			
 			
 			
-			cube.updateBoundingBox();
-			cube.setDynamic(false);
 			
 			{
 				//GradientTexture3D gradient = new GradientTexture3D(, Color.white(), 1.0);
@@ -435,9 +418,7 @@ public class TestScene8 extends Scene
 				inst.setMaterial(new DielectricPTMaterial(new Color(1.02, 1.018, 1.015), 1.31, 0.1));
 				//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
-				inst.updateBoundingBox();
 				inst.bake(null);
-				inst.setDynamic(false);
 				this.addChild(inst);
 			}
 		}
@@ -506,9 +487,6 @@ public class TestScene8 extends Scene
 				vert.setPosition(pos.multiply(multi));
 			}
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//Synchronize vertices
@@ -533,9 +511,6 @@ public class TestScene8 extends Scene
 		for(Triangle tri : mesh.getTriangles())
 		{
 			tri.generateFaceNormal();
-			tri.setDynamic(true);
-			tri.updateBoundingBox();
-			tri.setDynamic(false);
 		}
 		
 		//double maxLength = 0.15;
@@ -563,8 +538,6 @@ public class TestScene8 extends Scene
 		
 		
 		
-		cube.updateBoundingBox();
-		cube.setDynamic(false);
 		
 		{
 			/*
@@ -590,9 +563,7 @@ public class TestScene8 extends Scene
 			inst.setMaterial(new DiffusePTMaterial(gradientTrans));
 			//inst.setMaterial(new DiffuseMaterial(Color.white()));
 
-			inst.updateBoundingBox();
 			inst.bake(null);
-			inst.setDynamic(false);
 			this.addChild(inst);
 		}
 		

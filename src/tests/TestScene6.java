@@ -53,6 +53,7 @@ import raytrace.material.blend.unary.FullySaturateUBlend;
 import raytrace.material.blend.unary.GrayscaleUBlend;
 import raytrace.material.composite.NormalMapCMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -262,7 +263,6 @@ public class TestScene6 extends Scene
 			inst.getTransform().scale(1.5);
 			//inst.getTransform().rotateX(1);
 			
-			inst.updateBoundingBox();
 			inst.bake(null);
 			this.addChild(inst);
 		}
@@ -271,7 +271,7 @@ public class TestScene6 extends Scene
 
 		Cube cube = new Cube(1.0, 1.0, 1.0);		
 		int cubeCount = 2480;
-		ArrayList<CompositeSurface> cubes = new ArrayList<CompositeSurface>(cubeCount + 1);
+		ArrayList<AbstractSurface> cubes = new ArrayList<AbstractSurface>(cubeCount + 1);
 		
 		for(int x = 0; x < cubeCount; ++x)
 		{
@@ -289,7 +289,6 @@ public class TestScene6 extends Scene
 			double greyBase = 0.30;
 			inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
 
-			inst.updateBoundingBox();
 			inst.bake(null);
 			cubes.add(inst);
 		}
@@ -301,7 +300,7 @@ public class TestScene6 extends Scene
 		
 		Sphere sphere = new Sphere();
 		int sphereCount = 256;
-		ArrayList<CompositeSurface> spheres = new ArrayList<CompositeSurface>(sphereCount + 1);
+		ArrayList<AbstractSurface> spheres = new ArrayList<AbstractSurface>(sphereCount + 1);
 		
 		for(int x = 0; x < sphereCount; ++x)
 		{
@@ -313,7 +312,6 @@ public class TestScene6 extends Scene
 			inst.getTransform().scale(randInRange(3.0, 8.0));
 			double greyBase = 0.70;
 			inst.setMaterial(new DiffusePTMaterial(Color.gray(greyBase + (1.0 - greyBase) * Math.random())));
-			inst.updateBoundingBox();
 			inst.bake(null);
 			spheres.add(inst);
 		}
@@ -341,14 +339,11 @@ public class TestScene6 extends Scene
 			cylInst.setMaterial(new DiffusePTMaterial(new Color(0.6, 0.6, 0.6)));
 			cylInst.getTransform().translate(0, 2.0, 0.0);
 			cylInst.getTransform().rotateX(1);
-			cylInst.updateBoundingBox();
 			cylInst.bake(null);
 			//this.addChild(cylInst);
 		}
 		
 		
-		//Update bounding boxes
-		this.updateBoundingBox();
 		
 		//BVH TESTS
 		Logger.progress(-1, "Starting creating a BVH for root surface...");
@@ -357,8 +352,6 @@ public class TestScene6 extends Scene
 		this.getChildren().clear();
 		this.addChild(aabvh2);
 		
-		//Refresh
-		this.updateBoundingBox();
 		
 
 		//Make a plane
@@ -375,7 +368,6 @@ public class TestScene6 extends Scene
 			cylInst.setMaterial(new DiffusePTMaterial(new Color(0.9, 0.6, 0.6)));
 			cylInst.getTransform().translate(0, 2.0, 0.0);
 			cylInst.getTransform().rotateX(1);
-			cylInst.updateBoundingBox();
 			cylInst.bake(null);
 			//this.addChild(cylInst);
 		}
@@ -442,7 +434,6 @@ public class TestScene6 extends Scene
 	public void bake(BakeData data)
 	{
 		//TODO: This may be costly
-		this.updateBoundingBox();
 		super.bake(data);
 	}
 }

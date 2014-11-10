@@ -53,6 +53,8 @@ public class DielectricPTMaterial extends Material{
 		//Ray Direction
 		Vector3 rayDir = (new Vector3(data.getRay().getDirection())).normalizeM();
 		
+		//Distance
+		double distance = data.getIntersectionData().getDistance();
 		
 		double DdotN = normal.dot(rayDir);
 		double thisRefractiveIndex = refractiveIndex;
@@ -138,11 +140,10 @@ public class DielectricPTMaterial extends Material{
 		//If the ray is exiting the surface, then apply beers law to all light that was collected recursively
 		if(exiting)
 		{
-			double d = data.getIntersectionData().getDistance();
 			double[] a = tint.getChannels();
-			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * d), 
-										Math.exp(-1.0 * Math.log(a[1]) * d), 
-										Math.exp(-1.0 * Math.log(a[2]) * d));
+			Color beerColor = new Color(Math.exp(-1.0 * Math.log(a[0]) * distance), 
+										Math.exp(-1.0 * Math.log(a[1]) * distance), 
+										Math.exp(-1.0 * Math.log(a[2]) * distance));
 
 			recursionColor = recursionColor.multiply3(beerColor);
 		}

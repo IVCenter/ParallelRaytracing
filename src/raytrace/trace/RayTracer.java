@@ -57,9 +57,6 @@ public class RayTracer implements Tracer {
 				//Set the current ray
 				ray.setRandomValue(Math.random());
 				rdata.setRay(ray);
-				rdata.clear();
-				sdata.clear();
-				//sdata.setRay(ray); //Removed: RayData now handles the ray object for ShadingData
 				
 				//Get the ray-scene intersection data
 				idata = scene.intersects(rdata);
@@ -79,6 +76,10 @@ public class RayTracer implements Tracer {
 					//Shade the pixel using the sky material
 					color.add3M(skyMaterial.shade(sdata));
 				}
+
+				//Clear the data objects
+				rdata.clear();
+				sdata.clear();
 			}
 			
 			//If the camera is dirty stop rendering
@@ -86,6 +87,7 @@ public class RayTracer implements Tracer {
 				Logger.progress(-1, "RayTracer: Detected a dirty camera, cancelling rendering.");
 				break;
 			}
+			
 			
 			//Set the final color
 			color.multiply3M(1.0 / rayCount);

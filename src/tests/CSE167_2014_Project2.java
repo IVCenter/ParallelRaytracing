@@ -120,7 +120,7 @@ public class CSE167_2014_Project2 extends Scene
 		
 		camera = new ProgrammableCamera();
 		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(8);
+		camera.setSuperSamplingLevel(6);
 		camera.setPosition(new Vector3(0,2.85,3));
 		camera.setViewingDirection(new Vector3(0,-0.1,-1));
 		camera.setUp(new Vector3(0,1,0));
