@@ -63,8 +63,9 @@ public class Constants {
 		
 		public static final String Diffuse_Glass_TEST = KEYS.addKey("Diffuse_Glass_Test");
 		
-		
 		public static final String VoxelTest1 = KEYS.addKey("VoxelTest1");
+		
+		public static final String CSE165_2015_DataSmoothingDiagrams = KEYS.addKey("CSE165_2015_DataSmoothingDiagrams");
 	}
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

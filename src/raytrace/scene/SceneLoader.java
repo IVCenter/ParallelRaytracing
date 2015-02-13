@@ -3,6 +3,7 @@ package raytrace.scene;
 import java.util.HashMap;
 
 import system.Constants;
+import tests.CSE165_2015_DataSmoothingDiagrams;
 import tests.CSE167_2014_Project2;
 import tests.CSE168_Project1_Scene;
 import tests.CSE168_Project2_Scene;
@@ -227,6 +228,15 @@ public class SceneLoader {
 			public Scene load() {
 				Scene scene = new VoxelTest1();
 				scene.setSceneKey(Constants.SceneKeys.VoxelTest1);
+				return scene;
+			}
+		});
+		
+		sceneConstructors.put(Constants.SceneKeys.CSE165_2015_DataSmoothingDiagrams, new SceneConstructor(){
+			@Override
+			public Scene load() {
+				Scene scene = new CSE165_2015_DataSmoothingDiagrams();
+				scene.setSceneKey(Constants.SceneKeys.CSE165_2015_DataSmoothingDiagrams);
 				return scene;
 			}
 		});

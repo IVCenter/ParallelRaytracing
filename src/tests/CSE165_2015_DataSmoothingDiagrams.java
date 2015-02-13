@@ -20,6 +20,7 @@ import raytrace.camera.aperture.CircularAperture;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
+import raytrace.framework.Surface;
 import raytrace.framework.Tracer;
 import raytrace.geometry.Plane;
 import raytrace.geometry.Sphere;
@@ -49,7 +50,6 @@ import raytrace.map.texture._3D.blend.OneMinusT3DBlend;
 import raytrace.map.texture._3D.blend.SubtractiveT3DBlend;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DielectricMaterial;
 import raytrace.material.DielectricPTMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.DiffusePTMaterial;
@@ -59,13 +59,13 @@ import raytrace.material.Material;
 import raytrace.material.ReflectiveMaterial;
 import raytrace.material.SkyGradientMaterial;
 import raytrace.material.SubSurfaceDiffusePTTestMaterial;
-import raytrace.material.SubsurfaceScatterPTMaterial;
 import raytrace.material.blend.binary.PosterMaskBBlend;
 import raytrace.material.blend.binary.SelectDarkestBBlend;
 import raytrace.material.blend.unary.MultiplicativeUBlend;
 import raytrace.material.blend.unary.TwoToneNPRUBlend;
 import raytrace.material.composite.RecursionMinimumCMaterial;
 import raytrace.scene.Scene;
+import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -75,10 +75,10 @@ import raytrace.trace.RayTracer;
 import resource.ResourceManager;
 import system.Configuration;
 
-public class CSE167_2014_Project2 extends Scene
+public class CSE165_2015_DataSmoothingDiagrams extends Scene
 {	
 	/*
-	 * A simple test scene for cse167 project2 inspirations (2014)
+	 * A simple scene for cse165 project2 that generates diagrams of the affects of smoothing/de-noising (2015)
 	 */
 
 	/* *********************************************************************************************
@@ -101,19 +101,18 @@ public class CSE167_2014_Project2 extends Scene
 		
 		//Pixel Transform Tracer
 		ProgrammablePixelTracer pixeler = new ProgrammablePixelTracer();
-		pixeler.addTransform(new ColorInversionPT());
-		//tracers.add(pixeler);
+	tracers.add(pixeler);
 		
 		
 		//Outline Tracer
 		OutlineTracer outliner = new OutlineTracer();
-		outliner.setStencil(new CircularRayStencil(0.002, 3, 24));
-		outliner.setCreaseTexture(new Color(0xffffffff));
-		outliner.setOcclusionTexture(new Color(0xffffffff));
-		outliner.setSilhouetteTexture(new Color(0xffffffff));
+		outliner.setStencil(new CircularRayStencil(0.001, 3, 24));
+		outliner.setCreaseTexture(new Color(0x222222ff));
+		outliner.setOcclusionTexture(new Color(0x222222ff));
+		outliner.setSilhouetteTexture(new Color(0x222222ff));
 		outliner.setDepthThreshold(0.005);
 		outliner.setNormalThreshold(0.1);
-		//tracers.add(outliner);
+		tracers.add(outliner);
 		
 		return tracers;
 	}
@@ -129,15 +128,15 @@ public class CSE167_2014_Project2 extends Scene
 		
 		camera = new ProgrammableCamera();
 		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(1);
-		camera.setPosition(new Vector3(0,2.85,3));
-		camera.setViewingDirection(new Vector3(0,-0.1,-1));
+		camera.setSuperSamplingLevel(4);
+		camera.setPosition(new Vector3(0,0,3));
+		camera.setViewingDirection(new Vector3(0,0,-1));
 		camera.setUp(new Vector3(0,1,0));
 		camera.setFieldOfView(Math.PI/2.3);
 		camera.setPixelWidth(Configuration.getScreenWidth());
 		camera.setPixelHeight(Configuration.getScreenHeight());
 		camera.setAperture(new CircularAperture(0.02, 0.4));
-		camera.setFocalPlaneDistance(7.2);
+		camera.setFocalPlaneDistance(3.0);
 		
 		return camera;
 	}
@@ -149,14 +148,7 @@ public class CSE167_2014_Project2 extends Scene
 	@Override
 	protected Material configureSkyMaterial()
 	{				
-		Material skyMaterial = new ColorMaterial(Color.black());
-		/*
-		skyMaterial = new RecursionMinimumCMaterial(
-				new SkyGradientMaterial(new GradientTexture3D(new Color(0xddeeffff), new Color(0xddeeffff))),
-				new ColorMaterial(Color.black()),
-				1
-				);
-		*/
+		Material skyMaterial = new ColorMaterial(Color.white());
 		return skyMaterial;
 	}
 	
@@ -164,108 +156,30 @@ public class CSE167_2014_Project2 extends Scene
 	/* *********************************************************************************************
 	 * World
 	 * *********************************************************************************************/
-	Instance cloud;
-	ArrayList<PointSurface> points;
-	PointLight pointLight;
-	Color lightColor;
 	@Override
 	protected void configureWorld()
 	{
-		//Point light
+		//Generate data points
+		//Animate the data stream and algorithm
+		
+		ColorMaterial cmat = new ColorMaterial(new Color(0x666666ff));
+		Sphere s;
+		ArrayList<AbstractSurface> surfaces = new ArrayList<AbstractSurface>();
+		
+		for(int i = 0; i < 100; ++i)
 		{
-			pointLight = new PointLight();
-			pointLight.setColor(Color.white());
-			pointLight.setIntensity(36.14159);//was 36
-			pointLight.setQuadraticAttenuation(1.0);
-			pointLight.setConstantAttenuation(0.0);
-			pointLight.setPosition(new Vector3(-2.0, 6.0, -1.5));
-			lightManager.addLight(pointLight);
-			lightColor = pointLight.getColor().multiply3(pointLight.getIntensity());
+			s = new Sphere(0.03, (Vector3.uniformSphereSample()).multiplyM(3.0).multiplyM(new Vector3(1, 1, 0)));
+			s.setMaterial(cmat);
+			surfaces.add(s);
 		}
 		
 		
-		//Point Cloud
-		cloud = ResourceManager.create("dragon.xyz");//dragon.xyz
+		AbstractSurface accel = AABVHSurface.makeAABVH(surfaces);
 		
-		if(cloud != null) {
-			cloud.getTransform().scale(30.0);//ia
-			//cloud.getTransform().scale(4.0);
-			//cloud.getTransform().scale(0.1);//ia
-
-			cloud.getTransform().translate(0, 0, -4.2);
-			cloud.getTransform().rotateY(0.15);
-			cloud.bake(null);
-
-			//Place the cloud on the ground
-			BoundingBox bb = cloud.getBoundingBox();
-			cloud.getTransform().translate(-1.0 * bb.getMidpoint().get(0), -1.0 * bb.min.get(1), 0);
-			cloud.bake(null);
-			
-			
-			//Set colors	
-			/*
-			points = ((PointCloudSurface)cloud.getChildren().get(0)).getPointSurfaces();
-			for(PointSurface point : points)
-			{
-				Vector3 norm = new Vector3(point.getPoint().getNormal());
-				//Vector3 norm = new Vector3(point.getPoint().getPosition());
-				norm.normalizeM();
-				if(norm.magnitude() == 0.0)
-				{
-					//point.setMaterial(new ColorMaterial(new Color(norm.get(0), norm.get(1), norm.get(2))));
-				}
-				else
-				{
-					//point.setMaterial(new DiffusePTMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
-					//point.setMaterial(new ColorMaterial(new Color(norm.get(0) / 2.0 + 0.5, norm.get(1) / 2.0 + 0.5, norm.get(2) / 2.0 + 0.5)));
-				}
-				
-				/*
-				point.setMaterial(new ColorMaterial(diffuseLighting(
-						pointLight.getPosition(), 
-						inv.multiplyPt(point.getPosition()), 
-						inv.multiply3(norm).normalizeM(), 
-						lightColor, 
-						gradientTrans.evaluate(point.getPosition().get(0), point.getPosition().get(1), point.getPosition().get(2)))));
-				*
-				point.setSurfaceID(cloud.getSurfaceID());
-			}
-		*/
-
-			cloud.setMaterial(new DiffuseMaterial(Color.gray(1.0)));
-			
-			this.addChild(cloud);
-		}else{
-			Logger.error(-13, "CSE167_2014_Project2: Cloud was null!");
-		}
+		this.addChild(accel);
 		
 	}
 	
-	private Color diffuseLighting(Vector3 lightPos, Vector3 objPos, Vector3 normal, Color lightColor, Color objColor)
-	{
-		Color result = new Color();
-		
-		final double oneOverPi = 1.0 / Math.PI; 
-		Vector3 toLight = lightPos.subtract(objPos);
-		double distToLight = toLight.magnitude();
-
-		toLight.normalizeM();
-		
-		if(toLight.magnitudeSqrd() == 0.0)
-			return lightColor.multiply3(1.0);
-
-		double dot = normal.dot(toLight);
-		
-		if(dot <= 0.0)
-			return Color.black();
-		
-		result.add3M(lightColor);
-		result.multiply3M(1.0 / (distToLight * distToLight));
-		result.multiply3M( dot * oneOverPi );
-		result.multiply3M(objColor);
-		
-		return result;
-	}
 	
 	private double randInRange(double min, double max)
 	{
@@ -277,9 +191,8 @@ public class CSE167_2014_Project2 extends Scene
 	public void update(UpdateData data)
 	{
 		elapsed += data.getDt();
-
-		//
-		cloud.getTransform().rotateY(data.getDt() * (Math.PI/3.0));
+		
+		
 		
 		//Update the children
 		super.update(data);
