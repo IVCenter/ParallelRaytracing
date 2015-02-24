@@ -23,6 +23,7 @@ import input.DefaultKeyboard;
 import input.Keyboard;
 import process.Job;
 import raster.PixelBuffer;
+import raster.RenderBuffer;
 import raster.ScreenDrawer;
 import raytrace.AnimationRenderer;
 import raytrace.ConfigurableRayTracingRenderer;
@@ -60,6 +61,7 @@ public class ApplicationDelegate extends Job{
 	
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
+	protected RenderBuffer renderBuffer;
 	protected Keyboard keyboard;
 	
 	protected Renderer renderer;
@@ -171,6 +173,7 @@ public class ApplicationDelegate extends Job{
 			screenDrawer.setMsPerFrame(1000/12);
 			
 			pixelBuffer = screenDrawer.getPixelBuffer();
+			renderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			
 			keyboard = Configuration.getKeyboard();
 			if(keyboard == null) {
@@ -180,6 +183,7 @@ public class ApplicationDelegate extends Job{
 			
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			renderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 		}
 	}
 	
@@ -323,7 +327,9 @@ public class ApplicationDelegate extends Job{
 
 			//update the render data
 			rdata.setPixelBuffer(pixelBuffer);
+			rdata.setRenderBuffer(renderBuffer);
 			rdata.setScene(Configuration.getMasterScene());
+			rdata.setCamera(Configuration.getMasterScene().getActiveCamera());
 			
 			//render
 			renderer.render(rdata);
@@ -424,6 +430,14 @@ public class ApplicationDelegate extends Job{
 
 	public void setPixelBuffer(PixelBuffer pixelBuffer) {
 		this.pixelBuffer = pixelBuffer;
+	}
+	
+	public RenderBuffer getRenderBuffer() {
+		return renderBuffer;
+	}
+
+	public void setRenderBuffer(RenderBuffer renderBuffer) {
+		this.renderBuffer = renderBuffer;
 	}
 
 	public Keyboard getKeyboard() {

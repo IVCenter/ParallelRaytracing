@@ -7,14 +7,16 @@ import math.ray.Ray;
 import raster.PixelBuffer;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
+import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
-import raytrace.scene.Scene;
 
 public class MedianTracer implements Tracer {
 	
 	/*
 	 * A tracer for passing a median filter over a pixel buffer
 	 * Used to reduce salt and pepper noise in low sample renders
+	 * 
+	 * TODO: Update the use the render buffer
 	 */
 
 	/* *********************************************************************************************
@@ -55,8 +57,11 @@ public class MedianTracer implements Tracer {
 	 * Configuration
 	 * *********************************************************************************************/
 	@Override
-	public void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene)
+	public void trace(RenderData data)
 	{
+		PixelBuffer pixelBuffer = data.getPixelBuffer(); 
+		Camera camera = data.getCamera();
+		
 		//Pixels
 		int[] target = pixelBuffer.getPixels();
 		int[] source = null;

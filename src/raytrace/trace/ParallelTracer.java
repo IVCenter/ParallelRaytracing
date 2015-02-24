@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import process.logging.Logger;
-import raster.PixelBuffer;
 import raytrace.camera.Camera;
+import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
-import raytrace.scene.Scene;
+import system.Configuration;
 
 public abstract class ParallelTracer implements Tracer {
 	
@@ -47,10 +47,11 @@ public abstract class ParallelTracer implements Tracer {
 	
 	//TODO: Find a better way to get this data to the tracers
 	//NOTE: These change every call to trace
-	protected PixelBuffer activePixelBuffer;
+	//protected PixelBuffer activePixelBuffer;
 	//@SuppressWarnings("unused")
-	protected Camera activeCamera;
-	protected Scene activeScene;
+	//protected Camera activeCamera;
+	//protected Scene activeScene;
+	protected RenderData rdata;
 	
 	
 
@@ -59,8 +60,8 @@ public abstract class ParallelTracer implements Tracer {
 	 * *********************************************************************************************/
 	public ParallelTracer()
 	{
-		int cores = Runtime.getRuntime().availableProcessors();
-		//cores = 1;
+		//Set the number of core to the minimum of the avialble cores, or the configuration maximum
+		int cores = Math.min(Configuration.getMaxAllowableRenderingCores(), Runtime.getRuntime().availableProcessors());
 		threadCount = cores;
 		workers = new ArrayList<SynchronizingWorker>(cores);
 		threadPool = new ArrayList<Thread>(cores);
@@ -74,7 +75,6 @@ public abstract class ParallelTracer implements Tracer {
 			worker = createWorker(i);
 			workers.add(worker);
 			threadPool.add(new Thread(worker));
-			//rayBuffers.add(new RayBuffer());
 		}
 		
 		//Start the workers (they should immediately fall into a spin lock)
@@ -87,19 +87,17 @@ public abstract class ParallelTracer implements Tracer {
 	 * Trace Overrides
 	 * *********************************************************************************************/
 	@Override
-	public synchronized void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene)
+	public synchronized void trace(RenderData data)
 	{	
 		//Store parameters
-		this.activePixelBuffer = pixelBuffer;
-		this.activeCamera = camera;
-		this.activeScene = scene;
+		this.rdata = data;
 		
 		//Start tracing
 		Logger.progress(-1, "Starting Tracing...(" + threadCount + " threads).");
 		long startTime = System.currentTimeMillis();
 		
 		//Distribute camera rays (if necessary)
-		distributeRays(camera);
+		distributeRays(rdata.getScene().getActiveCamera());
 		
 		//Update the call id
 		callID++;

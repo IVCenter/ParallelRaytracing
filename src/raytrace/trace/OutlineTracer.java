@@ -5,11 +5,14 @@ import math.ray.CircularRayStencil;
 import math.ray.Ray;
 import math.ray.RayStencil;
 import process.logging.Logger;
+import raster.Pixel;
 import raster.PixelBuffer;
+import raster.RenderBuffer;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
+import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
 import raytrace.map.texture.Texture;
 import raytrace.scene.Scene;
@@ -72,10 +75,15 @@ public class OutlineTracer implements Tracer {
 	 * Configuration
 	 * *********************************************************************************************/
 	@Override
-	public void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene)
+	public void trace(RenderData data)
 	{
 		//Pixels
-		int[] pixels = pixelBuffer.getPixels();
+		PixelBuffer pixelBuffer = data.getPixelBuffer();
+		RenderBuffer renderBuffer = data.getRenderBuffer();
+		int[] pb_Pixels = pixelBuffer.getPixels();
+		Pixel[] rb_Pixels = renderBuffer.getPixels();
+		Camera camera = data.getCamera();
+		Scene scene = data.getScene();
 		
 		//Trace each ray in the camera
 		IntersectionData idata;
@@ -87,6 +95,8 @@ public class OutlineTracer implements Tracer {
 		//ray count and color storage for super sampling support
 		double sampleCount = 0;
 		Color color = new Color();
+		Pixel pixel;
+		int pixelIndex;
 		
 		//Primary ray data
 		int primarySurfaceID = 0;
@@ -112,7 +122,9 @@ public class OutlineTracer implements Tracer {
 		{
 			//reset ray count and color
 			sampleCount = 0.0;
-			color.setARGB(pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()]);
+			pixelIndex = rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth();
+			pixel = rb_Pixels[pixelIndex];
+			color.set(pixel.getColor());
 			
 			//Set the current primary ray
 			rays.setRandomValue(Math.random());
@@ -279,7 +291,10 @@ public class OutlineTracer implements Tracer {
 			
 			//Interpolate the line and pixel colors
 			color.multiply3M(darkness).add3AfterMultiply3M(lineColor, 1.0 - darkness);
-			pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.rgb32();
+			
+			//Update the buffers
+			pixel.getColor().set(color);
+			pb_Pixels[pixelIndex] = color.rgb32();
 		}
 		
 	}

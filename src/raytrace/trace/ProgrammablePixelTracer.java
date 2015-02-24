@@ -3,12 +3,14 @@ package raytrace.trace;
 import java.util.ArrayList;
 
 import math.ray.Ray;
+import raster.Pixel;
 import raster.PixelBuffer;
+import raster.RenderBuffer;
 import raster.pixel.PixelTransform;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
+import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
-import raytrace.scene.Scene;
 
 public class ProgrammablePixelTracer implements Tracer {
 	
@@ -38,28 +40,39 @@ public class ProgrammablePixelTracer implements Tracer {
 	 * Configuration
 	 * *********************************************************************************************/
 	@Override
-	public void trace(PixelBuffer pixelBuffer, Camera camera, Scene scene)
+	public void trace(RenderData data)
 	{
+		PixelBuffer pixelBuffer = data.getPixelBuffer();
+		RenderBuffer renderBuffer = data.getRenderBuffer();
+		Camera camera = data.getScene().getActiveCamera();
+		
 		//Pixels
-		int[] pixels = pixelBuffer.getPixels();
+		int[] pb_Pixels = pixelBuffer.getPixels();
+		Pixel[] rb_Pixels = renderBuffer.getPixels();
 		
 		//ray count and color storage for super sampling support
 		Color color = new Color();
-		
+		Pixel pixel = null;
+		int pixelIndex;
 		
 		//For each ray, calculate the pixel color
 		for(Ray rays : camera)
 		{
-			//reset ray count and color
-			color.setARGB(pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()]);
+			//Get the pixel index
+			pixelIndex = rays.getPixelX() + rays.getPixelY() * renderBuffer.getWidth();
+			
+			//Get the pixel
+			pixel = rb_Pixels[pixelIndex];
 			
 			//Iterate over the transforms, each operating on the output of the previous
 			for(PixelTransform transform : transforms)
 			{
-				color = transform.transform(color);
+				color = transform.transform(pixel);
 			}
 			
-			pixels[rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth()] = color.rgb32();
+			//Update the pixel buffer and render buffer
+			pixel.setColor(color);
+			pb_Pixels[pixelIndex] = color.rgb32();
 		}
 		
 	}

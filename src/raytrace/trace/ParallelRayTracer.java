@@ -1,6 +1,7 @@
 package raytrace.trace;
 
 import raytrace.camera.Camera;
+import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
 
 public class ParallelRayTracer extends ParallelTracer {
@@ -44,11 +45,18 @@ public class ParallelRayTracer extends ParallelTracer {
 		{
 			//Get the ray buffer
 			Camera buffer = rayBuffers.get(id);
+			
+			//Setup the rdata
+			RenderData localRData = new RenderData();
+			localRData.setCamera(buffer);
+			localRData.setPixelBuffer(rdata.getPixelBuffer());
+			localRData.setRenderBuffer(rdata.getRenderBuffer());
+			localRData.setScene(rdata.getScene());
 
 			//Iterate the tracers for this scene
-			for(Tracer tracer : activeScene.getTracers())
+			for(Tracer tracer : rdata.getScene().getTracers())
 			{
-				tracer.trace(activePixelBuffer, buffer, activeScene);
+				tracer.trace(localRData);
 			}
 		}
 		

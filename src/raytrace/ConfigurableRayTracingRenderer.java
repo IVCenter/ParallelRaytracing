@@ -67,7 +67,7 @@ public class ConfigurableRayTracingRenderer implements Renderer {
 			data.getScene().getActiveCamera().setDirty(false);
 			
 			//And trace
-			tracer.trace(data.getPixelBuffer(), data.getScene().getActiveCamera(), data.getScene());
+			tracer.trace(data);
 		}
 	}
 

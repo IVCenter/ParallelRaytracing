@@ -63,6 +63,7 @@ public class RenderRequestHandler extends MessageHandler {
 		RenderData rdata = new RenderData();
 		rdata.setPixelBuffer(ApplicationDelegate.inst.getPixelBuffer());
 		rdata.setScene(Configuration.getMasterScene());
+		rdata.setCamera(camera);
 		
 		//If not rendering in realtime
 		Thread intermediateThread = null;
