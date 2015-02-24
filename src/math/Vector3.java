@@ -409,5 +409,37 @@ public class Vector3 implements Serializable{
 		
 		return sample.normalizeM();
 	}
+
+	/*
+	 * This is terribly inefficient.
+	 * TODO: Implement a faster solution
+	 */
+	//Based on: http://math.stackexchange.com/a/205589
+	public static Vector3 uniformConeSample(Vector3 direction, double theta)
+	{
+		Vector3 ndir = direction.normalize();
+		double cosTheta = Math.cos(theta);
+		double phi = Math.random() * 2.0 * Math.PI;
+		
+		double y = cosTheta + (1.0 - cosTheta) * Math.random();
+		double yi = Math.sqrt(1.0 - y * y);
+		double x = yi * Math.sin(phi);
+		double z = yi * Math.cos(phi);
+		
+		Vector3 sample = new Vector3(x, y, z);
+		
+		//Rotate if the direction is not in the positive-y
+		if(1.0 - Math.abs(ndir.dot(Vector3.positiveYAxis)) > 0.0001)
+		{
+			Vector3 axis = Vector3.positiveYAxis.cross(ndir);
+			double angle = Math.acos(Vector3.positiveYAxis.dot(ndir));
+			Matrix4 rot = new Matrix4();
+			rot.identity();
+			rot.rotateArbitrary(axis, angle);
+			sample = rot.multiply3(sample);
+		}
+		
+		return sample.normalizeM();
+	}
 	
 }
