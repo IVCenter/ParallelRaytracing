@@ -15,6 +15,7 @@ public class DirectionalLight extends Light {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Vector3 direction;
+	private Vector3 inverseDirection;
 	
 
 	/* *********************************************************************************************
@@ -23,6 +24,7 @@ public class DirectionalLight extends Light {
 	public DirectionalLight()
 	{
 		direction = new Vector3();
+		inverseDirection = direction.multiply(-1.0);
 	}
 	
 	
@@ -35,7 +37,7 @@ public class DirectionalLight extends Light {
 		double distance = Double.MAX_VALUE;
 		
 		IntersectionData shadowData = shadowed(data.getRootScene(), 
-				new Ray(point, direction.multiply(-1.0), 0, 0), distance);
+				new Ray(point, inverseDirection, 0, 0), distance);
 		
 		double blocked = shadowData == null ? 1.0 : 0.0;
 
@@ -58,6 +60,7 @@ public class DirectionalLight extends Light {
 
 	public void setDirection(Vector3 direction) {
 		this.direction = direction.normalizeM();
+		this.inverseDirection = direction.multiply(-1.0);
 	}
 
 }
