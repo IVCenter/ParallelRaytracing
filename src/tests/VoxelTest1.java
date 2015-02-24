@@ -6,6 +6,7 @@ import java.util.List;
 
 import math.Vector3;
 import math.ray.CircularRayStencil;
+import process.Environment;
 import process.logging.Logger;
 import raster.pixel.ColorInversionPT;
 import raytrace.bounding.BoundingBox;
@@ -24,6 +25,7 @@ import raytrace.geometry.pointclouds.PointSurface;
 import raytrace.light.AmbientLight;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
+import raytrace.light.SoftDirectionalLight;
 import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.material.AshikhminPTMaterial;
 import raytrace.material.ColorMaterial;
@@ -44,6 +46,7 @@ import raytrace.trace.OutlineTracer;
 import raytrace.trace.ProgrammablePixelTracer;
 import raytrace.trace.RayTracer;
 import resource.ResourceManager;
+import system.ApplicationDelegate;
 import system.Configuration;
 
 public class VoxelTest1 extends Scene
@@ -110,7 +113,7 @@ public class VoxelTest1 extends Scene
 		
 		camera = new ProgrammableCamera();
 		camera.setStratifiedSampling(false);
-		camera.setSuperSamplingLevel(1);
+		camera.setSuperSamplingLevel(2);
 		camera.setPosition(new Vector3(0,3,0));
 		camera.setViewingDirection(new Vector3(0,-1,-1));
 		camera.setUp(new Vector3(0,1,0));
@@ -227,10 +230,11 @@ public class VoxelTest1 extends Scene
 		
 		
 		//Directional Light
-		DirectionalLight directionalLight = new DirectionalLight();
+		SoftDirectionalLight directionalLight = new SoftDirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);//.7 for global illum
 		directionalLight.setDirection(new Vector3(1,-1,-1));
+		directionalLight.setSoftness(0.1);
 		lightManager.addLight(directionalLight);
 		
 		AmbientLight ambientLight = new AmbientLight();
@@ -267,4 +271,42 @@ public class VoxelTest1 extends Scene
 		//his.updateBoundingBox();
 		super.bake(data);
 	}
+	
+	public static void main(String[] args)
+	{
+		loadDebugConfiguration();
+		
+		Logger.progress(-1, "Launching a Night Sky Node with ID:[" + Configuration.getId() + "]...");
+		
+		//Pass off control to the ApplicationDelegate
+		ApplicationDelegate app = new ApplicationDelegate();
+		app.execute(new Environment());
+	}
+	
+	private static void loadDebugConfiguration()
+	{
+		//Feel free to over write these with your own settings
+		Configuration.setId("Debug Node");
+		//Configuration.setScreenWidth(1368);
+		//Configuration.setScreenHeight(752);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
+		Configuration.setRenderWidth(1280);
+		Configuration.setRenderHeight(720);
+		Configuration.setDrawToScreen(true);
+		Configuration.setClock(true);//The top most node must have clock set to true (this includes stand-alone nodes)
+		Configuration.setLeaf(true);//true for local, false for networked
+		Configuration.setController(true);
+		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
+		Configuration.setMasterScene(new VoxelTest1());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

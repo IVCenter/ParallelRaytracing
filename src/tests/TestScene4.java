@@ -3,6 +3,7 @@ package tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import process.Environment;
 import process.logging.Logger;
 import math.Vector3;
 import math.ray.CircularRayStencil;
@@ -19,6 +20,7 @@ import raytrace.geometry.Sphere;
 import raytrace.light.AmbientLight;
 import raytrace.light.DirectionalLight;
 import raytrace.light.PointLight;
+import raytrace.light.SoftDirectionalLight;
 import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.material.ColorMaterial;
 import raytrace.material.DielectricMaterial;
@@ -41,6 +43,7 @@ import raytrace.trace.OutlineTracer;
 import raytrace.trace.ProgrammablePixelTracer;
 import raytrace.trace.RayTracer;
 import resource.ResourceManager;
+import system.ApplicationDelegate;
 import system.Configuration;
 
 public class TestScene4 extends Scene
@@ -66,7 +69,7 @@ public class TestScene4 extends Scene
 		//Pixel Transform Tracer
 		ProgrammablePixelTracer pixeler = new ProgrammablePixelTracer();
 		pixeler.addTransform(new ColorInversionPT());
-		tracers.add(pixeler);
+		//tracers.add(pixeler);
 		
 		
 		//Outline Tracer
@@ -123,6 +126,7 @@ public class TestScene4 extends Scene
 		{
 			Sphere sphere = new Sphere();
 			sphere.setMaterial(new DielectricPTMaterial(Color.random(0.7 + (Math.random()/16.0)), randInRange(1.01, 2.0)));
+			//sphere.setMaterial(new ColorMaterial(new Color(0xfefefeff)));
 			sphere.setPosition(new Vector3(4 * Math.random() - 2.0, 3.2 * Math.random() - 0.4, 4 * Math.random() - 2.0));
 			sphere.setRadius(Math.pow(Math.random() * 0.3, 1.15));
 			spheres.add(sphere);
@@ -168,6 +172,7 @@ public class TestScene4 extends Scene
 							new Color(0xffffffff), 
 							0.01
 							);
+			//Material shadowSelect = new SelectDarkestBBlend(softShadows, hardShadows);
 			Material shadowSelect = new SelectDarkestBBlend(softShadows, hardShadows);
 			//Material midOrShadowSelect = new SelectDarkestBBlend(softMids, shadowSelect);
 			model.setMaterial(shadowSelect);
@@ -194,10 +199,11 @@ public class TestScene4 extends Scene
 		
 		
 		//Directional Light
-		DirectionalLight directionalLight = new DirectionalLight();
+		SoftDirectionalLight directionalLight = new SoftDirectionalLight();
 		directionalLight.setColor(Color.white());
 		directionalLight.setIntensity(0.70);
 		directionalLight.setDirection(new Vector3(1,-1,-1));
+		directionalLight.setSoftness(0.02);
 		lightManager.addLight(directionalLight);
 		
 
@@ -252,6 +258,37 @@ public class TestScene4 extends Scene
 	{
 		//TODO: This may be costly
 		super.bake(data);
+	}
+	
+	
+
+	public static void main(String[] args)
+	{
+		loadDebugConfiguration();
+		
+		Logger.progress(-1, "Launching a Night Sky Node with ID:[" + Configuration.getId() + "]...");
+		
+		//Pass off control to the ApplicationDelegate
+		ApplicationDelegate app = new ApplicationDelegate();
+		app.execute(new Environment());
+	}
+	
+	private static void loadDebugConfiguration()
+	{
+		//Feel free to over write these with your own settings
+		Configuration.setId("Debug Node");
+		//Configuration.setScreenWidth(1368);
+		//Configuration.setScreenHeight(752);
+		Configuration.setScreenWidth(1280);
+		Configuration.setScreenHeight(720);
+		Configuration.setRenderWidth(1280);
+		Configuration.setRenderHeight(720);
+		Configuration.setDrawToScreen(true);
+		Configuration.setClock(true);//The top most node must have clock set to true (this includes stand-alone nodes)
+		Configuration.setLeaf(true);//true for local, false for networked
+		Configuration.setController(true);
+		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
+		Configuration.setMasterScene(new TestScene4());
 	}
 }
 

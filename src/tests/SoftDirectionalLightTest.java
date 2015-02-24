@@ -1,28 +1,13 @@
-
 package tests;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import file.nsconfig.ConfigFileLoader;
-import file.sslevel.Gate;
-import file.sslevel.SslFileLoader;
-import file.sslevel.SslLevelData;
-import folder.DirectoryManager;
-
-import math.Matrix4;
 import math.Spline;
 import math.Vector3;
-import math.function._2D.SelectDifferenceNthMthNearest2D;
-import math.function._2D.SelectNthNearest2D;
-import math.function._3D.TchebyshevDistance3D;
 import math.ray.CircularRayStencil;
 import process.Environment;
 import process.logging.Logger;
-import raster.pixel.ColorInversionPT;
-import raytrace.bounding.BoundingBox;
 import raytrace.camera.Camera;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.camera.aperture.CircularAperture;
@@ -31,11 +16,15 @@ import raytrace.color.Color;
 import raytrace.data.BakeData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Tracer;
-import raytrace.geometry.Sphere;
+import raytrace.geometry.meshes.Cube;
+import raytrace.geometry.meshes.Grid;
+import raytrace.light.SoftDirectionalLight;
+import raytrace.map.texture._3D.GradientTexture3D;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DiffusePTMaterial;
 import raytrace.material.Material;
+import raytrace.material.SkyGradientMaterial;
 import raytrace.scene.Scene;
-import raytrace.scene.SceneLoader;
 import raytrace.surfaces.AbstractSurface;
 import raytrace.surfaces.Instance;
 import raytrace.surfaces.acceleration.AABVHSurface;
@@ -44,9 +33,11 @@ import raytrace.trace.ProgrammablePixelTracer;
 import raytrace.trace.RayTracer;
 import system.ApplicationDelegate;
 import system.Configuration;
-import system.Constants;
+import file.sslevel.Gate;
+import file.sslevel.SslFileLoader;
+import file.sslevel.SslLevelData;
 
-public class CSE165_SpaceSlalomLevelTester extends Scene
+public class SoftDirectionalLightTest extends Scene
 {	
 	/*
 	 * A simple scene for cse165 project2 that generates diagrams of the affects of smoothing/de-noising (2015)
@@ -69,22 +60,6 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 		//Standard ray tracer
 		tracers.add(new RayTracer());
 		
-		
-		//Pixel Transform Tracer
-		ProgrammablePixelTracer pixeler = new ProgrammablePixelTracer();
-		//tracers.add(pixeler);
-		
-		
-		//Outline Tracer
-		OutlineTracer outliner = new OutlineTracer();
-		outliner.setStencil(new CircularRayStencil(0.001, 1, 4));
-		outliner.setCreaseTexture(new Color(0x888888ff));
-		outliner.setOcclusionTexture(new Color(0x888888ff));
-		outliner.setSilhouetteTexture(new Color(0x888888ff));
-		outliner.setDepthThreshold(0.005);
-		outliner.setNormalThreshold(0.1);
-		//tracers.add(outliner);
-		
 		return tracers;
 	}
 
@@ -98,16 +73,16 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 		ProgrammableCamera camera = new ProgrammableCamera();
 		
 		camera = new ProgrammableCamera();
-		camera.setStratifiedSampling(false);
-		camera.setSuperSamplingLevel(1);
-		camera.setPosition(new Vector3(4000,0,4000));
-		camera.setViewingDirection(new Vector3(-1,0,-1));
+		camera.setStratifiedSampling(true);
+		camera.setSuperSamplingLevel(16);
+		camera.setPosition(new Vector3(2.2,1.4,2.4));
+		camera.setViewingDirection(new Vector3(-0.8,-0.3,-1));
 		camera.setUp(new Vector3(0,1,0));
 		camera.setFieldOfView(Math.PI/2.3);
 		camera.setPixelWidth(Configuration.getScreenWidth());
 		camera.setPixelHeight(Configuration.getScreenHeight());
-		camera.setAperture(new PinholeAperture());
-		camera.setFocalPlaneDistance(3.0);
+		camera.setAperture(new CircularAperture(0.03, 0.5));
+		camera.setFocalPlaneDistance(3.1);
 		
 		return camera;
 	}
@@ -119,7 +94,8 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 	@Override
 	protected Material configureSkyMaterial()
 	{				
-		Material skyMaterial = new ColorMaterial(Color.white());
+		Material skyMaterial = new SkyGradientMaterial(new GradientTexture3D(new Color(0xffffeeff), new Color(0x888888ff), 5.0));
+		//skyMaterial = new ColorMaterial(Color.black());
 		return skyMaterial;
 	}
 	
@@ -127,49 +103,29 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 	/* *********************************************************************************************
 	 * World
 	 * *********************************************************************************************/
-	ArrayList<Gate> gates;
 	@Override
 	protected void configureWorld()
 	{
-		//Generate data points
-		//Animate the data stream and algorithm
+		//Setup a soft directional light
+		SoftDirectionalLight sdlight = new SoftDirectionalLight();
+		sdlight.setDirection((new Vector3(1, -1, -1)).normalizeM());
+		sdlight.setSoftness(0.05);
+		sdlight.setColor(new Color(0xffffeeff));
+		sdlight.setIntensity(0.9);
+		lightManager.addLight(sdlight);
 		
-		ColorMaterial cmat = new ColorMaterial(new Color(0x333333ff));
+		
+		//Set up a material
+		DiffusePTMaterial cmat = new DiffusePTMaterial(new Color(0xffffffff));
 		ArrayList<AbstractSurface> surfaces = new ArrayList<AbstractSurface>();
 		
 		
-		//Load level
-		String filename = "competition_7_easy.txt";
-		//String filename = "test1.txt";
-		
-		SslLevelData data = SslFileLoader.load(
-				Configuration.getWorkingDirectory() + Configuration.getModelsSubDirectory() + filename);
-		gates = data.getGates();
-		
-		Spline s;
-		ArrayList<Vector3> points;
-		int ignoreCount = 0;
-		for(Gate g : gates)
-		{
-			//Fix for overlapping gates
-			if(ignoreCount > 0)
-			{
-				--ignoreCount;
-				continue;
-			}
-			
-			g.getRight().multiplyM(10.0);
-			g.getUp().multiplyM(10.0);
-			
-			points = makePoints(g);
-			for(int i = 0; i < points.size(); ++i)
-			{
-				s = new Spline();
-				s.add(points.get(i));
-				s.add(points.get((i+1)%points.size()));
-				surfaces.addAll(s.tessellate(1, 4, 10, 10));
-			}
-		}
+		//Setup the geomoetry
+		Cube cube = new Cube(0.7, new Vector3(0.0, 0.8, 0.0));
+		surfaces.addAll(cube.getTriangles());
+
+		Grid grid = new Grid(10.0, 10.0);
+		surfaces.addAll(grid.getTriangles());
 		
 		
 		AbstractSurface accel = AABVHSurface.makeAABVH(surfaces);
@@ -177,40 +133,17 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 		Instance inst = new Instance();
 		inst.addChild(accel);
 		inst.setMaterial(cmat);
-		
 		this.addChild(inst);
 	}
 	
-	protected ArrayList<Vector3> makePoints(Gate g)
-	{
-		ArrayList<Vector3> points = new ArrayList<Vector3>();
-
-		points.add(g.getCenter().subtract(g.getUp()).subtractM(g.getRight()));
-		points.add(g.getCenter().subtract(g.getUp()).addM(g.getRight()));
-		points.add(g.getCenter().add(g.getUp()).addM(g.getRight()));
-		points.add(g.getCenter().add(g.getUp()).subtractM(g.getRight()));
-		
-		return points;
-	}
 	
 
-	int currentGate = 100;
 	@Override
 	public void update(UpdateData data)
 	{
 		elapsed += data.getDt();
 		
-		Gate g0 = gates.get(currentGate%gates.size());
-		Gate g1 = gates.get((currentGate+1)%gates.size());
-
-		//activeCamera.setPosition(g0.getCenter().add(g0.getUp().multiply(10.0)));
-		//activeCamera.setViewingDirection(g1.getCenter().subtract(g0.getCenter().add(g0.getUp().multiply(10.0))).normalize());
-		//activeCamera.setPosition(g0.getCenter());
-		//activeCamera.setViewingDirection(g1.getCenter().subtract(g0.getCenter()).normalize());
-		//activeCamera.setUp(g0.getRight().normalize());
-		
-		currentGate++;
-		
+		//
 		
 		//Update the children
 		super.update(data);
@@ -251,6 +184,6 @@ public class CSE165_SpaceSlalomLevelTester extends Scene
 		Configuration.setLeaf(true);//true for local, false for networked
 		Configuration.setController(true);
 		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-		Configuration.setMasterScene(new CSE165_SpaceSlalomLevelTester());
+		Configuration.setMasterScene(new SoftDirectionalLightTest());
 	}
 }
