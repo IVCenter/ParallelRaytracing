@@ -34,6 +34,8 @@ public class Configuration {
 	protected static boolean isController = false;
 	protected static boolean isRealTime = false;
 	
+	protected static int maxAllowableRenderingCores = Integer.MAX_VALUE;
+	
 	protected static Scene masterScene = null;
 	
 	protected static Keyboard keyboard = null;
@@ -157,6 +159,10 @@ public class Configuration {
 	//Real Time
 	public static boolean isRealTime() { return isRealTime; }
 	public static void setRealTime(boolean isRealTime) { Configuration.isRealTime = isRealTime; }
+	
+	//Max Allowable Rendering Tthreads
+	public static int getMaxAllowableRenderingCores() { return maxAllowableRenderingCores; }
+	public static void setMaxAllowableRenderingCores(	int maxAllowableRenderingCores) { Configuration.maxAllowableRenderingCores = maxAllowableRenderingCores; }
 
 	//Master Scene
 	public static Scene getMasterScene() { return masterScene; }
