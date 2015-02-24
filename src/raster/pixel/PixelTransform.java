@@ -1,5 +1,6 @@
 package raster.pixel;
 
+import raster.Pixel;
 import raytrace.color.Color;
 
 public abstract class PixelTransform {
@@ -11,5 +12,5 @@ public abstract class PixelTransform {
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
-	public abstract Color transform(Color pixel);
+	public abstract Color transform(Pixel pixel);
 }

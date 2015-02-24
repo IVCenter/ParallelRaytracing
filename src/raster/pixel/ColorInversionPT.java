@@ -1,5 +1,6 @@
 package raster.pixel;
 
+import raster.Pixel;
 import raytrace.color.Color;
 
 public class ColorInversionPT extends PixelTransform{
@@ -12,9 +13,9 @@ public class ColorInversionPT extends PixelTransform{
 	 * Transform Override
 	 * *********************************************************************************************/
 	@Override
-	public Color transform(Color pixel)
+	public Color transform(Pixel pixel)
 	{
-		return pixel.multiply3M(-1.0).add3M(1.0);
+		return pixel.getColor().multiply3M(-1.0).add3M(1.0);
 	}
 
 }
