@@ -43,35 +43,40 @@ public class ProgrammablePixelTracer implements Tracer {
 	public void trace(RenderData data)
 	{
 		PixelBuffer pixelBuffer = data.getPixelBuffer();
-		RenderBuffer renderBuffer = data.getRenderBuffer();
+		RenderBuffer outputRenderBuffer = data.getOutputRenderBuffer();
+		RenderBuffer inputRenderBuffer = data.getInputRenderBuffer();
 		Camera camera = data.getScene().getActiveCamera();
 		
 		//Pixels
 		int[] pb_Pixels = pixelBuffer.getPixels();
-		Pixel[] rb_Pixels = renderBuffer.getPixels();
+		Pixel[] irb_Pixels = inputRenderBuffer.getPixels();
+		Pixel[] orb_Pixels = outputRenderBuffer.getPixels();
+		int renderWidth = outputRenderBuffer.getWidth();
 		
 		//ray count and color storage for super sampling support
 		Color color = new Color();
-		Pixel pixel = null;
+		Pixel pixel = null, oPixel = null;
 		int pixelIndex;
 		
 		//For each ray, calculate the pixel color
 		for(Ray rays : camera)
 		{
 			//Get the pixel index
-			pixelIndex = rays.getPixelX() + rays.getPixelY() * renderBuffer.getWidth();
+			pixelIndex = rays.getPixelX() + rays.getPixelY() * renderWidth;
 			
-			//Get the pixel
-			pixel = rb_Pixels[pixelIndex];
+			//Get the input pixel
+			pixel = irb_Pixels[pixelIndex];
+			oPixel = orb_Pixels[pixelIndex];
 			
 			//Iterate over the transforms, each operating on the output of the previous
 			for(PixelTransform transform : transforms)
 			{
 				color = transform.transform(pixel);
+				pixel = oPixel;
+				pixel.getColor().set(color);
 			}
 			
 			//Update the pixel buffer and render buffer
-			pixel.setColor(color);
 			pb_Pixels[pixelIndex] = color.rgb32();
 		}
 		

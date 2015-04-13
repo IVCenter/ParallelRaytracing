@@ -10,6 +10,7 @@ import raytrace.color.Color;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
 
+@Deprecated
 public class MedianTracer implements Tracer {
 	
 	/*

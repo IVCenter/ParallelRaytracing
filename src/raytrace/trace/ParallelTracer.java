@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import process.logging.Logger;
+import raster.RenderBuffer;
 import raytrace.camera.Camera;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
@@ -99,34 +100,48 @@ public abstract class ParallelTracer implements Tracer {
 		//Distribute camera rays (if necessary)
 		distributeRays(rdata.getScene().getActiveCamera());
 		
-		//Update the call id
-		callID++;
+		//Reset the workers
+		for(SynchronizingWorker worker : workers)
+			worker.reset();
 		
-		//Clear thread control flags/counts
-		completedCount.set(0);
-		isComplete = false;
-		wasNotified = true;
-		
-		//Wake the workers up
-		synchronized(traceLock) {
-			traceLock.notifyAll();
-		}
-		
-		//Wait until tracing is complete via Spin Lock
-		synchronized(mainLock) {
-			while(!isComplete) {
-				try {
-					
-					mainLock.wait();
+		//For all work across all workers
+		while(thereIsWorkToBeDone())
+		{
+			//Update the call id
+			callID++;
+			
+			//Flip the input and output buffers
+			RenderBuffer oldInput = rdata.getInputRenderBuffer();
+			rdata.setInputRenderBuffer(rdata.getOutputRenderBuffer());
+			rdata.setOutputRenderBuffer(oldInput);
+			
+			//Clear thread control flags/counts
+			completedCount.set(0);
+			isComplete = false;
+			wasNotified = true;
+			
+			//Wake the workers up
+			synchronized(traceLock) {
+				traceLock.notifyAll();
+			}
+			
+			//Wait until tracing is complete via Spin Lock
+			synchronized(mainLock) {
+				while(!isComplete) {
+					try {
 						
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+						mainLock.wait();
+							
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
+			
+			//Re-enable the spin lock on the workers
+			wasNotified = false;
 		}
 		
-		//Re-enable the spin lock on the workers
-		wasNotified = false;
 		
 		//Tracing done
 		Logger.progress(-1, "Ending Tracing... (" + (System.currentTimeMillis()-startTime) + "ms).");
@@ -158,6 +173,14 @@ public abstract class ParallelTracer implements Tracer {
 			rayBuffers.add(cam);
 	}
 	
+	protected boolean thereIsWorkToBeDone()
+	{
+		for(SynchronizingWorker worker : workers)
+			if(!worker.isDone())
+				return true;
+		return false;
+	}
+	
 	protected abstract SynchronizingWorker createWorker(int i);
 	
 
@@ -174,6 +197,7 @@ public abstract class ParallelTracer implements Tracer {
 		 * *********************************************************************************************/
 		public final int id;
 		private int currentCallID = 0;
+		protected boolean isDone = false;
 		
 		
 		/* *********************************************************************************************
@@ -214,7 +238,7 @@ public abstract class ParallelTracer implements Tracer {
 					currentCallID = callID;
 	
 					//Perform a unit operation
-					work();
+					isDone = work();
 					
 					//Increment the completed counter
 					incrementCompletedCount();
@@ -240,7 +264,17 @@ public abstract class ParallelTracer implements Tracer {
 		/* *********************************************************************************************
 		 * Abstract Methods
 		 * *********************************************************************************************/
-		protected abstract void work();
+		protected abstract boolean work();
+
+		public abstract void reset();
+
+
+		/* *********************************************************************************************
+		 * Getters/Setters
+		 * *********************************************************************************************/
+		public boolean isDone() {
+			return isDone;
+		}
 		
 	}
 	

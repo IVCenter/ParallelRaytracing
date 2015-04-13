@@ -28,12 +28,20 @@ public class ParallelRayTracer extends ParallelTracer {
 		/*
 		 * A ray tracing worker
 		 */
+
+		/* *********************************************************************************************
+		 * Constructor
+		 * *********************************************************************************************/
+		protected int workIndex;
+		
+		
 		/* *********************************************************************************************
 		 * Constructor
 		 * *********************************************************************************************/
 		public TracingWorker(int id)
 		{
 			super(id);
+			workIndex = 0;
 		}
 		
 
@@ -41,7 +49,7 @@ public class ParallelRayTracer extends ParallelTracer {
 		 * Run Methods
 		 * *********************************************************************************************/
 		@Override
-		protected void work()
+		protected boolean work()
 		{
 			//Get the ray buffer
 			Camera buffer = rayBuffers.get(id);
@@ -50,14 +58,31 @@ public class ParallelRayTracer extends ParallelTracer {
 			RenderData localRData = new RenderData();
 			localRData.setCamera(buffer);
 			localRData.setPixelBuffer(rdata.getPixelBuffer());
-			localRData.setRenderBuffer(rdata.getRenderBuffer());
+			localRData.setInputRenderBuffer(rdata.getInputRenderBuffer());
+			localRData.setOutputRenderBuffer(rdata.getOutputRenderBuffer());
 			localRData.setScene(rdata.getScene());
+			
+			//Make sure the current index isn't out of range
+			//If it is, there is no work to do
+			int totalWork = rdata.getScene().getTracers().size();
+			if(workIndex < 0 || workIndex >= totalWork)
+				return true;
 
 			//Iterate the tracers for this scene
-			for(Tracer tracer : rdata.getScene().getTracers())
-			{
-				tracer.trace(localRData);
-			}
+			Tracer tracer = rdata.getScene().getTracers().get(workIndex);
+			tracer.trace(localRData);
+			
+			//Increment the work index
+			++workIndex;
+			
+			return workIndex >= totalWork;
+		}
+
+		@Override
+		public void reset()
+		{
+			workIndex = 0;
+			isDone = false;
 		}
 		
 	}

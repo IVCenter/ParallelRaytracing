@@ -15,7 +15,8 @@ public class RenderData {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected PixelBuffer pixelBuffer;
-	protected RenderBuffer renderBuffer;
+	protected RenderBuffer inputRenderBuffer;
+	protected RenderBuffer outputRenderBuffer;
 	protected Scene scene;
 	protected Camera camera;
 	
@@ -40,12 +41,20 @@ public class RenderData {
 		this.pixelBuffer = pixelBuffer;
 	}
 
-	public RenderBuffer getRenderBuffer() {
-		return renderBuffer;
+	public RenderBuffer getInputRenderBuffer() {
+		return inputRenderBuffer;
 	}
 
-	public void setRenderBuffer(RenderBuffer renderBuffer) {
-		this.renderBuffer = renderBuffer;
+	public void setInputRenderBuffer(RenderBuffer renderBuffer) {
+		this.inputRenderBuffer = renderBuffer;
+	}
+
+	public RenderBuffer getOutputRenderBuffer() {
+		return outputRenderBuffer;
+	}
+
+	public void setOutputRenderBuffer(RenderBuffer renderBuffer) {
+		this.outputRenderBuffer = renderBuffer;
 	}
 
 	public Scene getScene() {

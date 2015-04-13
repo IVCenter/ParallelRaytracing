@@ -41,6 +41,12 @@ public class Cube extends MeshSurface {
 		super();
 		initialize(length, length, length, offset);
 	}
+	
+	public Cube(double xLength, double yLength, double zLength, Vector3 offset)
+	{
+		super();
+		initialize(xLength, yLength, zLength, offset);
+	}
 
 	
 	/* *********************************************************************************************

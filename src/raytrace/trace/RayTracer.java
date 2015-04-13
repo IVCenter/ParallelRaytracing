@@ -23,14 +23,15 @@ public class RayTracer implements Tracer {
 	public void trace(RenderData data)
 	{
 		PixelBuffer pixelBuffer = data.getPixelBuffer();
-		RenderBuffer renderBuffer = data.getRenderBuffer();
+		//RenderBuffer inputRenderBuffer = data.getInputRenderBuffer();
+		RenderBuffer outputRenderBuffer = data.getOutputRenderBuffer();
 		Scene scene = data.getScene();
 		Camera camera = data.getCamera();
 		
 		
 		//Pixels
 		int[] pb_Pixels = pixelBuffer.getPixels();
-		Pixel[] rb_Pixels = renderBuffer.getPixels();
+		Pixel[] rb_Pixels = outputRenderBuffer.getPixels();
 		
 		//Trace each ray in the camera
 		IntersectionData idata;

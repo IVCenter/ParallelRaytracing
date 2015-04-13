@@ -61,7 +61,8 @@ public class ApplicationDelegate extends Job{
 	
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
-	protected RenderBuffer renderBuffer;
+	protected RenderBuffer inputRenderBuffer;
+	protected RenderBuffer outputRenderBuffer;
 	protected Keyboard keyboard;
 	
 	protected Renderer renderer;
@@ -173,7 +174,8 @@ public class ApplicationDelegate extends Job{
 			screenDrawer.setMsPerFrame(1000/12);
 			
 			pixelBuffer = screenDrawer.getPixelBuffer();
-			renderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			inputRenderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			outputRenderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			
 			keyboard = Configuration.getKeyboard();
 			if(keyboard == null) {
@@ -183,7 +185,8 @@ public class ApplicationDelegate extends Job{
 			
 		}else{
 			pixelBuffer = new PixelBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
-			renderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			inputRenderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			outputRenderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 		}
 	}
 	
@@ -327,7 +330,8 @@ public class ApplicationDelegate extends Job{
 
 			//update the render data
 			rdata.setPixelBuffer(pixelBuffer);
-			rdata.setRenderBuffer(renderBuffer);
+			rdata.setInputRenderBuffer(inputRenderBuffer);
+			rdata.setOutputRenderBuffer(outputRenderBuffer);
 			rdata.setScene(Configuration.getMasterScene());
 			rdata.setCamera(Configuration.getMasterScene().getActiveCamera());
 			
@@ -432,12 +436,20 @@ public class ApplicationDelegate extends Job{
 		this.pixelBuffer = pixelBuffer;
 	}
 	
-	public RenderBuffer getRenderBuffer() {
-		return renderBuffer;
+	public RenderBuffer getInputRenderBuffer() {
+		return inputRenderBuffer;
 	}
 
-	public void setRenderBuffer(RenderBuffer renderBuffer) {
-		this.renderBuffer = renderBuffer;
+	public void setInputRenderBuffer(RenderBuffer renderBuffer) {
+		this.inputRenderBuffer = renderBuffer;
+	}
+	
+	public RenderBuffer getOutputRenderBuffer() {
+		return outputRenderBuffer;
+	}
+
+	public void setOutputRenderBuffer(RenderBuffer renderBuffer) {
+		this.outputRenderBuffer = renderBuffer;
 	}
 
 	public Keyboard getKeyboard() {

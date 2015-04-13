@@ -79,9 +79,11 @@ public class OutlineTracer implements Tracer {
 	{
 		//Pixels
 		PixelBuffer pixelBuffer = data.getPixelBuffer();
-		RenderBuffer renderBuffer = data.getRenderBuffer();
+		RenderBuffer inputRenderBuffer = data.getInputRenderBuffer();
+		RenderBuffer outputRenderBuffer = data.getOutputRenderBuffer();
 		int[] pb_Pixels = pixelBuffer.getPixels();
-		Pixel[] rb_Pixels = renderBuffer.getPixels();
+		Pixel[] orb_Pixels = outputRenderBuffer.getPixels();
+		Pixel[] irb_Pixels = inputRenderBuffer.getPixels();
 		Camera camera = data.getCamera();
 		Scene scene = data.getScene();
 		
@@ -95,7 +97,7 @@ public class OutlineTracer implements Tracer {
 		//ray count and color storage for super sampling support
 		double sampleCount = 0;
 		Color color = new Color();
-		Pixel pixel;
+		Pixel iPixel, oPixel;
 		int pixelIndex;
 		
 		//Primary ray data
@@ -123,8 +125,9 @@ public class OutlineTracer implements Tracer {
 			//reset ray count and color
 			sampleCount = 0.0;
 			pixelIndex = rays.getPixelX() + rays.getPixelY() * pixelBuffer.getWidth();
-			pixel = rb_Pixels[pixelIndex];
-			color.set(pixel.getColor());
+			iPixel = irb_Pixels[pixelIndex];
+			oPixel = orb_Pixels[pixelIndex];
+			color.set(iPixel.getColor());
 			
 			//Set the current primary ray
 			rays.setRandomValue(Math.random());
@@ -293,7 +296,7 @@ public class OutlineTracer implements Tracer {
 			color.multiply3M(darkness).add3AfterMultiply3M(lineColor, 1.0 - darkness);
 			
 			//Update the buffers
-			pixel.getColor().set(color);
+			oPixel.getColor().set(color);
 			pb_Pixels[pixelIndex] = color.rgb32();
 		}
 		
