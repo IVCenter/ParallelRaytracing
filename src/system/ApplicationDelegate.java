@@ -171,7 +171,6 @@ public class ApplicationDelegate extends Job{
 		{
 			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
 			screenDrawer.setVerticalSynchronize(false);
-			screenDrawer.setMsPerFrame(1000/12);
 			
 			pixelBuffer = screenDrawer.getPixelBuffer();
 			inputRenderBuffer = new RenderBuffer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
@@ -337,6 +336,11 @@ public class ApplicationDelegate extends Job{
 			
 			//render
 			renderer.render(rdata);
+			
+			//If running in realtime, tell the screen drawer to update the frame
+			synchronized(screenDrawer) {
+				screenDrawer.notify();
+			}
 		}
 	}
 	

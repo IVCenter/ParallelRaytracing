@@ -46,7 +46,7 @@ public class ScreenDrawer extends JFrame {
     protected int width;
     protected int height;
     
-    protected long msPerFrame = 49;//About 20fps
+    protected long msPerFrame = (long)(1000.0 / Configuration.getFrameRate());//About 20fps
     protected long frames = 0;
 
     protected PixelBuffer pixelBuffer;
@@ -56,6 +56,8 @@ public class ScreenDrawer extends JFrame {
 	protected boolean verticalSynchronize = true;//Setting this to true fixes screen tearing...and murders the frame rate
 	
 	protected boolean loggingFramesPerSecond = false;
+	
+	protected ScreenDrawer screenDrawer = this;
 	
 
 	/* *********************************************************************************************
@@ -108,14 +110,6 @@ public class ScreenDrawer extends JFrame {
 	public void setHeight(int height) {
 		//TODO: Update buffer, etc.
 		this.height = height;
-	}
-
-	public long getMsPerFrame() {
-		return msPerFrame;
-	}
-
-	public void setMsPerFrame(long msPerFrame) {
-		this.msPerFrame = msPerFrame;
 	}
 
 	public long getFrameCount() {
@@ -286,8 +280,16 @@ public class ScreenDrawer extends JFrame {
 	                publish(bi);
 	                frames++;
 	                
+	                //If we're running in real time, wait until the next frame is ready, then draw again
+	                if(Configuration.isRealTime())
+	                	synchronized(screenDrawer) {
+	                		screenDrawer.wait();
+	                		continue;
+						}
+	                
 	                //Determine how much time we need to sleep to maintain the desired ms per frame
 	                //If we're behind schedule then immediately move on to the next frame
+	                msPerFrame = (long)(1000.0 / Configuration.getFrameRate());
 	                sleepTime = msPerFrame - (System.currentTimeMillis() - loopStart);
 	                if(sleepTime > 0)
 	                	Thread.sleep(sleepTime);

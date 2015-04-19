@@ -34,6 +34,8 @@ public class Configuration {
 	protected static boolean isController = false;
 	protected static boolean isRealTime = false;
 	
+	protected static double frameRate = 20.1;
+	
 	protected static int maxAllowableRenderingCores = Integer.MAX_VALUE;
 	
 	protected static Scene masterScene = null;
@@ -160,6 +162,10 @@ public class Configuration {
 	public static boolean isRealTime() { return isRealTime; }
 	public static void setRealTime(boolean isRealTime) { Configuration.isRealTime = isRealTime; }
 	
+	//Frame Rate
+	public static double getFrameRate() { return frameRate; }
+	public static void setFrameRate(double frameRate) { Configuration.frameRate = frameRate; }
+
 	//Max Allowable Rendering Tthreads
 	public static int getMaxAllowableRenderingCores() { return maxAllowableRenderingCores; }
 	public static void setMaxAllowableRenderingCores(	int maxAllowableRenderingCores) { Configuration.maxAllowableRenderingCores = maxAllowableRenderingCores; }
