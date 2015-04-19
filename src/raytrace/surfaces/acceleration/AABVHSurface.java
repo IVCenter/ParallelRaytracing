@@ -224,9 +224,26 @@ public class AABVHSurface extends CompositeSurface {
 		int slices = 5;
 		int maxSurfacesPerLeaf = 8;
 		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf);
+	}	
+	
+	public static <SURFACE extends AbstractSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces, boolean useSAH)
+	{
+		int slices = 5;
+		int maxSurfacesPerLeaf = 8;
+		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf, useSAH);
 	}
 	
 	public static <SURFACE extends AbstractSurface> AABVHSurface makeAABVH(Collection<SURFACE> surfaces, int slices, int maxSurfacesPerLeaf)
+	{
+		boolean useSAH = true;
+		return makeAABVH(surfaces, slices, maxSurfacesPerLeaf, useSAH);
+	}
+	
+	public static <SURFACE extends AbstractSurface> AABVHSurface makeAABVH(
+			Collection<SURFACE> surfaces, 
+			int slices, 
+			int maxSurfacesPerLeaf,
+			boolean useSAH)
 	{
 		/*
 		 * Steps:
@@ -256,8 +273,8 @@ public class AABVHSurface extends CompositeSurface {
 		double[] axisValues = center.getArray();
 		
 		//Make surface sets
-		ArrayList<SURFACE> negative = new ArrayList<SURFACE>();
-		ArrayList<SURFACE> positive = new ArrayList<SURFACE>();
+		ArrayList<SURFACE> negative = new ArrayList<SURFACE>(surfaces.size());
+		ArrayList<SURFACE> positive = new ArrayList<SURFACE>(surfaces.size());
 		
 		//Best axis data
 		double lowestSAH = Double.MAX_VALUE;
@@ -267,30 +284,39 @@ public class AABVHSurface extends CompositeSurface {
 		double lowestAxisValue = Integer.MAX_VALUE;
 		
 		//For each exis, split the sets
-		for(int i = 0; i < 3; ++i)
+		SAH:
 		{
-			for(int slice = -slices/2; slice <= slices/2; ++slice)
+			if(!useSAH)
 			{
-				//Get the plane position for the current axis/slice
-				currentAxisValue = axisValues[i] + (slice * (axisWidths[i])/(double)slices);
-				
-				//Split across current axis
-				split(surfaces, negative, positive, i, currentAxisValue);
-				
-				//Compute the SAH for the current sets
-				currentSAH = calculateSAH(negative, positive);
-
-				//If the current SAH is lower than the current lowest
-				if(currentSAH < lowestSAH)
+				lowestAxis = (int)(Math.random() * 3.0);
+				break SAH;
+			}
+			
+			for(int i = 0; i < 3; ++i)
+			{
+				for(int slice = -slices/2; slice <= slices/2; ++slice)
 				{
-					lowestSAH = currentSAH;
-					lowestAxis = i;
-					lowestAxisValue = currentAxisValue;
+					//Get the plane position for the current axis/slice
+					currentAxisValue = axisValues[i] + (slice * (axisWidths[i])/(double)slices);
+					
+					//Split across current axis
+					split(surfaces, negative, positive, i, currentAxisValue);
+					
+					//Compute the SAH for the current sets
+					currentSAH = calculateSAH(negative, positive);
+	
+					//If the current SAH is lower than the current lowest
+					if(currentSAH < lowestSAH)
+					{
+						lowestSAH = currentSAH;
+						lowestAxis = i;
+						lowestAxisValue = currentAxisValue;
+					}
+					
+					//Clear
+					negative.clear();
+					positive.clear();
 				}
-				
-				//Clear
-				negative.clear();
-				positive.clear();
 			}
 		}
 
