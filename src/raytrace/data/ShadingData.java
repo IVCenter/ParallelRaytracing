@@ -1,6 +1,7 @@
 package raytrace.data;
 
 import math.ray.Ray;
+import raytrace.color.Color;
 import raytrace.material.Material;
 import raytrace.scene.Scene;
 
@@ -21,6 +22,8 @@ public class ShadingData{
 	
 	protected double refractiveIndex;
 	
+	protected Color recursiveSample;
+	
 
 	/* *********************************************************************************************
 	 * Cosntructors
@@ -30,6 +33,7 @@ public class ShadingData{
 		shadingRecursionDepth = 0;
 		actualRecursionDepth = 0;
 		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
+		recursiveSample = Color.black();
 	}
 	
 
@@ -41,6 +45,7 @@ public class ShadingData{
 		shadingRecursionDepth = 0;
 		actualRecursionDepth = 0;	
 		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
+		recursiveSample = Color.black();
 	}
 
 
