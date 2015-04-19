@@ -15,8 +15,7 @@ import raytrace.framework.Tracer;
 public class ProgrammablePixelTracer implements Tracer {
 	
 	/*
-	 * A tracer for outlines, creases, intersections, etc.
-	 * Based on this paper: http://www.sci.utah.edu/~roni/research/projects/NPR-lines/NPR-lines.NPAR09.pdf
+	 * A tracer for Pixel Transforms
 	 */
 
 	/* *********************************************************************************************
