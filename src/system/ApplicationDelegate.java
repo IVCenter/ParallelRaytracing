@@ -26,11 +26,11 @@ import raster.PixelBuffer;
 import raster.RenderBuffer;
 import raster.ScreenDrawer;
 import raytrace.AnimationRenderer;
-import raytrace.ConfigurableRayTracingRenderer;
+import raytrace.ConfigurableRenderer;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
-import raytrace.trace.ParallelRayTracer;
+import raytrace.trace.MultiPassParallelTracer;
 
 public class ApplicationDelegate extends Job{
 	
@@ -195,7 +195,7 @@ public class ApplicationDelegate extends Job{
 		//	If has children its a network distribution renderer
 		if(shouldConfigure)
 		{
-			renderer = new ConfigurableRayTracingRenderer(new ParallelRayTracer());
+			renderer = new ConfigurableRenderer(new MultiPassParallelTracer());
 		}else{
 			renderer = new NetworkRenderer(nodeManager, messageSender);
 		}

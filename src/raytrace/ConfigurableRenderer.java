@@ -8,7 +8,7 @@ import raytrace.framework.Renderer;
 import raytrace.framework.Tracer;
 import system.Configuration;
 
-public class ConfigurableRayTracingRenderer implements Renderer {
+public class ConfigurableRenderer implements Renderer {
 
 	/*
 	 * A configurable ray tracer that allows 
@@ -23,12 +23,12 @@ public class ConfigurableRayTracingRenderer implements Renderer {
 	/* *********************************************************************************************
 	 * Constructors
 	 * *********************************************************************************************/
-	public ConfigurableRayTracingRenderer()
+	public ConfigurableRenderer()
 	{
 		
 	}
 	
-	public ConfigurableRayTracingRenderer(Tracer tracer)
+	public ConfigurableRenderer(Tracer tracer)
 	{
 		this.tracer = tracer;
 	}

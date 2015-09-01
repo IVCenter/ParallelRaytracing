@@ -4,7 +4,7 @@ import raytrace.camera.Camera;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
 
-public class ParallelRayTracer extends ParallelTracer {
+public class MultiPassParallelTracer extends ParallelTracer {
 	
 	/*
 	 * A parallel ray tracer that make use of the parallel tracer interface to manage threading and sync
