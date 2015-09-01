@@ -121,7 +121,7 @@ public class DragonInABoxTest extends Scene
 		tracers.add(outliner);
 		
 		BloomPostProcess bloom = new BloomPostProcess();
-		//tracers.add(bloom);
+		tracers.add(bloom);
 		
 		return tracers;
 	}
@@ -137,7 +137,7 @@ public class DragonInABoxTest extends Scene
 		
 		camera = new ProgrammableCamera();
 		camera.setStratifiedSampling(true);
-		camera.setSuperSamplingLevel(10);
+		camera.setSuperSamplingLevel(2);
 		camera.setPosition(new Vector3(0,2.85,5));
 		camera.setViewingDirection(new Vector3(0,-0.1,-1));
 		camera.setUp(new Vector3(0,1,0));
@@ -170,6 +170,9 @@ public class DragonInABoxTest extends Scene
 	@Override
 	protected void configureWorld()
 	{
+		//setUseDefaultMaterial(true);
+		//setDefaultMaterial(new NormalAsColorMaterial());
+		
 		
 		//Directional Light
 		SoftDirectionalLight directionalLight = new SoftDirectionalLight();

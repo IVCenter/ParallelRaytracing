@@ -86,7 +86,12 @@ public class RayTracer implements Tracer {
 				if(idata != null)
 				{
 					sdata.setIntersectionData(idata);
-					color.add3M(idata.getMaterial().shade(sdata));
+					
+					if(scene.isUseDefaultMaterial())
+						color.add3M(scene.getDefaultMaterial().shade(sdata));
+					else
+						color.add3M(idata.getMaterial().shade(sdata));
+					
 					normal = idata.getNormal();
 					point = idata.getPoint();
 					depth = idata.getDistance();

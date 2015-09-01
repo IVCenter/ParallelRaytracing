@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import math.Vector3;
-
 import raytrace.camera.Camera;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
@@ -14,6 +13,7 @@ import raytrace.framework.Tracer;
 import raytrace.light.Light;
 import raytrace.light.LightManager;
 import raytrace.material.ColorMaterial;
+import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.trace.RayTracer;
@@ -31,6 +31,9 @@ public abstract class Scene extends CompositeSurface{
 	protected Material skyMaterial;
 	protected String sceneKey;
 	protected List<Tracer> tracers;
+	protected Material defaultMaterial = new DiffuseMaterial(Color.white());
+	
+	protected boolean useDefaultMaterial = false;
 	
 
 	/* *********************************************************************************************
@@ -150,6 +153,22 @@ public abstract class Scene extends CompositeSurface{
 
 	public void setTracers(List<Tracer> tracers) {
 		this.tracers = tracers;
+	}
+
+	public Material getDefaultMaterial() {
+		return defaultMaterial;
+	}
+
+	public void setDefaultMaterial(Material defaultMaterial) {
+		this.defaultMaterial = defaultMaterial;
+	}
+
+	public boolean isUseDefaultMaterial() {
+		return useDefaultMaterial;
+	}
+
+	public void setUseDefaultMaterial(boolean useDefaultMaterial) {
+		this.useDefaultMaterial = useDefaultMaterial;
 	}
 
 }

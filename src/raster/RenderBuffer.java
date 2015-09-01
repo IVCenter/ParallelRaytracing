@@ -1,5 +1,7 @@
 package raster;
 
+import process.logging.Logger;
+
 public class RenderBuffer {
 	
 	/*
@@ -26,6 +28,21 @@ public class RenderBuffer {
 		
 		for(int i = 0; i < pixels.length; ++i)
 			pixels[i] = new Pixel();
+	}
+
+	
+	/* *********************************************************************************************
+	 * Copy method
+	 * *********************************************************************************************/
+	public void copy(RenderBuffer rb)
+	{
+		Pixel[] otherPixels = rb.pixels;
+		
+		if(width != rb.width || height != rb.height)
+			Logger.warning(101, "Pixel buffer sizes [" + width + "x" + height + "] and [" + rb.width + "x" + rb.height + "] do not match");
+		
+		for(int i = 0; i < pixels.length; ++i)
+			pixels[i].copy(otherPixels[i]);
 	}
 	
 	

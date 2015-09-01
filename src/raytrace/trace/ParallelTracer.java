@@ -116,6 +116,9 @@ public abstract class ParallelTracer implements Tracer {
 			rdata.setInputRenderBuffer(rdata.getOutputRenderBuffer());
 			rdata.setOutputRenderBuffer(oldInput);
 			
+			//Copy the input contents into the output
+			rdata.getOutputRenderBuffer().copy(rdata.getInputRenderBuffer());
+			
 			//Clear thread control flags/counts
 			completedCount.set(0);
 			isComplete = false;
