@@ -77,6 +77,7 @@ public class ObjFileLoader {
 		for(String line : lines)
 		{
 			line = line.replace("\t", " ");
+			line = line.replace("  ", " ");
 			firstSpaceIndex = line.indexOf(" ");
 			
 			if(line.length() == 0 || firstSpaceIndex < 0) {

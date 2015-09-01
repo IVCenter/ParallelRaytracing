@@ -205,6 +205,8 @@ public class AABVHSurface extends CompositeSurface {
 	@Override
 	public BoundingBox getBoundingBox()
 	{
+		if(boundingBox == null)
+			return new BoundingBox();
 		return boundingBox;
 	}
 	
@@ -372,6 +374,9 @@ public class AABVHSurface extends CompositeSurface {
 		{
 			surfacebb = cs.getBoundingBox();
 			
+			if(surfacebb == null)
+				continue;
+			
 			//If on the negative side, add to negative
 			if(surfacebb.min.get(axis) < axisValue && surfacebb.max.get(axis) < axisValue)
 			{
@@ -407,6 +412,9 @@ public class AABVHSurface extends CompositeSurface {
 			//cs.updateBoundingBox();
 			bb = cs.getBoundingBox();
 			
+			if(bb == null)
+				continue;
+			
 			min = bb.min;
 			max = bb.max;
 
@@ -430,6 +438,10 @@ public class AABVHSurface extends CompositeSurface {
 		for(SURFACE cs : surfaces)
 		{
 			bb = cs.getBoundingBox();
+			
+			if(bb == null)
+				continue;
+			
 			mp = bb.getMidpoint();
 			mpm = mp.getArray();
 			m[0] += mpm[0];

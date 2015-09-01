@@ -1,52 +1,35 @@
-package file.xyz;
+package file.ppm;
 
 import java.io.File;
 import java.util.HashMap;
 
 import process.logging.Logger;
+import raytrace.map.texture._2D.Texture2D;
 import file.LineParser;
 import file.StringParser;
+import file.xyz.XyzPointCloudData;
 import file.xyz.parse.XyzEntryParser;
 
-public class XyzFileLoader {
+public class PpmFileLoader {
 
-	/* *********************************************************************************************
-	 * Static Parsers
-	 * *********************************************************************************************/
-	protected static HashMap<String, StringParser<XyzPointCloudData>> parsers;
-	protected static StringParser<XyzPointCloudData> defaultParser;
-	
-
-	/* *********************************************************************************************
-	 * Static Constructor
-	 * *********************************************************************************************/
-	static
-	{
-		parsers = new HashMap<String, StringParser<XyzPointCloudData>>();
-
-		defaultParser = new XyzEntryParser();
-		(defaultParser).addTo(parsers);
-		//TODO: The rest?
-	}
-	
+	/*
+	 * A file loader for PPM Files
+	 */
 
 	/* *********************************************************************************************
 	 * Static Loading Methods
 	 * *********************************************************************************************/
-	public static XyzPointCloudData load(String fileName) { return load(new File(fileName)); }
-	public static XyzPointCloudData load(File file)
+	public static Texture2D load(String fileName) { return load(new File(fileName)); }
+	public static Texture2D load(File file)
 	{
 		//Make sure the file exists
 		if(!file.exists()) {
-			Logger.warning(-70, "XyzFileLoader: The specified file does not exist [" + file.getPath() + "].");
+			Logger.warning(-73, "PpmFileLoader: The specified file does not exist [" + file.getPath() + "].");
 			return null;
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-70, "XyzFileLoader: Starting loading of the point cload [" + file.getName() + "]...");
-		
-		//Create a new Xyz Point Cload Data object
-		XyzPointCloudData data = new XyzPointCloudData();
+		Logger.progress(-73, "PpmFileLoader: Starting loading of the PPM File [" + file.getName() + "]...");
 		
 		//Iterate the lines in the given file
 		String lineKey;
@@ -61,7 +44,7 @@ public class XyzFileLoader {
 			firstSpaceIndex = line.indexOf(" ");
 			
 			if(line.length() == 0 || firstSpaceIndex < 0) {
-				Logger.warning(-70, "XyzFileLoader: Skipping line [" + line + "].");
+				Logger.warning(-73, "PpmFileLoader: Skipping line [" + line + "].");
 				continue;
 			}
 			
@@ -83,7 +66,7 @@ public class XyzFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-70, "XyzFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
+		Logger.progress(-73, "PpmFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
 				data.getPoints().size() + "] points... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;

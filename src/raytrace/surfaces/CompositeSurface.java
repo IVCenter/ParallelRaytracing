@@ -115,6 +115,9 @@ public abstract class CompositeSurface extends AbstractSurface implements Compos
 		{
 			bb = cs.getBoundingBox();
 			
+			if(bb == null)
+				continue;
+			
 			min = bb.min;
 			max = bb.max;
 

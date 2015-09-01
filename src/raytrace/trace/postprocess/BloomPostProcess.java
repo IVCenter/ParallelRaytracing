@@ -17,7 +17,9 @@ public class BloomPostProcess extends PostProcess {
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	protected double radius = 20.0;
+	protected double radius = 10.0;
+	protected double minimumIntensity = 1.0;
+	protected double effectIntensity = 1.0;
 	
 
 	/* *********************************************************************************************
@@ -57,6 +59,9 @@ public class BloomPostProcess extends PostProcess {
 		int minx, maxx, miny, maxy;
 		int samplesUsed;
 		
+		double radiusSqrd = radius * radius;//Math.sqrt(radius);
+		double falloff;
+		
 		//For each ray, calculate the pixel color
 		for(Ray rays : camera)
 		{
@@ -93,22 +98,28 @@ public class BloomPostProcess extends PostProcess {
 					//Get the current pixel
 					iPixel = irb_Pixels[x + y * renderWidth];
 					
-					//If the overall intensity of the current pixel is greater than the center pixel, add it
-					if(iPixel.getColor().intensity3() > 1.0)
-						color.add3M(iPixel.getColor().multiply3(Math.sqrt(Math.pow(x - rayX, 2.0) + Math.pow(y - rayY, 2.0))/radius));
+					//Calculate the falloff
+					//falloff = Math.max(0.0, radius - (Math.sqrt(Math.pow(x - rayX, 2.0) + Math.pow(y - rayY, 2.0))));
+					//falloff = (falloff * falloff) / radiusSqrd;
+					falloff = Math.max(0.0, radius - (Math.sqrt(Math.pow(x - rayX, 2.0) + Math.pow(y - rayY, 2.0))));
+					falloff = (falloff) / radius;
 					
-					//Incremen the samplesUsed count
+					//If the overall intensity of the current pixel is greater than the center pixel, add it
+					if(iPixel.getColor().intensity3() > minimumIntensity)
+						color.add3M(iPixel.getColor().multiply3(falloff));
+					
+					//Increment the samplesUsed count
 					++samplesUsed;
 				}
 			}
 			
 			//Attenuate the bloom color by the numver of samples tested
-			color.multiply3M(1.0 / samplesUsed);
+			color.multiply3M(effectIntensity / samplesUsed);
 			color.add3M(centerPixel.getColor());
 			
 			//Update the pixel buffer and render buffer
 			oPixel.getColor().set(color);
-			pb_Pixels[pixelIndex] = color.rgb32();
+			pb_Pixels[pixelIndex] = color.argb24();
 		}
 	}
 

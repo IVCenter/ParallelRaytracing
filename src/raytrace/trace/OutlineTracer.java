@@ -297,7 +297,7 @@ public class OutlineTracer implements Tracer {
 			
 			//Update the buffers
 			oPixel.getColor().set(color);
-			pb_Pixels[pixelIndex] = color.rgb32();
+			pb_Pixels[pixelIndex] = color.argb24();
 		}
 		
 	}

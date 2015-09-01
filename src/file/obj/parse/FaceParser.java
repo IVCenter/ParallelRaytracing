@@ -49,7 +49,13 @@ public class FaceParser extends StringParser<ObjModelData> {
 			{
 				faceComponents = tokens(tokens[i], "/");
 				
+				if(faceComponents.length == 2)
+				{
+					faceComponents = new String[]{faceComponents[0], "0", faceComponents[1]};
+				}
+				
 				if(faceComponents.length != 3)
+				//	break;
 					throw new Exception("FaceParser: The line [" + str + "] has an improperly formatted part [" + tokens[i] + "].");
 				
 				for(int j = 0; j < faceComponents.length; ++j)

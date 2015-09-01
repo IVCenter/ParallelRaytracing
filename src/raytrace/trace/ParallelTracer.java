@@ -111,6 +111,7 @@ public abstract class ParallelTracer implements Tracer {
 			callID++;
 			
 			//Flip the input and output buffers
+			//TODO: Don't just flip them, copy the contents across!
 			RenderBuffer oldInput = rdata.getInputRenderBuffer();
 			rdata.setInputRenderBuffer(rdata.getOutputRenderBuffer());
 			rdata.setOutputRenderBuffer(oldInput);

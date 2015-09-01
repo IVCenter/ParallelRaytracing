@@ -124,7 +124,7 @@ public class RayTracer implements Tracer {
 			pixel.setDepth(depth);
 			
 			//Set the pixel buffer final color
-			pb_Pixels[pixelIndex] = color.rgb32();
+			pb_Pixels[pixelIndex] = color.argb24();
 		}
 		
 	}

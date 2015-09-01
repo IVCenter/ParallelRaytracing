@@ -94,7 +94,7 @@ public class Color implements Texture {
 	
 	public void setARGB(int color)
 	{
-		set((color << 8) + (color >>> 24));
+		set((color << 8) | (color >>> 24));
 	}
 
 	/* *********************************************************************************************
@@ -105,16 +105,23 @@ public class Color implements Texture {
 		//TODO: normalize
 	}
 	
-	public int rgb32()
+	public int argb24()
 	{
-		channels[0] = Math.max(0.0, Math.min(1.0, channels[0]));
-		channels[1] = Math.max(0.0, Math.min(1.0, channels[1]));
-		channels[2] = Math.max(0.0, Math.min(1.0, channels[2]));
+		double r = Math.max(0.0, Math.min(1.0, channels[0]));
+		double g = Math.max(0.0, Math.min(1.0, channels[1]));
+		double b = Math.max(0.0, Math.min(1.0, channels[2]));
 
 		return  (0x000000ff << 24) +
-				((int)((channels[0]) * 255) << 16) +
-				((int)((channels[1]) * 255) << 8) +
-				((int)((channels[2]) * 255));
+				(((int)(r * 255)) << 16) +
+				(((int)(g * 255)) << 8) +
+				(((int)(b * 255)));
+	}
+	
+	public int argb32()
+	{
+		double a = Math.max(0.0, Math.min(1.0, channels[3]));
+		
+		return (((int)(a * 255)) << 24) | (0x00FFFFFF & argb24());
 	}
 	
 	public Color add3(Color c)
@@ -217,18 +224,6 @@ public class Color implements Texture {
 		channels[1] *= d;
 		channels[2] *= d;
 		return this;
-	}
-	
-	public Color interpolate(Color color0, Color color1, double t)
-	{
-		t = Math.min(1.0, Math.max(0.0, t));
-		double[] c0 = color0.getChannels();
-		double[] c1 = color1.getChannels();
-		
-	    return new Color((1.0 - t) * c0[0] + t * c1[0],
-	                 	 (1.0 - t) * c0[1] + t * c1[1],
-	                 	 (1.0 - t) * c0[2] + t * c1[2],
-	                 	 (1.0 - t) * c0[3] + t * c1[3]);
 	}
 	
 	public Color mixWithWhite(double d, double e)
@@ -345,5 +340,50 @@ public class Color implements Texture {
 						 Math.random() * (1.0-min) + min, 
 						 1.0);
 	}
+	
+	public static Color interpolate(Color color0, Color color1, double t)
+	{
+		t = Math.min(1.0, Math.max(0.0, t));
+		double[] c0 = color0.getChannels();
+		double[] c1 = color1.getChannels();
+		
+	    return new Color((1.0 - t) * c0[0] + t * c1[0],
+	                 	 (1.0 - t) * c0[1] + t * c1[1],
+	                 	 (1.0 - t) * c0[2] + t * c1[2],
+	                 	 (1.0 - t) * c0[3] + t * c1[3]);
+	}
+	
+    /**
+     * Sourced from web: http://www.java-gaming.org/index.php?topic=22121.0
+     *
+     * @param c1 value/color 1 (upper left value/RGB pixel)
+     * @param c2 value/color 2 (upper right value/RGB pixel)
+     * @param c3 value/color 3 (lower left value/RGB pixel)
+     * @param c4 value/color 4 (lower right value/RGB pixel)
+     * @param bX x interpolation factor (range 0-256)
+     * @param bY y interpolation factor (range 0-256)
+     *
+     * @return interpolated value(packed RGB pixel) of c1,c2,c3,c4 for given factors bX & bY as three packed unsigned bytes
+     *
+     * @author Bruno Augier http://dzzd.net/
+     */
+
+    public static int interpolate(int c1, int c2, int c3, int c4, int bX, int bY)
+    {
+       int f24=(bX*bY)>>8;
+       int f23=bX-f24;
+       int f14=bY-f24;
+       int f13=((256-bX)*(256-bY))>>8; // this one can be computed faster
+       
+       return ((((c1&0xFF00FF)*f13+(c2&0xFF00FF)*f23+(c3&0xFF00FF)*f14+(c4&0xFF00FF)*f24)&0xFF00FF00)|
+               (((c1&0x00FF00)*f13+(c2&0x00FF00)*f23+(c3&0x00FF00)*f14+(c4&0x00FF00)*f24)&0x00FF0000))>>>8;
+    }
+    
+    public static int interpolate(Color c1, Color c2, Color c3, Color c4, double bX, double bY)
+    {;
+    	int usp = (int)(bX * 256);
+		int vsp = (int)(bY * 256);
+    	return  0xFF000000 | (0x00FFFFFF & interpolate(c1.argb24(), c2.argb24(), c3.argb24(), c4.argb24(), usp, vsp));
+    }
 	
 }

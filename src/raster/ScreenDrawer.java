@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import process.logging.Logger;
+import raytrace.color.Color;
 import system.Configuration;
 
 public class ScreenDrawer extends JFrame {
@@ -327,8 +328,8 @@ public class ScreenDrawer extends JFrame {
 	        			u1 = u0 + 1;
 	        			
 	        			//Add an alpha mask of 1.0 to the lower 24bits of the results of interpolate()
-	   					target[x + (y * targetScanWidth)] = 0xFF000000 + (0x00FFFFFF &
-	   							interpolate(base[(u0) + (v0) * baseScanWidth],
+	   					target[x + (y * targetScanWidth)] = 0xFF000000 | (0x00FFFFFF &
+	   							Color.interpolate(base[(u0) + (v0) * baseScanWidth],
 	   										base[(u1) + (v0) * baseScanWidth],
 	   										base[(u0) + (v1) * baseScanWidth],
 	   										base[(u1) + (v1) * baseScanWidth],
@@ -337,33 +338,6 @@ public class ScreenDrawer extends JFrame {
 	        		}
 	        	}
 		    }
-		    
-		    /**
-		     * Sourced from web: http://www.java-gaming.org/index.php?topic=22121.0
-		     *
-		     * @param c1 value/color 1 (upper left value/RGB pixel)
-		     * @param c2 value/color 2 (upper right value/RGB pixel)
-		     * @param c3 value/color 3 (lower left value/RGB pixel)
-		     * @param c4 value/color 4 (lower right value/RGB pixel)
-		     * @param bX x interpolation factor (range 0-256)
-		     * @param bY y interpolation factor (range 0-256)
-		     *
-		     * @return interpolated value(packed RGB pixel) of c1,c2,c3,c4 for given factors bX & bY as three packed unsigned bytes
-		     *
-		     * @author Bruno Augier http://dzzd.net/
-		     */
-
-		    private int interpolate(int c1,int c2,int c3,int c4,int bX, int bY)
-		    {
-		       int f24=(bX*bY)>>8;
-		       int f23=bX-f24;
-		       int f14=bY-f24;
-		       int f13=((256-bX)*(256-bY))>>8; // this one can be computed faster
-		       
-		       return ((((c1&0xFF00FF)*f13+(c2&0xFF00FF)*f23+(c3&0xFF00FF)*f14+(c4&0xFF00FF)*f24)&0xFF00FF00)|
-		               (((c1&0x00FF00)*f13+(c2&0x00FF00)*f23+(c3&0x00FF00)*f14+(c4&0x00FF00)*f24)&0x00FF0000))>>>8;
-		    }
-		    
 		    
 	    }
 	    

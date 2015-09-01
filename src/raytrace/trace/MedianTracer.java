@@ -130,7 +130,7 @@ public class MedianTracer implements Tracer {
 			Arrays.sort(colors, comparator);
 			
 			//Set the color
-			target[x + y * width] = colors[colors.length / 2].rgb32();
+			target[x + y * width] = colors[colors.length / 2].argb24();
 		}
 		
 	}

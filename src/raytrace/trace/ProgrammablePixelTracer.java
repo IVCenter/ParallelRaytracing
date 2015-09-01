@@ -76,7 +76,7 @@ public class ProgrammablePixelTracer implements Tracer {
 			}
 			
 			//Update the pixel buffer and render buffer
-			pb_Pixels[pixelIndex] = color.rgb32();
+			pb_Pixels[pixelIndex] = color.argb24();
 		}
 		
 	}
