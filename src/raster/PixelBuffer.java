@@ -85,13 +85,13 @@ public class PixelBuffer {
 			bufimg.setRGB(0, 0, imageWidth, imageHeight, buffer, 0, width);
 
 			
-			Logger.progress(-1, "Begin saving pixel buffer to file [" + filePath + "].");
+			Logger.message(-1, "Begin saving pixel buffer to file [" + filePath + "].");
 			
 			//Save the image to disk at filePath
 			if(!ImageIO.write(bufimg, "png", file))
 				Logger.error(-1, "Can not find an appropriate file writer for the given type.");
 			
-			Logger.progress(-1, "End saving pixel buffer");
+			Logger.message(-1, "End saving pixel buffer");
 			
 		} catch (IOException e) {
 			e.printStackTrace();

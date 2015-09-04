@@ -37,7 +37,7 @@ public class AnimationFolderNamePrefixParser extends StringParser<Configuration>
 			
 			//Set it
 			Configuration.setAnimationFolderNamePrefix(animationFolderPrefix);
-			Logger.progress(-32, "ConfigFileLoader: Setting Animation Folder Prefix [" + animationFolderPrefix + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Animation Folder Prefix [" + animationFolderPrefix + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-39, "AnimationFolderNamePrefixParser: Failed to parse a Animation Folder Prefix line. [" + str + "]");

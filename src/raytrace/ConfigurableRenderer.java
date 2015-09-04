@@ -46,7 +46,7 @@ public class ConfigurableRenderer implements Renderer {
 	@Override
 	public void update(UpdateData data)
 	{
-		Logger.progress(-1, "Updating...");
+		Logger.message(-1, "Updating...");
 		if(data.getScene() != null) {
 			data.getScene().update(data);
 			data.getScene().bake(new BakeData());
@@ -56,7 +56,7 @@ public class ConfigurableRenderer implements Renderer {
 	@Override
 	public void render(RenderData data)
 	{
-		Logger.progress(-1, "Rendering...");
+		Logger.message(-1, "Rendering...");
 		if(tracer != null && data.getScene() != null && data.getScene().getActiveCamera() != null)
 		{
 			//Update the active camera to use the render dimensions

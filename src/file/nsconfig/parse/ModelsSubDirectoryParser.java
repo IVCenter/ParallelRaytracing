@@ -37,7 +37,7 @@ public class ModelsSubDirectoryParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setModelsSubDirectory(modelDir);
-			Logger.progress(-32, "ConfigFileLoader: Setting Models Directory [" + modelDir + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Models Directory [" + modelDir + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-46, "ModelsSubDirectoryParser: Failed to parse a Models Directory line. [" + str + "]");

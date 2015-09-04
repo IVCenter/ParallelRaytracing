@@ -37,7 +37,7 @@ public class WorkingDirectoryParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setWorkingDirectory(workDir);
-			Logger.progress(-32, "ConfigFileLoader: Setting Working Directory [" + workDir + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Working Directory [" + workDir + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-45, "WorkingDirectoryParser: Failed to parse a Working Directory line. [" + str + "]");

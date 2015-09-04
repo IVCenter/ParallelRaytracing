@@ -259,7 +259,7 @@ public class ScreenDrawer extends JFrame {
 	            	//If its been about a second or so, print the current fps
 	            	if(loopStart - start >= 1000) {
 	            		if(loggingFramesPerSecond)
-	            			Logger.progress(-2, "ScreenDrawer: FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
+	            			Logger.message(-2, "ScreenDrawer: FPS:[" + ((double) frames / (loopStart - start) * 1000) + "]");
 	            		start = loopStart;
 	            		frames = 0;
 	            	}

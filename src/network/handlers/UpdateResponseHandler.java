@@ -4,7 +4,7 @@ import network.Message;
 import network.NetworkRenderer;
 import raytrace.AnimationRenderer;
 import raytrace.framework.Renderer;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 
 public class UpdateResponseHandler extends MessageHandler {
 	
@@ -36,7 +36,7 @@ public class UpdateResponseHandler extends MessageHandler {
 		//TODO: Anything else?
 		
 		//If the renderer is a network renderer, let it know we completed a request
-		Renderer renderer = ApplicationDelegate.inst.getRenderer();
+		Renderer renderer = RenderingEngine.inst.getRenderer();
 		if(renderer instanceof NetworkRenderer)
 		{
 			((NetworkRenderer)renderer).completedARequest();

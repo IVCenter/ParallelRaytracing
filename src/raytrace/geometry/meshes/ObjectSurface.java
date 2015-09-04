@@ -44,11 +44,11 @@ public class ObjectSurface extends MeshSurface {
 		 * Create aabvh from triangles
 		 * set aabvh var
 		 */
-		Logger.progress(-14, "Starting creating an Object Surface....");
-		Logger.progress(-14, "Vertices: [" + obj.getVertices().size() + "].");
-		Logger.progress(-14, "Normals: [" + obj.getNormals().size() + "].");
-		Logger.progress(-14, "TexCoords: [" + obj.getTexCoords().size() + "].");
-		Logger.progress(-14, "Faces: [" + obj.getFaces().size() + "].");
+		Logger.message(-14, "Starting creating an Object Surface....");
+		Logger.message(-14, "Vertices: [" + obj.getVertices().size() + "].");
+		Logger.message(-14, "Normals: [" + obj.getNormals().size() + "].");
+		Logger.message(-14, "TexCoords: [" + obj.getTexCoords().size() + "].");
+		Logger.message(-14, "Faces: [" + obj.getFaces().size() + "].");
 		
 		//int tempCount = 0;
 		
@@ -79,9 +79,9 @@ public class ObjectSurface extends MeshSurface {
 		
 		//Create and profile aabvh
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-1, "Starting creating a BVH for root surface... [" + triangles.size() + " subsurfaces].");
+		Logger.message(-1, "Starting creating a BVH for root surface... [" + triangles.size() + " subsurfaces].");
 		aabvh = AABVHSurface.makeAABVH(triangles, 1, 4);
-		Logger.progress(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
+		Logger.message(-1, "Ending AABVH creation... (" + (System.currentTimeMillis() - startTime) + "ms).");
 	}
 
 	

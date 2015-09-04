@@ -1,7 +1,7 @@
 package network.handlers;
 
 import raytrace.data.UpdateData;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Configuration;
 import system.Constants;
 import network.CommonMessageConstructor;
@@ -43,14 +43,14 @@ public class UpdateRequestHandler extends MessageHandler {
 		udata.setScene(Configuration.getMasterScene());
 		
 		//Get rendering
-		ApplicationDelegate.inst.getRenderer().update(udata);
+		RenderingEngine.inst.getRenderer().update(udata);
 		
 		
 		//Send a response message
 		Message response = CommonMessageConstructor.createUpdateResponseMessage();
 		
 		String returnIP = message.getData().get(Constants.Message.NODE_IP);
-		ApplicationDelegate.inst.getMessageSender().send(response, returnIP);
+		RenderingEngine.inst.getMessageSender().send(response, returnIP);
 	}
 
 }

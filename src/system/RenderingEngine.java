@@ -2,6 +2,7 @@ package system;
 
 import java.io.IOException;
 
+import folder.DirectoryManager;
 import network.CommonMessageConstructor;
 import network.Message;
 import network.NetworkRenderer;
@@ -22,6 +23,7 @@ import network.send.NetworkMessageSender;
 import input.DefaultKeyboard;
 import input.Keyboard;
 import process.Job;
+import process.logging.Logger;
 import raster.PixelBuffer;
 import raster.RenderBuffer;
 import raster.ScreenDrawer;
@@ -32,7 +34,7 @@ import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
 import raytrace.trace.MultiPassParallelTracer;
 
-public class ApplicationDelegate extends Job{
+public class RenderingEngine extends Job{
 	
 	/*
 	 * If controller specified:
@@ -57,7 +59,7 @@ public class ApplicationDelegate extends Job{
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
-	public static ApplicationDelegate inst;
+	public static RenderingEngine inst;
 	
 	protected ScreenDrawer screenDrawer;
 	protected PixelBuffer pixelBuffer;
@@ -81,7 +83,7 @@ public class ApplicationDelegate extends Job{
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ApplicationDelegate()
+	public RenderingEngine()
 	{
 		//Set the statically accessible instance to this
 		//There should not be more than once instance of application delegate at a time
@@ -98,7 +100,11 @@ public class ApplicationDelegate extends Job{
 	@Override
 	protected void initialize()
 	{
-		progress("Initializing Application Delegate...");
+		message("Initializing Application Delegate...");
+		
+
+		//Create the directory structure for the current config
+		DirectoryManager.createFolderStructure();
 		
 		
 		//Create a node manager
@@ -285,7 +291,7 @@ public class ApplicationDelegate extends Job{
 	@Override
 	protected void finalize()
 	{
-		//
+		Logger.terminate();
 	}
 
 	
@@ -294,7 +300,7 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected void startMainLoop()
 	{	
-		progress("Starting Main Loop...");
+		message("Starting Main Loop...");
 		
 		//If this is a clock (implicit by this method being called), and its a leaf, then this is a stand-alone node
 		//So set the started flag to true
@@ -366,7 +372,7 @@ public class ApplicationDelegate extends Job{
 	 * *********************************************************************************************/
 	protected void startRegistrationLoop()
 	{
-		progress("Starting Registration Loop...");
+		message("Starting Registration Loop...");
 		
 		//Registration Loop
 		for(;;)//While spider face holds true
@@ -417,6 +423,7 @@ public class ApplicationDelegate extends Job{
 			}
 		}
 		
+		Logger.terminate();
 		System.exit(1);
 	}
 	

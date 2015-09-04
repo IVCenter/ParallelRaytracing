@@ -80,7 +80,7 @@ public class ConfigFileLoader {
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-32, "ConfigFileLoader: Starting loading of the config [" + file.getName() + "]...");
+		Logger.message(-32, "ConfigFileLoader: Starting loading of the config [" + file.getName() + "]...");
 		
 		//Iterate the lines in the given file
 		String lineKey;
@@ -128,7 +128,7 @@ public class ConfigFileLoader {
 			parser.parse(line, null);
 		}
 		
-		Logger.progress(-32, "ConfigFileLoader: Ending loading of the configuration [" + file.getName() + "]... (" + 
+		Logger.message(-32, "ConfigFileLoader: Ending loading of the configuration [" + file.getName() + "]... (" + 
 				(System.currentTimeMillis() - startTime) + "ms).");
 	}
 

@@ -4,7 +4,7 @@ import process.utils.RenderingUtils;
 
 import raytrace.camera.Camera;
 import raytrace.data.RenderData;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Configuration;
 import system.Constants;
 import network.CommonMessageConstructor;
@@ -61,7 +61,7 @@ public class RenderRequestHandler extends MessageHandler {
 		
 		//Setup a render data object
 		RenderData rdata = new RenderData();
-		rdata.setPixelBuffer(ApplicationDelegate.inst.getPixelBuffer());
+		rdata.setPixelBuffer(RenderingEngine.inst.getPixelBuffer());
 		rdata.setScene(Configuration.getMasterScene());
 		rdata.setCamera(camera);
 		
@@ -74,7 +74,7 @@ public class RenderRequestHandler extends MessageHandler {
 		}
 		
 		//Get rendering
-		ApplicationDelegate.inst.getRenderer().render(rdata);
+		RenderingEngine.inst.getRenderer().render(rdata);
 		
 		//If an intermediate thread was created, stop it here.
 		if(intermediateThread != null)
@@ -94,10 +94,10 @@ public class RenderRequestHandler extends MessageHandler {
 		Message response = CommonMessageConstructor.createRenderResponseMessage();
 		response.getData().set(Constants.Message.NODE_CAMERA, freshCamera);
 		response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
-				ApplicationDelegate.inst.getPixelBuffer().getPixels(), freshCamera));
+				RenderingEngine.inst.getPixelBuffer().getPixels(), freshCamera));
 		
 		String returnIP = message.getData().get(Constants.Message.NODE_IP);
-		ApplicationDelegate.inst.getMessageSender().send(response, returnIP);
+		RenderingEngine.inst.getMessageSender().send(response, returnIP);
 	}
 	
 	private Thread startIntermediateResultsLoop(final Camera camera, final String controllerIP)
@@ -122,9 +122,9 @@ public class RenderRequestHandler extends MessageHandler {
 						Message response = CommonMessageConstructor.createIntermediateRenderResponseMessage();
 						response.getData().set(Constants.Message.NODE_CAMERA, camera);
 						response.getData().set(Constants.Message.NODE_PIXELS, RenderingUtils.packPixels(
-								ApplicationDelegate.inst.getPixelBuffer().getPixels(), camera));
+								RenderingEngine.inst.getPixelBuffer().getPixels(), camera));
 						
-						ApplicationDelegate.inst.getMessageSender().send(response, controllerIP);
+						RenderingEngine.inst.getMessageSender().send(response, controllerIP);
 					}
 				}
 			}

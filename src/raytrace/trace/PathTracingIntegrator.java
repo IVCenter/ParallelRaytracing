@@ -128,7 +128,7 @@ public class PathTracingIntegrator implements Tracer {
 			
 			//If the camera is dirty stop rendering
 			if(camera.isDirty()) {
-				Logger.progress(-1, "RayTracer: Detected a dirty camera, cancelling rendering.");
+				Logger.message(-1, "RayTracer: Detected a dirty camera, cancelling rendering.");
 				break;
 			}
 

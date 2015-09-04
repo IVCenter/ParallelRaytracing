@@ -37,7 +37,7 @@ public class TextureSubDirectoryParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setTextureSubDirectory(textureDir);
-			Logger.progress(-32, "ConfigFileLoader: Setting Texture Directory [" + textureDir + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Texture Directory [" + textureDir + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-49, "TextureSubDirectoryParser: Failed to parse a Texture Directory line. [" + str + "]");

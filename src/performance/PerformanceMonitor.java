@@ -61,7 +61,7 @@ public class PerformanceMonitor {
 		for(int i = 0; i < Runtime.getRuntime().availableProcessors(); ++i) {
 			new Thread() {
 				public void run() {
-					Logger.progress(-17, "FLOPs: [" + flopper.measure(5000) + "].");
+					Logger.message(-17, "FLOPs: [" + flopper.measure(5000) + "].");
 				}
 			}.start();
 		}

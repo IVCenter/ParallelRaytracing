@@ -37,7 +37,7 @@ public class MessageSendPortParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.Networking.setMessageSendPort(port);
-			Logger.progress(-32, "ConfigFileLoader: Setting Message Send Port [" + port + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Message Send Port [" + port + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-51, "MessageSendPortParser: Failed to parse a Message Send Port line. [" + str + "]");

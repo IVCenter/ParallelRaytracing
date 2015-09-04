@@ -42,7 +42,7 @@ public class SslFileLoader {
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-70, "SslFileLoader: Starting loading of the point cload [" + file.getName() + "]...");
+		Logger.message(-70, "SslFileLoader: Starting loading of the point cload [" + file.getName() + "]...");
 		
 		//Create a new Ssl Level Data object
 		SslLevelData data = new SslLevelData();
@@ -75,7 +75,7 @@ public class SslFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-70, "SslFileLoader: Ending loading of the space slalom level [" + file.getName() + "] with [" + 
+		Logger.message(-70, "SslFileLoader: Ending loading of the space slalom level [" + file.getName() + "] with [" + 
 				data.getGates().size() + "] gates... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;

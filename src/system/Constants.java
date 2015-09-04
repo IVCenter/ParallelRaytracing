@@ -39,6 +39,9 @@ public class Constants {
 		//Keep track of keys used to prevent duplicate keys from being used
 		public static final KeySet KEYS = new KeySet();
 
+		//NOTE: Scene implementations have been removed from the engine source code
+		//TODO: Remove these scene constants
+		/*
 		public static final String TEST1 = KEYS.addKey("Test1");
 		public static final String TEST2 = KEYS.addKey("Test2");
 		public static final String TEST3 = KEYS.addKey("Test3");
@@ -66,6 +69,7 @@ public class Constants {
 		public static final String VoxelTest1 = KEYS.addKey("VoxelTest1");
 		
 		public static final String CSE165_2015_DataSmoothingDiagrams = KEYS.addKey("CSE165_2015_DataSmoothingDiagrams");
+		*/
 	}
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

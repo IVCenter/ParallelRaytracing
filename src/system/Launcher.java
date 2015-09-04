@@ -3,11 +3,9 @@ package system;
 import java.io.File;
 
 import file.nsconfig.ConfigFileLoader;
-import folder.DirectoryManager;
-
 import process.Environment;
 import process.logging.Logger;
-import raytrace.scene.SceneLoader;
+import raytrace.scene.EmptyScene;
 
 public class Launcher {
 
@@ -33,9 +31,6 @@ public class Launcher {
 			if(configFile.exists() && configFile.getName().endsWith(Constants.configurationFileExtension))
 			{
 				ConfigFileLoader.load(configFile);
-
-				//Create the directory structure for the current config
-				DirectoryManager.createFolderStructure();
 			}else{
 				Logger.error(-1, "Launcher: Unable to open the configuration file [" + args[0] + "].");
 			}
@@ -52,11 +47,11 @@ public class Launcher {
 		}
 		
 		
-		Logger.progress(-1, "Launching a Night Sky Node with ID:[" + Configuration.getId() + "]...");
+		Logger.message(-1, "Launching a Night Sky Node with ID:[" + Configuration.getId() + "]...");
 		
 		//Pass off control to the ApplicationDelegate
-		ApplicationDelegate app = new ApplicationDelegate();
-		app.execute(new Environment());
+		RenderingEngine engine = new RenderingEngine();
+		engine.execute();
 	}
 	
 	private static void loadDebugConfiguration()
@@ -71,11 +66,8 @@ public class Launcher {
 		Configuration.setClock(true);//The top most node must have clock set to true (this includes stand-alone nodes)
 		Configuration.setLeaf(true);//true for local, false for networked
 		Configuration.setController(true);
-		Configuration.setWorkingDirectory("/Users/Asylodus/Desktop/NightSky/");
-		Configuration.setMasterScene(SceneLoader.load(Constants.SceneKeys.TEST6));
-
-		//Create the directory structure for the debug config
-		DirectoryManager.createFolderStructure();
+		Configuration.setWorkingDirectory("");
+		Configuration.setMasterScene(new EmptyScene());
 	}
 	
 	/*

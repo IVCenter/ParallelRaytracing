@@ -62,7 +62,7 @@ public class ObjFileLoader {
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-9, "ObjFileLoader: Starting loading of the model [" + file.getName() + "]...");
+		Logger.message(-9, "ObjFileLoader: Starting loading of the model [" + file.getName() + "]...");
 		
 		//Create a new Object Model Data object
 		ObjModelData data = new ObjModelData();
@@ -102,7 +102,7 @@ public class ObjFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-9, "ObjFileLoader: Ending loading of the model [" + file.getName() + "]... (" + 
+		Logger.message(-9, "ObjFileLoader: Ending loading of the model [" + file.getName() + "]... (" + 
 				(System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;

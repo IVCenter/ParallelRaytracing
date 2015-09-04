@@ -37,7 +37,7 @@ public class NodeIdPrefixParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setNodeIdPrefix(idPrefix);
-			Logger.progress(-32, "ConfigFileLoader: Setting Node ID Prefix [" + idPrefix + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Node ID Prefix [" + idPrefix + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-37, "NodeIdPrefixParser: Failed to parse a Node ID Prefix line. [" + str + "]");

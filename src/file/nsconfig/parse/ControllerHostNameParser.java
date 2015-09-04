@@ -37,7 +37,7 @@ public class ControllerHostNameParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.Networking.setControllerHostName(hostname);
-			Logger.progress(-32, "ConfigFileLoader: Setting Controller Host Name [" + hostname + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Controller Host Name [" + hostname + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-50, "ControllerHostNameParser: Failed to parse a Controller Host Name line. [" + str + "]");

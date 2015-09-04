@@ -33,13 +33,13 @@ public abstract class Keyboard implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
-		Logger.progress(-7, "Revceived a keyTyped() call for Key[" + e.getKeyChar() + "].");
+		Logger.message(-7, "Revceived a keyTyped() call for Key[" + e.getKeyChar() + "].");
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		Logger.progress(-7, "Revceived a keyPressed() call for Key[" + e.getKeyChar() + "].");
+		Logger.message(-7, "Revceived a keyPressed() call for Key[" + e.getKeyChar() + "].");
 		
 		keyDown.put(e.getKeyCode(), true);
 	}
@@ -47,7 +47,7 @@ public abstract class Keyboard implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		Logger.progress(-7, "Revceived a keyReleased() call for Key[" + e.getKeyChar() + "].");
+		Logger.message(-7, "Revceived a keyReleased() call for Key[" + e.getKeyChar() + "].");
 
 		keyDown.put(e.getKeyCode(), false);
 	}

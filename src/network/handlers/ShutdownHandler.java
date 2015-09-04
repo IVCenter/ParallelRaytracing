@@ -1,6 +1,6 @@
 package network.handlers;
 
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import network.Message;
 
 public class ShutdownHandler extends MessageHandler {
@@ -32,7 +32,7 @@ public class ShutdownHandler extends MessageHandler {
 	{
 		//Request shutdown via Application Delegate
 		//This will guarantee that all children also receive a shutdown request
-		ApplicationDelegate.inst.shutdown();
+		RenderingEngine.inst.shutdown();
 	}
 
 }

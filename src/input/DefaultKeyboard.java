@@ -14,7 +14,7 @@ import raster.PixelBuffer;
 import raytrace.AnimationRenderer;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.framework.Renderer;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Configuration;
 
 public class DefaultKeyboard extends Keyboard {
@@ -44,7 +44,7 @@ public class DefaultKeyboard extends Keyboard {
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		Logger.progress(-7, "Revceived a keyReleased() call for Key[" + e.getKeyChar() + "].");
+		Logger.message(-7, "Revceived a keyReleased() call for Key[" + e.getKeyChar() + "].");
 		
 		//If P is pressed, take a screen shot of the current pixel buffer
 		if(e.getKeyCode() == KeyEvent.VK_P)
@@ -59,36 +59,36 @@ public class DefaultKeyboard extends Keyboard {
 		//If Ctrl is down, and X is released, kill the program
 		if(keyIsDown(KeyEvent.VK_CONTROL) && e.getKeyCode() == KeyEvent.VK_X)
 		{
-			ApplicationDelegate.inst.shutdown();
+			RenderingEngine.inst.shutdown();
 		}
 		
 		//If N is released, print the current nodes under the node manager
 		if(e.getKeyCode() == KeyEvent.VK_N)
 		{
-			Logger.progress(-23, "Node Information:");
+			Logger.message(-23, "Node Information:");
 			
-			NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
+			NodeManager nodes = RenderingEngine.inst.getNodeManager();
 			
 			int totalCores = 0;
 			for(Node node : nodes)
 			{
 				totalCores += node.getNumberOfCores();
-				Logger.progress(-32, node.toString());
+				Logger.message(-32, node.toString());
 			}
 			
-			Logger.progress(-23, "Total Rendering Cores: " + totalCores);
+			Logger.message(-23, "Total Rendering Cores: " + totalCores);
 		}
 		
 		//If S is released, start/stop the renderer
 		if(e.getKeyCode() == KeyEvent.VK_S)
 		{
-			if(ApplicationDelegate.inst.isStarted())
+			if(RenderingEngine.inst.isStarted())
 			{
-				Logger.progress(-24, "Stopping Rendering...");
-				ApplicationDelegate.inst.stop();
+				Logger.message(-24, "Stopping Rendering...");
+				RenderingEngine.inst.stop();
 			}else{
-				Logger.progress(-24, "Starting Rendering...");
-				ApplicationDelegate.inst.start();	
+				Logger.message(-24, "Starting Rendering...");
+				RenderingEngine.inst.start();	
 			}
 		}
 		
@@ -97,9 +97,9 @@ public class DefaultKeyboard extends Keyboard {
 		{
 			Message message;
 			
-			MessageSender sender = ApplicationDelegate.inst.getMessageSender();
+			MessageSender sender = RenderingEngine.inst.getMessageSender();
 
-			NodeManager nodes = ApplicationDelegate.inst.getNodeManager();
+			NodeManager nodes = RenderingEngine.inst.getNodeManager();
 			for(Node node : nodes)
 			{
 				message = CommonMessageConstructor.createConfigurationMessage(
@@ -119,7 +119,7 @@ public class DefaultKeyboard extends Keyboard {
 		//If R is pressed, start/stop the animation renderer
 		if(e.getKeyCode() == KeyEvent.VK_R)
 		{
-			Renderer renderer = ApplicationDelegate.inst.getRenderer();
+			Renderer renderer = RenderingEngine.inst.getRenderer();
 			if(renderer instanceof AnimationRenderer)
 			{
 				AnimationRenderer ar = (AnimationRenderer)renderer;

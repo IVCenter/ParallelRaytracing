@@ -73,6 +73,11 @@ public abstract class Job implements Runnable {
 	/* *********************************************************************************************
 	 * Concrete Methods
 	 * *********************************************************************************************/
+	public Environment execute()
+	{
+		return execute(new Environment());
+	}
+	
 	public Environment execute(Environment params) {
 		//Setup the instance variables
 		parameters = params; 
@@ -81,7 +86,7 @@ public abstract class Job implements Runnable {
 
 		//Have subclasses prepare the instance variables for running
 		try{
-			progress("Initializing Job #" + jobID + ".");
+			message("Initializing Job #" + jobID + ".");
 			initialize();
 		}catch(Exception e) {
 			error("Initialization of Job #" + jobID + " failed in an unrecoverable manner.");
@@ -96,7 +101,7 @@ public abstract class Job implements Runnable {
 		//Setup any return values
 		resultMap = new Environment();
 		try{
-			progress("Finalizing Job #" + jobID + ".");
+			message("Finalizing Job #" + jobID + ".");
 			finalize();
 		}catch(Exception e) {
 			error("Finalization of Job #" + jobID + " failed in an unrecoverable manner.  Following jobs may not execute correctly.");
@@ -200,7 +205,7 @@ public abstract class Job implements Runnable {
 			Logger.debug(jobID, idPrefix, message); 
 	}
 
-	protected void progress(String message) { Logger.progress(jobID, idPrefix, message); }
+	protected void message(String message) { Logger.message(jobID, idPrefix, message); }
 
 	protected void warning(String message) {
 		++warningCount;

@@ -5,7 +5,7 @@ import process.utils.RenderingUtils;
 import raytrace.AnimationRenderer;
 import raytrace.camera.Camera;
 import raytrace.framework.Renderer;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Constants;
 import network.Message;
 import network.NetworkRenderer;
@@ -64,7 +64,7 @@ public class RenderResponseHandler extends MessageHandler {
 		int[] pixels = message.getData().get(Constants.Message.NODE_PIXELS);
 		
 		//Unpack the pixels into the buffer
-		RenderingUtils.unpackPixels(ApplicationDelegate.inst.getPixelBuffer().getPixels(), pixels, camera);
+		RenderingUtils.unpackPixels(RenderingEngine.inst.getPixelBuffer().getPixels(), pixels, camera);
 		
 		
 		
@@ -72,7 +72,7 @@ public class RenderResponseHandler extends MessageHandler {
 		//TODO: There has to be a better way to detect if there is a network renderer in the render chain
 		//		besides unwrapping it.
 		//TODO: UpdateResponse has this same problem
-		Renderer renderer = ApplicationDelegate.inst.getRenderer();
+		Renderer renderer = RenderingEngine.inst.getRenderer();
 		if(renderer instanceof NetworkRenderer)
 		{
 			((NetworkRenderer)renderer).completedARequest();

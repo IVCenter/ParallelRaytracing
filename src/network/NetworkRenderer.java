@@ -47,7 +47,7 @@ public class NetworkRenderer implements Renderer {
 	@Override
 	public void update(UpdateData data)
 	{
-		Logger.progress(-1, "Updating...");
+		Logger.message(-1, "Updating...");
 		/*
 		 * Create update message
 		 * Loop nodes
@@ -77,10 +77,10 @@ public class NetworkRenderer implements Renderer {
 	@Override
 	public void render(RenderData data)
 	{
-		Logger.progress(-1, "Rendering...");
+		Logger.message(-1, "Rendering...");
 		
 		//Start distributing
-		Logger.progress(-1, "Starting Distributing...(" + nodeManager.getNodeCount() + " nodes).");
+		Logger.message(-1, "Starting Distributing...(" + nodeManager.getNodeCount() + " nodes).");
 		long startTime = System.currentTimeMillis();
 		
 		//TODO: Per-frame Load balance
@@ -109,7 +109,7 @@ public class NetworkRenderer implements Renderer {
 		waitOnOutstandingRequests();
 		
 		//Distributing done
-		Logger.progress(-1, "Ending Distributing... (" + (System.currentTimeMillis()-startTime) + "ms).");
+		Logger.message(-1, "Ending Distributing... (" + (System.currentTimeMillis()-startTime) + "ms).");
 	}
 	
 	private void waitOnOutstandingRequests()

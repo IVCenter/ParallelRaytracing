@@ -33,7 +33,7 @@ public class IsDrawingToScreenParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setDrawToScreen(isDrawingToScreen);
-			Logger.progress(-32, "ConfigFileLoader: Setting Drawing to Screen Flag [" + isDrawingToScreen + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Drawing to Screen Flag [" + isDrawingToScreen + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-41, "IsDrawingToScreenParser: Failed to parse a Drawing to Screen Flag line. [" + str + "]");

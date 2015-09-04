@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import process.logging.Logger;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 
 import network.Message;
 
@@ -58,7 +58,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 	 * *********************************************************************************************/
 	public void run()
 	{
-		Logger.progress(-22, "NetworkMessageSender: Starting...");
+		Logger.message(-22, "NetworkMessageSender: Starting...");
 		try{
 			//While spidey face holds true, serve the socket
 			for(;;)
@@ -189,7 +189,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 			
 			Socket socket = null;
 			try {
-				Logger.progress(-22, "NetworkMessageSender: Sending message...");
+				Logger.message(-22, "NetworkMessageSender: Sending message...");
 				
 				//Create a new socket
 				socket = new Socket(destination, port);
@@ -211,7 +211,7 @@ public class NetworkMessageSender extends MessageSender implements Runnable {
 			        //inStream.close();
 			        
 			        //Pass the response to the listener
-			        ApplicationDelegate.inst.getMessageListener().listen(responseMessage);
+			        RenderingEngine.inst.getMessageListener().listen(responseMessage);
 			        
 		        } catch(IOException e) {
 		        	//Just means no response object from server

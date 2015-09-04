@@ -56,7 +56,7 @@ public class DirectoryManager {
 		
 		
 		//Log the working dir
-		Logger.progress(-33, "DirectoryManager: Attemtping to use working directory [" + workDir + "].");
+		Logger.message(-33, "DirectoryManager: Attemtping to use working directory [" + workDirFile.getAbsolutePath() + "].");
 		
 		
 		//If work dir doesn't exist, see if its parent exists

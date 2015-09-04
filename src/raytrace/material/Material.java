@@ -14,7 +14,7 @@ public abstract class Material {
 	 */
 
 	/* *********************************************************************************************
-	 * Instance Vars
+	 * Static Vars
 	 * *********************************************************************************************/
 	protected static final double RECURSIVE_EPSILON = 0.00001;
 	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
@@ -23,6 +23,17 @@ public abstract class Material {
 	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
 
 	protected static final double oneOverPi = 1.0 / Math.PI;
+	
+
+	/* *********************************************************************************************
+	 * Instance Vars
+	 * *********************************************************************************************/
+	//TODO: Upgrade materials interface
+	//Flags!
+	//Properties!!
+	//Separation from integration logic!!!
+	protected boolean castsShadows = true;
+	protected boolean receivesShadows = true;
 
 
 	/* *********************************************************************************************

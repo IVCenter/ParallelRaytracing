@@ -37,7 +37,7 @@ public class ScreenshotSubDirectoryParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setScreenshotSubDirectory(screenshotDir);
-			Logger.progress(-32, "ConfigFileLoader: Setting Screenshot Directory [" + screenshotDir + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Screenshot Directory [" + screenshotDir + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-47, "ScreenshotSubDirectoryParser: Failed to parse a Screenshot Directory line. [" + str + "]");

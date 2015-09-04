@@ -33,7 +33,7 @@ public class IsControllerParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setController(isController);
-			Logger.progress(-32, "ConfigFileLoader: Setting Controller Flag [" + isController + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Controller Flag [" + isController + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-39, "IsControllerParser: Failed to parse a Controller Flag line. [" + str + "]");

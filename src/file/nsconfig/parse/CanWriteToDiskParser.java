@@ -33,7 +33,7 @@ public class CanWriteToDiskParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setCanWriteToDisk(canWrite);
-			Logger.progress(-32, "ConfigFileLoader: Setting Can Write to Disk Flag [" + canWrite + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Can Write to Disk Flag [" + canWrite + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-44, "CanWriteToDiskParser: Failed to parse a Can Write to Disk Flag line. [" + str + "]");

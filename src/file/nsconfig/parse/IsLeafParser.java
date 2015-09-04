@@ -33,7 +33,7 @@ public class IsLeafParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setLeaf(isLeaf);
-			Logger.progress(-32, "ConfigFileLoader: Setting Leaf Flag [" + isLeaf + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Leaf Flag [" + isLeaf + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-40, "IsLeafParser: Failed to parse a Leaf Flag line. [" + str + "]");

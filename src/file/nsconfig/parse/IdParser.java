@@ -37,7 +37,7 @@ public class IdParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setId(id);
-			Logger.progress(-32, "ConfigFileLoader: Setting Node ID [" + id + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Node ID [" + id + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-36, "IdParser: Failed to parse a Node ID line. [" + str + "]");

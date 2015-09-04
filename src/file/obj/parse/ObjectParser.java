@@ -30,7 +30,7 @@ public class ObjectParser extends StringParser<ObjModelData> {
 				throw new Exception("ObjectParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
 			pop.addObject(tokens[1]);
-			Logger.progress(-11, "ObjectFileLoader: Object: " + tokens[1]);
+			Logger.message(-11, "ObjectFileLoader: Object: " + tokens[1]);
 			
 		}catch(Exception e) {
 			Logger.error(-1, "Failed to parse an object line.");

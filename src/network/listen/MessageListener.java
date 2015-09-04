@@ -36,7 +36,7 @@ public abstract class MessageListener {
 	 * *********************************************************************************************/
 	public void listen(Message message)
 	{
-		Logger.progress(-21, "MessageListener: Listening...");
+		Logger.message(-21, "MessageListener: Listening...");
 		
 		if(message == null)
 			return;

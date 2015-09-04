@@ -1,7 +1,7 @@
 package network.handlers;
 
 import process.logging.Logger;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Configuration;
 import system.Constants;
 import network.Node;
@@ -79,20 +79,20 @@ public class RegistrationHandler extends MessageHandler {
 		node.setLastMessageTime(System.currentTimeMillis());
 		
 		//If there does not already exist this node
-		if(!ApplicationDelegate.inst.getNodeManager().hasNode(node))
+		if(!RenderingEngine.inst.getNodeManager().hasNode(node))
 		{
-			Logger.progress(-26, "RegistrationHandler: Registering new node...");
+			Logger.message(-26, "RegistrationHandler: Registering new node...");
 			
 			node.setRegistrationTime(System.currentTimeMillis());
 		
-			ApplicationDelegate.inst.getNodeManager().addNode(node);
+			RenderingEngine.inst.getNodeManager().addNode(node);
 			
 		}else{
 			
-			Logger.progress(-26, "RegistrationHandler: Updating existing node...");
+			Logger.message(-26, "RegistrationHandler: Updating existing node...");
 			
 			//Update the node data if it exists
-			ApplicationDelegate.inst.getNodeManager().updateNode(node);
+			RenderingEngine.inst.getNodeManager().updateNode(node);
 		}
 		
 	}

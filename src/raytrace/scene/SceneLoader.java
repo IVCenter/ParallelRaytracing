@@ -2,29 +2,6 @@ package raytrace.scene;
 
 import java.util.HashMap;
 
-import system.Constants;
-import tests.CSE165_2015_DataSmoothingDiagrams;
-import tests.CSE167_2014_Project2;
-import tests.CSE168_Project1_Scene;
-import tests.CSE168_Project2_Scene;
-import tests.CSE168_Project3_Scene;
-import tests.DiffuseGlassTestScene;
-import tests.PerformanceTest1;
-import tests.TestScene1;
-import tests.TestScene10;
-import tests.TestScene11;
-import tests.TestScene12;
-import tests.TestScene13;
-import tests.TestScene2;
-import tests.TestScene3;
-import tests.TestScene4;
-import tests.TestScene5;
-import tests.TestScene6;
-import tests.TestScene7;
-import tests.TestScene8;
-import tests.TestScene9;
-import tests.VoxelTest1;
-
 public class SceneLoader {
 	
 	/*
@@ -52,6 +29,8 @@ public class SceneLoader {
 			}
 		});
 		
+		//NOTE: These Scene implementations have been moved to: https://github.com/rexwest/ParallelRaytracing-Demos
+		/*
 		sceneConstructors.put(Constants.SceneKeys.TEST1, new SceneConstructor(){
 			@Override
 			public Scene load() {
@@ -240,11 +219,26 @@ public class SceneLoader {
 				return scene;
 			}
 		});
+		*/
 	}
 	
 	public static Scene load(String key)
 	{
-		return sceneConstructors.get(key).load();
+		//TODO: Add support for a "scene folder" configuration option
+		//TODO: Add support for reading and compiling a Scene java file from the "scene folder"
+		
+		//NOTE: For now loading a new scene after the engine has been started is unsupported
+		//To launch a scene directly, create a subclass of Scene and implement a main that 
+		//	sets up Configuration and hands off to ApplicationDelegate
+		SceneConstructor constructor = sceneConstructors.get(key);
+		Scene scene = null;
+		
+		if(constructor != null)
+			scene = constructor.load();
+		else
+			scene = sceneConstructors.get("").load();
+		
+		return scene;
 	}
 	
 	

@@ -70,9 +70,9 @@ public class Logger {
 		debug(jobID, defaultPrefix, message);
 	}
 	
-	public static void progress(long jobID, String message)
+	public static void message(long jobID, String message)
 	{
-		progress(jobID, defaultPrefix, message);
+		message(jobID, defaultPrefix, message);
 	}
 	
 	public static void warning(long jobID, String message)
@@ -93,7 +93,7 @@ public class Logger {
 		handleMessage(jobID, prefix, message, Level.Debug);
 	}
 	
-	public static void progress(long jobID, String prefix, String message)
+	public static void message(long jobID, String prefix, String message)
 	{
 		handleMessage(jobID, prefix, message, Level.Progress);
 	}
@@ -107,8 +107,14 @@ public class Logger {
 	{
 		handleMessage(jobID, prefix, message, Level.Error);
 	}
-	
-	
+
+	/*
+	 * Terminate the logger
+	 */
+	public static void terminate()
+	{
+		LogWriter.terminate();
+	}
 	
 
 	/* *********************************************************************************************
@@ -197,7 +203,7 @@ public class Logger {
 		@Override
 		public void run()
 		{	
-			Logger.progress(-0, "Now running worker thread [" + this + "]");
+			Logger.message(-0, "Now running worker thread [" + this + "]");
 			
 			//Keep watching the log queue of the logger until terminated
 			while(running || logQueue.size() > 0)

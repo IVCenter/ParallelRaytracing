@@ -29,7 +29,7 @@ public class PpmFileLoader {
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-73, "PpmFileLoader: Starting loading of the PPM File [" + file.getName() + "]...");
+		Logger.message(-73, "PpmFileLoader: Starting loading of the PPM File [" + file.getName() + "]...");
 		
 		//Iterate the lines in the given file
 		String lineKey;
@@ -66,7 +66,7 @@ public class PpmFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-73, "PpmFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
+		Logger.message(-73, "PpmFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
 				data.getPoints().size() + "] points... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;

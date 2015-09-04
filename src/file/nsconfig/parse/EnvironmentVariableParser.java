@@ -30,7 +30,7 @@ public class EnvironmentVariableParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.set(key, value);
-			Logger.progress(-32, "ConfigFileLoader: Setting an environment variable Key[" + key + "] -> Value[" + value + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting an environment variable Key[" + key + "] -> Value[" + value + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-35, "EnvironmentVariableParser: Failed to parse an environment variable line. [" + str + "]");

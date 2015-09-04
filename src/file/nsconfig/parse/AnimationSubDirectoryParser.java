@@ -37,7 +37,7 @@ public class AnimationSubDirectoryParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setAnimationSubDirectory(animDir);
-			Logger.progress(-32, "ConfigFileLoader: Setting Animation Directory [" + animDir + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Animation Directory [" + animDir + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-48, "AnimationSubDirectoryParser: Failed to parse a Animation Directory line. [" + str + "]");

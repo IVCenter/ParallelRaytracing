@@ -46,7 +46,7 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 	 * *********************************************************************************************/
 	public void run()
 	{
-		Logger.progress(-20, "NetworkMessageListener: Starting...");
+		Logger.message(-20, "NetworkMessageListener: Starting...");
 		try{
 			//While spidey face holds true, serve the socket
 			for(;;)
@@ -112,7 +112,7 @@ public class NetworkMessageListener extends MessageListener implements Runnable 
 		{
 			try {
 				
-				Logger.progress(-21, "NetworkMessageListener: Serving socket...");
+				Logger.message(-21, "NetworkMessageListener: Serving socket...");
 				
 				ObjectInputStream stream = new ObjectInputStream(socket.getInputStream());
 				

@@ -43,7 +43,7 @@ public class XyzFileLoader {
 		}
 
 		long startTime = System.currentTimeMillis();
-		Logger.progress(-70, "XyzFileLoader: Starting loading of the point cload [" + file.getName() + "]...");
+		Logger.message(-70, "XyzFileLoader: Starting loading of the point cload [" + file.getName() + "]...");
 		
 		//Create a new Xyz Point Cload Data object
 		XyzPointCloudData data = new XyzPointCloudData();
@@ -83,7 +83,7 @@ public class XyzFileLoader {
 			parser.parse(line, data);
 		}
 		
-		Logger.progress(-70, "XyzFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
+		Logger.message(-70, "XyzFileLoader: Ending loading of the point cloud [" + file.getName() + "] with [" + 
 				data.getPoints().size() + "] points... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;

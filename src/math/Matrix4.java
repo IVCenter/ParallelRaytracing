@@ -324,7 +324,7 @@ public class Matrix4 {
 	        sb.append("]\n");
 	    }
 	    
-	    Logger.progress(-1, sb.toString());
+	    Logger.message(-1, sb.toString());
 	}
 
 	public Matrix4 transpose()

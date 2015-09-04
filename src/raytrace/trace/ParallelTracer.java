@@ -94,7 +94,7 @@ public abstract class ParallelTracer implements Tracer {
 		this.rdata = data;
 		
 		//Start tracing
-		Logger.progress(-1, "Starting Tracing...(" + threadCount + " threads).");
+		Logger.message(-1, "Starting Tracing...(" + threadCount + " threads).");
 		long startTime = System.currentTimeMillis();
 		
 		//Distribute camera rays (if necessary)
@@ -148,7 +148,7 @@ public abstract class ParallelTracer implements Tracer {
 		
 		
 		//Tracing done
-		Logger.progress(-1, "Ending Tracing... (" + (System.currentTimeMillis()-startTime) + "ms).");
+		Logger.message(-1, "Ending Tracing... (" + (System.currentTimeMillis()-startTime) + "ms).");
 		
 	}
 	

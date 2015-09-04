@@ -33,7 +33,7 @@ public class IsRealTimeParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setRealTime(isRealTime);
-			Logger.progress(-32, "ConfigFileLoader: Setting Realtime Flag [" + isRealTime + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Realtime Flag [" + isRealTime + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-42, "IsRealTimeParser: Failed to parse a Realtime Flag line. [" + str + "]");

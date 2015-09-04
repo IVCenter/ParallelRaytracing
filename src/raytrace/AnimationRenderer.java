@@ -8,7 +8,7 @@ import process.utils.TimeStamp;
 import raytrace.data.RenderData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Renderer;
-import system.ApplicationDelegate;
+import system.RenderingEngine;
 import system.Configuration;
 
 public class AnimationRenderer implements Renderer {
@@ -78,7 +78,7 @@ public class AnimationRenderer implements Renderer {
 		//Save pixel buffer to file 
 		if(isRecording && outputFolderPath != null && Configuration.canWriteToDisk())
 		{
-			ApplicationDelegate.inst.getPixelBuffer().writeToFile(
+			RenderingEngine.inst.getPixelBuffer().writeToFile(
 					outputFolderPath + Configuration.getFrameFileNamePrefix() + animationStartTimeStamp + "_"
 					+ StringUtils.zeroPad(frameNumber, frameNumberWidth)
 				);
@@ -117,7 +117,7 @@ public class AnimationRenderer implements Renderer {
 		{
 			if(!outputFolder.exists())
 			{
-				Logger.progress(-31, "AnimationRenderer: Creating folder for the current animation...");
+				Logger.message(-31, "AnimationRenderer: Creating folder for the current animation...");
 				outputFolderPath = outputFolder.getPath() + "/";
 				
 				if(!outputFolder.mkdir())
@@ -135,7 +135,7 @@ public class AnimationRenderer implements Renderer {
 		}
 
 		//Start recording
-		Logger.progress(-31, "AnimationRenderer: Starting recording an animation... [" + outputFolder.getName() + "].");
+		Logger.message(-31, "AnimationRenderer: Starting recording an animation... [" + outputFolder.getName() + "].");
 		isRecording = true;
 	}
 	
@@ -144,7 +144,7 @@ public class AnimationRenderer implements Renderer {
 		if(!isRecording)
 			return;
 
-		Logger.progress(-31, "AnimationRenderer: Ending recording an animation.");
+		Logger.message(-31, "AnimationRenderer: Ending recording an animation.");
 		isRecording = false;
 	}
 	

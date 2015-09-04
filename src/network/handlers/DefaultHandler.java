@@ -15,7 +15,7 @@ public class DefaultHandler extends MessageHandler {
 	@Override
 	public void handle(Message message)
 	{
-		Logger.progress(-19, message.toString());
+		Logger.message(-19, message.toString());
 	}
 
 }

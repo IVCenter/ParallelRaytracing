@@ -32,7 +32,7 @@ public class PointCloudSurface extends CompositeSurface {
 	 * *********************************************************************************************/
 	public PointCloudSurface(XyzPointCloudData data)
 	{
-		Logger.progress(-1, "Starting creating a Point Cloud Surface...");
+		Logger.message(-1, "Starting creating a Point Cloud Surface...");
 		
 		pointSurfaces = new ArrayList<PointSurface>(data.getPoints().size());
 		
@@ -49,7 +49,7 @@ public class PointCloudSurface extends CompositeSurface {
 		
 		//this.updateBoundingBox();
 		
-		Logger.progress(-1, "Ending creating a Point Cloud Surface.");
+		Logger.message(-1, "Ending creating a Point Cloud Surface.");
 	}
 
 	

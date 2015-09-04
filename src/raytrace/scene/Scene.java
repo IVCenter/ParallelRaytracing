@@ -9,6 +9,7 @@ import raytrace.camera.Camera;
 import raytrace.camera.ProgrammableCamera;
 import raytrace.color.Color;
 import raytrace.data.BakeData;
+import raytrace.data.UpdateData;
 import raytrace.framework.Tracer;
 import raytrace.light.Light;
 import raytrace.light.LightManager;
@@ -18,7 +19,7 @@ import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.trace.RayTracer;
 
-public abstract class Scene extends CompositeSurface{
+public abstract class Scene extends CompositeSurface {
 	
 	/*
 	 * A scene to be rendered
@@ -85,7 +86,8 @@ public abstract class Scene extends CompositeSurface{
 	
 	protected void configureWorld()
 	{
-		//
+		//TODO: Add a light
+		//TODO: Add a spinning cube
 	}
 	
 
@@ -102,8 +104,15 @@ public abstract class Scene extends CompositeSurface{
 	 * Surface Overrides
 	 * *********************************************************************************************/
 	@Override
-	public void bake(BakeData data) {
+	public void bake(BakeData data)
+	{
 		super.bake(null);
+	}
+	
+	@Override
+	public void update(UpdateData data)
+	{
+		//TODO: Spin the cube
 	}
 	
 

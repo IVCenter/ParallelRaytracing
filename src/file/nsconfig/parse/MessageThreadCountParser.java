@@ -37,7 +37,7 @@ public class MessageThreadCountParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.Networking.setMessageThreadCount(threadCount);
-			Logger.progress(-32, "ConfigFileLoader: Setting Message Thread Count [" + threadCount + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Message Thread Count [" + threadCount + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-52, "MessageThreadCountParser: Failed to parse a Message Thread Count line. [" + str + "]");

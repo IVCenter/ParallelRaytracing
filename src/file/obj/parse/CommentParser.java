@@ -29,7 +29,7 @@ public class CommentParser extends StringParser<ObjModelData> {
 			if(!tokens[0].equals(keyToken))
 				throw new Exception("CommentParser: Excepted a key token of [" + keyToken + "] but encountered [" + tokens[0] + "]");
 			
-			Logger.progress(-11, "ObjectFileLoader: Comment: " + str);
+			Logger.message(-11, "ObjectFileLoader: Comment: " + str);
 			
 		}catch(Exception e) {
 			Logger.error(-1, "Failed to parse a comment line. [" + str + "]");

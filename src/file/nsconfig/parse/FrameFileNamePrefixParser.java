@@ -37,7 +37,7 @@ public class FrameFileNamePrefixParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setFrameFileNamePrefix(framePrefix);
-			Logger.progress(-32, "ConfigFileLoader: Setting Frame Prefix [" + framePrefix + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Frame Prefix [" + framePrefix + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-38, "FrameFileNamePrefixParser: Failed to parse a Frame Prefix line. [" + str + "]");

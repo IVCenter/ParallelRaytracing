@@ -33,7 +33,7 @@ public class IsClockParser extends StringParser<Configuration> {
 			
 			//Set it
 			Configuration.setClock(isClock);
-			Logger.progress(-32, "ConfigFileLoader: Setting Clock Flag [" + isClock + "].");
+			Logger.message(-32, "ConfigFileLoader: Setting Clock Flag [" + isClock + "].");
 			
 		}catch(Exception e) {
 			Logger.error(-39, "IsClockParser: Failed to parse a Clock Flag line. [" + str + "]");
