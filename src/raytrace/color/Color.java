@@ -327,6 +327,11 @@ public class Color implements Texture {
 		return new Color(1.0, 0.0, 0.0, 1.0);
 	}
 	
+	public static Color darkGreen()
+	{
+		return new Color(0x23ff27ff);
+	}
+	
 	public static Color random()
 	{
 		return new Color(Math.random(), Math.random(), Math.random(), 1.0);

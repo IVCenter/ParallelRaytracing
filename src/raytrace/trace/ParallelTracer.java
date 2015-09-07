@@ -104,20 +104,25 @@ public abstract class ParallelTracer implements Tracer {
 		for(SynchronizingWorker worker : workers)
 			worker.reset();
 		
+		//Loop counter
+		int loopCount = 0;
+		
 		//For all work across all workers
 		while(thereIsWorkToBeDone())
 		{
 			//Update the call id
 			callID++;
 			
-			//Flip the input and output buffers
-			//TODO: Don't just flip them, copy the contents across!
-			RenderBuffer oldInput = rdata.getInputRenderBuffer();
-			rdata.setInputRenderBuffer(rdata.getOutputRenderBuffer());
-			rdata.setOutputRenderBuffer(oldInput);
-			
-			//Copy the input contents into the output
-			rdata.getOutputRenderBuffer().copy(rdata.getInputRenderBuffer());
+			//Copy the input contents into the output for all passes after the first pass
+			if(loopCount > 0)
+			{
+				//Flip the input and output buffers
+				RenderBuffer oldInput = rdata.getInputRenderBuffer();
+				rdata.setInputRenderBuffer(rdata.getOutputRenderBuffer());
+				rdata.setOutputRenderBuffer(oldInput);
+				
+				rdata.getOutputRenderBuffer().copy(rdata.getInputRenderBuffer());
+			}
 			
 			//Clear thread control flags/counts
 			completedCount.set(0);
@@ -144,6 +149,9 @@ public abstract class ParallelTracer implements Tracer {
 			
 			//Re-enable the spin lock on the workers
 			wasNotified = false;
+			
+			//Increment the loop count
+			++loopCount;
 		}
 		
 		
