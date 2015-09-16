@@ -14,6 +14,9 @@ public class Constants {
 	public static final String workingDirectory = "/";
 	public static final String configurationFileExtension = ".nsconfig";
 	
+	//Tracing constants
+	public static final double RECURSIVE_EPSILON = 0.00001;
+	
 	
 	/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	 * Global Parameter Keys
