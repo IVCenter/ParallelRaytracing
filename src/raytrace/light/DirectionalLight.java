@@ -4,7 +4,7 @@ import math.Vector3;
 import math.ray.Ray;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
-import raytrace.data.ShadingData;
+import raytrace.scene.Scene;
 
 public class DirectionalLight extends Light {
 	
@@ -32,11 +32,11 @@ public class DirectionalLight extends Light {
 	 * Overrides
 	 * *********************************************************************************************/
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector3 point)
+	public IlluminationData illuminate(Scene scene, Vector3 point)
 	{
-		double distance = Double.MAX_VALUE;
+		double distance = Double.POSITIVE_INFINITY;
 		
-		IntersectionData shadowData = shadowed(data.getRootScene(), 
+		IntersectionData shadowData = shadowed(scene, 
 				new Ray(point, inverseDirection, 0, 0), distance);
 		
 		double blocked = shadowData == null ? 1.0 : 0.0;
