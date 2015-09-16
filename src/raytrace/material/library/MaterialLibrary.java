@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import raytrace.color.Color;
 import raytrace.material.ColorMaterial;
-import raytrace.material.DiffusePTMaterial;
+import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 
 public class MaterialLibrary {
@@ -45,7 +45,7 @@ public class MaterialLibrary {
 		
 		materials.put(MATTE_WHITE, new MaterialConstructor() { 
 			public Material create() {
-				return new DiffusePTMaterial(Color.white());
+				return new DiffuseMaterial(Color.white());
 			}
 		});
 		
@@ -69,9 +69,9 @@ public class MaterialLibrary {
 		return constructor.create();
 	}
 	
-	public static DiffusePTMaterial matteWhite()
+	public static DiffuseMaterial matteWhite()
 	{
-		return (DiffusePTMaterial)lookup(MATTE_WHITE);
+		return (DiffuseMaterial)lookup(MATTE_WHITE);
 	}
 
 	/* *********************************************************************************************
