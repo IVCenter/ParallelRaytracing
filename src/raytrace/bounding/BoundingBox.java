@@ -73,7 +73,7 @@ public class BoundingBox {
 		double tstart = data.getTStart();
 		
 		if(absmin > absmax || absmin >= tend || absmax < tstart || absmax >= tend)
-			return Double.MAX_VALUE;
+			return Double.POSITIVE_INFINITY;
 		
 		//double tstart = data.getTStart();
 		
@@ -109,8 +109,8 @@ public class BoundingBox {
 	 * *********************************************************************************************/
 	public void clear()
 	{
-		min.set(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-		max.set(-1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0), -1.0 * (Double.MAX_VALUE-1.0));
+		min.set(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+		max.set(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 		//max.set((-9999999.0), (-9999999.0), (-9999999.0), 0);
 	}
 	
