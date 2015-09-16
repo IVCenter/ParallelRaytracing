@@ -1,11 +1,10 @@
 package raytrace.material;
 
 import math.Vector3;
-import math.ray.Ray;
 import raytrace.color.Color;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.data.ShadingData;
+import raytrace.medium.Medium;
 
 public abstract class Material {
 	
@@ -16,12 +15,6 @@ public abstract class Material {
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	protected static final double RECURSIVE_EPSILON = 0.00001;
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 10;
-	protected static final int SYSTEM_RESURSION_LIMIT = 100;
-	
-	public static final double AIR_REFRACTIVE_INDEX = 1.0003;
-
 	protected static final double oneOverPi = 1.0 / Math.PI;
 	
 
@@ -34,6 +27,11 @@ public abstract class Material {
 	//Separation from integration logic!!!
 	protected boolean castsShadows = true;
 	protected boolean receivesShadows = true;
+	protected boolean globallyIlluminated = true;
+	protected boolean affectedByLightSources = true;
+	protected boolean emitsLight = false;
+	
+	protected Medium medium = null;
 
 
 	/* *********************************************************************************************
@@ -45,15 +43,20 @@ public abstract class Material {
 	/* *********************************************************************************************
 	 * Abstract Programmable Methods
 	 * *********************************************************************************************/
-	public abstract Color shade(ShadingData data);
+	public abstract RayData sample(IntersectionData idata, RayData rdata);
+
+	public abstract Color evaluateDirectLight(IntersectionData idata, RayData rdata, Color light, Vector3 lightDirection);
+	
+	//Returns the sampled light if importance sampled, else weights the sampled light
+	public abstract Color evaluateSampledLight(IntersectionData idata, RayData rdata, Color light, RayData sample);
+	
+	//Returns a non-zero amount of light if the material itself emits light independent of incoming light
+	public abstract Color evaluateEmission(IntersectionData idata, RayData rdata);
 	
 
 	/* *********************************************************************************************
 	 * Helper Methods
 	 * *********************************************************************************************/
-	/**
-	 * 
-	 */
 	protected Color diffuse(Color light, Vector3 normal, Vector3 fromLight)
 	{
 		double dot = normal.dot(fromLight);
@@ -67,19 +70,11 @@ public abstract class Material {
 		return light.multiply3( dot * -1.0 * oneOverPi );
 	}
 	
-	protected Color reflect(ShadingData data, Vector3 point, Vector3 normal, double refractiveIndex)
+	protected Vector3 reflect(Vector3 ray, Vector3 point, Vector3 normal)
 	{
-		return reflect(data, point, normal, refractiveIndex, true);
-	}
-	
-	protected Color reflect(ShadingData data, Vector3 point, Vector3 normal, double refractiveIndex, boolean increaseRecurDepth)
-	{	
-		Vector3 dir = data.getIntersectionData().getRay().getDirection();
-		//Vector4 reflect = dir.add3( normal.multiply3( -2.0 * dir.dot3(normal) ) ).normalize3();
+		double c = -2.0 * ray.dot(normal);
 		
-		double c = -2.0 * dir.dot(normal);
-		
-		double[] dirm = dir.getArray();
+		double[] dirm = ray.getArray();
 		double[] nm = normal.getArray();
 
 		double rx = dirm[0] + nm[0] * c;
@@ -88,15 +83,62 @@ public abstract class Material {
 		
 		Vector3 reflect = (new Vector3(rx, ry, rz)).normalizeM();
 		
-		return recurse(data, point, reflect, refractiveIndex, increaseRecurDepth);
+		return reflect;
 	}
 
-	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex)
-	{
-		return recurse(data, point, direction, refractiveIndex, true);
+	
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
+	public Medium getMedium() {
+		return medium;
 	}
 	
+	public void setMedium(Medium medium) {
+		this.medium = medium;
+	}
+
+	public boolean castsShadows() {
+		return castsShadows;
+	}
+
+	public void setCastsShadows(boolean castsShadows) {
+		this.castsShadows = castsShadows;
+	}
+
+	public boolean receivesShadows() {
+		return receivesShadows;
+	}
+
+	public void setReceivesShadows(boolean receivesShadows) {
+		this.receivesShadows = receivesShadows;
+	}
+
+	public boolean isGloballyIlluminated() {
+		return globallyIlluminated;
+	}
+
+	public void setGloballyIlluminated(boolean globallyIlluminated) {
+		this.globallyIlluminated = globallyIlluminated;
+	}
+
+	public boolean isAffectedByLightSources() {
+		return affectedByLightSources;
+	}
+
+	public void setAffectedByLightSources(boolean affectedByLightSources) {
+		this.affectedByLightSources = affectedByLightSources;
+	}
+
+	public boolean emitsLight() {
+		return emitsLight;
+	}
+
+	public void setEmitsLight(boolean emitsLight) {
+		this.emitsLight = emitsLight;
+	}
 	
+	/*
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
 	{		
 		//If we're past the ABSOLUTE recursive limit, use black
@@ -107,7 +149,7 @@ public abstract class Material {
 		RayData rdata = new RayData();
 		Ray ray = new Ray(point, direction, 0, 0);
 		rdata.setRay(ray);
-		rdata.setRootSurface(data.getRootScene());
+		//rdata.setRootSurface(data.getRootScene());
 		rdata.setTStart(RECURSIVE_EPSILON);
 		rdata.setTEnd(Double.MAX_VALUE);
 		
@@ -132,7 +174,7 @@ public abstract class Material {
 		sdata.setIntersectionData(null);
 		return data.getRootScene().getSkyMaterial().shade(sdata);
 	}
-	
+	*/
 	
 	/*
 	protected Color recurse(ShadingData data, Vector3 point, Vector3 direction, double refractiveIndex, boolean increaseRecurDepth)
@@ -172,7 +214,7 @@ public abstract class Material {
 		return data.getRootScene().getSkyMaterial().shade(data);
 	}
 	*/
-	
+	/*
 	protected Vector3 halfVector(Vector3 a, Vector3 b)
 	{
 		return Vector3.halfVector(a, b);
@@ -207,4 +249,5 @@ public abstract class Material {
 	{
 		return Vector3.uniformSphereSample();
 	}
+	*/
 }
