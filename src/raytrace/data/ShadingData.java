@@ -3,8 +3,10 @@ package raytrace.data;
 import math.ray.Ray;
 import raytrace.color.Color;
 import raytrace.material.Material;
+import raytrace.medium.Medium;
 import raytrace.scene.Scene;
 
+@Deprecated
 public class ShadingData{
 	
 	/*
@@ -32,7 +34,7 @@ public class ShadingData{
 	{
 		shadingRecursionDepth = 0;
 		actualRecursionDepth = 0;
-		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
+		refractiveIndex = Medium.AIR_REFRACTIVE_INDEX;
 		recursiveSample = Color.black();
 	}
 	
@@ -44,7 +46,7 @@ public class ShadingData{
 	{
 		shadingRecursionDepth = 0;
 		actualRecursionDepth = 0;	
-		refractiveIndex = Material.AIR_REFRACTIVE_INDEX;
+		refractiveIndex = Medium.AIR_REFRACTIVE_INDEX;
 		recursiveSample = Color.black();
 	}
 
