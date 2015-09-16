@@ -8,11 +8,11 @@ import raytrace.data.BakeData;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
-import raytrace.data.ShadingData;
 import raytrace.data.UpdateData;
 import raytrace.framework.Positionable;
 import raytrace.scene.Scene;
 import raytrace.surfaces.AbstractSurface;
+import system.Constants;
 
 public abstract class Light extends AbstractSurface implements Positionable {
 
@@ -33,11 +33,13 @@ public abstract class Light extends AbstractSurface implements Positionable {
 	
 	protected Vector3 position = new Vector3();
 	
+	protected boolean castsShadows = true;
+	
 
 	/* *********************************************************************************************
 	 * Abstract Methods
 	 * *********************************************************************************************/
-	public abstract IlluminationData illuminate(ShadingData data, Vector3 point);
+	public abstract IlluminationData illuminate(Scene scene, Vector3 point);
 
 	
 	/* *********************************************************************************************
@@ -45,21 +47,37 @@ public abstract class Light extends AbstractSurface implements Positionable {
 	 * *********************************************************************************************/
 	protected IntersectionData shadowed(Scene scene, Ray ray, double distanceToLight)
 	{
+		//If this does not cast shadows, return null
+		if(!castsShadows)
+			return null;
+		
 		//TODO: Remove this, and instead use a pre-allocated object
 		RayData rdata = new RayData();
 		
 		rdata.setRay(ray);
 		rdata.setTStart(RECURSIVE_EPSILON);
 		IntersectionData idata = scene.intersects(rdata);
+		Vector3 origin;
 		
 		//If no intersection, not shadowed
 		if(idata == null)
 			return null;
 		
+		//If the object we intersected does not cast a shadow, recursively call from here
+		if(!idata.getMaterial().castsShadows())
+		{
+			origin = ray.getOrigin();
+			ray.setOrigin(idata.getPoint().addMultiRight(ray.getDirection(), Constants.RECURSIVE_EPSILON));
+			idata = shadowed(scene, ray, distanceToLight - idata.getDistance());
+			ray.setOrigin(origin);
+			return idata;
+		}
+		
 		//If the light is infinitely far, and we hit something, in shadow
-		if(distanceToLight == Double.MAX_VALUE)
+		if(distanceToLight == Double.POSITIVE_INFINITY)
 			return idata;
 		
+		//If the intersected object is closer than the light, in shadow
 		if(idata.getDistance() < distanceToLight)
 			return idata;
 		
@@ -142,6 +160,14 @@ public abstract class Light extends AbstractSurface implements Positionable {
 
 	public void setPosition(Vector3 position) {
 		this.position = position;
+	}
+
+	public boolean castsShadows() {
+		return castsShadows;
+	}
+
+	public void setCastsShadows(boolean castsShadows) {
+		this.castsShadows = castsShadows;
 	}
 	
 }
