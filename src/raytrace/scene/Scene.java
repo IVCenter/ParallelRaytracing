@@ -17,7 +17,8 @@ import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 import raytrace.surfaces.CompositeSurface;
-import raytrace.trace.RayTracer;
+import raytrace.trace.IntegrationTracer;
+import raytrace.trace.integration.PathTracingIntegrator;
 
 public abstract class Scene extends CompositeSurface {
 	
@@ -62,7 +63,7 @@ public abstract class Scene extends CompositeSurface {
 	protected List<Tracer> configureTracers()
 	{
 		ArrayList<Tracer> tracers = new ArrayList<Tracer>(1);
-		tracers.add(new RayTracer());
+		tracers.add(new IntegrationTracer(new PathTracingIntegrator()));
 		return tracers;
 	}
 	
