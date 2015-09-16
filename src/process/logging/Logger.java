@@ -22,7 +22,7 @@ public class Logger {
 	
 	protected static String logServerBaseURL;
 	
-	protected static enum Level {None, Debug, Progress, Warning, Error};
+	protected static enum Level {None, Debug, Message, Warning, Error};
 	protected static String defaultPrefix = "X";
 	
 	
@@ -95,7 +95,7 @@ public class Logger {
 	
 	public static void message(long jobID, String prefix, String message)
 	{
-		handleMessage(jobID, prefix, message, Level.Progress);
+		handleMessage(jobID, prefix, message, Level.Message);
 	}
 	
 	public static void warning(long jobID, String prefix, String message)
@@ -254,7 +254,7 @@ public class Logger {
 		 */
 		private static void toConsole(Level level, String consoleString)
 		{
-			if(level.compareTo(Level.Progress) > 0) {
+			if(level.compareTo(Level.Message) > 0) {
 				System.err.println(consoleString);
 			}else{
 				System.out.println(consoleString);	
