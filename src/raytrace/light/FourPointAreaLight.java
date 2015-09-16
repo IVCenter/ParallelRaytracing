@@ -5,7 +5,7 @@ import math.ray.Ray;
 import raytrace.color.Color;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
-import raytrace.data.ShadingData;
+import raytrace.scene.Scene;
 
 public class FourPointAreaLight extends Light {
 	
@@ -28,7 +28,7 @@ public class FourPointAreaLight extends Light {
 	 * *********************************************************************************************/
 
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector3 point)
+	public IlluminationData illuminate(Scene scene, Vector3 point)
 	{
 		IlluminationData ildata = new IlluminationData();
 		Vector3 toPoint = point.subtract(points[0]);
@@ -53,7 +53,7 @@ public class FourPointAreaLight extends Light {
 			
 			newRay.setDirection(toPoint.multiply(-1.0));
 			newRay.setOrigin(point);
-			shadowData = shadowed(data.getRootScene(), newRay, distance);
+			shadowData = shadowed(scene, newRay, distance);
 			
 			if(shadowData == null)
 				continue;
