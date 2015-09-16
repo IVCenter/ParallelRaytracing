@@ -2,7 +2,7 @@ package raytrace.light;
 
 import math.Vector3;
 import raytrace.data.IlluminationData;
-import raytrace.data.ShadingData;
+import raytrace.scene.Scene;
 
 public class AmbientLight extends Light {
 	
@@ -14,13 +14,13 @@ public class AmbientLight extends Light {
 	 * *********************************************************************************************/
 
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector3 point)
+	public IlluminationData illuminate(Scene scene, Vector3 point)
 	{
 		IlluminationData ildata = new IlluminationData();
 		
 		ildata.setColor(color.multiply3(intensity));
 		ildata.setDirection(new Vector3());
-		ildata.setDistance(Double.MAX_VALUE);
+		ildata.setDistance(Double.POSITIVE_INFINITY);
 				
 		return ildata;
 	}
