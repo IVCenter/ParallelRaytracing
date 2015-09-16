@@ -16,7 +16,8 @@ import raytrace.material.ColorMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 import raytrace.surfaces.Instance;
-import raytrace.trace.RayTracer;
+import raytrace.trace.IntegrationTracer;
+import raytrace.trace.integration.PathTracingIntegrator;
 import system.Configuration;
 
 public class EmptyScene extends Scene {
@@ -38,10 +39,10 @@ public class EmptyScene extends Scene {
 	@Override
 	protected List<Tracer> configureTracers()
 	{
-		ArrayList<Tracer> tracers = new ArrayList<Tracer>(2);
+		ArrayList<Tracer> tracers = new ArrayList<Tracer>(1);
 		
 		//Standard ray tracer
-		tracers.add(new RayTracer());
+		tracers.add(new IntegrationTracer(new PathTracingIntegrator()));
 		
 		return tracers;
 	}
