@@ -4,7 +4,7 @@ import math.Vector3;
 import math.ray.Ray;
 import raytrace.data.IlluminationData;
 import raytrace.data.IntersectionData;
-import raytrace.data.ShadingData;
+import raytrace.scene.Scene;
 
 public class SoftDirectionalLight extends Light {
 	
@@ -35,13 +35,13 @@ public class SoftDirectionalLight extends Light {
 	 * Overrides
 	 * *********************************************************************************************/
 	@Override
-	public IlluminationData illuminate(ShadingData data, Vector3 point)
+	public IlluminationData illuminate(Scene scene, Vector3 point)
 	{
-		double distance = Double.MAX_VALUE;
+		double distance = Double.POSITIVE_INFINITY;
 		
 		Vector3 sampleDirection = Vector3.uniformConeSample(inverseDirection, softness * Math.PI * 0.5);
 		
-		IntersectionData shadowData = shadowed(data.getRootScene(), 
+		IntersectionData shadowData = shadowed(scene, 
 				new Ray(point, sampleDirection, 0, 0), distance);
 		
 		double blocked = shadowData == null ? 1.0 : 0.0;
