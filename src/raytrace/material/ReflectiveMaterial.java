@@ -2,16 +2,16 @@ package raytrace.material;
 
 import math.Vector3;
 import raytrace.color.Color;
-import raytrace.data.IlluminationData;
-import raytrace.data.ShadingData;
-import raytrace.light.Light;
+import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
 import raytrace.map.texture.Texture;
 
-public class ReflectiveMaterial  extends Material{
+public class ReflectiveMaterial  extends Material {
 	
 	/*
-	 * An implementation of a material that is a diffuse color and affected by light
+	 * An implementation of a material that uniformly reflects light across its surface normal
 	 */
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
@@ -26,42 +26,61 @@ public class ReflectiveMaterial  extends Material{
 	{
 		this.tintTexture = tintTexture;
 		this.reflectivePercent = reflectivePercent;
-	}
+		
+		this.affectedByLightSources = false;
+		this.emitsLight = false;
+	}	
 	
 
+	/* *********************************************************************************************
+	 * Material Overrides
+	 * *********************************************************************************************/
 	@Override
-	public Color shade(ShadingData data)
+	public RayData sample(IntersectionData idata, RayData rdata)
 	{
-		//Storage for the result color
-		Color shade = new Color(0x000000ff);
+		Vector3 point = idata.getPoint();
+		Vector3 normal = idata.getNormal().normalizeM();
+		Vector3 ray = rdata.getRay().getDirection();
 		
-		//Get the material color from the texture
-		Color tint = tintTexture.evaluate(data.getIntersectionData());
+		double DdotN = normal.dot(ray);
 		
-		Vector3 point = data.getIntersectionData().getPoint();
-		Vector3 normal = data.getIntersectionData().getNormal();
-		IlluminationData ildata;
-		
-		//Diffuse lighting and shadows
-		for(Light light : data.getRootScene().getLightManager())
-		{
-			//Get illumination data for the current light
-			ildata = light.illuminate(data, point);
-			
-			shade.add3M(diffuse(ildata.getColor(), normal, ildata.getDirection()));
+		//If the normal is facing in the wrong direction, flip it
+		if(DdotN > 0.0) {
+			normal = normal.multiply(-1.0);
 		}
 
-		//If reflective, go divin'
-		Color rflectColor = new Color();
-		if(reflectivePercent != 0.0 && data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
-		{
-			rflectColor = reflect(data, point, normal, data.getRefractiveIndex());
-		}
+		//Create a new sample reflected across the normal
+		RayData newRData = new RayData(point, reflect(ray, point, normal), RayData.Type.REFLECT);
 		
-		
-		Color diffuseColor = tint.multiply3(shade).multiply3(1.0 - reflectivePercent);
-		Color reflectiveColor = rflectColor.multiply3(reflectivePercent);
-		return diffuseColor.add3(reflectiveColor);
+		return newRData;
 	}
 
+	@Override
+	public Color evaluateDirectLight(IntersectionData idata, RayData rdata, Color light, Vector3 lightDirection)
+	{
+		return Color.black();
+	}
+
+	@Override
+	public Color evaluateSampledLight(IntersectionData idata, RayData rdata, Color light, RayData sample)
+	{
+		//Get the material color from the texture
+		Color tint = tintTexture.evaluate(idata);	
+		
+		//If reflective, calculate how much light was not absorbed
+		Color unabsorbedLight;
+		unabsorbedLight = light.multiply3(reflectivePercent);
+		
+		//Calculate the reflected light
+		Color reflectedLight = unabsorbedLight.multiply3M(tint);
+		
+		return reflectedLight;
+	}
+
+	@Override
+	public Color evaluateEmission(IntersectionData idata, RayData rdata)
+	{
+		return Color.black();
+	}
+	
 }
