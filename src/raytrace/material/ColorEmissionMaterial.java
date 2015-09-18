@@ -6,10 +6,10 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.map.texture.Texture;
 
-public class ColorMaterial extends Material {
+public class ColorEmissionMaterial extends Material {
 	
 	/*
-	 * An implementation of a material that is a diffuse color
+	 * An implementation of a material that emits light based on a texture
 	 */
 	
 	/* *********************************************************************************************
@@ -21,7 +21,7 @@ public class ColorMaterial extends Material {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ColorMaterial(Texture colorTexture)
+	public ColorEmissionMaterial(Texture colorTexture)
 	{
 		this.colorTexture = colorTexture;
 		this.globallyIlluminated = false;
