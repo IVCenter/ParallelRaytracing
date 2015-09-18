@@ -40,7 +40,12 @@ public class TimeStamp {
 	{
 		String temp = new String("");
 		Date timeStamp = new Date();
-		temp = "" + (1900 + timeStamp.getYear()) + "" + (1 +timeStamp.getMonth()) + "" + timeStamp.getDate() + "-" + timeStamp.getHours() + "." + (timeStamp.getMinutes() < 10?("0" + timeStamp.getMinutes()):(timeStamp.getMinutes())) + "." + (timeStamp.getSeconds() < 10?("0" + timeStamp.getSeconds()):(timeStamp.getSeconds())) + "";
+		temp = "" + (1900 + timeStamp.getYear()) + "" + 
+				(timeStamp.getMonth() < 9 ? ("0" + (1 + timeStamp.getMonth())) : (1 + timeStamp.getMonth())) + "" + 
+				(timeStamp.getDate() < 10?("0" + timeStamp.getDate()):(timeStamp.getDate())) + "-" + 
+				(timeStamp.getHours() < 10?("0" + timeStamp.getHours()):(timeStamp.getHours())) + "." + 
+				(timeStamp.getMinutes() < 10?("0" + timeStamp.getMinutes()):(timeStamp.getMinutes())) + "." + 
+				(timeStamp.getSeconds() < 10?("0" + timeStamp.getSeconds()):(timeStamp.getSeconds())) + "";
 		return temp;
 	}
 	
