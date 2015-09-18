@@ -12,7 +12,7 @@ import raytrace.data.UpdateData;
 import raytrace.framework.Tracer;
 import raytrace.geometry.meshes.Cube;
 import raytrace.light.PointLight;
-import raytrace.material.ColorMaterial;
+import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 import raytrace.surfaces.Instance;
@@ -77,7 +77,7 @@ public class EmptyScene extends Scene {
 	@Override
 	protected Material configureSkyMaterial()
 	{
-		Material skyMaterial = new ColorMaterial(Color.black());
+		Material skyMaterial = new ColorEmissionMaterial(Color.black());
 		
 		return skyMaterial;
 	}

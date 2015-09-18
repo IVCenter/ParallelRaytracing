@@ -13,9 +13,11 @@ import raytrace.data.UpdateData;
 import raytrace.framework.Tracer;
 import raytrace.light.Light;
 import raytrace.light.LightManager;
-import raytrace.material.ColorMaterial;
+import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
+import raytrace.medium.Medium;
+import raytrace.medium.VacuumMedium;
 import raytrace.surfaces.CompositeSurface;
 import raytrace.trace.IntegrationTracer;
 import raytrace.trace.integration.PathTracingIntegrator;
@@ -34,6 +36,7 @@ public abstract class Scene extends CompositeSurface {
 	protected String sceneKey;
 	protected List<Tracer> tracers;
 	protected Material defaultMaterial = new DiffuseMaterial(Color.white());
+	protected Medium globalMedium = new VacuumMedium();
 	
 	protected boolean useDefaultMaterial = false;
 	
@@ -82,7 +85,7 @@ public abstract class Scene extends CompositeSurface {
 	
 	protected Material configureSkyMaterial()
 	{
-		return new ColorMaterial(Color.black());
+		return new ColorEmissionMaterial(Color.black());
 	}
 	
 	protected void configureWorld()
@@ -179,6 +182,14 @@ public abstract class Scene extends CompositeSurface {
 
 	public void setUseDefaultMaterial(boolean useDefaultMaterial) {
 		this.useDefaultMaterial = useDefaultMaterial;
+	}
+
+	public Medium getGlobalMedium() {
+		return globalMedium;
+	}
+
+	public void setGlobalMedium(Medium globalMedium) {
+		this.globalMedium = globalMedium;
 	}
 
 }
