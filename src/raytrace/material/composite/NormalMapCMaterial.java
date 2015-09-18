@@ -2,7 +2,8 @@ package raytrace.material.composite;
 
 import math.Vector3;
 import raytrace.color.Color;
-import raytrace.data.ShadingData;
+import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
 import raytrace.map.normal.FlatNormalMap;
 import raytrace.map.normal.NormalMap;
 import raytrace.material.Material;
@@ -22,39 +23,93 @@ public class NormalMapCMaterial extends CompositeMaterial {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public NormalMapCMaterial(Material material)
-	{
-		super(material);
-		normalMap = new FlatNormalMap();
-	}
-	
 	public NormalMapCMaterial(Material material, NormalMap normalMap)
 	{
 		super(material);
 		this.normalMap = normalMap;
+		
+		this.affectedByLightSources = true;
+		this.globallyIlluminated = true;
+		this.emitsLight = true;
 	}
-
 	
+	public NormalMapCMaterial(Material material)
+	{
+		this(material, new FlatNormalMap());
+	}
+	
+
 	/* *********************************************************************************************
 	 * Material Overrides
 	 * *********************************************************************************************/
 	@Override
-	public Color shade(ShadingData data)
+	public RayData sample(IntersectionData idata, RayData rdata)
 	{
-		Vector3 normal = normalMap.evaluate(data.getIntersectionData());
+		Vector3 oldNormal = modifyNormal(idata);
+		
+		RayData sample = material.sample(idata, rdata);
+		
+		restoreNormal(idata, oldNormal);
+		
+		return sample;
+	}
+
+	@Override
+	public Color evaluateDirectLight(IntersectionData idata, RayData rdata, Color light, Vector3 lightDirection)
+	{
+		Vector3 oldNormal = modifyNormal(idata);
+		
+		Color result = material.evaluateDirectLight(idata, rdata, light, lightDirection);
+		
+		restoreNormal(idata, oldNormal);
+		
+		return result;
+	}
+
+	@Override
+	public Color evaluateSampledLight(IntersectionData idata, RayData rdata, Color light, RayData sample)
+	{
+		Vector3 oldNormal = modifyNormal(idata);
+		
+		Color result = material.evaluateSampledLight(idata, rdata, light, sample);
+		
+		restoreNormal(idata, oldNormal);
+		
+		return result;
+	}
+
+	@Override
+	public Color evaluateEmission(IntersectionData idata, RayData rdata)
+	{
+		Vector3 oldNormal = modifyNormal(idata);
+		
+		Color result = material.evaluateEmission(idata, rdata);
+		
+		restoreNormal(idata, oldNormal);
+		
+		return result;
+	}
+
+
+	/* *********************************************************************************************
+	 * Helper Methods
+	 * *********************************************************************************************/
+	protected Vector3 modifyNormal(IntersectionData idata)
+	{
+		Vector3 normal = normalMap.evaluate(idata);
 		
 		//Store the old normal
-		Vector3 oldNormal = data.getIntersectionData().getNormal().normalizeM();
+		Vector3 oldNormal = idata.getNormal().normalizeM();
 		
 		//Set the normal to the new one
-		data.getIntersectionData().setNormal(normal);
+		idata.setNormal(normal);
 		
-		//Shade
-		Color shade = material.shade(data);
-		
-		//Put the old normal back
-		data.getIntersectionData().setNormal(oldNormal);
-		return shade;
+		return oldNormal;
+	}
+	
+	protected void restoreNormal(IntersectionData idata, Vector3 normal)
+	{
+		idata.setNormal(normal);
 	}
 	
 	
