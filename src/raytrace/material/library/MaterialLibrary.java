@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import raytrace.color.Color;
-import raytrace.material.ColorMaterial;
+import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.DiffuseMaterial;
 import raytrace.material.Material;
 
@@ -39,7 +39,7 @@ public class MaterialLibrary {
 		
 		materials.put(ERROR, new MaterialConstructor() {
 			public Material create() {
-				return new ColorMaterial(Color.red());
+				return new ColorEmissionMaterial(Color.red());
 			}
 		});
 		
