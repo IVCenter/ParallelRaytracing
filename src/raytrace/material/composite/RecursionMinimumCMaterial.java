@@ -1,10 +1,13 @@
 package raytrace.material.composite;
 
+import math.Vector3;
 import raytrace.color.Color;
-import raytrace.data.ShadingData;
-import raytrace.material.ColorMaterial;
+import raytrace.data.IntersectionData;
+import raytrace.data.RayData;
+import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.Material;
 
+@Deprecated //Is not yet supported by the new Materials interface
 public class RecursionMinimumCMaterial extends CompositeMaterial {
 
 	/*
@@ -26,37 +29,70 @@ public class RecursionMinimumCMaterial extends CompositeMaterial {
 	public RecursionMinimumCMaterial(Material material)
 	{
 		super(material);
-		recursionMinimum = 0;
-		belowMinimumMaterial = new ColorMaterial(Color.black());
+		this.recursionMinimum = 0;
+		this.belowMinimumMaterial = new ColorEmissionMaterial(Color.black());
+		
+		this.affectedByLightSources = true;
+		this.globallyIlluminated = true;
+		this.emitsLight = true;
 	}
 	
 	public RecursionMinimumCMaterial(Material material, int recursionMinimum)
 	{
-		super(material);
+		this(material);
 		this.recursionMinimum = recursionMinimum;
-		this.belowMinimumMaterial = new ColorMaterial(Color.black());
 	}
 	
 	public RecursionMinimumCMaterial(Material material, Material belowMinimumMaterial, int recursionMinimum)
 	{
-		super(material);
-		this.recursionMinimum = recursionMinimum;
+		this(material, recursionMinimum);
 		this.belowMinimumMaterial = belowMinimumMaterial;
 	}
 
-	
+
 	/* *********************************************************************************************
 	 * Material Overrides
 	 * *********************************************************************************************/
 	@Override
-	public Color shade(ShadingData data)
+	public RayData sample(IntersectionData idata, RayData rdata)
 	{
-		if(data.getRecursionDepth() < recursionMinimum)
-			return belowMinimumMaterial.shade(data);
+		//RecursionDepth is not yet available
+		//if(recursionDepth < recursionMinimum)
+		//	return belowMinimumMaterial.sample(idata, rdata);
 		
-		//Shade
-		return material.shade(data);
+		return material.sample(idata, rdata);
 	}
+
+	@Override
+	public Color evaluateDirectLight(IntersectionData idata, RayData rdata, Color light, Vector3 lightDirection)
+	{
+		//RecursionDepth is not yet available
+		//if(recursionDepth < recursionMinimum)
+		//	return belowMinimumMaterial.evaluateDirectLight(idata, rdata, light, lightDirection);
+		
+		return material.evaluateDirectLight(idata, rdata, light, lightDirection);
+	}
+
+	@Override
+	public Color evaluateSampledLight(IntersectionData idata, RayData rdata, Color light, RayData sample)
+	{
+		//RecursionDepth is not yet available
+		//if(recursionDepth < recursionMinimum)
+		//	return belowMinimumMaterial.evaluateSampledLight(idata, rdata, light, sample);
+		
+		return material.evaluateSampledLight(idata, rdata, light, sample);
+	}
+
+	@Override
+	public Color evaluateEmission(IntersectionData idata, RayData rdata)
+	{
+		//RecursionDepth is not yet available
+		//if(recursionDepth < recursionMinimum)
+		//	return belowMinimumMaterial.evaluateEmission(idata, rdata);
+		
+		return material.evaluateEmission(idata, rdata);
+	}
+
 	
 	
 	/* *********************************************************************************************
