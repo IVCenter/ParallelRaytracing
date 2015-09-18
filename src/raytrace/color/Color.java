@@ -251,6 +251,24 @@ public class Color implements Texture {
 	{
 		return (channels[0] + channels[1] + channels[2]) / 3.0;
 	}
+	
+	public Color raiseToExponent(double e)
+	{
+		return new Color(Math.pow(channels[0], e), 
+						 Math.pow(channels[1], e), 
+						 Math.pow(channels[2], e), 
+						 channels[3]);
+	}
+	
+	public Color gammaEncode(double gamma)
+	{
+		return raiseToExponent(1.0 / gamma);
+	}
+	
+	public Color gammaDecode(double gamma)
+	{
+		return raiseToExponent(gamma);
+	}
 
 	
 	/* *********************************************************************************************
