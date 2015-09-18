@@ -22,6 +22,7 @@ public class PpmFileLoader {
 	public static Texture2D load(String fileName) { return load(new File(fileName)); }
 	public static Texture2D load(File file)
 	{
+		/*
 		//Make sure the file exists
 		if(!file.exists()) {
 			Logger.warning(-73, "PpmFileLoader: The specified file does not exist [" + file.getPath() + "].");
@@ -70,5 +71,8 @@ public class PpmFileLoader {
 				data.getPoints().size() + "] points... (" + (System.currentTimeMillis() - startTime) + "ms).");
 		
 		return data;
+		*/
+		
+		return null;
 	}
 }
