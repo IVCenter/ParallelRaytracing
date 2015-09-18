@@ -139,7 +139,7 @@ public class AABVHSurface extends CompositeSurface {
 		
 		
 		//If there are no intersections then bail out.
-		if(intersections_1 == Double.MAX_VALUE && intersections_0 == Double.MAX_VALUE)
+		if(intersections_1 == Double.POSITIVE_INFINITY && intersections_0 == Double.POSITIVE_INFINITY)
 		{
 			return null;
 		}
@@ -164,7 +164,7 @@ public class AABVHSurface extends CompositeSurface {
 		IntersectionData closest = null;
 		
 		//Test the closest bounding box first
-		if(intersections_0 != Double.MAX_VALUE)
+		if(intersections_0 != Double.POSITIVE_INFINITY)
 		{
 			idata = surfaces_0.intersects(data);
 			if(idata != null)
@@ -179,7 +179,7 @@ public class AABVHSurface extends CompositeSurface {
 		}
 		
 		//If necessary, test the second bounding box
-		if(intersections_1 != Double.MAX_VALUE)
+		if(intersections_1 != Double.POSITIVE_INFINITY)
 		{
 			idata = surfaces_1.intersects(data);
 			//If idata isn't null, and either closest is null, or idata is closer than closest
@@ -279,7 +279,7 @@ public class AABVHSurface extends CompositeSurface {
 		ArrayList<SURFACE> positive = new ArrayList<SURFACE>(surfaces.size());
 		
 		//Best axis data
-		double lowestSAH = Double.MAX_VALUE;
+		double lowestSAH = Double.POSITIVE_INFINITY;
 		double currentSAH = 0.0;
 		double currentAxisValue = 0.0;
 		int lowestAxis = 0;
