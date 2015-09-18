@@ -41,7 +41,7 @@ public class VacuumMedium extends Medium {
 	{
 		Vector3 direction = startPoint.subtract(endPoint).normalizeM();
 		
-		RayData rdata = new RayData(new Ray(startPoint, direction, 0, 0), Constants.RECURSIVE_EPSILON, rayMarchDistance);
+		RayData rdata = new RayData(new Ray(startPoint, direction, 0, 0), Constants.RECURSIVE_EPSILON, Double.POSITIVE_INFINITY);
 		
 		return rdata;
 	}
