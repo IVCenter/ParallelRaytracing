@@ -6,11 +6,12 @@ import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.map.texture.Texture;
 
-public class DiffuseMaterial extends Material{
+public class DiffuseMaterial extends Material {
 	
 	/*
 	 * An implementation of a material that diffusely reflects light
 	 */
+	
 	/* *********************************************************************************************
 	 * Instance Vars
 	 * *********************************************************************************************/
@@ -24,62 +25,11 @@ public class DiffuseMaterial extends Material{
 	{
 		this.tintTexture = tintTexture;
 	}
-	
-	/*
-	@Override
-	public Color shade(ShadingData data)
-	{
-		//Storage for result color
-		Color shade = new Color(0x000000ff);
-		
-		//Get the material color from the texture
-		Color tint = tintTexture.evaluate(data.getIntersectionData());
-		
-		Vector3 point = data.getIntersectionData().getPoint();
-		Vector3 normal = data.getIntersectionData().getNormal().normalizeM();
-		
-		double DdotN = normal.dot(data.getRay().getDirection());
-		//If the normal is facing in the wrong direction, flip it
-		if(DdotN > 0.0) {
-			normal = normal.multiply(-1.0);
-		}
 
-		
-		//Basis
-		Vector3 uTangent;
-		Vector3 vTangent;
-		
-		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
-			uTangent = normal.cross(Vector3.cosineWeightedSample()).normalizeM();
-		else
-			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
-		vTangent = uTangent.cross(normal).normalizeM();
-		
-		
-		//Direct Illumination
-		IlluminationData ildata;
-		for(Light light : data.getRootScene().getLightManager())
-		{
-			//Get illumination data for the current light
-			ildata = light.illuminate(data, point);
-			
-			shade.add3M(diffuse(light, idata.getNormal(), lightDirection));
-		}
-		
-		
-		//Sampling
-		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
-		{
-			//Sample a random point
-			
-			//Add the direct shading and samples shading together
-			shade.add3M(recurse(data, point, sampleDir, 1.0));
-		}
-		
-		return shade.multiply3M(tint);
-	}
-	*/
 
+	/* *********************************************************************************************
+	 * Material Overrides
+	 * *********************************************************************************************/
 	@Override
 	public RayData sample(IntersectionData idata, RayData rdata)
 	{
@@ -142,6 +92,4 @@ public class DiffuseMaterial extends Material{
 		return Color.black();
 	}
 	
-	
-
 }

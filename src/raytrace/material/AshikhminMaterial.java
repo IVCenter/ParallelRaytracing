@@ -188,7 +188,7 @@ public class AshikhminMaterial extends Material {
 		
 		double middleSpec = topSpec / bottomSpec;
 		
-		//If middle spec is over 1.0 then the specular reflection is generating energy! So clamp it
+		//If middle spec is over 1.0 then the specular reflection /seems to be/ generating energy. So clamp it
 		if(middleSpec > 1.0)
 			middleSpec = 1.0;
 		
@@ -235,86 +235,5 @@ public class AshikhminMaterial extends Material {
 	{
 		return k1.multiply(-1.0).addM(half.multiply(half.dot(k1) * 2.0)).normalizeM();
 	}
-	
-	/*
-	@Override
-	public Color shade(ShadingData data)
-	{	
-		Color diffuseTint = diffuseTexture.evaluate(data.getIntersectionData());
-		Color specularTint = specularTexture.evaluate(data.getIntersectionData());
-		
-		
-		Color shade = new Color(0x000000ff);
-		
-		Vector3 point = data.getIntersectionData().getPoint();
-		Vector3 normal = data.getIntersectionData().getNormal().normalizeM();
-		Vector3 rayDir = data.getRay().getDirection().multiply(-1.0).normalizeM();
-		
-		double DdotN = normal.dot(rayDir);
-		//If the normal is facing the wrong direction, flip it
-		if(DdotN < 0.0) {
-			normal = normal.multiply(-1.0);
-			DdotN = normal.dot(rayDir);
-		}
-		
-		
-		//Basis
-		Vector3 uTangent;
-		Vector3 vTangent;
-		
-		if(Math.abs(normal.dot(Vector3.positiveYAxis)) == 1.0)
-			uTangent = normal.cross(Vector3.cosineWeightedSample()).normalizeM();
-		else
-			uTangent = normal.cross(Vector3.positiveYAxis).normalizeM();
-		vTangent = uTangent.cross(normal).normalizeM();
-		
-		
-		//Direct Illumination
-		IlluminationData ildata;
-		Vector3 lightDir;
-		Vector3 half;
-		for(Light light : data.getRootScene().getLightManager())
-		{
-			//Get illumination data for the current light
-			ildata = light.illuminate(data, point);
-			
-			lightDir = ildata.getDirection().multiply(-1.0).normalizeM();
-			half = Vector3.halfVector(rayDir, lightDir);
-
-			shade.add3M(ashikminSpecular(ildata.getColor(), specularTint, rayDir, lightDir, normal, uTangent, vTangent, half));
-			shade.add3M(ashikminDiffuse(ildata.getColor(), diffuseTint, rayDir, lightDir, normal, uTangent, vTangent, half));
-		}
-		
-		
-		//Sampling
-		if(data.getRecursionDepth() < DO_NOT_EXCEED_RECURSION_LEVEL)
-		{
-			Vector3 halfSample;
-			Vector3 sample;
-			//Roll a random to trace either specular reflections or diffuse reflections
-			if(Math.random() < specularReflectance)
-			{
-
-				//Specular Sample
-				halfSample = createHalfSample(normal, uTangent, vTangent);
-				sample = createSample(halfSample, rayDir);
-				
-				if(sample.dot(normal) > 0.0)
-				{
-					shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), specularTint);	
-				}
-			
-			}else{
-				
-				//Diffuse Sample
-				sample = Vector3.cosineWeightedSample(uTangent, normal, vTangent);
-
-				shade.add3AfterMultiply3M(recurse(data, point, sample, 1.0), diffuseTint);	
-			}
-		}
-		
-		return shade;
-	}
-	*/
 
 }

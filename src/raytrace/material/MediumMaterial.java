@@ -10,6 +10,7 @@ public class MediumMaterial  extends Material{
 	
 	/*
 	 * An implementation of a material that hands off to a medium
+	 * Replaces "PassThroughMaterial" in functionality
 	 */
 	/* *********************************************************************************************
 	 * Instance Vars
