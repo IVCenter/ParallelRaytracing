@@ -152,6 +152,11 @@ public class Vector3 implements Serializable{
 	{
 		return new Vector3(array[0]*d, array[1]*d, array[2]*d);
 	}
+	
+	public Vector3 multiply(double d, double e, double f)
+	{
+		return new Vector3(array[0]*d, array[1]*e, array[2]*f);
+	}
 
 	public Vector3 multiply(Vector3 that)
 	{
@@ -163,6 +168,14 @@ public class Vector3 implements Serializable{
 		array[0] *= d;
 		array[1] *= d;
 		array[2] *= d;
+		return this;
+	}
+	
+	public Vector3 multiplyM(double d, double e, double f)
+	{
+		array[0] *= d;
+		array[1] *= e;
+		array[2] *= f;
 		return this;
 	}
 	
