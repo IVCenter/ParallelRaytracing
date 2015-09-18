@@ -48,7 +48,7 @@ public class SimplexInterpolationT3DBlend extends Texture3D {
 	public Color evaluate(Double x, Double y, Double z)
 	{
 		double t = 0.5 * Math.abs(1.0 + noiseFunction.evaluate(x, y, z));
-		return firstColor.interpolate(firstColor, secondColor, t);
+		return Color.interpolate(firstColor, secondColor, t);
 	}
 	
 	

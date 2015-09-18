@@ -38,7 +38,7 @@ public class SphericalSineWaveTexture3D extends Texture3D {
 	public Color evaluate(Double x, Double y, Double z)
 	{
 		double t = 0.5 * (Math.sin(Math.sqrt(x * x + y * y + z * z)) + 1.0);
-		return firstColor.interpolate(firstColor, secondColor, t);
+		return Color.interpolate(firstColor, secondColor, t);
 	}
 	
 	

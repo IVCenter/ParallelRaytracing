@@ -49,7 +49,7 @@ public class CircularGradientTexture3D extends Texture3D {
 	{
 		double p = Math.sqrt(x * x + z * z);
 		double t = Math.min(1.0, Math.max(0.0, p));
-		return firstColor.interpolate(firstColor, secondColor, Math.pow(t, weight));
+		return Color.interpolate(firstColor, secondColor, Math.pow(t, weight));
 	}
 	
 	

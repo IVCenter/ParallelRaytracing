@@ -43,7 +43,7 @@ public class ConstantMaskT3DBlend extends Texture3D {
 	{
 		Color firstColor = firstTexture.evaluate(x, y, z);
 		Color secondColor = secondTexture.evaluate(x, y, z);
-		return firstColor.interpolate(firstColor, secondColor, mask);
+		return Color.interpolate(firstColor, secondColor, mask);
 	}
 	
 	

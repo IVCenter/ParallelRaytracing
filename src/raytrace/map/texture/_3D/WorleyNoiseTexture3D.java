@@ -63,7 +63,7 @@ public class WorleyNoiseTexture3D extends Texture3D {
 	public Color evaluate(Double x, Double y, Double z)
 	{
 		double t = noiseFunction.evaluate(x, y, z);
-		return firstColor.interpolate(firstColor, secondColor, t);
+		return Color.interpolate(firstColor, secondColor, t);
 	}
 	
 	
