@@ -59,7 +59,7 @@ public class BloomPostProcess extends PostProcess {
 		int minx, maxx, miny, maxy;
 		int samplesUsed;
 		
-		double radiusSqrd = radius * radius;//Math.sqrt(radius);
+		//double radiusSqrd = radius * radius;//Math.sqrt(radius);
 		double falloff;
 		
 		//For each ray, calculate the pixel color

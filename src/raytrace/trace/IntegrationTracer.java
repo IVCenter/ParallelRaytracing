@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import math.Vector3;
 import math.ray.Ray;
-import math.volume.SchlickPhaseFunction;
 import process.logging.Logger;
 import raster.Pixel;
 import raster.PixelBuffer;
@@ -12,15 +11,12 @@ import raster.RenderBuffer;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
 import raytrace.data.IntegrationData;
-import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
-import raytrace.map.texture._3D.ColorTexture3D;
 import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.Material;
 import raytrace.medium.Medium;
-import raytrace.medium.ParticipatingMedium;
 import raytrace.medium.VacuumMedium;
 import raytrace.scene.Scene;
 import raytrace.trace.integration.Integrator;
@@ -163,12 +159,12 @@ public class IntegrationTracer implements Tracer {
 		//Shoot a ray continually upwards
 		//For all surface it exits without entering, add that surface's medium to the list (if any!)
 		
-		Vector3 dir = camera.getUp();
-		RayData rdata = new RayData(new Ray(camera.getPosition(), dir, 0, 0));
+		//Vector3 dir = camera.getUp();
+		//RayData rdata = new RayData(new Ray(camera.getPosition(), dir, 0, 0));
 		
-		IntersectionData idata = scene.intersects(rdata);
+		//IntersectionData idata = scene.intersects(rdata);
 		
-		//
+		//Repeat until intersection with sky
 		
 		
 		return mediums;
