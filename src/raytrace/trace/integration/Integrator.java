@@ -16,8 +16,8 @@ public abstract class Integrator {
 	/* *********************************************************************************************
 	 * Static Vars
 	 * *********************************************************************************************/
-	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 100;
-	protected static final int SYSTEM_RESURSION_LIMIT = 100;
+	protected static final int DO_NOT_EXCEED_RECURSION_LEVEL = 1000;
+	protected static final int SYSTEM_RESURSION_LIMIT = 1000;
 
 	
 	/* *********************************************************************************************

@@ -42,26 +42,22 @@ public class PathTracingIntegrator extends Integrator {
 		//double rayMarchDistance = requestedRayMarchingDistance(applicableMediumList);
 		double rayMarchDistance = applicableMedium.getRayMarchDistance();
 		
-		//If there is a medium on the stack
-		//if(!applicableMediumList.isEmpty())
-		if(recursionDepth >= DO_NOT_EXCEED_RECURSION_LEVEL || 
-				recursionDepth >= SYSTEM_RESURSION_LIMIT)
-		{
-			rayMarchDistance = Double.POSITIVE_INFINITY;
-		}
-		
-		rayData.setTEnd(rayMarchDistance);
-		
 		//Light transport points
-		Vector3 lightTransportStartPoint = rayData.getRay().getOrigin().add(rayData.getRay().getDirection().multiply(rayMarchDistance));
+		double stochasticRayMarchDistance = Math.random() * rayMarchDistance;
+		Vector3 lightTransportStartPoint = rayData.getRay().getOrigin().add(rayData.getRay().getDirection().multiply(stochasticRayMarchDistance));
 		Vector3 lightTransportEndPoint = rayData.getRay().getOrigin();
 		
 		//Get the ray-scene intersection data
 		IntersectionData intersectionData = scene.intersects(rayData);
 		
 		//If there was 
-		if(intersectionData == null && rayMarchDistance < Double.POSITIVE_INFINITY)
+		if(intersectionData != null && 
+				rayMarchDistance < Double.POSITIVE_INFINITY && 
+				stochasticRayMarchDistance < intersectionData.getDistance() &&
+				recursionDepth < DO_NOT_EXCEED_RECURSION_LEVEL && 
+				recursionDepth < SYSTEM_RESURSION_LIMIT)
 		{
+			//Set the intersectionData 
 			//TODO: Evaluate the light passing through the medium
 			
 			//If inside of a medium that requires ray marching
@@ -224,7 +220,7 @@ public class PathTracingIntegrator extends Integrator {
 			result = applicableMedium.transmit(lightTransportStartPoint, lightTransportEndPoint, result);
 			
 			//Handle scatter in
-			//result.add3M(mediumScatterIn);
+			result.add3M(mediumScatterIn);
 		}
 		
 		

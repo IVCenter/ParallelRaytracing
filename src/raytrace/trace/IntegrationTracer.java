@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import math.Vector3;
 import math.ray.Ray;
+import math.volume.SchlickPhaseFunction;
 import process.logging.Logger;
 import raster.Pixel;
 import raster.PixelBuffer;
@@ -16,7 +17,7 @@ import raytrace.data.RayData;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
 import raytrace.map.texture._3D.ColorTexture3D;
-import raytrace.material.ColorMaterial;
+import raytrace.material.ColorEmissionMaterial;
 import raytrace.material.Material;
 import raytrace.medium.Medium;
 import raytrace.medium.ParticipatingMedium;
@@ -71,7 +72,7 @@ public class IntegrationTracer implements Tracer {
 		
 		Material skyMaterial = scene.getSkyMaterial();
 		if(skyMaterial == null)
-			skyMaterial = new ColorMaterial(Color.white());
+			skyMaterial = new ColorEmissionMaterial(Color.white());
 		
 		//ray count for super sampling support
 		double rayCount = 0;
@@ -154,15 +155,9 @@ public class IntegrationTracer implements Tracer {
 		//Add the base air medium
 		mediums.add(new VacuumMedium());
 		
-		ParticipatingMedium pm = new ParticipatingMedium();
-		pm.setAbsorption(new ColorTexture3D((new Color(0.15, 0.25, 0.35)).multiply3M(.1)));
-		//pm.setScatterOut(new ColorTexture3D(new Color(0.05, 0.05, 0.05)));
-		//pm.setEmission(new ColorTexture3D(new Color(0.05, 0.05, 0.05)));
-		pm.setScatterIn(new ColorTexture3D(new Color(0.05, 0.05, 0.05)));
-		//pm.setRayMarching(true);
-		//pm.setRayMarchDistance(0.2);
+		if(scene.getGlobalMedium() != null)
+			mediums.add(scene.getGlobalMedium());
 		
-		//mediums.add(pm);
 		
 		//TODO: Calculate them
 		//Shoot a ray continually upwards
