@@ -38,7 +38,11 @@ public abstract class GeometrySurface extends AbstractSurface implements Materia
 	{
 		//Mask
 	}
+
 	
+	/* *********************************************************************************************
+	 * Getters/Setters
+	 * *********************************************************************************************/
 	@Override
 	public Material getMaterial()
 	{
