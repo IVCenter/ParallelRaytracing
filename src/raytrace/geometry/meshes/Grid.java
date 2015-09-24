@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import math.Vector3;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
-import raytrace.material.Material;
 
 public class Grid extends MeshSurface {
 	
@@ -34,17 +33,29 @@ public class Grid extends MeshSurface {
 		super();
 		initialize(width, height);
 	}
+	
+	public Grid(double width, double height, int resolution)
+	{
+		super();
+		initialize(width, height, resolution);
+	}
 
 	
 	/* *********************************************************************************************
 	 * Init Triangles
 	 * *********************************************************************************************/
-	public void initialize(double width, double height)
+	protected void initialize(double width, double height)
+	{
+		initialize(width, height, 1);
+	}
+	
+	protected void initialize(double width, double height, int resolution)
 	{
 		w = width * 0.5;
 		h = height * 0.5;
+		resolution = resolution <= 0 ? 1 : resolution;
 
-		ArrayList<Triangle> tris = generateTriangles(w, h, 1);
+		ArrayList<Triangle> tris = generateTriangles(w, h, resolution);
 		this.triangles = tris;
 	}
 	
@@ -145,10 +156,6 @@ public class Grid extends MeshSurface {
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public void setMaterial(Material material)
-	{
-		this.material = material;
-		for(Triangle tri: triangles)
-			tri.setMaterial(material);
-	}
+	//
+	
 }

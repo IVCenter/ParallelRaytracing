@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import math.Vector3;
-
 import raytrace.bounding.BoundingBox;
 import raytrace.data.BakeData;
 import raytrace.data.IntersectionData;
@@ -96,7 +95,10 @@ public class MeshSurface extends GeometrySurface {
 		}
 		
 		if(closest != null)
+		{
 			closest.setSurfaceID(surfaceID);
+			closest.setMaterial(material);
+		}
 		
 		return closest;
 	}
@@ -300,12 +302,17 @@ public class MeshSurface extends GeometrySurface {
 	public void setTriangles(ArrayList<Triangle> triangles) {
 		this.triangles = triangles;
 	}
-
+	
+	@Override
+	public Material getMaterial()
+	{
+		return material;
+	}
+	
+	@Override
 	public void setMaterial(Material material)
 	{
 		this.material = material;
-		for(Triangle cs : triangles)
-			cs.setMaterial(material);
 	}
 	
 }

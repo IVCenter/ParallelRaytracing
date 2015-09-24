@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import math.Vector3;
 import raytrace.geometry.Triangle;
 import raytrace.geometry.Vertex;
-import raytrace.material.Material;
 
 public class Cube extends MeshSurface {
 	
@@ -188,10 +187,6 @@ public class Cube extends MeshSurface {
 	/* *********************************************************************************************
 	 * Getters/Setters
 	 * *********************************************************************************************/
-	public void setMaterial(Material material)
-	{
-		this.material = material;
-		for(Triangle tri: triangles)
-			tri.setMaterial(material);
-	}
+	//
+	
 }

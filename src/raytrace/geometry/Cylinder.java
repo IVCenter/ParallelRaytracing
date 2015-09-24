@@ -11,7 +11,8 @@ import raytrace.surfaces.GeometrySurface;
 public class Cylinder extends GeometrySurface {
 	
 	/*
-	 * A simple sphere class
+	 * A simple cylinder class 
+	 * (TODO: Currently not supported)
 	 */
 	
 	/* *********************************************************************************************
