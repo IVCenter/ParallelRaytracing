@@ -26,8 +26,6 @@ public class PathTracingIntegrator extends Integrator {
 	@Override
 	public IntegrationData integrate(Scene scene, LinkedList<Medium> mediums, RayData rayData, int recursionDepth)
 	{
-		//Extract data variables
-		
 		//IntegrationData
 		IntegrationData integrationData = new IntegrationData();
 		
@@ -56,14 +54,7 @@ public class PathTracingIntegrator extends Integrator {
 				stochasticRayMarchDistance < intersectionData.getDistance() &&
 				recursionDepth < DO_NOT_EXCEED_RECURSION_LEVEL && 
 				recursionDepth < SYSTEM_RESURSION_LIMIT)
-		{
-			//Set the intersectionData 
-			//TODO: Evaluate the light passing through the medium
-			
-			//If inside of a medium that requires ray marching
-			//Handle the ray step: Cast an auxiliary rays, query any lights, recurse
-			//Apply medium to light/recursion result
-			
+		{	
 			//Get a sample ray from the medium
 			RayData sample = applicableMedium.sample(lightTransportStartPoint, lightTransportEndPoint);
 			
@@ -93,7 +84,6 @@ public class PathTracingIntegrator extends Integrator {
 			return integrationData;
 		}
 		
-
 		
 		//If there was no intersection, evaluate the sky material
 		if(intersectionData == null)
@@ -136,14 +126,10 @@ public class PathTracingIntegrator extends Integrator {
 		}
 		
 		
-		//Re-usable Material Evaluation Data object
-		//MaterialEvaluationData mdata = new MaterialEvaluationData();
-		
-		
 		//For all lights
 		//Test for shadowing
 		//Evaluate the material
-		//Accumulate the light leaving the surface in the direction of the parameter ray
+		//Accumulate the light leaving the surface in the direction of the parameter ray, as well as the light scattered in
 		Vector3 intersectionPoint = intersectionData.getPoint();
 		Color mediumScatterIn = new Color();
 		if(material.isAffectedByLightSources() || applicableMedium.getType().compareTo(Medium.Type.NONE) != 0)
@@ -170,13 +156,7 @@ public class PathTracingIntegrator extends Integrator {
 		}
 		
 		
-		//Determine if a sample needs to be cast
-		//If yes, use the material to generate a sample
-		//If transmitting, and material has a medium
-		//	If entering, push onto medium stack
-		//	If exiting, remove from medium stack
-		
-		//If we are not at any recursion limits, and the path isn't terminated by chance
+		//If we are not at any recursion limits, and the material is globally illuminated, and the path isn't terminated by chance
 		Recurse:
 		if(recursionDepth < DO_NOT_EXCEED_RECURSION_LEVEL && 
 				recursionDepth < SYSTEM_RESURSION_LIMIT && 
@@ -234,6 +214,7 @@ public class PathTracingIntegrator extends Integrator {
 		return integrationData;
 	}
 	
+	@Deprecated
 	protected LinkedList<Medium> getApplicableMediumList(LinkedList<Medium> mediums)
 	{
 		LinkedList<Medium> applicable = new LinkedList<Medium>();
@@ -252,6 +233,7 @@ public class PathTracingIntegrator extends Integrator {
 		return applicable;
 	}
 	
+	@Deprecated
 	protected double requestedRayMarchingDistance(LinkedList<Medium> mediums)
 	{
 		double minimumDistance = Double.POSITIVE_INFINITY;
