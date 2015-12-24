@@ -1,6 +1,5 @@
 package raytrace.data;
 
-import math.Vector3;
 import raytrace.color.Color;
 
 public class IntegrationData {
@@ -13,10 +12,11 @@ public class IntegrationData {
 	 * Instance Vars
 	 * *********************************************************************************************/
 	protected Color color;
-	protected Vector3 normal;
-	protected Vector3 point;
-	protected double distance;
-	protected boolean didIntersect;
+	//protected Vector3 normal;
+	//protected Vector3 point;
+	//protected double distance;
+	//protected boolean didIntersect;
+	protected IntersectionData intersectionData;
 	
 
 	/* *********************************************************************************************
@@ -25,10 +25,11 @@ public class IntegrationData {
 	public IntegrationData()
 	{
 		color = Color.black();
-		normal = new Vector3();
-		point = new Vector3();
-		distance = 0.0;
-		didIntersect = false;
+		//normal = new Vector3();
+		//point = new Vector3();
+		//distance = 0.0;
+		//didIntersect = false;
+		intersectionData = null;
 	}
 
 
@@ -38,10 +39,11 @@ public class IntegrationData {
 	public void copy(IntegrationData idata)
 	{
 		this.color.set(idata.color);
-		this.normal.set(idata.normal);
-		this.point.set(idata.point);
-		this.distance = idata.distance;
-		this.didIntersect = idata.didIntersect;
+		//this.normal.set(idata.normal);
+		//this.point.set(idata.point);
+		//this.distance = idata.distance;
+		//this.didIntersect = idata.didIntersect;
+		this.intersectionData = idata.intersectionData;
 	}
 
 
@@ -56,6 +58,7 @@ public class IntegrationData {
 		this.color = color;
 	}
 
+	/*
 	public Vector3 getNormal() {
 		return normal;
 	}
@@ -86,6 +89,15 @@ public class IntegrationData {
 
 	public void setDidIntersect(boolean didIntersect) {
 		this.didIntersect = didIntersect;
+	}
+	*/
+
+	public IntersectionData getIntersectionData() {
+		return intersectionData;
+	}
+
+	public void setIntersectionData(IntersectionData intersectionData) {
+		this.intersectionData = intersectionData;
 	}
 
 }

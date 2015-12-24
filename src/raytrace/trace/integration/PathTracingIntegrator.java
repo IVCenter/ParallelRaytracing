@@ -205,10 +205,7 @@ public class PathTracingIntegrator extends Integrator {
 		
 		
 		//Set the integration data fields
-		integrationData.setDidIntersect(true);
-		integrationData.setDistance(intersectionData.getDistance());
-		integrationData.getPoint().set(integrationData.getPoint());
-		integrationData.getNormal().set(integrationData.getNormal());
+		integrationData.setIntersectionData(intersectionData);
 		integrationData.getColor().set(result);
 		
 		return integrationData;

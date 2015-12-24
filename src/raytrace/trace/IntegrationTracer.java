@@ -11,6 +11,7 @@ import raster.RenderBuffer;
 import raytrace.camera.Camera;
 import raytrace.color.Color;
 import raytrace.data.IntegrationData;
+import raytrace.data.IntersectionData;
 import raytrace.data.RayData;
 import raytrace.data.RenderData;
 import raytrace.framework.Tracer;
@@ -63,6 +64,9 @@ public class IntegrationTracer implements Tracer {
 		//Integration Data
 		IntegrationData idata;
 		
+		//Intersection Data
+		IntersectionData intersectionData = null;
+		
 		//Build a ray data object
 		RayData rdata = new RayData();
 		
@@ -110,11 +114,11 @@ public class IntegrationTracer implements Tracer {
 				color.add3M(idata.getColor());
 				
 				//If there was an intersection, store normal, point, and depth
-				if(idata.didIntersect())
+				if((intersectionData = idata.getIntersectionData()) != null)
 				{
-					normal = idata.getNormal();
-					point = idata.getPoint();
-					depth = idata.getDistance();
+					normal = intersectionData.getNormal();
+					point = intersectionData.getPoint();
+					depth = intersectionData.getDistance();
 				}
 
 				//Clear the data objects

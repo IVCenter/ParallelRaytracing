@@ -36,7 +36,7 @@ public class CompositeObjectSurface extends CompositeSurface {
 	 * *********************************************************************************************/
 	public CompositeObjectSurface(ObjModelData data)
 	{
-		Logger.message(-1, "Starting creating a Composite OBject Surface...");
+		Logger.message(-1, "Starting creating a Composite Object Surface...");
 		
 		objectSurfaces = new ArrayList<ObjectSurface>();
 		
