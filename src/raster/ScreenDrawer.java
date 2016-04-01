@@ -64,7 +64,7 @@ public class ScreenDrawer extends JFrame {
 	/* *********************************************************************************************
 	 * Constructor
 	 * *********************************************************************************************/
-	public ScreenDrawer(final int width, final int height)
+	public ScreenDrawer(final int width, final int height) throws Exception
 	{
 		//Init frame
 		super();

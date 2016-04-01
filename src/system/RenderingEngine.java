@@ -172,10 +172,22 @@ public class RenderingEngine extends Job{
 	
 	public void configureAsDrawingToScreen(boolean shouldConfigure)
 	{
-		//If drawing to screen
+		//If drawing to screen, see if a screenDrawer can be created
 		if(shouldConfigure)
 		{
-			screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			try {
+				screenDrawer = new ScreenDrawer(Configuration.getScreenWidth(), Configuration.getScreenHeight());
+			} catch(Exception e) {
+				screenDrawer = null;
+				shouldConfigure = false;
+				warning("Failed to initialize a Screen Drawer");
+				warning(e.toString());
+			}
+		}
+		
+		//If drawing to screen, and a screenDrawer was successfully created
+		if(shouldConfigure)
+		{
 			screenDrawer.setVerticalSynchronize(false);
 			
 			pixelBuffer = screenDrawer.getPixelBuffer();
