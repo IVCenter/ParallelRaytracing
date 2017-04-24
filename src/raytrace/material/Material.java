@@ -44,6 +44,7 @@ public abstract class Material {
 	public abstract Color evaluateDirectLight(IntersectionData idata, RayData rdata, Color light, Vector3 lightDirection);
 	
 	//Returns the sampled light if importance sampled, else weights the sampled light
+	//sample points towards where the light is coming from
 	public abstract Color evaluateSampledLight(IntersectionData idata, RayData rdata, Color light, RayData sample);
 	
 	//Returns a non-zero amount of light if the material itself emits light independent of incoming light
