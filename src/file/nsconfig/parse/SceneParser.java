@@ -34,7 +34,7 @@ public class SceneParser extends StringParser<Configuration> {
 			String scene = tokens[1];
 			
 			//If scene is NONE, bounce and let the caller handle it (this is an explcit command to do nothing)
-			if(scene == "NONE")
+			if(scene.equals("NONE"))
 				return;
 			
 			//Make sure the Scene is reasonable
