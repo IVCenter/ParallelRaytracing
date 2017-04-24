@@ -1,5 +1,6 @@
 package raytrace.color;
 
+import math.Vector3;
 import process.utils.StringUtils;
 import raytrace.data.IntersectionData;
 import raytrace.map.texture.Texture;
@@ -60,6 +61,11 @@ public class Color implements Texture {
 	public Color(double r, double g, double b)
 	{
 		this(r, g, b, 1);;
+	}
+	
+	public Color(Vector3 v)
+	{
+		this(v.get(0), v.get(1), v.get(2), 1);;
 	}
 	
 	public void set(Color c)
