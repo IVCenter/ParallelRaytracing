@@ -312,6 +312,16 @@ public class Vector3 implements Serializable{
 		double z = array[2] - that.array[2];
 		return Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z)));
 	}
+
+	//From SmallPPM
+	//Vec operator%(Vec&b) {return Vec(y*b.z-z*b.y,z*b.x-x*b.z,x*b.y-y*b.x);};
+	public Vector3 mod(Vector3 b)
+	{
+		return new Vector3(
+				array[1] * b.array[2] - array[2] * b.array[1],
+				array[2] * b.array[0] - array[0] * b.array[2],
+				array[0] * b.array[1] - array[1] * b.array[0]);
+	}
 	
 
 	/* *********************************************************************************************
